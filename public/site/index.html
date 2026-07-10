@@ -709,93 +709,89 @@
 
         <section class="wendy-page" id="wendyPage" aria-labelledby="wendy-title" hidden>
           <header class="wendy-hero">
-            <div>
-              <p class="wendy-kicker">社媒运营智能体</p>
-              <h1 id="wendy-title">Wendy 社媒发布日历</h1>
-              <p>按最佳发布时间查看、排期和直接发布 LinkedIn、Instagram、TikTok 与 YouTube Shorts 内容。</p>
+            <div class="wendy-hero-copy">
+              <p class="wendy-kicker">2026年6月23日 星期二</p>
+              <h1 id="wendy-title">Wendy 帮你持续运营海外社媒</h1>
+              <p>连接账号、生成内容方案、排期发布，把 LinkedIn、TikTok、YouTube Shorts 和 Instagram 变成独立站的稳定引流入口。</p>
             </div>
+            <aside class="wendy-account-summary" aria-label="社媒账号绑定状态">
+              <div>
+                <span>已绑定社媒平台</span>
+                <strong>3<small>/4</small></strong>
+                <p>为了全平台运营，建议绑定所有社媒账号</p>
+              </div>
+              <button class="wendy-account-manage" data-wendy-account-manage type="button"><i data-lucide="circle-user-round"></i>账号管理</button>
+            </aside>
           </header>
 
           <section class="wendy-calendar-shell" aria-label="Wendy发布日历">
             <div class="wendy-calendar-toolbar">
               <div class="wendy-range-controls" aria-label="日历日期控制">
-                <button class="wendy-text-button" type="button">Today</button>
                 <button class="wendy-icon-button" type="button" aria-label="上一周"><i data-lucide="chevron-left"></i></button>
+                <button class="wendy-text-button" type="button">今天</button>
                 <button class="wendy-icon-button" type="button" aria-label="下一周"><i data-lucide="chevron-right"></i></button>
                 <strong>2026年7月6日 - 12日</strong>
               </div>
               <div class="wendy-view-controls">
-                <span>Asia/Shanghai</span>
-                <div class="wendy-segmented" role="tablist" aria-label="日历视图">
-                  <button class="active" type="button" role="tab" aria-selected="true">周</button>
-                  <button type="button" role="tab" aria-selected="false">月</button>
-                  <button type="button" role="tab" aria-selected="false">列表</button>
-                </div>
-                <button class="wendy-icon-button bordered" type="button" aria-label="日历设置"><i data-lucide="settings"></i></button>
-                <button class="wendy-primary wendy-send-button" data-wendy-open-publisher type="button"><i data-lucide="send"></i>发布 Post</button>
+                <button class="wendy-primary wendy-send-button" data-wendy-open-publisher type="button"><i data-lucide="send"></i>发布</button>
               </div>
             </div>
 
             <div class="wendy-calendar-subbar">
-              <button class="wendy-trend-pill" type="button"><i data-lucide="hash"></i>未来热门标签</button>
-              <div class="wendy-platform-legend" aria-label="平台颜色说明">
-                <span><i class="linkedin"></i>LinkedIn</span>
-                <span><i class="instagram"></i>Instagram</span>
-                <span><i class="tiktok"></i>TikTok</span>
-                <span><i class="youtube"></i>YouTube</span>
-              </div>
+              <p><i data-lucide="sparkles"></i>本周最佳发布窗口集中在周二至周四 10:00-16:00，已自动避开内容冲突。</p>
+              <button type="button"><i data-lucide="calendar-range"></i>自动排期</button>
             </div>
 
             <div class="wendy-week-calendar">
               <div class="wendy-week-header" aria-hidden="true">
-                <span></span>
-                <strong>6 周一</strong>
-                <strong>7 周二</strong>
-                <strong>8 周三</strong>
-                <strong>9 周四</strong>
-                <strong>10 周五</strong>
-                <strong>11 周六</strong>
-                <strong>12 周日</strong>
+                <span>时间</span>
+                <strong>周一 7/6</strong>
+                <strong>周二 7/7</strong>
+                <strong>周三 7/8</strong>
+                <strong class="active">周四 7/9</strong>
+                <strong>周五 7/10</strong>
+                <strong>周六 7/11</strong>
+                <strong>周日 7/12</strong>
               </div>
 
               <div class="wendy-week-body">
                 <div class="wendy-time-axis" aria-hidden="true">
-                  <span>12AM</span><span>1AM</span><span>2AM</span><span>3AM</span>
-                  <span>4AM</span><span>5AM</span><span>6AM</span><span>7AM</span>
-                  <span>8AM</span><span>9AM</span><span>10AM</span><span>11AM</span>
-                  <span>12PM</span><span>1PM</span><span>2PM</span><span>3PM</span>
+                  <span>08:00</span><span>09:00</span><span>10:00</span><span>11:00</span>
+                  <span>12:00</span><span>13:00</span><span>14:00</span><span>15:00</span>
+                  <span>16:00</span><span>17:00</span><span>18:00</span><span>19:00</span>
+                  <span>20:00</span>
                 </div>
                 <div class="wendy-day-column" data-day="7月6日 周一">
-                  <button class="wendy-event blue" style="--start: 3; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-06T10:00" data-copy="发布欧洲储能安装商案例图文，强调交付稳定性和认证资料完整度。" type="button"><span>LinkedIn 案例图文</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event blue" style="--start: 2; --duration: .86;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-06T10:00" data-copy="发布欧洲储能安装商案例图文，强调交付稳定性和认证资料完整度。" type="button"><i class="wendy-platform-icon" data-lucide="linkedin"></i><span>LinkedIn 案例图文</span></button>
+                  <button class="wendy-event hot" style="--start: 7; --duration: .86;" data-wendy-event data-platform="TikTok" data-time="2026-07-06T15:00" data-copy="发布工厂测试流程短视频，开头展示高压测试台和质检标签。" type="button"><i class="wendy-platform-icon" data-lucide="music-2"></i><span>TikTok 案例图文</span></button>
+                  <button class="wendy-event pink" style="--start: 10; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-06T18:00" data-copy="发布产品应用场景轮播图，导流到独立站资料页。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
                 </div>
                 <div class="wendy-day-column" data-day="7月7日 周二">
-                  <button class="wendy-event purple" style="--start: 0; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-07T00:30" data-copy="展示新一代并网组件的产品细节，附带官网资料下载链接。" type="button"><span>Instagram 产品细节</span><i data-lucide="flame"></i></button>
-                  <button class="wendy-event hot" style="--start: 6; --duration: 1;" data-wendy-event data-platform="TikTok" data-time="2026-07-07T06:00" data-copy="15 秒工厂测试流程短视频，开头展示高压测试台和质检标签。" type="button"><span>TikTok 工厂短视频</span><i data-lucide="flame"></i></button>
-                  <button class="wendy-event blue" style="--start: 7; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-07T07:00" data-copy="分享项目交付时间线，突出海外安装商能快速获取技术资料。" type="button"><span>LinkedIn 交付时间线</span><i data-lucide="flame"></i></button>
-                  <button class="wendy-event purple" style="--start: 12; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-07T12:00" data-copy="午间发布产品应用场景轮播图，导流到独立站资料页。" type="button"><span>Instagram 场景轮播</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event pink" style="--start: 1; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-07T09:00" data-copy="展示新一代并网组件的产品细节，附带官网资料下载链接。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
+                  <button class="wendy-event blue" style="--start: 4; --duration: .86;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-07T12:00" data-copy="分享项目交付时间线，突出海外安装商能快速获取技术资料。" type="button"><i class="wendy-platform-icon" data-lucide="linkedin"></i><span>LinkedIn 案例图文</span></button>
+                  <button class="wendy-event youtube" style="--start: 8; --duration: .86;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-07T16:00" data-copy="发布 30 秒 YouTube Shorts，展示产品包装、测试和出货节点。" type="button"><i class="wendy-platform-icon" data-lucide="youtube"></i><span>YouTube 案例图文</span></button>
                 </div>
                 <div class="wendy-day-column" data-day="7月8日 周三">
-                  <button class="wendy-event pink" style="--start: 7; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-08T07:00" data-copy="发布客户常见问题短图，解释认证资料、质保和售后响应。" type="button"><span>Instagram FAQ 短图</span><i data-lucide="flame"></i></button>
-                  <button class="wendy-event blue" style="--start: 13; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-08T13:00" data-copy="午后发布 LinkedIn 投票，询问海外买家最关注的并网组件指标。" type="button"><span>LinkedIn 买家投票</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event hot" style="--start: 3; --duration: .86;" data-wendy-event data-platform="TikTok" data-time="2026-07-08T11:00" data-copy="15 秒工厂测试流程短视频，开头展示高压测试台和质检标签。" type="button"><i class="wendy-platform-icon" data-lucide="music-2"></i><span>TikTok 案例图文</span></button>
+                  <button class="wendy-event pink" style="--start: 6; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-08T14:00" data-copy="发布客户常见问题短图，解释认证资料、质保和售后响应。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
+                  <button class="wendy-event blue" style="--start: 9; --duration: .86;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-08T17:00" data-copy="午后发布 LinkedIn 投票，询问海外买家最关注的并网组件指标。" type="button"><i class="wendy-platform-icon" data-lucide="linkedin"></i><span>LinkedIn 案例图文</span></button>
                 </div>
                 <div class="wendy-day-column" data-day="7月9日 周四">
-                  <button class="wendy-event purple" style="--start: 0; --duration: 1;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-09T00:30" data-copy="发布 30 秒 YouTube Shorts，展示产品包装、测试和出货节点。" type="button"><span>YouTube Shorts 出货</span><i data-lucide="flame"></i></button>
-                  <button class="wendy-event pink" style="--start: 4; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-09T04:00" data-copy="清晨发布海外项目安装现场图，配合热门标签获取自然流量。" type="button"><span>Instagram 项目现场</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event youtube" style="--start: 2; --duration: .86;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-09T10:00" data-copy="发布 30 秒 YouTube Shorts，展示产品包装、测试和出货节点。" type="button"><i class="wendy-platform-icon" data-lucide="youtube"></i><span>YouTube 案例图文</span></button>
+                  <button class="wendy-event blue" style="--start: 5; --duration: .86;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-09T13:00" data-copy="发布一条面向采购负责人的交付承诺帖，附带联系入口。" type="button"><i class="wendy-platform-icon" data-lucide="linkedin"></i><span>LinkedIn 案例图文</span></button>
+                  <button class="wendy-event pink" style="--start: 8; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-09T16:00" data-copy="清晨发布海外项目安装现场图，配合热门标签获取自然流量。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
+                  <button class="wendy-event hot" style="--start: 11; --duration: .86;" data-wendy-event data-platform="TikTok" data-time="2026-07-09T19:00" data-copy="发布工厂测试流程短视频，开头展示高压测试台和质检标签。" type="button"><i class="wendy-platform-icon" data-lucide="music-2"></i><span>TikTok 案例图文</span></button>
                 </div>
                 <div class="wendy-day-column" data-day="7月10日 周五">
-                  <button class="wendy-event pink" style="--start: 9; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-10T09:00" data-copy="发布安装商合作清单，说明交付前、中、后的支持动作。" type="button"><span>Instagram 合作清单</span><i data-lucide="flame"></i></button>
-                  <button class="wendy-event purple" style="--start: 11; --duration: 1;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-10T11:00" data-copy="发布售后备件短视频，强化长期维护能力。" type="button"><span>YouTube 售后短片</span><i data-lucide="flame"></i></button>
-                  <button class="wendy-event blue" style="--start: 13; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-10T13:00" data-copy="发布一条面向采购负责人的交付承诺帖，附带联系入口。" type="button"><span>LinkedIn 采购帖</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event blue" style="--start: 1; --duration: .86;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-10T09:00" data-copy="发布一条面向采购负责人的交付承诺帖，附带联系入口。" type="button"><i class="wendy-platform-icon" data-lucide="linkedin"></i><span>LinkedIn 案例图文</span></button>
+                  <button class="wendy-event hot" style="--start: 4; --duration: .86;" data-wendy-event data-platform="TikTok" data-time="2026-07-10T12:00" data-copy="发布售后备件短视频，强化长期维护能力。" type="button"><i class="wendy-platform-icon" data-lucide="music-2"></i><span>TikTok 案例图文</span></button>
+                  <button class="wendy-event pink" style="--start: 7; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-10T15:00" data-copy="发布安装商合作清单，说明交付前、中、后的支持动作。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
                 </div>
                 <div class="wendy-day-column" data-day="7月11日 周六">
-                  <button class="wendy-event pink split-one" style="--start: 0; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-11T00:00" data-copy="周末零点发布热门标签内容，覆盖北美深夜流量。" type="button" aria-label="Instagram周末热门标签"><i data-lucide="flame"></i></button>
-                  <button class="wendy-event purple split-two" style="--start: 0; --duration: 1;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-11T00:20" data-copy="同步一条 Shorts 精简版产品亮点。" type="button" aria-label="YouTube Shorts产品亮点"><i data-lucide="flame"></i></button>
-                  <button class="wendy-event blue split-three" style="--start: 0; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-11T00:40" data-copy="发布 LinkedIn 英文短帖，引导进入资料下载页。" type="button" aria-label="LinkedIn英文短帖"><i data-lucide="flame"></i></button>
-                  <button class="wendy-event pink" style="--start: 5; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-11T05:00" data-copy="发布周末项目照片合集，保持账号活跃。" type="button"><span>Instagram 照片合集</span><i data-lucide="flame"></i></button>
-                  <button class="wendy-event blue" style="--start: 13; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-11T13:00" data-copy="复盘本周社媒内容表现，邀请买家留言需求。" type="button"><span>LinkedIn 周总结</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event youtube" style="--start: 5; --duration: .86;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-11T13:00" data-copy="同步一条 Shorts 精简版产品亮点。" type="button"><i class="wendy-platform-icon" data-lucide="youtube"></i><span>YouTube 案例图文</span></button>
                 </div>
                 <div class="wendy-day-column" data-day="7月12日 周日">
-                  <button class="wendy-event purple" style="--start: 2; --duration: 1;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-12T02:00" data-copy="发布下周预告短视频，展示新素材拍摄计划。" type="button"><span>YouTube 下周预告</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event pink" style="--start: 3; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-12T11:00" data-copy="发布下周预告图文，展示新素材拍摄计划。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
                 </div>
               </div>
             </div>
@@ -820,9 +816,8 @@
             <form class="wendy-publisher-panel" aria-labelledby="wendyPublisherTitle">
               <header>
                 <div>
-                  <p>Distribute</p>
-                  <h2 id="wendyPublisherTitle">发布 Post</h2>
-                  <span>选择平台、内容类型、素材与排期，一次生成可发布的社媒内容。</span>
+                  <h2 id="wendyPublisherTitle">快速发布</h2>
+                  <span>选择平台、内容、素材与排期，快速发布社媒内容</span>
                 </div>
                 <button class="wendy-icon-button" data-wendy-close-publisher type="button" aria-label="关闭"><i data-lucide="x"></i></button>
               </header>
@@ -831,10 +826,10 @@
                   <div class="wendy-publisher-block">
                     <div class="wendy-block-heading">
                       <div>
-                        <strong>Post to</strong>
+                        <strong>发布平台</strong>
                         <span>选择要同步分发的平台</span>
                       </div>
-                      <select id="wendyPublishPlatform" aria-label="主发布平台">
+                      <select id="wendyPublishPlatform" aria-label="主发布平台" hidden>
                         <option>LinkedIn</option>
                         <option>Instagram</option>
                         <option>TikTok</option>
@@ -842,54 +837,35 @@
                       </select>
                     </div>
                     <div class="wendy-platform-picker" aria-label="目标平台">
-                      <button class="active" data-wendy-platform-option="LinkedIn" type="button"><i data-lucide="briefcase-business"></i><span>LinkedIn</span><b>Post</b></button>
-                      <button data-wendy-platform-option="Instagram" type="button"><i data-lucide="camera"></i><span>Instagram</span><b>Feed Post</b></button>
-                      <button data-wendy-platform-option="TikTok" type="button"><i data-lucide="music-2"></i><span>TikTok</span><b>Video</b></button>
-                      <button data-wendy-platform-option="YouTube Shorts" type="button"><i data-lucide="play"></i><span>YouTube</span><b>Short</b></button>
+                      <button class="active" data-wendy-platform-option="LinkedIn" type="button"><i data-lucide="linkedin"></i><span>LinkedIn</span></button>
+                      <button data-wendy-platform-option="Instagram" type="button"><i data-lucide="instagram"></i><span>Instagram</span></button>
+                      <button data-wendy-platform-option="TikTok" type="button"><i data-lucide="music-2"></i><span>TikTok</span></button>
+                      <button data-wendy-platform-option="YouTube Shorts" type="button"><i data-lucide="youtube"></i><span>YouTube</span></button>
                     </div>
                   </div>
 
                   <div class="wendy-publisher-block">
                     <div class="wendy-block-heading">
                       <div>
-                        <strong>Content Type</strong>
-                        <span>为当前平台选择内容格式</span>
-                      </div>
-                    </div>
-                    <div class="wendy-content-type-grid" aria-label="内容类型">
-                      <button class="active" type="button">Post</button>
-                      <button type="button">Article</button>
-                      <button type="button">Carousel</button>
-                      <button type="button">Short Video</button>
-                    </div>
-                  </div>
-
-                  <div class="wendy-publisher-block">
-                    <div class="wendy-block-heading">
-                      <div>
-                        <strong>Caption</strong>
+                        <strong>发布文案</strong>
                         <span>编辑平台文案，或让 Wendy 基于素材生成</span>
                       </div>
-                      <button class="wendy-ai-button" data-wendy-generate-caption type="button"><i data-lucide="sparkles"></i>Generate with AI</button>
                     </div>
                     <label class="wendy-field wendy-caption-field">
-                      <span>Post 文案</span>
                       <textarea id="wendyPublishCopy" rows="7">面向欧洲储能安装商的新一代并网组件已经完成批量测试。点击了解交付稳定性、认证资料和项目支持方案。</textarea>
+                      <button class="wendy-ai-button" data-wendy-generate-caption type="button"><i data-lucide="wand-sparkles"></i>AI 润色</button>
                     </label>
                   </div>
 
                   <div class="wendy-publisher-block">
                     <div class="wendy-block-heading">
                       <div>
-                        <strong>Media</strong>
+                        <strong>素材</strong>
                         <span>从资料库选择或上传图片、短视频</span>
                       </div>
                     </div>
                     <div class="wendy-media-grid" aria-label="Post素材">
-                      <button class="selected" type="button"><i data-lucide="image"></i><span>产品测试图</span></button>
-                      <button type="button"><i data-lucide="factory"></i><span>工厂场景</span></button>
-                      <button type="button"><i data-lucide="file-image"></i><span>资料页截图</span></button>
-                      <button class="upload" type="button"><i data-lucide="upload"></i><span>Upload</span></button>
+                      <button class="upload selected" type="button"><i data-lucide="upload"></i><span>上传或从知识库选择</span></button>
                     </div>
                   </div>
                 </section>
@@ -898,32 +874,31 @@
                   <section class="wendy-publisher-block">
                     <div class="wendy-block-heading">
                       <div>
-                        <strong>Settings &amp; Schedule</strong>
+                        <strong>发布时间</strong>
                         <span>设置发布身份和发布时间</span>
                       </div>
                     </div>
-                    <div class="wendy-account-card">
-                      <div class="wendy-preview-avatar" id="wendyPublisherAvatar">OZ<i>in</i></div>
-                      <div>
-                        <span>Posting as</span>
-                        <strong>@OntoZ Power</strong>
-                        <em id="wendyPublisherPostingTo">Posting to LinkedIn</em>
-                      </div>
-                    </div>
                     <div class="wendy-schedule-tabs" role="group" aria-label="发布方式">
-                      <button class="active" data-wendy-schedule-mode="schedule" type="button">Schedule</button>
-                      <button data-wendy-schedule-mode="now" type="button">Now</button>
+                      <button data-wendy-schedule-mode="now" type="button">立即发布</button>
+                      <button class="active" data-wendy-schedule-mode="schedule" type="button">定时发布</button>
                     </div>
-                    <label class="wendy-field">
-                      <span>发布时间</span>
-                      <input id="wendyPublishTime" type="datetime-local" value="2026-07-07T09:30" />
-                    </label>
+                    <div class="wendy-date-time-row">
+                      <label class="wendy-field">
+                        <span>日期</span>
+                        <input id="wendyPublishDate" type="date" value="2026-07-07" />
+                      </label>
+                      <label class="wendy-field">
+                        <span>时间</span>
+                        <input id="wendyPublishClock" type="time" step="1" value="10:30:00" />
+                      </label>
+                    </div>
+                    <input id="wendyPublishTime" type="hidden" value="2026-07-07T10:30:00" />
                   </section>
 
                   <section class="wendy-publisher-block">
                     <div class="wendy-block-heading">
                       <div>
-                        <strong>Preview</strong>
+                        <strong>预览</strong>
                         <span>当前平台发布预览</span>
                       </div>
                     </div>
@@ -935,11 +910,50 @@
                 </aside>
               </div>
               <footer>
-                <button class="wendy-secondary" data-wendy-save-draft type="button"><i data-lucide="file-check"></i>保存草稿</button>
-                <button class="wendy-primary" data-wendy-schedule-post type="button"><i data-lucide="calendar-plus"></i>排期发布</button>
+                <button class="wendy-secondary" data-wendy-close-publisher type="button">取消</button>
+                <div class="wendy-publisher-footer-actions">
+                  <button class="wendy-secondary" data-wendy-save-draft type="button"><i data-lucide="save"></i>保存草稿</button>
+                  <button class="wendy-primary" data-wendy-schedule-post type="button"><i data-lucide="send"></i>发布</button>
+                </div>
               </footer>
             </form>
           </div>
+        </section>
+
+        <section class="wendy-accounts-page" id="wendyAccountsPage" aria-labelledby="wendy-accounts-title" hidden>
+          <header class="wendy-accounts-hero">
+            <button class="wendy-back-button" data-wendy-back-home type="button"><i data-lucide="arrow-left"></i>返回 Wendy</button>
+            <div>
+              <p class="wendy-kicker">账号管理</p>
+              <h1 id="wendy-accounts-title">管理社媒账号绑定</h1>
+              <p>查看不同社媒账号的绑定状态，未绑定平台可继续连接，已绑定平台可随时解绑。</p>
+            </div>
+          </header>
+
+          <section class="wendy-accounts-summary" aria-label="账号绑定概览">
+            <article>
+              <span>已绑定</span>
+              <strong id="wendyAccountsBoundCount">3</strong>
+            </article>
+            <article>
+              <span>全部平台</span>
+              <strong id="wendyAccountsTotalCount">4</strong>
+            </article>
+            <article>
+              <span>待绑定</span>
+              <strong id="wendyAccountsPendingCount">1</strong>
+            </article>
+          </section>
+
+          <section class="wendy-accounts-panel" aria-labelledby="wendy-platform-title">
+            <div class="wendy-accounts-panel-heading">
+              <div>
+                <h2 id="wendy-platform-title">社媒平台</h2>
+                <p>绑定后 Wendy 可以生成内容、读取平台格式偏好并加入发布日历。</p>
+              </div>
+            </div>
+            <div class="wendy-account-list" id="wendyAccountList" aria-live="polite"></div>
+          </section>
         </section>
 
         <section class="wendy-agent-page" id="wendyAgentPage" aria-labelledby="wendy-agent-title" hidden>
@@ -955,6 +969,79 @@
           </header>
 
           <div class="wendy-agent-thread" aria-live="polite">
+            <section class="wendy-plan-step" id="wendyPlanStep" aria-labelledby="wendy-plan-platform-title">
+              <section class="wendy-plan-card">
+                <header>
+                  <div>
+                    <h2 id="wendy-plan-platform-title">选择发布平台</h2>
+                    <p>选择一个主力发布平台，后续可以调整为全平台发布</p>
+                  </div>
+                </header>
+                <div class="wendy-plan-platform-grid" role="group" aria-label="选择发布平台">
+                  <button class="wendy-plan-option selected linkedin" data-wendy-agent-platform="LinkedIn" type="button" aria-pressed="true">
+                    <i data-lucide="linkedin"></i>
+                    <span>LinkedIn</span>
+                  </button>
+                  <button class="wendy-plan-option instagram" data-wendy-agent-platform="Instagram" type="button" aria-pressed="false">
+                    <i data-lucide="instagram"></i>
+                    <span>Instagram</span>
+                  </button>
+                  <button class="wendy-plan-option tiktok" data-wendy-agent-platform="TikTok" type="button" aria-pressed="false">
+                    <i data-lucide="music-2"></i>
+                    <span>TikTok</span>
+                  </button>
+                  <button class="wendy-plan-option youtube" data-wendy-agent-platform="YouTube" type="button" aria-pressed="false">
+                    <i data-lucide="youtube"></i>
+                    <span>YouTube</span>
+                  </button>
+                </div>
+              </section>
+
+              <section class="wendy-plan-card">
+                <header>
+                  <div>
+                    <h2>选择视觉方案</h2>
+                    <p>已经为你预设了不同的风格</p>
+                  </div>
+                  <button class="wendy-plan-upload" id="wendyPlanUpload" type="button">
+                    <i data-lucide="upload"></i>
+                    <span>上传参考素材</span>
+                  </button>
+                </header>
+                <div class="wendy-visual-grid" role="group" aria-label="选择视觉方案">
+                  <button class="wendy-visual-option selected" data-wendy-agent-visual="超写实摄影" type="button" aria-pressed="true">
+                    <span class="wendy-visual-swatch photo"></span>
+                    <strong>超写实摄影</strong>
+                  </button>
+                  <button class="wendy-visual-option" data-wendy-agent-visual="电影级" type="button" aria-pressed="false">
+                    <span class="wendy-visual-swatch cinematic"></span>
+                    <strong>电影级</strong>
+                  </button>
+                  <button class="wendy-visual-option" data-wendy-agent-visual="日系极简" type="button" aria-pressed="false">
+                    <span class="wendy-visual-swatch minimal"></span>
+                    <strong>日系极简</strong>
+                  </button>
+                  <button class="wendy-visual-option" data-wendy-agent-visual="工业产品场景" type="button" aria-pressed="false">
+                    <span class="wendy-visual-swatch industrial"></span>
+                    <strong>工业产品场景</strong>
+                  </button>
+                  <button class="wendy-visual-option" data-wendy-agent-visual="品牌海报" type="button" aria-pressed="false">
+                    <span class="wendy-visual-swatch poster"></span>
+                    <strong>品牌海报</strong>
+                  </button>
+                  <button class="wendy-visual-option" data-wendy-agent-visual="社媒原生短图" type="button" aria-pressed="false">
+                    <span class="wendy-visual-swatch native"></span>
+                    <strong>社媒原生短图</strong>
+                  </button>
+                </div>
+              </section>
+
+              <button class="wendy-generate-plan" id="wendyGeneratePlan" type="button">
+                <i data-lucide="send"></i>
+                <span>生成方案</span>
+              </button>
+            </section>
+
             <section class="wendy-thinking-thread" id="wendyThinkingThread">
               <section class="wendy-thinking-card" id="wendyThinkingCard" aria-labelledby="wendy-thinking-title">
                 <div class="wendy-thinking-rail" aria-hidden="true">
@@ -1028,121 +1115,29 @@
               </section>
 
               <section class="wendy-post-previews" id="wendyPostPreviews" aria-labelledby="wendy-post-preview-title" hidden>
-                <header class="wendy-preview-heading">
-                  <div>
-                    <h2 id="wendy-post-preview-title">Post 预览</h2>
-                    <p>确认生成后，Wendy 已按不同社媒格式拆分出可编辑预览。</p>
-                  </div>
-                  <span><i data-lucide="coins"></i>将消耗 18 点</span>
-                </header>
-
-                <article class="wendy-post-preview-card" data-preview-platform="LinkedIn">
-                  <header class="wendy-post-preview-top">
-                    <div class="wendy-preview-account">
-                      <div class="wendy-preview-avatar">OZ<i>in</i></div>
-                      <div><strong>@OntoZ Power</strong><span>LinkedIn</span></div>
-                    </div>
-                    <label class="wendy-preview-time">
-                      <i data-lucide="clock-3"></i>
-                      <span>Publish on</span>
-                      <select aria-label="LinkedIn发布时间">
-                        <option>2026/07/09 9:30 am</option>
-                        <option>2026/07/10 1:00 pm</option>
-                      </select>
-                    </label>
-                  </header>
-                  <div class="wendy-post-preview-body">
-                    <div class="wendy-preview-media linkedin" aria-label="LinkedIn素材预览">
-                      <i data-lucide="factory"></i>
-                      <strong>Product testing</strong>
-                    </div>
-                    <section class="wendy-caption-card">
-                      <i data-lucide="message-square-text"></i>
-                      <label>
-                        <span>Post Caption</span>
-                        <textarea rows="7">面向欧洲储能安装商的新一代并网组件已经完成批量测试。我们把认证资料、交付排期和售后响应流程整理成一页资料，帮助项目团队更快完成供应商评估。</textarea>
-                      </label>
-                      <footer><button type="button"><i data-lucide="smile"></i>Emojis</button><button type="button"><i data-lucide="file-text"></i>Saved Captions</button></footer>
-                    </section>
-                  </div>
-                  <footer class="wendy-post-preview-actions">
-                    <button data-wendy-preview-save="LinkedIn" type="button">保存草稿</button>
-                    <button data-wendy-preview-schedule="LinkedIn" type="button">排期发布</button>
-                  </footer>
-                </article>
-
-                <article class="wendy-post-preview-card" data-preview-platform="Instagram">
-                  <header class="wendy-post-preview-top">
-                    <div class="wendy-preview-account">
-                      <div class="wendy-preview-avatar instagram">OZ<i>ig</i></div>
-                      <div><strong>@ontoz_power</strong><span>Instagram</span></div>
-                    </div>
-                    <label class="wendy-preview-time">
-                      <i data-lucide="clock-3"></i>
-                      <span>Publish on</span>
-                      <select aria-label="Instagram发布时间">
-                        <option>2026/07/09 7:00 pm</option>
-                        <option>2026/07/11 10:00 am</option>
-                      </select>
-                    </label>
-                  </header>
-                  <div class="wendy-post-preview-body">
-                    <div class="wendy-preview-media instagram" aria-label="Instagram素材预览">
-                      <i data-lucide="image"></i>
-                      <strong>Carousel 1/4</strong>
-                    </div>
-                    <section class="wendy-caption-card">
-                      <i data-lucide="message-square-text"></i>
-                      <label>
-                        <span>Post Caption</span>
-                        <textarea rows="7">从测试台到项目现场，OntoZ 用完整认证资料和稳定交付支持海外安装商缩短评估周期。滑动查看组件细节、出货检查和项目应用场景。</textarea>
-                      </label>
-                      <footer><button type="button"><i data-lucide="smile"></i>Emojis</button><button type="button"><i data-lucide="file-text"></i>Saved Captions</button></footer>
-                    </section>
-                  </div>
-                  <footer class="wendy-post-preview-actions">
-                    <button data-wendy-preview-save="Instagram" type="button">保存草稿</button>
-                    <button data-wendy-preview-schedule="Instagram" type="button">排期发布</button>
-                  </footer>
-                </article>
-
-                <article class="wendy-post-preview-card" data-preview-platform="TikTok">
-                  <header class="wendy-post-preview-top">
-                    <div class="wendy-preview-account">
-                      <div class="wendy-preview-avatar tiktok">OZ<i>tt</i></div>
-                      <div><strong>@ontoz_power</strong><span>TikTok</span></div>
-                    </div>
-                    <label class="wendy-preview-time">
-                      <i data-lucide="clock-3"></i>
-                      <span>Publish on</span>
-                      <select aria-label="TikTok发布时间">
-                        <option>2026/07/10 6:00 pm</option>
-                        <option>2026/07/12 8:30 pm</option>
-                      </select>
-                    </label>
-                  </header>
-                  <div class="wendy-post-preview-body">
-                    <div class="wendy-preview-media tiktok" aria-label="TikTok素材预览">
-                      <i data-lucide="play"></i>
-                      <strong>15s video</strong>
-                    </div>
-                    <section class="wendy-caption-card">
-                      <i data-lucide="message-square-text"></i>
-                      <label>
-                        <span>Post Caption</span>
-                        <textarea rows="7">15 秒看懂并网组件出货前会经历哪些测试：高压检测、标签核验、包装检查、备件确认。适合正在筛选稳定供应商的海外安装商。</textarea>
-                      </label>
-                      <footer><button type="button"><i data-lucide="smile"></i>Emojis</button><button type="button"><i data-lucide="file-text"></i>Saved Captions</button></footer>
-                    </section>
-                  </div>
-                  <footer class="wendy-post-preview-actions">
-                    <button data-wendy-preview-save="TikTok" type="button">保存草稿</button>
-                    <button data-wendy-preview-schedule="TikTok" type="button">排期发布</button>
-                  </footer>
-                </article>
+                <div class="wendy-single-preview" id="wendySinglePreview"></div>
+                <section class="wendy-image-reprompt" aria-labelledby="wendy-image-reprompt-title">
+                  <label for="wendyImageReprompt" id="wendy-image-reprompt-title">对生成的图片不满意，请告诉Wendy修改建议</label>
+                  <textarea id="wendyImageReprompt" rows="2" maxlength="280" placeholder="例如：让背景更干净，产品放大一些，增加海外仓应用场景"></textarea>
+                  <button id="wendyRegenerateImage" type="button">
+                    <i data-lucide="wand-sparkles"></i>
+                    <span>AI重新生图 <strong id="wendyImageRegenerateCount">0</strong>/8</span>
+                  </button>
+                </section>
               </section>
             </section>
           </div>
+
+          <section class="wendy-strategy-composer" id="wendyStrategyComposer" aria-labelledby="wendy-strategy-composer-title" hidden>
+            <label id="wendy-strategy-composer-title" for="wendyStrategyPrompt">如需修改整体策略，请输入</label>
+            <div>
+              <textarea id="wendyStrategyPrompt" rows="2" maxlength="360" placeholder="例如：更强调海外安装商痛点，弱化品牌宣传，多给一个行动号召"></textarea>
+              <button id="wendyStrategySend" type="button">
+                <i data-lucide="send"></i>
+                <span>发送</span>
+              </button>
+            </div>
+          </section>
         </section>
 
         <section class="lucas-page" id="lucasPage" aria-labelledby="lucas-title" hidden>
