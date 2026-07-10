@@ -1,0 +1,1466 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="OntoZ 专业建站 Lucas——为外贸企业生成可转化的专业独立站。" />
+    <title>OntoZ · 专业建站 Lucas</title>
+    <link rel="stylesheet" href="styles.css?v=home-composer-1" />
+    <link rel="stylesheet" href="lucide-icons.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar" aria-label="主导航">
+        <header class="sidebar-header">
+          <a class="brand" href="#lucas" aria-label="OntoZ 首页">OntoZ</a>
+          <button class="collapse-button" id="collapseButton" type="button" aria-label="收起导航">
+            <i data-lucide="panel-left-close" aria-hidden="true"></i>
+          </button>
+        </header>
+
+        <nav class="sidebar-nav">
+          <section class="nav-section" aria-labelledby="workspace-label">
+            <h2 id="workspace-label">工作台</h2>
+            <a class="nav-item" href="#ontology"><i data-lucide="brain-circuit"></i><span>企业本体</span></a>
+            <a class="nav-item" href="#dashboard"><i data-lucide="chart-column-big"></i><span>数据看板</span></a>
+            <a class="nav-item" href="#customers"><i data-lucide="contact-round"></i><span>客户池</span></a>
+          </section>
+          <section class="nav-section" aria-labelledby="agents-label">
+            <h2 id="agents-label">智能体</h2>
+            <a class="nav-item" href="#zoe"><i data-lucide="user-round-search"></i><span>搜索开发 Zoe</span></a>
+            <a class="nav-item" href="#lily"><i data-lucide="handshake"></i><span>触达转化 Lily</span></a>
+            <a class="nav-item" href="#leo"><i data-lucide="briefcase-business"></i><span>展会助手 Leo</span></a>
+            <a class="nav-item active" href="#lucas" aria-current="page"><i data-lucide="monitor"></i><span>专业建站 Lucas</span></a>
+            <a class="nav-item" href="#john"><i data-lucide="chart-no-axes-combined"></i><span>24/7投流 John</span></a>
+            <a class="nav-item" href="#wendy"><i data-lucide="messages-square"></i><span>社媒运营 Wendy</span></a>
+          </section>
+        </nav>
+
+        <button class="account" type="button" aria-label="打开 John Smith 的账户菜单">
+          <img src="assets/avatar.png" alt="" />
+          <strong>John Smith</strong>
+          <i data-lucide="chevrons-up-down" aria-hidden="true"></i>
+        </button>
+      </aside>
+
+      <main class="lily-workspace">
+        <div class="lily-home" id="lilyHome">
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero-copy">
+            <p class="date">2026年6月23日 星期二</p>
+            <h1 id="page-title">今天，从这些商机开始</h1>
+            <p class="intro">基于你的客户、市场与行业动态，已为你筛选出优先行动建议。</p>
+          </div>
+
+          <div class="hero-side">
+            <nav class="home-quick-links" aria-label="Lily快捷入口">
+              <button data-lily-page="lily/messages" type="button"><i data-lucide="messages-square"></i>询盘消息</button>
+              <button data-lily-page="lily/templates" type="button"><i data-lucide="message-square-text"></i>话术模板</button>
+              <button data-lily-page="lily/tasks" type="button"><i data-lucide="clipboard-list"></i>任务管理</button>
+            </nav>
+          </div>
+        </section>
+
+        <section class="strategy-panel" aria-labelledby="strategy-title">
+          <header class="strategy-header">
+            <h2 id="strategy-title">为你推荐的商机策略</h2>
+            <div class="scene-tabs" role="tablist" aria-label="商机场景">
+              <button class="scene-tab active" data-scene="news" role="tab" aria-selected="true">推荐策略</button>
+              <button class="scene-tab" id="showMyStrategyTab" type="button" role="tab" aria-selected="false">重点客户</button>
+            </div>
+          </header>
+          <div class="strategy-grid" id="strategyGrid" aria-live="polite"></div>
+          <footer class="strategy-footer">
+            <button id="nextStrategies" type="button">换一批 <i data-lucide="refresh-cw"></i></button>
+          </footer>
+        </section>
+
+        <section class="my-strategy-panel" id="myStrategyPanel" aria-labelledby="my-strategy-title" hidden>
+          <header class="my-strategy-header">
+            <h2 id="my-strategy-title">重点客户</h2>
+            <div class="scene-tabs" role="tablist" aria-label="策略视图">
+              <button class="scene-tab" id="showRecommendTab" type="button" role="tab" aria-selected="false">推荐策略</button>
+              <button class="scene-tab active" type="button" role="tab" aria-selected="true">重点客户</button>
+            </div>
+          </header>
+          <div class="my-strategy-list" id="myStrategyList"></div>
+        </section>
+
+        <section class="composer" aria-label="描述你的商机诉求">
+          <textarea id="opportunityInput" rows="2" maxlength="500" placeholder="基于选中的策略，更详细的描述你的诉求"></textarea>
+          <div class="composer-actions">
+            <button class="send-button" id="sendButton" type="button"><i data-lucide="scan-search"></i>发现商机</button>
+          </div>
+        </section>
+        </div>
+
+        <section class="lily-agent" id="lilyAgent" aria-labelledby="agent-title" hidden>
+          <header class="agent-topbar">
+            <button class="agent-home" id="backFromAgent" type="button" aria-label="返回触达转化 Lily 首页">
+              <i data-lucide="arrow-left" aria-hidden="true"></i>
+              <span>返回首页</span>
+            </button>
+            <h1 id="agent-title">Lily分析客户池精准生成策略</h1>
+            <button class="agent-panel-button" type="button" aria-label="收起右侧面板">
+              <i data-lucide="panel-right" aria-hidden="true"></i>
+            </button>
+          </header>
+
+          <div class="agent-thread" aria-live="polite">
+            <section class="thinking-card" id="thinkingCard" aria-labelledby="thinking-title">
+              <div class="thinking-rail" aria-hidden="true">
+                <i data-lucide="circle-check-big"></i>
+                <span></span>
+              </div>
+              <div class="thinking-content">
+                <button class="thinking-summary" id="toggleThinking" type="button" aria-expanded="true" aria-controls="thinkingSteps">
+                  <span id="thinking-title">Lily 正在扫描全部 372 家客户，为你生成触达转化策略</span>
+                  <i data-lucide="chevron-down" aria-hidden="true"></i>
+                </button>
+                <div class="thinking-steps" id="thinkingSteps"></div>
+              </div>
+            </section>
+
+            <section class="followup-card" id="followupCard" aria-labelledby="followup-title" hidden>
+              <h2 id="followup-title">检查到你的高质量客户有 172 家，线索数量较少，为了更好得提供策略</h2>
+              <button class="zoe-acquire-option active" id="zoeAcquireOption" type="button" aria-pressed="true">前往 Zoe 获客</button>
+              <label class="followup-answer">
+                <span>补充说明</span>
+                <input id="followupAnswerInput" type="text" placeholder="请输入你的答案" />
+              </label>
+              <div class="followup-actions">
+                <button class="followup-primary" id="confirmFollowup" type="button">下一步</button>
+                <button id="regenerateFollowup" type="button">忽略</button>
+              </div>
+            </section>
+
+            <section class="agent-strategies" id="agentStrategies" aria-label="Lily生成的策略卡片" hidden></section>
+          </div>
+
+          <section class="agent-composer" aria-label="继续描述你的营销诉求">
+            <div class="agent-composer-input-row">
+              <textarea id="agentPromptInput" rows="2" maxlength="500" placeholder="基于选中的策略，更详细的描述你的诉求，例如：帮我找到最近有扩产计划的华东新能源企业，并分析合适的营销话术"></textarea>
+            </div>
+            <div class="agent-composer-actions">
+              <div>
+                <button type="button"><i data-lucide="paperclip"></i>添加资料</button>
+                <button type="button"><i data-lucide="sliders-horizontal"></i>高级筛选</button>
+              </div>
+              <button class="agent-send" id="agentPromptSend" type="button">发送 <i data-lucide="send"></i></button>
+            </div>
+          </section>
+
+          <section class="strategy-modal" id="marketingDrawer" role="dialog" aria-modal="true" aria-labelledby="marketing-title" aria-hidden="true" hidden>
+            <header class="marketing-header">
+              <div class="marketing-title-row">
+                <button id="closeMarketingDrawer" type="button" aria-label="返回触达转化 Lily">
+                  <i data-lucide="arrow-left" aria-hidden="true"></i>
+                  <span>返回</span>
+                </button>
+                <h2 id="marketing-title">「新品发布策略」触达任务</h2>
+              </div>
+              <div class="marketing-header-actions">
+                <button id="saveMarketingDraft" type="button">保存草稿</button>
+                <button class="confirm-marketing" id="confirmMarketing" type="button"><i data-lucide="send"></i>发布任务</button>
+              </div>
+            </header>
+
+            <div class="marketing-content">
+              <div class="modal-main-column">
+                <section class="sequence-panel" id="sequencePanel" aria-labelledby="sequence-title">
+                  <div class="sequence-task-heading">
+                    <h3 id="sequence-title">新品发布任务_0702</h3>
+                    <span id="sequenceFitScore">匹配度 96%</span>
+                  </div>
+
+                  <label class="sequence-field sequence-name" hidden>
+                    <span>Sequence 名称</span>
+                    <input id="sequenceName" type="text" value="高价值客户触达 sequence" />
+                  </label>
+
+                  <div class="sequence-select" data-select-root="rounds">
+                    <button class="sequence-select-trigger" id="sequenceRoundTrigger" type="button" aria-expanded="false" aria-haspopup="listbox">
+                      <span>邮件轮次</span>
+                      <strong id="sequenceRoundValue">3轮</strong>
+                      <i data-lucide="chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="sequence-dropdown" id="sequenceRoundMenu" role="listbox" aria-label="选择邮件轮次" hidden>
+                      <button type="button" role="option" data-step-count="1">1 轮</button>
+                      <button type="button" role="option" data-step-count="3" aria-selected="true">3 轮<i data-lucide="check" aria-hidden="true"></i></button>
+                      <button type="button" role="option" data-step-count="5">5 轮</button>
+                    </div>
+                    <select id="sequenceStepPreset" aria-label="选择默认邮件序列数量" hidden>
+                      <option value="1">1 封邮件</option>
+                      <option value="3" selected>3 封邮件</option>
+                      <option value="5">5 封邮件</option>
+                    </select>
+                  </div>
+
+                  <button id="addSequenceStep" type="button" hidden>添加步骤</button>
+                  <div class="sequence-steps" id="sequenceSteps"></div>
+                  <p id="mailBody" hidden></p>
+                  <p id="mailSubject" hidden></p>
+                  <span id="mailFitScore" hidden>匹配度 92%</span>
+                </section>
+              </div>
+
+              <aside class="modal-side-column">
+                <section class="sequence-rules-card" aria-labelledby="sequence-rules-title">
+                  <h3 id="sequence-rules-title" hidden>发送规则</h3>
+                  <label class="sequence-field">
+                    <span>发件人</span>
+                    <span class="sequence-control">
+                      <select id="sequenceSender">
+                        <option>12345678@qq.com</option>
+                        <option>John · john@ontoz.ai</option>
+                      </select>
+                      <i data-lucide="chevron-down" aria-hidden="true"></i>
+                    </span>
+                  </label>
+                  <label class="sequence-field">
+                    <span>接收邮箱</span>
+                    <span class="sequence-control">
+                      <select id="sequenceReceiver">
+                        <option>同发送邮箱</option>
+                        <option>客户联系人邮箱</option>
+                      </select>
+                      <i data-lucide="chevron-down" aria-hidden="true"></i>
+                    </span>
+                  </label>
+                  <label class="sequence-field">
+                    <span>邮件模版</span>
+                    <span class="sequence-control">
+                      <select id="sequenceTemplate">
+                        <option>新建模版</option>
+                        <option>首次开发信·观察破冰</option>
+                        <option>圣诞节营销模版</option>
+                        <option>展会营销系列</option>
+                        <option>自动开发客户</option>
+                      </select>
+                      <i data-lucide="chevron-down" aria-hidden="true"></i>
+                    </span>
+                  </label>
+                  <label class="auto-unlock">
+                    <input id="autoUnlockContacts" type="checkbox" />
+                    <span class="auto-unlock-switch" aria-hidden="true"></span>
+                    <span class="auto-unlock-copy">
+                      <strong>自动解锁</strong>
+                      <small>对于信息不全的客户自动补全联系人方式</small>
+                    </span>
+                  </label>
+                  <input id="deliveryStart" type="time" value="09:30" hidden />
+                  <input id="deliveryEnd" type="time" value="17:30" hidden />
+                </section>
+              </aside>
+            </div>
+          </section>
+        </section>
+
+        <section class="lily-dashboard" id="lilyDashboard" aria-labelledby="dashboard-title" hidden>
+          <header class="dashboard-topbar">
+            <nav class="breadcrumb" aria-label="面包屑">
+              <button id="backToLily" type="button">触达转化 Lily</button>
+              <i data-lucide="chevron-right" aria-hidden="true"></i>
+              <span aria-current="page">数据看板</span>
+            </nav>
+            <div class="dashboard-heading">
+              <div>
+                <h1 id="dashboard-title">触达转化数据看板</h1>
+                <p>查看 Lily 创建的触达任务表现，识别高转化渠道并跟进关键商机。</p>
+              </div>
+              <div class="dashboard-toolbar" aria-label="看板时间范围">
+                <button class="date-range active" data-range="7" type="button">近 7 天</button>
+                <button class="date-range" data-range="30" type="button">近 30 天</button>
+                <button class="date-range" data-range="90" type="button">近 90 天</button>
+                <button class="export-dashboard" type="button"><i data-lucide="download"></i>导出</button>
+              </div>
+            </div>
+          </header>
+
+          <div class="metric-grid" aria-label="核心转化指标">
+            <article class="metric-card">
+              <div class="metric-icon indigo"><i data-lucide="send"></i></div>
+              <span>累计触达</span><strong data-metric="reach">12,480</strong>
+              <p><b>↑ 18.6%</b> 较上一周期</p>
+            </article>
+            <article class="metric-card">
+              <div class="metric-icon blue"><i data-lucide="mail-check"></i></div>
+              <span>有效送达</span><strong data-metric="delivered">11,806</strong>
+              <p><b>94.6%</b> 平均送达率</p>
+            </article>
+            <article class="metric-card">
+              <div class="metric-icon amber"><i data-lucide="mouse-pointer-click"></i></div>
+              <span>客户互动</span><strong data-metric="engaged">3,284</strong>
+              <p><b>27.8%</b> 互动率</p>
+            </article>
+            <article class="metric-card">
+              <div class="metric-icon green"><i data-lucide="badge-dollar-sign"></i></div>
+              <span>产生商机</span><strong data-metric="opportunities">426</strong>
+              <p><b>13.0%</b> 互动转商机</p>
+            </article>
+          </div>
+
+          <div class="insight-grid">
+            <article class="dashboard-card trend-panel">
+              <header><div><h2>触达与转化趋势</h2><p>近 7 天每日触达人数与产生商机数</p></div><span class="chart-legend"><i></i>触达人数 <i></i>产生商机</span></header>
+              <div class="trend-chart" role="img" aria-label="近 7 天触达人数逐步上升，6月22日达到峰值">
+                <div class="chart-y"><span>2,000</span><span>1,500</span><span>1,000</span><span>500</span><span>0</span></div>
+                <svg viewBox="0 0 700 210" preserveAspectRatio="none" aria-hidden="true">
+                  <defs><linearGradient id="reachFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6366f1" stop-opacity=".22"/><stop offset="1" stop-color="#6366f1" stop-opacity="0"/></linearGradient></defs>
+                  <g class="chart-grid"><line x1="0" y1="10" x2="700" y2="10"/><line x1="0" y1="57" x2="700" y2="57"/><line x1="0" y1="104" x2="700" y2="104"/><line x1="0" y1="151" x2="700" y2="151"/><line x1="0" y1="198" x2="700" y2="198"/></g>
+                  <path class="chart-area" d="M0 165 L116 145 L233 132 L350 92 L466 108 L583 52 L700 70 L700 210 L0 210 Z"/>
+                  <polyline class="reach-line" points="0,165 116,145 233,132 350,92 466,108 583,52 700,70"/>
+                  <polyline class="opportunity-line" points="0,188 116,180 233,183 350,165 466,172 583,151 700,158"/>
+                </svg>
+                <div class="chart-x"><span>6月17日</span><span>6月18日</span><span>6月19日</span><span>6月20日</span><span>6月21日</span><span>6月22日</span><span>6月23日</span></div>
+              </div>
+            </article>
+
+            <article class="dashboard-card channel-panel">
+              <header><div><h2>渠道表现</h2><p>按产生商机贡献排序</p></div><button type="button" aria-label="查看更多渠道"><i data-lucide="ellipsis"></i></button></header>
+              <div class="channel-list">
+                <div class="channel-row"><div><span class="channel-dot wecom"></span><strong>企业微信</strong><small>送达率 98.2%</small></div><b>42%</b><span class="channel-bar"><i style="width:42%"></i></span></div>
+                <div class="channel-row"><div><span class="channel-dot email"></span><strong>邮件</strong><small>送达率 92.8%</small></div><b>31%</b><span class="channel-bar"><i style="width:31%"></i></span></div>
+                <div class="channel-row"><div><span class="channel-dot sms"></span><strong>短信</strong><small>送达率 96.4%</small></div><b>18%</b><span class="channel-bar"><i style="width:18%"></i></span></div>
+                <div class="channel-row"><div><span class="channel-dot linkedin"></span><strong>LinkedIn</strong><small>送达率 88.6%</small></div><b>9%</b><span class="channel-bar"><i style="width:9%"></i></span></div>
+              </div>
+            </article>
+          </div>
+
+          <section class="dashboard-card task-panel" aria-labelledby="task-title">
+            <header class="task-header">
+              <div><h2 id="task-title">触达任务</h2><p>共 18 个任务，5 个正在执行</p></div>
+              <div class="task-controls">
+                <label class="task-search"><i data-lucide="search"></i><input id="taskSearch" type="search" aria-label="搜索触达任务" placeholder="搜索任务" /></label>
+                <div class="task-tabs" role="group" aria-label="任务状态筛选">
+                  <button class="active" data-status="all" type="button">全部</button>
+                  <button data-status="running" type="button">进行中</button>
+                  <button data-status="completed" type="button">已完成</button>
+                </div>
+              </div>
+            </header>
+            <div class="task-table-wrap">
+              <table class="task-table">
+                <thead><tr><th>任务名称</th><th>目标人群</th><th>渠道</th><th>触达/互动</th><th>商机</th><th>状态</th><th>更新时间</th><th></th></tr></thead>
+                <tbody id="taskTableBody">
+                  <tr data-status="running"><td><strong>华东新能源扩产客户触达</strong><small>由新闻热点策略创建</small></td><td>1,280 人</td><td><span class="channel-tag">企业微信</span></td><td>1,124 / 386</td><td><b>58</b></td><td><span class="status running">进行中</span></td><td>10 分钟前</td><td><button class="task-detail" type="button">查看</button></td></tr>
+                  <tr data-status="completed"><td><strong>沉默高价值客户唤醒</strong><small>由老客维护策略创建</small></td><td>846 人</td><td><span class="channel-tag">邮件</span></td><td>792 / 241</td><td><b>37</b></td><td><span class="status completed">已完成</span></td><td>昨天 18:42</td><td><button class="task-detail" type="button">查看</button></td></tr>
+                  <tr data-status="running"><td><strong>欧盟碳关税合规服务推广</strong><small>由政策热点策略创建</small></td><td>620 人</td><td><span class="channel-tag">邮件 + 短信</span></td><td>574 / 198</td><td><b>29</b></td><td><span class="status running">进行中</span></td><td>今天 09:16</td><td><button class="task-detail" type="button">查看</button></td></tr>
+                  <tr data-status="completed"><td><strong>东南亚储能渠道招募</strong><small>由市场机会策略创建</small></td><td>438 人</td><td><span class="channel-tag">LinkedIn</span></td><td>388 / 104</td><td><b>16</b></td><td><span class="status completed">已完成</span></td><td>6月21日</td><td><button class="task-detail" type="button">查看</button></td></tr>
+                  <tr data-status="running"><td><strong>供应商认证窗口期拓客</strong><small>由新客商机策略创建</small></td><td>316 人</td><td><span class="channel-tag">企业微信</span></td><td>287 / 96</td><td><b>14</b></td><td><span class="status running">进行中</span></td><td>6月20日</td><td><button class="task-detail" type="button">查看</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="task-empty" id="taskEmpty" hidden>没有找到匹配的任务</p>
+          </section>
+        </section>
+
+        <section class="lily-secondary inquiry-page" id="lilyInquiryPage" aria-labelledby="inquiry-title" hidden>
+          <nav class="lily-breadcrumb" aria-label="面包屑">
+            <button class="back-to-lily" type="button">触达转化Lily</button>
+            <i data-lucide="chevron-right" aria-hidden="true"></i>
+            <span aria-current="page" id="inquiry-title">询盘消息</span>
+          </nav>
+
+          <div class="inquiry-layout">
+            <aside class="inquiry-list" aria-label="询盘消息列表">
+              <header>
+                <h2>消息</h2>
+                <div class="compact-tabs" role="tablist" aria-label="消息筛选">
+                  <button class="active" type="button" role="tab" aria-selected="true">全部</button>
+                  <button type="button" role="tab" aria-selected="false">未读</button>
+                </div>
+              </header>
+              <button class="inquiry-item active" type="button">
+                <span class="avatar">C</span>
+                <span><strong>Chris</strong><small>Hello! I'm Chris from Shanghai Wei Yuan</small></span>
+                <time>14:36</time>
+              </button>
+              <button class="inquiry-item" type="button">
+                <span class="avatar blue">M</span>
+                <span><strong>Mia</strong><small>Can you share the battery catalog?</small></span>
+                <time>12:18</time>
+              </button>
+              <button class="inquiry-item" type="button">
+                <span class="avatar green">A</span>
+                <span><strong>Ava</strong><small>We need delivery details this week.</small></span>
+                <time>昨天</time>
+              </button>
+            </aside>
+
+            <article class="inquiry-chat" aria-label="询盘详情">
+              <header>
+                <div><span class="avatar">C</span><h2>Chris</h2></div>
+                <div class="compact-tabs" role="tablist" aria-label="会话类型">
+                  <button class="active" type="button" role="tab" aria-selected="true">消息</button>
+                  <button type="button" role="tab" aria-selected="false">邮件</button>
+                </div>
+              </header>
+              <div class="chat-thread">
+                <div class="chat-row sent"><p>Hi，我想找电池的客户</p><span class="avatar self">J</span></div>
+                <div class="chat-row sent"><p class="file-message"><i data-lucide="file"></i>CZMH_20250820_000009.pdf <button type="button">查看</button><button type="button">下载</button></p></div>
+                <div class="chat-row"><span class="avatar">C</span><p>Hi，我想找电池的客户</p></div>
+              </div>
+              <footer class="reply-box">
+                <textarea rows="2" placeholder="请输入"></textarea>
+                <div>
+                  <button type="button"><i data-lucide="paperclip"></i>添加资料</button>
+                  <button class="send-reply" type="button">发送 <i data-lucide="send"></i></button>
+                </div>
+              </footer>
+            </article>
+          </div>
+        </section>
+
+        <section class="lily-secondary templates-page" id="lilyTemplatesPage" aria-labelledby="templates-title" hidden>
+          <nav class="lily-breadcrumb" aria-label="面包屑">
+            <button class="back-to-lily" type="button">触达转化Lily</button>
+            <i data-lucide="chevron-right" aria-hidden="true"></i>
+            <span aria-current="page" id="templates-title">话术模板</span>
+          </nav>
+
+          <div class="template-tabs compact-tabs" role="tablist" aria-label="话术模板类型">
+            <button class="active" type="button" role="tab" aria-selected="true">单轮邮件</button>
+            <button type="button" role="tab" aria-selected="false">多轮邮件</button>
+          </div>
+
+          <div class="template-grid" aria-label="邮件模板列表">
+            <button class="template-card new-template" type="button"><i data-lucide="plus"></i><span>新建邮件</span></button>
+            <article class="template-card featured"><button class="template-more" type="button" aria-label="更多操作"><i data-lucide="more-vertical"></i></button><header><h2>首次开发信·观察破冰型</h2><span>行业专家</span></header><p>单轮首次开发信·观察破冰</p></article>
+            <article class="template-card featured"><button class="template-more" type="button" aria-label="更多操作"><i data-lucide="more-vertical"></i></button><header><h2>首次开发信·观察破冰型</h2><span>行业专家</span></header><p>单轮首次开发信·观察破冰</p></article>
+            <article class="template-card"><button class="template-more" type="button" aria-label="更多操作"><i data-lucide="more-vertical"></i></button><header><h2>自定义模板</h2></header><p>2024-12-23 14:39:44</p></article>
+            <article class="template-card"><button class="template-more" type="button" aria-label="更多操作"><i data-lucide="more-vertical"></i></button><header><h2>自定义模板</h2></header><p>2024-12-23 14:39:44</p></article>
+            <article class="template-card"><button class="template-more" type="button" aria-label="更多操作"><i data-lucide="more-vertical"></i></button><header><h2>自定义模板</h2></header><p>2024-12-23 14:39:44</p></article>
+            <article class="template-card"><button class="template-more" type="button" aria-label="更多操作"><i data-lucide="more-vertical"></i></button><header><h2>自定义模板</h2></header><p>2024-12-23 14:39:44</p></article>
+            <article class="template-card"><button class="template-more" type="button" aria-label="更多操作"><i data-lucide="more-vertical"></i></button><header><h2>自定义模板</h2></header><p>2024-12-23 14:39:44</p></article>
+          </div>
+        </section>
+
+        <section class="lily-secondary marketing-tasks-page" id="lilyTasksPage" aria-labelledby="lily-tasks-title" hidden>
+          <nav class="lily-breadcrumb" aria-label="面包屑">
+            <button class="back-to-lily" type="button">触达转化Lily</button>
+            <i data-lucide="chevron-right" aria-hidden="true"></i>
+            <span aria-current="page" id="lily-tasks-title">任务管理</span>
+          </nav>
+
+          <div class="task-summary-row" aria-label="任务状态概览">
+            <article><span>进行中</span><strong>23</strong></article>
+            <article><span>已完成</span><strong>23</strong></article>
+            <article><span>已停止</span><strong>23</strong></article>
+          </div>
+
+          <div class="lily-task-list">
+            <article class="lily-task-card" data-secondary-task-status="running">
+              <header><h2>新品发布策略任务</h2><span class="task-badge running">策略触达</span></header>
+              <div class="task-stat-row">
+                <div><strong>8</strong><span>持续天数</span></div>
+                <div><strong>小小</strong><span>发起人</span></div>
+                <div><strong>727</strong><span>已触达公司</span></div>
+                <div><strong>1328</strong><span>已触达联系人</span></div>
+              </div>
+              <footer><span>触达客群</span><b>Filter 1</b><b>Filter 2</b><b>Filter 3</b><b>Filter 4</b><b>Filter 5</b><span>触达模版</span><button type="button">新客触达标准模版</button><button class="open-task-template" type="button" aria-label="打开模板"><i data-lucide="arrow-up-right"></i></button></footer>
+            </article>
+          </div>
+        </section>
+
+        <section class="john-page" id="johnPage" aria-labelledby="john-title" hidden>
+          <header class="john-hero">
+            <div class="john-hero-copy">
+              <p class="john-kicker">24/7 投流 John</p>
+              <h1 id="john-title">John 让投流增长保持在线</h1>
+              <p>实时分析广告、国家、渠道、人群和关键词表现，帮你发现预算机会、异常波动和下一步优化动作。</p>
+            </div>
+            <div class="john-entry-actions" aria-label="John 功能入口">
+              <button type="button" data-john-entry="关键词管理">
+                <i data-lucide="search-check"></i>
+                <span>关键词管理</span>
+              </button>
+              <button type="button" data-john-entry="广告管理">
+                <i data-lucide="chart-no-axes-combined"></i>
+                <span>广告管理</span>
+              </button>
+            </div>
+          </header>
+
+          <div class="john-metric-grid" aria-label="广告核心指标">
+            <article class="john-metric-card">
+              <span>曝光 Impressions</span>
+              <strong data-john-metric="impressions">37,106</strong>
+              <p><i data-lucide="trending-up"></i><b data-john-delta="impressions">12%</b> vs 上周</p>
+            </article>
+            <article class="john-metric-card">
+              <span>点击 Clicks</span>
+              <strong data-john-metric="clicks">2,290</strong>
+              <p><i data-lucide="trending-up"></i><b data-john-delta="clicks">8%</b> vs 上周</p>
+            </article>
+            <article class="john-metric-card">
+              <span>花费 Cost</span>
+              <strong data-john-metric="cost">$4,842</strong>
+              <p><i data-lucide="trending-up"></i><b data-john-delta="cost">5%</b> vs 上周</p>
+            </article>
+            <article class="john-metric-card">
+              <span>转化 Conversions</span>
+              <strong data-john-metric="conversions">229</strong>
+              <p><i data-lucide="trending-up"></i><b data-john-delta="conversions">15%</b> vs 上周</p>
+            </article>
+          </div>
+
+          <div class="john-dashboard-grid">
+            <section class="john-card john-trend-card" aria-labelledby="john-trend-title">
+              <header>
+                <div>
+                  <h2 id="john-trend-title">花费 & 转化趋势</h2>
+                  <p id="johnTrendSubtitle">近 14 天 · 广告1 · 性能卖点</p>
+                </div>
+                <span class="john-legend"><i></i>花费 <i></i>转化</span>
+              </header>
+              <div class="john-trend-chart" role="img" aria-label="近14天花费和转化趋势折线图">
+                <div class="john-chart-y"><span>220</span><span>165</span><span>110</span><span>55</span><span>0</span></div>
+                <svg viewBox="0 0 720 260" preserveAspectRatio="none" aria-hidden="true">
+                  <g class="john-grid-lines">
+                    <line x1="0" y1="18" x2="720" y2="18"></line>
+                    <line x1="0" y1="76" x2="720" y2="76"></line>
+                    <line x1="0" y1="134" x2="720" y2="134"></line>
+                    <line x1="0" y1="192" x2="720" y2="192"></line>
+                    <line x1="0" y1="250" x2="720" y2="250"></line>
+                    <line x1="168" y1="18" x2="168" y2="250"></line>
+                    <line x1="336" y1="18" x2="336" y2="250"></line>
+                    <line x1="504" y1="18" x2="504" y2="250"></line>
+                  </g>
+                  <path class="john-cost-line" data-john-line="cost" d="M0 148 C28 42 55 8 84 33 S122 243 168 164 S225 104 252 138 S299 194 336 132 S407 95 420 114 S463 156 504 124 S568 -8 604 63 S660 177 720 146"></path>
+                  <path class="john-conversion-line" data-john-line="conversions" d="M0 250 C28 238 55 235 84 238 S120 254 168 246 S225 244 252 247 S298 249 336 245 S392 239 420 240 S470 243 504 237 S562 226 604 234 S668 243 720 241"></path>
+                  <line class="john-hover-line" x1="420" y1="18" x2="420" y2="250"></line>
+                  <circle class="john-point cost" cx="420" cy="114" r="4"></circle>
+                  <circle class="john-point conversions" cx="420" cy="240" r="4"></circle>
+                </svg>
+                <div class="john-tooltip">
+                  <strong>06-08</strong>
+                  <span>conversions: 8</span>
+                  <span>cost: 125.83</span>
+                </div>
+                <div class="john-chart-x">
+                  <span>06-01</span><span>06-02</span><span>06-03</span><span>06-04</span><span>06-05</span><span>06-06</span><span>06-07</span><span>06-08</span><span>06-09</span><span>06-10</span><span>06-11</span><span>06-12</span><span>06-13</span><span>06-14</span>
+                </div>
+              </div>
+              <footer>
+                <span>CTR <strong data-john-metric="ctr">6.17%</strong></span>
+                <span>CPA <strong data-john-metric="cpa">$21.14</strong></span>
+                <button type="button" data-john-action="diagnose"><i data-lucide="sparkles"></i>生成优化建议</button>
+              </footer>
+            </section>
+
+            <aside class="john-card john-distribution-card" aria-labelledby="john-distribution-title">
+              <header>
+                <div>
+                  <h2 id="john-distribution-title">花费分布</h2>
+                  <p>按国家 / 渠道 / 人群拆解预算效率</p>
+                </div>
+              </header>
+              <div class="john-tabs" role="tablist" aria-label="花费分布维度">
+                <button class="active" type="button" role="tab" aria-selected="true" data-john-segment="country">国家</button>
+                <button type="button" role="tab" aria-selected="false" data-john-segment="channel">渠道</button>
+                <button type="button" role="tab" aria-selected="false" data-john-segment="audience">人群</button>
+              </div>
+              <div class="john-donut" aria-hidden="true"></div>
+              <div class="john-distribution-list" id="johnDistributionList" aria-live="polite"></div>
+            </aside>
+          </div>
+
+          <div class="john-lower-grid">
+            <section class="john-card john-insight-card" aria-labelledby="john-insight-title">
+              <header>
+                <div>
+                  <h2 id="john-insight-title">John 的投流提醒</h2>
+                  <p>预算、转化和素材异常会优先提示。</p>
+                </div>
+                <button type="button" data-john-action="refresh"><i data-lucide="refresh-cw"></i></button>
+              </header>
+              <div class="john-insight-list">
+                <article><i data-lucide="badge-dollar-sign"></i><div><strong>US 预算还可上调 12%</strong><span>CPA 低于均值 $3.8，且过去 3 天转化稳定。</span></div><button type="button">采纳</button></article>
+                <article><i data-lucide="mouse-pointer-click"></i><div><strong>移动端点击率偏低</strong><span>素材首屏卖点不够直接，建议测试“认证 + 交付周期”版本。</span></div><button type="button">测试</button></article>
+                <article><i data-lucide="search-check"></i><div><strong>关键词「solar battery supplier」升温</strong><span>搜索量上涨 18%，可加入性能卖点广告组。</span></div><button type="button">添加</button></article>
+              </div>
+            </section>
+
+            <section class="john-card john-table-card" aria-labelledby="john-keyword-title">
+              <header>
+                <div>
+                  <h2 id="john-keyword-title">关键词表现</h2>
+                  <p>按转化效率排序，定位可加预算或需暂停的词。</p>
+                </div>
+              </header>
+              <div class="john-table-wrap">
+                <table class="john-table">
+                  <thead><tr><th>关键词</th><th>花费</th><th>点击</th><th>转化</th><th>CPA</th><th>动作</th></tr></thead>
+                  <tbody>
+                    <tr><td><strong>solar battery supplier</strong><small>高意图 · US</small></td><td>$684</td><td>318</td><td><b>42</b></td><td>$16.29</td><td><span class="john-status good">加预算</span></td></tr>
+                    <tr><td><strong>home energy storage</strong><small>泛流量 · GB</small></td><td>$592</td><td>286</td><td><b>21</b></td><td>$28.19</td><td><span class="john-status watch">观察</span></td></tr>
+                    <tr><td><strong>lithium battery wholesale</strong><small>B2B · DE</small></td><td>$421</td><td>144</td><td><b>18</b></td><td>$23.38</td><td><span class="john-status good">扩词</span></td></tr>
+                    <tr><td><strong>cheap powerwall alternative</strong><small>低价意图 · JP</small></td><td>$236</td><td>92</td><td><b>3</b></td><td>$78.67</td><td><span class="john-status stop">暂停</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+
+          <section class="john-composer" aria-label="描述你的投流分析诉求">
+            <textarea id="johnPromptInput" rows="2" maxlength="500" placeholder="想要分析特定国家or人群，想要提升哪些广告表现，让John帮你提升"></textarea>
+            <div class="john-composer-actions">
+              <button class="john-prompt-send" id="johnPromptSend" type="button"><i data-lucide="sparkles"></i>让 John 分析</button>
+            </div>
+          </section>
+        </section>
+
+        <section class="john-manage-page john-ads-page" id="johnAdsPage" aria-labelledby="john-ads-title" hidden>
+          <header class="john-manage-hero">
+            <button class="john-back" type="button" data-john-back><i data-lucide="arrow-left"></i>返回 John</button>
+            <h1 id="john-ads-title">广告管理</h1>
+            <p>所有广告（不管是 campaign 还是广告组），颗粒度统一到「广告」层级。</p>
+          </header>
+
+          <div class="john-ad-products">
+            <section class="john-product-card" aria-labelledby="aurora-title">
+              <header>
+                <div>
+                  <h2 id="aurora-title">Aurora 降噪耳机</h2>
+                  <p>3 条广告</p>
+                </div>
+                <span>音频</span>
+              </header>
+              <div class="john-manage-table-wrap">
+                <table class="john-manage-table john-ad-table">
+                  <thead><tr><th>广告</th><th>状态</th><th>日预算</th><th>国家</th><th>渠道</th><th>关键词</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td><strong>广告1 · 品牌主推</strong><small>Aurora 降噪耳机 · 沉浸聆听</small></td><td><span class="john-status good">运行中</span></td><td>$120</td><td>US, GB</td><td>2 个</td><td>3</td><td><button data-john-ad-action="pause" type="button">暂停</button><button data-john-ad-action="edit" type="button">编辑</button></td></tr>
+                    <tr><td><strong>广告2 · 再营销</strong><small>还在犹豫?今日下单立省 $40</small></td><td><span class="john-status good">运行中</span></td><td>$60</td><td>US</td><td>1 个</td><td>2</td><td><button data-john-ad-action="pause" type="button">暂停</button><button data-john-ad-action="edit" type="button">编辑</button></td></tr>
+                    <tr><td><strong>广告3 · 新国家测试</strong><small>Aurora Headphones — Now in DE</small></td><td><span class="john-status draft">草稿</span></td><td>$40</td><td>DE</td><td>2 个</td><td>1</td><td><button data-john-ad-action="enable" type="button">启用</button><button data-john-ad-action="edit" type="button">编辑</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="john-product-card" aria-labelledby="lumos-title">
+              <header>
+                <div>
+                  <h2 id="lumos-title">Lumos 智能台灯</h2>
+                  <p>2 条广告</p>
+                </div>
+                <span>照明</span>
+              </header>
+              <div class="john-manage-table-wrap">
+                <table class="john-manage-table john-ad-table">
+                  <thead><tr><th>广告</th><th>状态</th><th>日预算</th><th>国家</th><th>渠道</th><th>关键词</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td><strong>广告1 · 通用搜索</strong><small>Lumos 智能台灯 · 护眼无频闪</small></td><td><span class="john-status good">运行中</span></td><td>$80</td><td>US, JP</td><td>2 个</td><td>2</td><td><button data-john-ad-action="pause" type="button">暂停</button><button data-john-ad-action="edit" type="button">编辑</button></td></tr>
+                    <tr><td><strong>广告2 · 礼品场景</strong><small>送礼之选 · Lumos 礼盒装</small></td><td><span class="john-status watch">已暂停</span></td><td>$50</td><td>US</td><td>1 个</td><td>1</td><td><button data-john-ad-action="enable" type="button">启用</button><button data-john-ad-action="edit" type="button">编辑</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="john-manage-page john-keywords-page" id="johnKeywordsPage" aria-labelledby="john-keywords-title" hidden>
+          <header class="john-manage-hero">
+            <button class="john-back" type="button" data-john-back><i data-lucide="arrow-left"></i>返回 John</button>
+            <h1 id="john-keywords-title">关键词管理</h1>
+            <p>需求 2c / 4：广告关联搜索词，支持启用/停用、补充负向词、调整词与广告的关联。</p>
+          </header>
+
+          <section class="john-keyword-panel">
+            <header>
+              <label>
+                <span>广告：</span>
+                <select id="johnKeywordAdFilter">
+                  <option value="all">全部广告</option>
+                  <option value="广告1 · 品牌主推">广告1 · 品牌主推</option>
+                  <option value="广告2 · 再营销">广告2 · 再营销</option>
+                  <option value="广告3 · 新国家测试">广告3 · 新国家测试</option>
+                  <option value="广告1 · 通用搜索">广告1 · 通用搜索</option>
+                  <option value="广告2 · 礼品场景">广告2 · 礼品场景</option>
+                </select>
+              </label>
+              <div class="john-keyword-tabs" role="tablist" aria-label="关键词类型">
+                <button class="active" type="button" role="tab" aria-selected="true" data-john-keyword-tab="keyword">关键词</button>
+                <button type="button" role="tab" aria-selected="false" data-john-keyword-tab="negative">负向词</button>
+              </div>
+            </header>
+
+            <div class="john-manage-table-wrap">
+              <table class="john-manage-table john-keyword-table">
+                <thead><tr><th>搜索词 / 关键词</th><th>匹配</th><th>归属广告</th><th>曝光</th><th>点击</th><th>花费</th><th>转化</th><th>状态</th><th></th></tr></thead>
+                <tbody id="johnKeywordRows">
+                  <tr data-keyword-type="keyword" data-ad-name="广告1 · 品牌主推"><td><strong>降噪耳机</strong></td><td><select><option>广泛</option><option>词组</option><option>精确</option></select></td><td><select><option>广告1 · 品牌主推</option><option>广告2 · 再营销</option></select></td><td>7,189</td><td>634</td><td>$722.87</td><td>74</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
+                  <tr data-keyword-type="keyword" data-ad-name="广告1 · 品牌主推"><td><strong>noise cancelling headphones</strong></td><td><select><option>词组</option><option>广泛</option><option>精确</option></select></td><td><select><option>广告1 · 品牌主推</option><option>广告3 · 新国家测试</option></select></td><td>9,568</td><td>325</td><td>$924.66</td><td>31</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
+                  <tr data-keyword-type="keyword" data-ad-name="广告1 · 品牌主推"><td><strong>无线耳机推荐</strong></td><td><select><option>广泛</option><option>词组</option><option>精确</option></select></td><td><select><option>广告1 · 品牌主推</option><option>广告2 · 再营销</option></select></td><td>2,601</td><td>230</td><td>$544.17</td><td>24</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
+                  <tr data-keyword-type="keyword" data-ad-name="广告2 · 再营销"><td><strong>aurora 耳机 优惠</strong></td><td><select><option>精确</option><option>词组</option><option>广泛</option></select></td><td><select><option>广告2 · 再营销</option><option>广告1 · 品牌主推</option></select></td><td>7,615</td><td>603</td><td>$1,570.92</td><td>47</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
+                  <tr data-keyword-type="keyword" data-ad-name="广告2 · 再营销"><td><strong>耳机 折扣码</strong></td><td><select disabled><option>词组</option></select></td><td><select disabled><option>广告2 · 再营销</option></select></td><td>8,405</td><td>678</td><td>$1,343.41</td><td>26</td><td><span class="john-status watch">停用</span></td><td><button data-john-keyword-action="enable" type="button">启用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
+                  <tr data-keyword-type="keyword" data-ad-name="广告3 · 新国家测试"><td><strong>kopfhörer anc</strong></td><td><select><option>词组</option><option>广泛</option><option>精确</option></select></td><td><select><option>广告3 · 新国家测试</option><option>广告1 · 品牌主推</option></select></td><td>8,594</td><td>522</td><td>$577.68</td><td>52</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
+                  <tr data-keyword-type="keyword" data-ad-name="广告1 · 通用搜索"><td><strong>智能台灯</strong></td><td><select><option>广泛</option><option>词组</option><option>精确</option></select></td><td><select><option>广告1 · 通用搜索</option><option>广告2 · 礼品场景</option></select></td><td>6,042</td><td>199</td><td>$484.68</td><td>6</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
+                  <tr data-keyword-type="keyword" data-ad-name="广告1 · 通用搜索"><td><strong>护眼台灯</strong></td><td><select><option>词组</option><option>广泛</option><option>精确</option></select></td><td><select><option>广告1 · 通用搜索</option><option>广告2 · 礼品场景</option></select></td><td>2,464</td><td>185</td><td>$169.36</td><td>9</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
+                  <tr data-keyword-type="keyword" data-ad-name="广告2 · 礼品场景"><td><strong>生日礼物 台灯</strong></td><td><select><option>词组</option><option>广泛</option><option>精确</option></select></td><td><select><option>广告2 · 礼品场景</option><option>广告1 · 通用搜索</option></select></td><td>1,681</td><td>65</td><td>$141.36</td><td>2</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
+                  <tr data-keyword-type="negative" data-ad-name="广告1 · 品牌主推"><td><strong>二手耳机</strong><small>避免低价二手流量</small></td><td><select><option>词组</option><option>精确</option></select></td><td><select><option>广告1 · 品牌主推</option><option>广告2 · 再营销</option></select></td><td>1,204</td><td>83</td><td>$96.24</td><td>0</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
+                  <tr data-keyword-type="negative" data-ad-name="广告1 · 通用搜索"><td><strong>维修台灯</strong><small>过滤售后维修类搜索</small></td><td><select><option>广泛</option><option>词组</option></select></td><td><select><option>广告1 · 通用搜索</option><option>广告2 · 礼品场景</option></select></td><td>842</td><td>41</td><td>$44.68</td><td>0</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section class="wendy-page" id="wendyPage" aria-labelledby="wendy-title" hidden>
+          <header class="wendy-hero">
+            <div>
+              <p class="wendy-kicker">社媒运营智能体</p>
+              <h1 id="wendy-title">Wendy 社媒发布日历</h1>
+              <p>按最佳发布时间查看、排期和直接发布 LinkedIn、Instagram、TikTok 与 YouTube Shorts 内容。</p>
+            </div>
+          </header>
+
+          <section class="wendy-calendar-shell" aria-label="Wendy发布日历">
+            <div class="wendy-calendar-toolbar">
+              <div class="wendy-range-controls" aria-label="日历日期控制">
+                <button class="wendy-text-button" type="button">Today</button>
+                <button class="wendy-icon-button" type="button" aria-label="上一周"><i data-lucide="chevron-left"></i></button>
+                <button class="wendy-icon-button" type="button" aria-label="下一周"><i data-lucide="chevron-right"></i></button>
+                <strong>2026年7月6日 - 12日</strong>
+              </div>
+              <div class="wendy-view-controls">
+                <span>Asia/Shanghai</span>
+                <div class="wendy-segmented" role="tablist" aria-label="日历视图">
+                  <button class="active" type="button" role="tab" aria-selected="true">周</button>
+                  <button type="button" role="tab" aria-selected="false">月</button>
+                  <button type="button" role="tab" aria-selected="false">列表</button>
+                </div>
+                <button class="wendy-icon-button bordered" type="button" aria-label="日历设置"><i data-lucide="settings"></i></button>
+                <button class="wendy-primary wendy-send-button" data-wendy-open-publisher type="button"><i data-lucide="send"></i>发布 Post</button>
+              </div>
+            </div>
+
+            <div class="wendy-calendar-subbar">
+              <button class="wendy-trend-pill" type="button"><i data-lucide="hash"></i>未来热门标签</button>
+              <div class="wendy-platform-legend" aria-label="平台颜色说明">
+                <span><i class="linkedin"></i>LinkedIn</span>
+                <span><i class="instagram"></i>Instagram</span>
+                <span><i class="tiktok"></i>TikTok</span>
+                <span><i class="youtube"></i>YouTube</span>
+              </div>
+            </div>
+
+            <div class="wendy-week-calendar">
+              <div class="wendy-week-header" aria-hidden="true">
+                <span></span>
+                <strong>6 周一</strong>
+                <strong>7 周二</strong>
+                <strong>8 周三</strong>
+                <strong>9 周四</strong>
+                <strong>10 周五</strong>
+                <strong>11 周六</strong>
+                <strong>12 周日</strong>
+              </div>
+
+              <div class="wendy-week-body">
+                <div class="wendy-time-axis" aria-hidden="true">
+                  <span>12AM</span><span>1AM</span><span>2AM</span><span>3AM</span>
+                  <span>4AM</span><span>5AM</span><span>6AM</span><span>7AM</span>
+                  <span>8AM</span><span>9AM</span><span>10AM</span><span>11AM</span>
+                  <span>12PM</span><span>1PM</span><span>2PM</span><span>3PM</span>
+                </div>
+                <div class="wendy-day-column" data-day="7月6日 周一">
+                  <button class="wendy-event blue" style="--start: 3; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-06T10:00" data-copy="发布欧洲储能安装商案例图文，强调交付稳定性和认证资料完整度。" type="button"><span>LinkedIn 案例图文</span><i data-lucide="flame"></i></button>
+                </div>
+                <div class="wendy-day-column" data-day="7月7日 周二">
+                  <button class="wendy-event purple" style="--start: 0; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-07T00:30" data-copy="展示新一代并网组件的产品细节，附带官网资料下载链接。" type="button"><span>Instagram 产品细节</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event hot" style="--start: 6; --duration: 1;" data-wendy-event data-platform="TikTok" data-time="2026-07-07T06:00" data-copy="15 秒工厂测试流程短视频，开头展示高压测试台和质检标签。" type="button"><span>TikTok 工厂短视频</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event blue" style="--start: 7; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-07T07:00" data-copy="分享项目交付时间线，突出海外安装商能快速获取技术资料。" type="button"><span>LinkedIn 交付时间线</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event purple" style="--start: 12; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-07T12:00" data-copy="午间发布产品应用场景轮播图，导流到独立站资料页。" type="button"><span>Instagram 场景轮播</span><i data-lucide="flame"></i></button>
+                </div>
+                <div class="wendy-day-column" data-day="7月8日 周三">
+                  <button class="wendy-event pink" style="--start: 7; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-08T07:00" data-copy="发布客户常见问题短图，解释认证资料、质保和售后响应。" type="button"><span>Instagram FAQ 短图</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event blue" style="--start: 13; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-08T13:00" data-copy="午后发布 LinkedIn 投票，询问海外买家最关注的并网组件指标。" type="button"><span>LinkedIn 买家投票</span><i data-lucide="flame"></i></button>
+                </div>
+                <div class="wendy-day-column" data-day="7月9日 周四">
+                  <button class="wendy-event purple" style="--start: 0; --duration: 1;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-09T00:30" data-copy="发布 30 秒 YouTube Shorts，展示产品包装、测试和出货节点。" type="button"><span>YouTube Shorts 出货</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event pink" style="--start: 4; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-09T04:00" data-copy="清晨发布海外项目安装现场图，配合热门标签获取自然流量。" type="button"><span>Instagram 项目现场</span><i data-lucide="flame"></i></button>
+                </div>
+                <div class="wendy-day-column" data-day="7月10日 周五">
+                  <button class="wendy-event pink" style="--start: 9; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-10T09:00" data-copy="发布安装商合作清单，说明交付前、中、后的支持动作。" type="button"><span>Instagram 合作清单</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event purple" style="--start: 11; --duration: 1;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-10T11:00" data-copy="发布售后备件短视频，强化长期维护能力。" type="button"><span>YouTube 售后短片</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event blue" style="--start: 13; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-10T13:00" data-copy="发布一条面向采购负责人的交付承诺帖，附带联系入口。" type="button"><span>LinkedIn 采购帖</span><i data-lucide="flame"></i></button>
+                </div>
+                <div class="wendy-day-column" data-day="7月11日 周六">
+                  <button class="wendy-event pink split-one" style="--start: 0; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-11T00:00" data-copy="周末零点发布热门标签内容，覆盖北美深夜流量。" type="button" aria-label="Instagram周末热门标签"><i data-lucide="flame"></i></button>
+                  <button class="wendy-event purple split-two" style="--start: 0; --duration: 1;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-11T00:20" data-copy="同步一条 Shorts 精简版产品亮点。" type="button" aria-label="YouTube Shorts产品亮点"><i data-lucide="flame"></i></button>
+                  <button class="wendy-event blue split-three" style="--start: 0; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-11T00:40" data-copy="发布 LinkedIn 英文短帖，引导进入资料下载页。" type="button" aria-label="LinkedIn英文短帖"><i data-lucide="flame"></i></button>
+                  <button class="wendy-event pink" style="--start: 5; --duration: 1;" data-wendy-event data-platform="Instagram" data-time="2026-07-11T05:00" data-copy="发布周末项目照片合集，保持账号活跃。" type="button"><span>Instagram 照片合集</span><i data-lucide="flame"></i></button>
+                  <button class="wendy-event blue" style="--start: 13; --duration: 1;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-11T13:00" data-copy="复盘本周社媒内容表现，邀请买家留言需求。" type="button"><span>LinkedIn 周总结</span><i data-lucide="flame"></i></button>
+                </div>
+                <div class="wendy-day-column" data-day="7月12日 周日">
+                  <button class="wendy-event purple" style="--start: 2; --duration: 1;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-12T02:00" data-copy="发布下周预告短视频，展示新素材拍摄计划。" type="button"><span>YouTube 下周预告</span><i data-lucide="flame"></i></button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="wendy-bottom-composer" aria-label="描述你想要的社媒内容">
+            <div class="wendy-composer-box">
+              <textarea id="wendyPromptInput" rows="2" maxlength="500" placeholder="描述你想要的社媒内容，例如：帮我生成一条LinkedIn新品介绍"></textarea>
+              <div class="wendy-composer-footer">
+                <div class="wendy-composer-left">
+                  <input id="wendyImageInput" type="file" accept="image/*" multiple hidden />
+                  <button class="wendy-attach-button" id="wendyAttachImage" type="button"><i data-lucide="paperclip"></i>添加资料</button>
+                  <span class="wendy-upload-status" id="wendyUploadStatus" aria-live="polite"></span>
+                </div>
+                <button class="wendy-composer-send" id="wendyPromptSend" type="button">发送 <i data-lucide="send"></i></button>
+              </div>
+            </div>
+          </section>
+
+          <div class="wendy-publisher" id="wendyPublisher" hidden>
+            <div class="wendy-publisher-backdrop" data-wendy-close-publisher></div>
+            <form class="wendy-publisher-panel" aria-labelledby="wendyPublisherTitle">
+              <header>
+                <div>
+                  <p>Distribute</p>
+                  <h2 id="wendyPublisherTitle">发布 Post</h2>
+                  <span>选择平台、内容类型、素材与排期，一次生成可发布的社媒内容。</span>
+                </div>
+                <button class="wendy-icon-button" data-wendy-close-publisher type="button" aria-label="关闭"><i data-lucide="x"></i></button>
+              </header>
+              <div class="wendy-publisher-body">
+                <section class="wendy-publisher-main" aria-label="Post内容设置">
+                  <div class="wendy-publisher-block">
+                    <div class="wendy-block-heading">
+                      <div>
+                        <strong>Post to</strong>
+                        <span>选择要同步分发的平台</span>
+                      </div>
+                      <select id="wendyPublishPlatform" aria-label="主发布平台">
+                        <option>LinkedIn</option>
+                        <option>Instagram</option>
+                        <option>TikTok</option>
+                        <option>YouTube Shorts</option>
+                      </select>
+                    </div>
+                    <div class="wendy-platform-picker" aria-label="目标平台">
+                      <button class="active" data-wendy-platform-option="LinkedIn" type="button"><i data-lucide="briefcase-business"></i><span>LinkedIn</span><b>Post</b></button>
+                      <button data-wendy-platform-option="Instagram" type="button"><i data-lucide="camera"></i><span>Instagram</span><b>Feed Post</b></button>
+                      <button data-wendy-platform-option="TikTok" type="button"><i data-lucide="music-2"></i><span>TikTok</span><b>Video</b></button>
+                      <button data-wendy-platform-option="YouTube Shorts" type="button"><i data-lucide="play"></i><span>YouTube</span><b>Short</b></button>
+                    </div>
+                  </div>
+
+                  <div class="wendy-publisher-block">
+                    <div class="wendy-block-heading">
+                      <div>
+                        <strong>Content Type</strong>
+                        <span>为当前平台选择内容格式</span>
+                      </div>
+                    </div>
+                    <div class="wendy-content-type-grid" aria-label="内容类型">
+                      <button class="active" type="button">Post</button>
+                      <button type="button">Article</button>
+                      <button type="button">Carousel</button>
+                      <button type="button">Short Video</button>
+                    </div>
+                  </div>
+
+                  <div class="wendy-publisher-block">
+                    <div class="wendy-block-heading">
+                      <div>
+                        <strong>Caption</strong>
+                        <span>编辑平台文案，或让 Wendy 基于素材生成</span>
+                      </div>
+                      <button class="wendy-ai-button" data-wendy-generate-caption type="button"><i data-lucide="sparkles"></i>Generate with AI</button>
+                    </div>
+                    <label class="wendy-field wendy-caption-field">
+                      <span>Post 文案</span>
+                      <textarea id="wendyPublishCopy" rows="7">面向欧洲储能安装商的新一代并网组件已经完成批量测试。点击了解交付稳定性、认证资料和项目支持方案。</textarea>
+                    </label>
+                  </div>
+
+                  <div class="wendy-publisher-block">
+                    <div class="wendy-block-heading">
+                      <div>
+                        <strong>Media</strong>
+                        <span>从资料库选择或上传图片、短视频</span>
+                      </div>
+                    </div>
+                    <div class="wendy-media-grid" aria-label="Post素材">
+                      <button class="selected" type="button"><i data-lucide="image"></i><span>产品测试图</span></button>
+                      <button type="button"><i data-lucide="factory"></i><span>工厂场景</span></button>
+                      <button type="button"><i data-lucide="file-image"></i><span>资料页截图</span></button>
+                      <button class="upload" type="button"><i data-lucide="upload"></i><span>Upload</span></button>
+                    </div>
+                  </div>
+                </section>
+
+                <aside class="wendy-publisher-side" aria-label="排期与预览">
+                  <section class="wendy-publisher-block">
+                    <div class="wendy-block-heading">
+                      <div>
+                        <strong>Settings &amp; Schedule</strong>
+                        <span>设置发布身份和发布时间</span>
+                      </div>
+                    </div>
+                    <div class="wendy-account-card">
+                      <div class="wendy-preview-avatar" id="wendyPublisherAvatar">OZ<i>in</i></div>
+                      <div>
+                        <span>Posting as</span>
+                        <strong>@OntoZ Power</strong>
+                        <em id="wendyPublisherPostingTo">Posting to LinkedIn</em>
+                      </div>
+                    </div>
+                    <div class="wendy-schedule-tabs" role="group" aria-label="发布方式">
+                      <button class="active" data-wendy-schedule-mode="schedule" type="button">Schedule</button>
+                      <button data-wendy-schedule-mode="now" type="button">Now</button>
+                    </div>
+                    <label class="wendy-field">
+                      <span>发布时间</span>
+                      <input id="wendyPublishTime" type="datetime-local" value="2026-07-07T09:30" />
+                    </label>
+                  </section>
+
+                  <section class="wendy-publisher-block">
+                    <div class="wendy-block-heading">
+                      <div>
+                        <strong>Preview</strong>
+                        <span>当前平台发布预览</span>
+                      </div>
+                    </div>
+                    <article class="wendy-publisher-preview">
+                      <div class="wendy-publisher-preview-media"><i data-lucide="image"></i><span>Product testing</span></div>
+                      <p id="wendyPublisherPreviewText">面向欧洲储能安装商的新一代并网组件已经完成批量测试。点击了解交付稳定性、认证资料和项目支持方案。</p>
+                    </article>
+                  </section>
+                </aside>
+              </div>
+              <footer>
+                <button class="wendy-secondary" data-wendy-save-draft type="button"><i data-lucide="file-check"></i>保存草稿</button>
+                <button class="wendy-primary" data-wendy-schedule-post type="button"><i data-lucide="calendar-plus"></i>排期发布</button>
+              </footer>
+            </form>
+          </div>
+        </section>
+
+        <section class="wendy-agent-page" id="wendyAgentPage" aria-labelledby="wendy-agent-title" hidden>
+          <header class="wendy-agent-topbar">
+            <button class="wendy-agent-back" id="backFromWendyAgent" type="button" aria-label="返回社媒运营 Wendy">
+              <i data-lucide="arrow-left" aria-hidden="true"></i>
+              <span>返回日历</span>
+            </button>
+            <h1 id="wendy-agent-title">Wendy 正在生成社媒内容方案</h1>
+            <button class="wendy-agent-panel-button" type="button" aria-label="收起右侧面板">
+              <i data-lucide="panel-right" aria-hidden="true"></i>
+            </button>
+          </header>
+
+          <div class="wendy-agent-thread" aria-live="polite">
+            <section class="wendy-thinking-thread" id="wendyThinkingThread">
+              <section class="wendy-thinking-card" id="wendyThinkingCard" aria-labelledby="wendy-thinking-title">
+                <div class="wendy-thinking-rail" aria-hidden="true">
+                  <i data-lucide="circle-check-big"></i>
+                  <span></span>
+                </div>
+                <div class="wendy-thinking-content">
+                  <button class="wendy-thinking-summary" id="wendyThinkingToggle" type="button" aria-expanded="true" aria-controls="wendyThinkingSteps">
+                    <span id="wendy-thinking-title">Wendy 正在分析社媒内容诉求</span>
+                    <i data-lucide="chevron-down" aria-hidden="true"></i>
+                  </button>
+                  <div class="wendy-thinking-steps" id="wendyThinkingSteps"></div>
+                </div>
+              </section>
+
+              <section class="wendy-thinking-result" id="wendyThinkingResult" hidden>
+                <header>
+                  <div>
+                    <h2>已生成社媒内容建议</h2>
+                    <p>Wendy 已整理本次发布的目标、素材来源、平台适配和生成消耗。</p>
+                  </div>
+                  <div class="wendy-result-actions">
+                    <span><i data-lucide="coins"></i>含 AI 海报生成时预计消耗 18 点</span>
+                    <button class="wendy-secondary" data-wendy-agent-confirm type="button"><i data-lucide="check"></i>确认生成</button>
+                  </div>
+                </header>
+                <div class="wendy-result-brief">
+                  <article>
+                    <span>发布意图</span>
+                    <strong>完成一组面向海外买家的新品社媒发布</strong>
+                    <p>目标是介绍产品价值、建立品牌可信度，并把感兴趣的客户导流到独立站资料页或询盘入口。</p>
+                  </article>
+                  <article>
+                    <span>目标平台</span>
+                    <strong>已纳入 LinkedIn、Instagram、TikTok</strong>
+                    <p>LinkedIn 适合 B2B 价值说明，Instagram 适合产品视觉种草，TikTok 适合短视频触达；Facebook、YouTube 未纳入，因为本次素材和文案目标更适合轻量多平台快速发布。</p>
+                  </article>
+                  <article>
+                    <span>素材来源</span>
+                    <strong>上传素材、企业知识库、AI 生成内容库、AI 自行生成</strong>
+                    <p>优先读取用户上传图片；补充企业知识库中的产品卖点、认证和交付资料；调用 AI 生成内容库中的历史表达；缺少成套视觉时由 AI 自行生成海报。</p>
+                  </article>
+                  <article>
+                    <span>素材用途</span>
+                    <strong>已有图片直接发布，缺口由海报生成补齐</strong>
+                    <p>清晰产品图可直接作为发布图片；参考图、现场图和资料页信息用于生成平台海报，不会替代事实依据。</p>
+                  </article>
+                  <article>
+                    <span>产品对象与事实</span>
+                    <strong>本次使用产品资料、认证信息、交付能力和应用场景</strong>
+                    <p>文案只引用已上传素材和企业资料中的可验证事实，包括产品特点、适用场景、服务能力、安装商合作价值和独立站入口。</p>
+                  </article>
+                  <article>
+                    <span>风格</span>
+                    <strong>专业可信，兼顾平台原生表达</strong>
+                    <p>若用户指定风格，将优先遵循；未指定时，Wendy 推荐使用清晰产品主视觉、克制卖点表达和明确行动入口。</p>
+                  </article>
+                </div>
+                <div class="wendy-platform-summary" aria-label="平台适配摘要">
+                  <h3>平台适配摘要</h3>
+                  <div>
+                    <article><span>LinkedIn</span><p>建议 1.91:1 或 4:5 海报；构图突出产品和关键参数；文案密度中高，语气偏专业、可信、面向采购和合作伙伴。</p></article>
+                    <article><span>Instagram</span><p>建议 4:5 或 1:1 海报；构图更重视产品细节和视觉层次；文案密度中低，语气更轻快、直观、便于收藏。</p></article>
+                    <article><span>TikTok</span><p>建议 9:16 竖版海报或视频封面；构图保留强钩子标题；文案密度低，语气更直接，适合短句和行动号召。</p></article>
+                  </div>
+                </div>
+                <div class="wendy-result-notes">
+                  <p><strong>预计动作：</strong>每个平台将创建 1 个平台发布项，包含 1 张海报和 1 套平台文案。</p>
+                  <p><strong>消耗提示：</strong>AI 自行生成海报会产生生成消耗；直接发布已有图片不产生海报生成消耗。</p>
+                </div>
+              </section>
+
+              <section class="wendy-post-previews" id="wendyPostPreviews" aria-labelledby="wendy-post-preview-title" hidden>
+                <header class="wendy-preview-heading">
+                  <div>
+                    <h2 id="wendy-post-preview-title">Post 预览</h2>
+                    <p>确认生成后，Wendy 已按不同社媒格式拆分出可编辑预览。</p>
+                  </div>
+                  <span><i data-lucide="coins"></i>将消耗 18 点</span>
+                </header>
+
+                <article class="wendy-post-preview-card" data-preview-platform="LinkedIn">
+                  <header class="wendy-post-preview-top">
+                    <div class="wendy-preview-account">
+                      <div class="wendy-preview-avatar">OZ<i>in</i></div>
+                      <div><strong>@OntoZ Power</strong><span>LinkedIn</span></div>
+                    </div>
+                    <label class="wendy-preview-time">
+                      <i data-lucide="clock-3"></i>
+                      <span>Publish on</span>
+                      <select aria-label="LinkedIn发布时间">
+                        <option>2026/07/09 9:30 am</option>
+                        <option>2026/07/10 1:00 pm</option>
+                      </select>
+                    </label>
+                  </header>
+                  <div class="wendy-post-preview-body">
+                    <div class="wendy-preview-media linkedin" aria-label="LinkedIn素材预览">
+                      <i data-lucide="factory"></i>
+                      <strong>Product testing</strong>
+                    </div>
+                    <section class="wendy-caption-card">
+                      <i data-lucide="message-square-text"></i>
+                      <label>
+                        <span>Post Caption</span>
+                        <textarea rows="7">面向欧洲储能安装商的新一代并网组件已经完成批量测试。我们把认证资料、交付排期和售后响应流程整理成一页资料，帮助项目团队更快完成供应商评估。</textarea>
+                      </label>
+                      <footer><button type="button"><i data-lucide="smile"></i>Emojis</button><button type="button"><i data-lucide="file-text"></i>Saved Captions</button></footer>
+                    </section>
+                  </div>
+                  <footer class="wendy-post-preview-actions">
+                    <button data-wendy-preview-save="LinkedIn" type="button">保存草稿</button>
+                    <button data-wendy-preview-schedule="LinkedIn" type="button">排期发布</button>
+                  </footer>
+                </article>
+
+                <article class="wendy-post-preview-card" data-preview-platform="Instagram">
+                  <header class="wendy-post-preview-top">
+                    <div class="wendy-preview-account">
+                      <div class="wendy-preview-avatar instagram">OZ<i>ig</i></div>
+                      <div><strong>@ontoz_power</strong><span>Instagram</span></div>
+                    </div>
+                    <label class="wendy-preview-time">
+                      <i data-lucide="clock-3"></i>
+                      <span>Publish on</span>
+                      <select aria-label="Instagram发布时间">
+                        <option>2026/07/09 7:00 pm</option>
+                        <option>2026/07/11 10:00 am</option>
+                      </select>
+                    </label>
+                  </header>
+                  <div class="wendy-post-preview-body">
+                    <div class="wendy-preview-media instagram" aria-label="Instagram素材预览">
+                      <i data-lucide="image"></i>
+                      <strong>Carousel 1/4</strong>
+                    </div>
+                    <section class="wendy-caption-card">
+                      <i data-lucide="message-square-text"></i>
+                      <label>
+                        <span>Post Caption</span>
+                        <textarea rows="7">从测试台到项目现场，OntoZ 用完整认证资料和稳定交付支持海外安装商缩短评估周期。滑动查看组件细节、出货检查和项目应用场景。</textarea>
+                      </label>
+                      <footer><button type="button"><i data-lucide="smile"></i>Emojis</button><button type="button"><i data-lucide="file-text"></i>Saved Captions</button></footer>
+                    </section>
+                  </div>
+                  <footer class="wendy-post-preview-actions">
+                    <button data-wendy-preview-save="Instagram" type="button">保存草稿</button>
+                    <button data-wendy-preview-schedule="Instagram" type="button">排期发布</button>
+                  </footer>
+                </article>
+
+                <article class="wendy-post-preview-card" data-preview-platform="TikTok">
+                  <header class="wendy-post-preview-top">
+                    <div class="wendy-preview-account">
+                      <div class="wendy-preview-avatar tiktok">OZ<i>tt</i></div>
+                      <div><strong>@ontoz_power</strong><span>TikTok</span></div>
+                    </div>
+                    <label class="wendy-preview-time">
+                      <i data-lucide="clock-3"></i>
+                      <span>Publish on</span>
+                      <select aria-label="TikTok发布时间">
+                        <option>2026/07/10 6:00 pm</option>
+                        <option>2026/07/12 8:30 pm</option>
+                      </select>
+                    </label>
+                  </header>
+                  <div class="wendy-post-preview-body">
+                    <div class="wendy-preview-media tiktok" aria-label="TikTok素材预览">
+                      <i data-lucide="play"></i>
+                      <strong>15s video</strong>
+                    </div>
+                    <section class="wendy-caption-card">
+                      <i data-lucide="message-square-text"></i>
+                      <label>
+                        <span>Post Caption</span>
+                        <textarea rows="7">15 秒看懂并网组件出货前会经历哪些测试：高压检测、标签核验、包装检查、备件确认。适合正在筛选稳定供应商的海外安装商。</textarea>
+                      </label>
+                      <footer><button type="button"><i data-lucide="smile"></i>Emojis</button><button type="button"><i data-lucide="file-text"></i>Saved Captions</button></footer>
+                    </section>
+                  </div>
+                  <footer class="wendy-post-preview-actions">
+                    <button data-wendy-preview-save="TikTok" type="button">保存草稿</button>
+                    <button data-wendy-preview-schedule="TikTok" type="button">排期发布</button>
+                  </footer>
+                </article>
+              </section>
+            </section>
+          </div>
+        </section>
+
+        <section class="lucas-page" id="lucasPage" aria-labelledby="lucas-title" hidden>
+          <header class="lucas-hero">
+            <div class="lucas-hero-copy">
+              <p class="lucas-kicker">智能体 / 专业建站 Lucas <span>资料待补充</span></p>
+              <h1 id="lucas-title">把企业故事和产品实力，做成一座会获客的网站</h1>
+              <p>Lucas 会先补齐企业信息、产品服务、案例信任与视觉素材，再生成更可信、更能转化的专业网站。</p>
+              <div class="lucas-hero-actions">
+                <button class="lucas-primary" id="lucasUploadHero" type="button"><i data-lucide="image-plus"></i>补充素材</button>
+                <button class="lucas-secondary" id="lucasOpenKnowledge" type="button"><i data-lucide="database"></i>查看企业知识库</button>
+              </div>
+            </div>
+
+            <aside class="lucas-progress-card" aria-label="知识库通过状态">
+              <div>
+                <span>知识库通过模块</span>
+                <strong><b id="lucasPassedCount">0</b> / 4</strong>
+              </div>
+              <div class="lucas-progress-track" aria-hidden="true"><i id="lucasProgressBar"></i></div>
+              <p id="lucasProgressCopy">还有 4 个模块未通过，生成前建议先补齐。</p>
+            </aside>
+          </header>
+
+          <div class="lucas-layout">
+            <section class="lucas-main">
+              <section class="lucas-card lucas-missing-card" aria-labelledby="lucas-missing-title">
+                <header class="lucas-section-header">
+                  <div>
+                    <h2 id="lucas-missing-title">缺失资料</h2>
+                    <p>未通过的模块会影响网站文案准确度、案例可信度或资质引用。</p>
+                  </div>
+                  <button class="lucas-icon-button" id="lucasRefreshAudit" type="button" aria-label="重新检测"><i data-lucide="refresh-cw"></i></button>
+                </header>
+
+                <div class="lucas-check-list" id="lucasCheckList">
+                  <article data-lucas-module="企业信息">
+                    <div><i data-lucide="building-2"></i><strong>企业信息</strong><small>公司介绍、联系方式、品牌口径和企业实力。</small></div>
+                    <button type="button">未提交</button>
+                  </article>
+                  <article data-lucas-module="产品管理">
+                    <div><i data-lucide="package-search"></i><strong>产品管理</strong><small>产品目录、主推产品、应用行业和产品素材。</small></div>
+                    <button class="needed" type="button">需补充</button>
+                  </article>
+                  <article data-lucas-module="客户案例">
+                    <div><i data-lucide="badge-check"></i><strong>客户案例</strong><small>客户案例、公开权限、项目成果与使用场景。</small></div>
+                    <button type="button">未提交</button>
+                  </article>
+                  <article data-lucas-module="资质认证">
+                    <div><i data-lucide="shield-check"></i><strong>资质认证</strong><small>证书、检测报告、合规文件和授权说明。</small></div>
+                    <button type="button">未提交</button>
+                  </article>
+                </div>
+
+                <button class="lucas-upload-zone" id="lucasUploadZone" type="button">
+                  <i data-lucide="upload-cloud"></i>
+                  <span>可上传 banner、工厂、产品、案例等图片素材。图片仅作为当前 demo 的建站素材记录，不会上传到后端。</span>
+                </button>
+              </section>
+
+              <section class="lucas-card lucas-builder-card" aria-labelledby="lucas-builder-title">
+                <header class="lucas-section-header">
+                  <div>
+                    <h2 id="lucas-builder-title">Lucas 建站工作流</h2>
+                    <p>补齐资料后，Lucas 会生成站点结构、页面文案、视觉建议和可发布草稿。</p>
+                  </div>
+                  <button class="lucas-primary" id="lucasGenerateSite" type="button"><i data-lucide="wand-sparkles"></i>生成网站草稿</button>
+                </header>
+                <div class="lucas-workflow">
+                  <article><span>01</span><strong>识别企业定位</strong><p>从知识库提取主营行业、品牌优势和目标客户。</p></article>
+                  <article><span>02</span><strong>规划网站结构</strong><p>生成首页、产品页、案例页、关于我们和询盘入口。</p></article>
+                  <article><span>03</span><strong>匹配视觉素材</strong><p>把图片素材分配到 Banner、产品展示和信任背书区域。</p></article>
+                </div>
+              </section>
+            </section>
+
+            <aside class="lucas-side">
+              <section class="lucas-card lucas-package-card" aria-labelledby="lucas-package-title">
+                <header class="lucas-side-header">
+                  <h2 id="lucas-package-title">建站资料包</h2>
+                  <p>以下资料包需要逐项补齐；结构化资料在知识库中维护，图片素材可在本页补充。</p>
+                </header>
+                <div class="lucas-package-grid">
+                  <article><i data-lucide="building-2"></i><strong>企业基础资料</strong><p>公司介绍、联系方式、品牌口径和企业实力。</p></article>
+                  <article><i data-lucide="boxes"></i><strong>产品与服务资料</strong><p>产品目录、主推产品、应用行业和产品素材。</p></article>
+                  <article><i data-lucide="handshake"></i><strong>案例与信任资料</strong><p>客户案例、公开权限、资质证书和检测报告。</p></article>
+                  <article><i data-lucide="images"></i><strong>网站视觉素材</strong><p>Banner、工厂、产品、案例和团队图片。</p></article>
+                </div>
+              </section>
+
+              <section class="lucas-card lucas-assets-card" aria-labelledby="lucas-assets-title">
+                <header class="lucas-side-header compact">
+                  <h2 id="lucas-assets-title">已补充素材</h2>
+                </header>
+                <div class="lucas-asset-summary" id="lucasAssetSummary">
+                  <span>尚未补充建站素材</span>
+                  <strong><b id="lucasAssetCount">0</b> 个文件</strong>
+                </div>
+                <div class="lucas-asset-list" id="lucasAssetList" aria-live="polite"></div>
+              </section>
+
+              <section class="lucas-card lucas-preview-card" aria-labelledby="lucas-preview-title">
+                <header class="lucas-side-header compact">
+                  <h2 id="lucas-preview-title">生成预览</h2>
+                  <span id="lucasPreviewStatus">等待资料</span>
+                </header>
+                <div class="lucas-site-preview">
+                  <div class="lucas-preview-browser">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <div class="lucas-preview-hero">
+                    <strong>首页 Banner</strong>
+                    <p id="lucasPreviewCopy">资料补齐后，Lucas 会在这里生成首页首屏文案和素材建议。</p>
+                  </div>
+                </div>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="lucas-material-modal" id="lucasMaterialModal" role="dialog" aria-modal="true" aria-labelledby="lucas-material-title" hidden>
+          <div class="lucas-modal-panel">
+            <header class="lucas-modal-header">
+              <div>
+                <h2 id="lucas-material-title">补充建站素材</h2>
+                <p>为专业建站补充图片素材。建议按用途标注类型，便于后续生成网站时分配到 Banner、产品展示、案例背书或企业实力区域。</p>
+              </div>
+              <button class="lucas-modal-close" id="lucasMaterialClose" type="button" aria-label="关闭补充素材弹窗"><i data-lucide="x"></i></button>
+            </header>
+
+            <div class="lucas-modal-body">
+              <div class="lucas-material-chips" role="group" aria-label="常用素材类型">
+                <button type="button" data-material-type="Banner 图">Banner 图</button>
+                <button type="button" data-material-type="工厂 / 办公实拍图">工厂 / 办公实拍图</button>
+                <button type="button" data-material-type="产品合集图">产品合集图</button>
+                <button type="button" data-material-type="案例现场图">案例现场图</button>
+                <button type="button" data-material-type="团队 / 展会图">团队 / 展会图</button>
+              </div>
+
+              <label class="lucas-material-field">
+                <span>素材类型</span>
+                <input id="lucasMaterialType" type="text" placeholder="例如：Banner 图 / 实拍图 / 产品合集图" />
+              </label>
+
+              <label class="lucas-file-drop">
+                <span>请选择图片文件。可以一次上传多张，同一批图片会使用上方填写的素材类型。</span>
+                <input id="lucasMaterialFiles" type="file" accept="image/*" multiple />
+                <strong><i data-lucide="upload-cloud"></i>选择文件</strong>
+                <small id="lucasFileSummary">未选择任何文件</small>
+              </label>
+            </div>
+
+            <footer class="lucas-modal-footer">
+              <button class="lucas-secondary" id="lucasMaterialCancel" type="button">取消</button>
+              <button class="lucas-primary" id="lucasMaterialSave" type="button">保存素材</button>
+            </footer>
+          </div>
+        </section>
+
+        <section class="core-page dashboard-page" id="dashboardPage" aria-labelledby="core-dashboard-title" hidden>
+          <div class="core-grid">
+            <div class="core-main">
+              <section class="core-card account-overview">
+                <h1 id="core-dashboard-title">账号总览</h1>
+                <div class="overview-stats" aria-label="账号总览指标">
+                  <article><span>AI获客</span><strong>13,477</strong><small>全量 100%</small></article>
+                  <article><span>触达</span><strong>10,892</strong><small>转化率 92%</small></article>
+                  <article><span>询盘</span><strong>7,241</strong><small>转化率 78%</small></article>
+                  <article><span>报价</span><strong>15,821</strong><small>转化率 21%</small></article>
+                  <article><span>成交</span><strong>15,821</strong><small>转化率 12%</small></article>
+                </div>
+              </section>
+
+              <section class="core-card acquisition-card">
+                <header class="section-title-row">
+                  <h2>新增获客成果</h2>
+                  <div class="period-toggle" role="group" aria-label="时间范围">
+                    <button class="active" type="button">7 天</button>
+                    <button type="button">30 天</button>
+                  </div>
+                </header>
+                <div class="filter-row">
+                  <button type="button">产品线 <i data-lucide="chevron-down"></i></button>
+                  <button type="button">买家画像 <i data-lucide="chevron-down"></i></button>
+                  <button type="button">目标国家 <i data-lucide="chevron-down"></i></button>
+                </div>
+                <div class="bar-chart" aria-label="Top 10 Products by Revenue">
+                  <div><span>Powder</span><i style="--a:45%;--b:58%;--c:76%"></i></div>
+                  <div><span>Mascara</span><i style="--a:40%;--b:54%;--c:72%"></i></div>
+                  <div><span>Lip gloss</span><i style="--a:46%;--b:64%;--c:69%"></i></div>
+                  <div><span>Foundation</span><i style="--a:42%;--b:57%;--c:66%"></i></div>
+                  <div><span>Eyeliner</span><i style="--a:48%;--b:60%;--c:63%"></i></div>
+                  <div><span>Eyeshadows</span><i style="--a:38%;--b:50%;--c:59%"></i></div>
+                  <div><span>Pomade</span><i style="--a:36%;--b:47%;--c:55%"></i></div>
+                  <div><span>Rouge</span><i style="--a:34%;--b:43%;--c:51%"></i></div>
+                </div>
+                <footer class="mini-metrics">
+                  <div><span>定位并分析精准客户</span><strong>13,477 点数</strong></div>
+                  <div><span>高阶触达</span><strong>10,487 点数</strong></div>
+                  <div><span>触达客户</span><strong>7,487 点数</strong></div>
+                </footer>
+              </section>
+
+              <section class="core-card buyer-ranking">
+                <h2>买家画像排行</h2>
+                <table>
+                  <thead><tr><th></th><th>精准客户</th><th>触达</th><th>询盘</th><th>报价</th><th>成交</th></tr></thead>
+                  <tbody>
+                    <tr><td><b class="rank hot">1</b> 宠物主粮经销商</td><td>4,321 个</td><td>3,372</td><td>1,321</td><td>321</td><td>21</td></tr>
+                    <tr><td><b class="rank warm">2</b> 宠物店</td><td>3,387 个</td><td>3,387</td><td>1,087</td><td>387</td><td>87</td></tr>
+                    <tr><td><b class="rank">3</b> 宠物医院</td><td>3,132 个</td><td>2,422</td><td>832</td><td>132</td><td>32</td></tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+
+            <aside class="core-side">
+              <section class="core-card zoe-progress">
+                <h2>ZOE工作进展</h2>
+                <p>ZOE的脚步跑遍了 23 个国家，分析了103,424家公司，定位13,477家精准客户，挖掘到了32,923位高质量联系人，已建立74个AI触达任务</p>
+                <div class="side-stat-grid">
+                  <div><span>工作时长</span><strong>3477h</strong></div>
+                  <div><span>分析数据</span><strong>8,982,484,742</strong></div>
+                  <div><span>全量新客数</span><strong>54,877</strong></div>
+                  <div><span>精准联系方式</span><strong>32,923</strong></div>
+                  <div><span>全量发信数</span><strong>5,247,778</strong></div>
+                </div>
+              </section>
+
+              <section class="core-card team-card">
+                <h2>您的团队</h2>
+                <div class="team-member"><header><strong>王羽凡</strong><span>子账号</span></header><div><span>线索数量 123</span><span>询盘响应 22min</span></div><p>线索分配规则 美国 新西兰 印度 加拿大</p><div><span>触达公司 15,523</span><span>询盘数量 265</span></div></div>
+                <div class="team-member"><header><strong>Elsa</strong><span>子账号</span></header><div><span>线索数量 123</span><span>询盘响应 22min</span></div><p>线索分配规则 美国 新西兰 印度 加拿大</p><div><span>触达公司 15,523</span><span>询盘数量 265</span></div></div>
+                <div class="team-member"><header><strong>Cathy</strong><span>子账号</span></header><div><span>线索数量 123</span><span>22min</span></div><p>线索分配规则 美国 新西兰 印度 加拿大</p><div><span>触达公司 15,523</span><span>询盘数量 265</span></div></div>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="core-page customers-page" id="customersPage" aria-labelledby="customers-title" hidden>
+          <header class="list-page-header">
+            <h1 id="customers-title">客户池</h1>
+            <button class="soft-button" type="button"><i data-lucide="download"></i>导入</button>
+          </header>
+          <div class="customer-summary" aria-label="客户池指标">
+            <article><span>新客全量池</span><strong>69,881</strong></article>
+            <article><span>高质量线索池</span><strong>8,714</strong></article>
+            <article><span>触达客户</span><strong>352</strong></article>
+            <article><span>询盘客户</span><strong>245</strong></article>
+            <article><span>报价客户</span><strong>73</strong></article>
+            <article><span>成交客户</span><strong>69,881</strong></article>
+          </div>
+          <div class="customer-toolbar">
+            <label><i data-lucide="search"></i><input type="search" placeholder="公司名称/公司简介/搜索词" /></label>
+            <button type="button"><i data-lucide="funnel"></i>筛选</button>
+            <button type="button"><i data-lucide="arrow-down-up"></i>匹配度</button>
+          </div>
+          <p class="selection-line"><span></span>已选择 0 条数据</p>
+          <div class="lead-list" id="leadList"></div>
+          <footer class="pagination"><button type="button"><i data-lucide="chevron-left"></i></button><span>1</span><strong>2</strong><span>3</span><span>...</span><button type="button"><i data-lucide="chevron-right"></i></button></footer>
+        </section>
+
+        <section class="agent-page zoe-page" id="zoePage" aria-labelledby="zoe-title" hidden>
+          <article class="agent-flow-card">
+            <header><span></span><h1 id="zoe-title">找客户</h1><div><button type="button"><i data-lucide="clipboard-list"></i></button><button type="button"><i data-lucide="rotate-cw"></i></button></div></header>
+            <div class="agent-flow-body">
+              <ol class="step-anchor"><li class="active">选择公司产品线</li><li>确认买家画像</li><li>分配标注负责人</li><li>确认目标国家</li><li>确认触达设置</li></ol>
+              <div class="flow-content">
+                <section class="form-bubble">
+                  <label>公司产品线<input value="锂电池" aria-label="公司产品线" /></label>
+                  <button type="button">确认</button>
+                </section>
+              </div>
+            </div>
+          </article>
+          <aside class="assistant-pane">
+            <header><h2>Zoe助手</h2><button type="button"><i data-lucide="panel-right-close"></i></button></header>
+            <div class="assistant-note">
+              <i data-lucide="circle-check-big"></i>
+              <div><strong>产品线信息</strong><p>好的，我来初始化公司的产品线信息<br><br>我注意到查询到 6 个产品线，接下来让我逐一分析它们的特性<br><br>了解这些产品线后，我将为您构建一个清晰的产品战略<br><br>最后，整理出每条产品线的优势和市场定位</p></div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="agent-page leo-page" id="leoPage" aria-labelledby="leo-title" hidden>
+          <article class="agent-flow-card">
+            <header><span></span><h1 id="leo-title">展会营销创建</h1><div><button type="button"><i data-lucide="rotate-cw"></i></button></div></header>
+            <div class="agent-flow-body">
+              <ol class="step-anchor"><li class="active">搜索展会</li><li>展会信息</li><li>展会营销策略</li><li>拓展新客户</li><li>营销信模板</li></ol>
+              <div class="flow-content">
+                <p class="question-bubble">请告诉我展会名称</p>
+                <section class="form-bubble">
+                  <label>展会名称<input value="拉斯维加斯消费电子展" aria-label="展会名称" /></label>
+                  <div class="inline-actions"><button class="confirm-light" type="button"><i data-lucide="circle-check-big"></i>确认</button><button type="button"><i data-lucide="rotate-cw"></i>重试</button></div>
+                </section>
+                <p class="question-bubble wide">已为您搜索到拉斯维加斯消费电子展展位信息</p>
+                <section class="form-bubble">
+                  <label>展会名称<input value="拉斯维加斯消费电子展" aria-label="展会名称" /></label>
+                  <label>展会国家<input value="美国" aria-label="展会国家" /></label>
+                  <label>展会城市<input value="拉斯维加斯" aria-label="展会城市" /></label>
+                  <button type="button">确认</button>
+                </section>
+              </div>
+            </div>
+          </article>
+          <aside class="assistant-pane">
+            <header><h2>Zoe助手</h2><button type="button"><i data-lucide="panel-right-close"></i></button></header>
+            <div class="assistant-note">
+              <i data-lucide="circle-check-big"></i>
+              <div><strong>展会信息</strong><p>嗯，用户想了解拉斯维加斯消费电子展的展会信息，这是一个典型的信息收集类问题。<br><br>我计划从展会基本信息、核心亮点以及中国企业参与情况几个方面来组织回答。<br><br>信息比较充足，我准备用表格先呈现核心信息概览，然后分两大亮点详细展开。</p></div>
+            </div>
+          </aside>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"><i data-lucide="circle-check"></i><span></span></div>
+    <script src="assets/lucide.min.js"></script>
+    <script src="app.js?v=home-composer-1"></script>
+  </body>
+</html>
