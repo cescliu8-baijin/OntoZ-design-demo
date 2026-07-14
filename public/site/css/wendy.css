@@ -808,6 +808,19 @@
   white-space: normal;
 }
 
+.wendy-event small {
+  display: block;
+  margin-top: 4px;
+  overflow: hidden;
+  color: currentColor;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+  opacity: .72;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .wendy-platform-icon,
 .wendy-event svg {
   width: 16px;
@@ -841,6 +854,16 @@
   background: #d7199d;
 }
 
+.wendy-event.published {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.wendy-event.failed {
+  color: #b42318;
+  background: #fee4e2;
+}
+
 .wendy-event.split-one,
 .wendy-event.split-two,
 .wendy-event.split-three {
@@ -851,6 +874,294 @@
 .wendy-event.split-one { left: 8px; }
 .wendy-event.split-two { left: calc(8px + (100% - 24px) / 3 + 4px); }
 .wendy-event.split-three { left: calc(8px + ((100% - 24px) / 3 + 4px) * 2); }
+
+.wendy-month-calendar,
+.wendy-status-board {
+  min-width: 980px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.wendy-month-calendar[hidden],
+.wendy-status-board[hidden] {
+  display: none;
+}
+
+.wendy-month-weekdays,
+.wendy-month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(128px, 1fr));
+}
+
+.wendy-month-weekdays {
+  min-height: 36px;
+  align-items: center;
+  border-bottom: 1px solid #ececf2;
+  color: #6b697d;
+  background: #fbfbfd;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.wendy-month-day {
+  min-height: 132px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  border-right: 1px solid #ececf2;
+  border-bottom: 1px solid #ececf2;
+  background: #fff;
+}
+
+.wendy-month-day:nth-child(7n) {
+  border-right: 0;
+}
+
+.wendy-month-day.muted {
+  background: #fafafa;
+}
+
+.wendy-month-day.today {
+  box-shadow: inset 0 0 0 2px #8a5cff;
+}
+
+.wendy-month-day header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.wendy-month-day strong {
+  color: #171717;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 650;
+}
+
+.wendy-month-day.muted strong {
+  color: #a1a1aa;
+}
+
+.wendy-month-day header span {
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: #fff;
+  background: #8a5cff;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 600;
+}
+
+.wendy-month-events,
+.wendy-status-list {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wendy-month-event {
+  min-height: 26px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 7px;
+  border: 0;
+  border-radius: 4px;
+  color: #171717;
+  background: #f4f4f5;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.wendy-month-event svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+
+.wendy-month-event span {
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wendy-month-event.published { color: #166534; background: #dcfce7; }
+.wendy-month-event.scheduled { color: #0a66c2; background: #dbeafe; }
+.wendy-month-event.draft { color: #854d0e; background: #fef3c7; }
+.wendy-month-event.failed { color: #b42318; background: #fee4e2; }
+
+.wendy-month-more {
+  color: #71717a;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+}
+
+.wendy-status-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 12px;
+  padding: 12px;
+  background: #f7f7fa;
+}
+
+.wendy-status-column {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wendy-status-column > header {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 4px;
+}
+
+.wendy-status-column h3 {
+  margin: 0;
+  color: #171717;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+.wendy-status-column header span {
+  color: #71717a;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.wendy-status-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(17, 17, 22, .04);
+}
+
+.wendy-status-card-main {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.wendy-status-platform {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #71717a;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.wendy-status-platform svg {
+  width: 14px;
+  height: 14px;
+}
+
+.wendy-status-card strong {
+  color: #18181b;
+  font-size: 14px;
+  line-height: 19px;
+  font-weight: 650;
+}
+
+.wendy-status-card small {
+  color: #71717a;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.wendy-status-action {
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid #e3e3e8;
+  border-radius: 6px;
+  color: #171717;
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wendy-status-action svg {
+  width: 14px;
+  height: 14px;
+}
+
+.wendy-status-card.published .wendy-status-action {
+  color: #166534;
+}
+
+.wendy-status-card.failed {
+  border-color: #fecdca;
+}
+
+.wendy-status-card.failed .wendy-status-action {
+  border-color: #fecdca;
+  color: #b42318;
+  background: #fff7f6;
+}
+
+.wendy-failure-reason {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: #b42318;
+  background: #fff7f6;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+}
+
+.wendy-failure-reason svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.wendy-empty-status {
+  margin: 0;
+  padding: 16px 10px;
+  border: 1px dashed #d9d9e2;
+  border-radius: 8px;
+  color: #8a8a96;
+  background: #fff;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+}
 
 .wendy-plan-step {
   width: min(800px, calc(100% - 48px));
@@ -2125,6 +2436,77 @@
   line-height: 17px;
 }
 
+.wendy-publisher-mode {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 24px;
+  border-bottom: 1px solid #e6e6eb;
+  color: #344054;
+  background: #f8fafc;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.wendy-publisher-mode[hidden] {
+  display: none;
+}
+
+.wendy-publisher-mode span,
+.wendy-publisher-mode strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wendy-publisher-mode span {
+  font-weight: 700;
+}
+
+.wendy-publisher-mode strong {
+  font-weight: 500;
+}
+
+.wendy-publisher-mode svg {
+  width: 16px;
+  height: 16px;
+}
+
+.wendy-publisher-mode.published {
+  color: #166534;
+  background: #f0fdf4;
+}
+
+.wendy-publisher-mode.scheduled {
+  color: #0a66c2;
+  background: #eff6ff;
+}
+
+.wendy-publisher-mode.draft {
+  color: #854d0e;
+  background: #fffbeb;
+}
+
+.wendy-publisher-mode.failed {
+  color: #b42318;
+  background: #fff7f6;
+}
+
+.wendy-publisher-panel.is-readonly .wendy-publisher-body {
+  background: #fafafa;
+}
+
+.wendy-publisher-panel.is-readonly .wendy-platform-picker button,
+.wendy-publisher-panel.is-readonly .wendy-content-type-grid button,
+.wendy-publisher-panel.is-readonly .wendy-media-grid button,
+.wendy-publisher-panel.is-readonly .wendy-schedule-tabs button,
+.wendy-publisher-panel.is-readonly .wendy-ai-button,
+.wendy-publisher-panel.is-readonly .wendy-publisher-footer-actions {
+  opacity: .56;
+}
+
 .wendy-publisher-body {
   min-height: 0;
   display: grid;
@@ -2516,6 +2898,15 @@
     flex-wrap: wrap;
   }
 
+  .wendy-month-calendar,
+  .wendy-status-board {
+    min-width: 920px;
+  }
+
+  .wendy-status-board {
+    grid-template-columns: repeat(4, minmax(210px, 1fr));
+  }
+
   .wendy-week-calendar {
     overflow-x: auto;
   }
@@ -2706,6 +3097,10 @@
     padding: 14px;
   }
 
+  .wendy-calendar-shell {
+    border-radius: 8px;
+  }
+
   .wendy-range-controls {
     flex-wrap: wrap;
   }
@@ -2725,6 +3120,33 @@
 
   .wendy-segmented button {
     flex: 1;
+    padding: 0 10px;
+  }
+
+  .wendy-month-calendar,
+  .wendy-status-board {
+    min-width: 760px;
+  }
+
+  .wendy-month-weekdays,
+  .wendy-month-grid {
+    grid-template-columns: repeat(7, minmax(104px, 1fr));
+  }
+
+  .wendy-month-day {
+    min-height: 118px;
+  }
+
+  .wendy-status-board {
+    grid-template-columns: repeat(4, minmax(176px, 1fr));
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .wendy-publisher-mode {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 10px 16px;
   }
 
   .wendy-publisher-panel {

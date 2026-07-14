@@ -1455,8 +1455,12 @@ const wendyDateField = document.querySelector('#wendyPublishDate');
 const wendyClockField = document.querySelector('#wendyPublishClock');
 const wendyCopyField = document.querySelector('#wendyPublishCopy');
 const wendyPublisherPreviewText = document.querySelector('#wendyPublisherPreviewText');
+const wendyPublisherMode = document.querySelector('#wendyPublisherMode');
 const wendyPublisherAvatar = document.querySelector('#wendyPublisherAvatar');
 const wendyPublisherPostingTo = document.querySelector('#wendyPublisherPostingTo');
+const wendyCalendarRange = document.querySelector('#wendyCalendarRange');
+const wendyCalendarHint = document.querySelector('#wendyCalendarHint');
+const wendyMonthGrid = document.querySelector('#wendyMonthGrid');
 const wendyPromptInput = document.querySelector('#wendyPromptInput');
 const wendyPromptSend = document.querySelector('#wendyPromptSend');
 const wendyImageInput = document.querySelector('#wendyImageInput');
@@ -1498,7 +1502,9 @@ const wendyState = {
   previewConfirmed: false,
   selectedSyncPlatforms: [],
   strategyPrompt: '',
-  strategyRevisionCount: 0
+  strategyRevisionCount: 0,
+  calendarView: 'week',
+  activePostId: null
 };
 
 const wendyPreviewPlatforms = {
@@ -1579,6 +1585,123 @@ const wendySocialAccounts = [
   }
 ];
 
+const wendyStatusMeta = {
+  published: {
+    label: '已发布',
+    tone: 'published',
+    icon: 'circle-check-big',
+    action: '查看',
+    hint: '内容已发布，历史记录不可修改。'
+  },
+  scheduled: {
+    label: '已排期',
+    tone: 'scheduled',
+    icon: 'clock-3',
+    action: '编辑',
+    hint: '已设置发布时间，当前还未到发布时刻。'
+  },
+  draft: {
+    label: '草稿',
+    tone: 'draft',
+    icon: 'file-pen-line',
+    action: '编辑',
+    hint: '内容已准备好，但还没有安排发布时间。'
+  },
+  failed: {
+    label: '发布失败',
+    tone: 'failed',
+    icon: 'circle-alert',
+    action: '重新发布',
+    hint: '发布未成功，可查看原因并重新发布。'
+  }
+};
+
+const wendyToday = new Date('2026-07-14T12:00:00+08:00');
+const wendyCalendarPosts = [
+  {
+    id: 'wendy-post-0713-linkedin',
+    platform: 'LinkedIn',
+    title: '欧洲安装商案例图文',
+    time: '2026-07-13T10:00:00',
+    copy: '发布欧洲储能安装商案例图文，强调交付稳定性和认证资料完整度。',
+    status: 'published'
+  },
+  {
+    id: 'wendy-post-0714-instagram',
+    platform: 'Instagram',
+    title: '产品细节轮播',
+    time: '2026-07-14T09:00:00',
+    copy: '展示新一代并网组件的产品细节，附带官网资料下载链接。',
+    status: 'published'
+  },
+  {
+    id: 'wendy-post-0714-tiktok-failed',
+    platform: 'TikTok',
+    title: '工厂测试流程短视频',
+    time: '2026-07-14T11:00:00',
+    copy: '15 秒工厂测试流程短视频，开头展示高压测试台和质检标签。',
+    status: 'failed',
+    failureReason: '内容被拒'
+  },
+  {
+    id: 'wendy-post-0715-linkedin',
+    platform: 'LinkedIn',
+    title: '交付时间线长图',
+    time: '2026-07-15T10:30:00',
+    copy: '分享项目交付时间线，突出海外安装商能快速获取技术资料。',
+    status: 'scheduled'
+  },
+  {
+    id: 'wendy-post-0716-youtube',
+    platform: 'YouTube Shorts',
+    title: '包装测试 Shorts',
+    time: '2026-07-16T16:00:00',
+    copy: '发布 30 秒 YouTube Shorts，展示产品包装、测试和出货节点。',
+    status: 'scheduled'
+  },
+  {
+    id: 'wendy-post-0717-instagram-failed',
+    platform: 'Instagram',
+    title: '海外项目现场图',
+    time: '2026-07-17T15:00:00',
+    copy: '发布海外项目安装现场图，配合热门标签获取自然流量。',
+    status: 'failed',
+    failureReason: '平台账号失效'
+  },
+  {
+    id: 'wendy-post-0718-instagram',
+    platform: 'Instagram',
+    title: '安装商合作清单',
+    time: '2026-07-18T14:00:00',
+    copy: '发布安装商合作清单，说明交付前、中、后的支持动作。',
+    status: 'scheduled'
+  },
+  {
+    id: 'wendy-post-draft-linkedin',
+    platform: 'LinkedIn',
+    title: '采购负责人交付承诺帖',
+    time: '',
+    copy: '发布一条面向采购负责人的交付承诺帖，附带联系入口。',
+    status: 'draft'
+  },
+  {
+    id: 'wendy-post-draft-instagram',
+    platform: 'Instagram',
+    title: '下周预告图文',
+    time: '',
+    copy: '发布下周预告图文，展示新素材拍摄计划。',
+    status: 'draft'
+  },
+  {
+    id: 'wendy-post-0721-linkedin',
+    platform: 'LinkedIn',
+    title: '认证资料下载导流',
+    time: '2026-07-21T13:30:00',
+    copy: '午后发布 LinkedIn 投票，询问海外买家最关注的并网组件指标。',
+    status: 'scheduled'
+  }
+];
+
 const wendyThinkingScript = [
   { type: 'line', text: '正在读取你的社媒诉求和上传素材…' },
   { type: 'line', text: '已确认发布平台和视觉方案，正在锁定生成约束…' },
@@ -1590,6 +1713,177 @@ const wendyThinkingScript = [
   { type: 'layer', text: '第 3 层 · 素材与格式' },
   { type: 'line', text: '已生成 LinkedIn 长文、Instagram 轮播和 TikTok 短视频三个方向，正在整理…' }
 ];
+
+function getWendyPostStatus(post) {
+  if (!post) return 'draft';
+  if (post.status === 'failed' || post.status === 'draft' || post.status === 'published') return post.status;
+  if (!post.time) return 'draft';
+  const publishAt = new Date(post.time);
+  if (!Number.isNaN(publishAt.getTime()) && publishAt > wendyToday) return 'scheduled';
+  return 'published';
+}
+
+function formatWendyDateTime(value, fallback = '未排期') {
+  if (!value) return fallback;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return fallback;
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hour = String(date.getHours()).padStart(2, '0');
+  const minute = String(date.getMinutes()).padStart(2, '0');
+  return `${month}月${day}日 ${hour}:${minute}`;
+}
+
+function getWendyPostById(postId) {
+  return wendyCalendarPosts.find(post => post.id === postId);
+}
+
+function renderWendyEventButton(post) {
+  const status = getWendyPostStatus(post);
+  const meta = wendyStatusMeta[status] || wendyStatusMeta.draft;
+  const timeText = post.time ? formatWendyDateTime(post.time) : '未排期';
+  const safePostId = escapeHTML(post.id);
+  const safePlatform = escapeHTML(post.platform);
+  const safeTitle = escapeHTML(post.title);
+  const safeTime = escapeHTML(post.time || '');
+  const safeCopy = escapeHTML(post.copy || '');
+  const failure = post.failureReason ? ` data-failure-reason="${escapeHTML(post.failureReason)}"` : '';
+
+  return `
+    <button class="wendy-event ${getWendyEventColor(post.platform, status)}" style="--start: ${getWendyWeekStart(post.time)}; --duration: .86;" data-wendy-event data-wendy-post-id="${safePostId}" data-platform="${safePlatform}" data-time="${safeTime}" data-copy="${safeCopy}" data-status="${escapeHTML(status)}"${failure} type="button">
+      <i class="wendy-platform-icon" data-lucide="${getWendyPlatformIcon(post.platform)}"></i>
+      <span>${safePlatform} ${safeTitle}</span>
+      <small>${escapeHTML(meta.label)} · ${escapeHTML(timeText)}</small>
+    </button>
+  `;
+}
+
+function getWendyWeekStart(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 1;
+  return Math.min(12, Math.max(0, date.getHours() + date.getMinutes() / 60 - 8));
+}
+
+function renderWendyWeekCalendar() {
+  document.querySelectorAll('.wendy-day-column').forEach(column => {
+    const dateKey = column.dataset.day;
+    const dayPosts = wendyCalendarPosts
+      .filter(post => post.time?.startsWith(dateKey))
+      .sort((a, b) => String(a.time).localeCompare(String(b.time)));
+    column.innerHTML = dayPosts.map(renderWendyEventButton).join('');
+  });
+}
+
+function renderWendyMonthCalendar() {
+  if (!wendyMonthGrid) return;
+  const monthPosts = wendyCalendarPosts.filter(post => post.time?.startsWith('2026-07'));
+  const leadingDays = [
+    { day: 29, muted: true, key: '2026-06-29' },
+    { day: 30, muted: true, key: '2026-06-30' }
+  ];
+  const julyDays = Array.from({ length: 31 }, (_, index) => {
+    const day = index + 1;
+    return { day, muted: false, key: `2026-07-${String(day).padStart(2, '0')}` };
+  });
+  const trailingDays = [
+    { day: 1, muted: true, key: '2026-08-01' },
+    { day: 2, muted: true, key: '2026-08-02' }
+  ];
+
+  wendyMonthGrid.innerHTML = [...leadingDays, ...julyDays, ...trailingDays].map(dayInfo => {
+    const dayPosts = monthPosts
+      .filter(post => post.time?.startsWith(dayInfo.key))
+      .sort((a, b) => String(a.time).localeCompare(String(b.time)));
+    const classes = [
+      'wendy-month-day',
+      dayInfo.muted ? 'muted' : '',
+      dayInfo.key === '2026-07-14' ? 'today' : ''
+    ].filter(Boolean).join(' ');
+
+    return `
+      <section class="${classes}" aria-label="${dayInfo.key}">
+        <header><strong>${dayInfo.day}</strong>${dayInfo.key === '2026-07-14' ? '<span>今天</span>' : ''}</header>
+        <div class="wendy-month-events">
+          ${dayPosts.slice(0, 3).map(post => {
+            const status = getWendyPostStatus(post);
+            const meta = wendyStatusMeta[status] || wendyStatusMeta.draft;
+            return `
+              <button class="wendy-month-event ${escapeHTML(meta.tone)}" data-wendy-event data-wendy-post-id="${escapeHTML(post.id)}" data-platform="${escapeHTML(post.platform)}" data-time="${escapeHTML(post.time || '')}" data-copy="${escapeHTML(post.copy || '')}" data-status="${escapeHTML(status)}" type="button">
+                <i data-lucide="${getWendyPlatformIcon(post.platform)}"></i>
+                <span>${escapeHTML(formatWendyDateTime(post.time, '').split(' ').pop() || '')} ${escapeHTML(post.title)}</span>
+              </button>
+            `;
+          }).join('')}
+          ${dayPosts.length > 3 ? `<span class="wendy-month-more">还有 ${dayPosts.length - 3} 条</span>` : ''}
+        </div>
+      </section>
+    `;
+  }).join('');
+}
+
+function renderWendyStatusBoard() {
+  document.querySelectorAll('[data-wendy-status-column]').forEach(column => {
+    const status = column.dataset.wendyStatusColumn;
+    const list = column.querySelector('.wendy-status-list');
+    const posts = wendyCalendarPosts
+      .filter(post => getWendyPostStatus(post) === status)
+      .sort((a, b) => String(a.time || '9999').localeCompare(String(b.time || '9999')));
+    if (!list) return;
+    list.innerHTML = posts.length ? posts.map(post => {
+      const meta = wendyStatusMeta[status] || wendyStatusMeta.draft;
+      const failureMarkup = status === 'failed' && post.failureReason
+        ? `<p class="wendy-failure-reason"><i data-lucide="triangle-alert"></i>${escapeHTML(post.failureReason)}</p>`
+        : '';
+      const actionIcon = status === 'failed' ? 'refresh-cw' : status === 'published' ? 'eye' : 'square-pen';
+      const actionAttr = status === 'failed' ? 'data-wendy-republish' : 'data-wendy-event';
+
+      return `
+        <article class="wendy-status-card ${escapeHTML(meta.tone)}">
+          <button class="wendy-status-card-main" ${actionAttr} data-wendy-post-id="${escapeHTML(post.id)}" data-platform="${escapeHTML(post.platform)}" data-time="${escapeHTML(post.time || '')}" data-copy="${escapeHTML(post.copy || '')}" data-status="${escapeHTML(status)}" type="button">
+            <span class="wendy-status-platform">${renderIcon(getWendyPlatformIcon(post.platform))}${escapeHTML(post.platform)}</span>
+            <strong>${escapeHTML(post.title)}</strong>
+            <small>${escapeHTML(formatWendyDateTime(post.time))}</small>
+          </button>
+          ${failureMarkup}
+          <button class="wendy-status-action" ${actionAttr} data-wendy-post-id="${escapeHTML(post.id)}" type="button">
+            <i data-lucide="${actionIcon}"></i>${escapeHTML(meta.action)}
+          </button>
+        </article>
+      `;
+    }).join('') : '<p class="wendy-empty-status">暂无内容</p>';
+  });
+}
+
+function renderWendyCalendars() {
+  renderWendyWeekCalendar();
+  renderWendyMonthCalendar();
+  renderWendyStatusBoard();
+  refreshIcons();
+}
+
+function setWendyCalendarView(view) {
+  wendyState.calendarView = view;
+  document.querySelectorAll('[data-wendy-calendar-view]').forEach(button => {
+    const active = button.dataset.wendyCalendarView === view;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-selected', String(active));
+  });
+  document.querySelectorAll('[data-wendy-calendar-panel]').forEach(panel => {
+    panel.hidden = panel.dataset.wendyCalendarPanel !== view;
+  });
+  if (wendyCalendarRange) {
+    wendyCalendarRange.textContent = view === 'month' ? '2026年7月' : view === 'list' ? '发布状态列表' : '2026年7月13日 - 19日';
+  }
+  if (wendyCalendarHint) {
+    const hintText = view === 'month'
+      ? '月视图按自然月呈现全部已排期、已发布和失败记录，适合检查内容密度。'
+      : view === 'list'
+        ? '列表按状态分栏：已发布只能查看，草稿可编辑，失败项显示原因并支持重新发布。'
+        : '本周最佳发布窗口集中在周二至周四 10:00-16:00，已自动避开内容冲突。';
+    wendyCalendarHint.innerHTML = `${renderIcon('sparkles')}${escapeHTML(hintText)}`;
+    refreshIcons();
+  }
+}
 
 function syncWendyPublisherPreview() {
   if (!wendyPublisherPreviewText || !wendyCopyField) return;
@@ -1823,8 +2117,9 @@ function setWendyActiveButton(button, selector) {
   button.classList.add(selector.includes('media') ? 'selected' : 'active');
 }
 
-function getWendyEventColor(platform, isLive = false) {
-  if (isLive) return 'hot';
+function getWendyEventColor(platform, status = 'scheduled') {
+  if (status === 'failed') return 'failed';
+  if (status === 'published') return 'published';
   if (platform.includes('LinkedIn')) return 'blue';
   if (platform.includes('Instagram')) return 'pink';
   if (platform.includes('YouTube')) return 'youtube';
@@ -1839,37 +2134,103 @@ function getWendyPlatformIcon(platform) {
   return 'send';
 }
 
-function openWendyPublisher({ platform = 'LinkedIn', time = '2026-07-07T10:30:00', copy = '' } = {}) {
+function setWendyPublisherAccess(status = 'draft', failureReason = '') {
+  const readOnly = status === 'published';
+  const form = document.querySelector('#wendyPublisher form');
+  form?.classList.toggle('is-readonly', readOnly);
+  if (wendyPublisherMode) {
+    const meta = wendyStatusMeta[status] || wendyStatusMeta.draft;
+    const failureMarkup = status === 'failed' && failureReason
+      ? `<strong>失败原因：${escapeHTML(failureReason)}</strong>`
+      : `<strong>${escapeHTML(meta.hint)}</strong>`;
+    wendyPublisherMode.hidden = false;
+    wendyPublisherMode.className = `wendy-publisher-mode ${escapeHTML(meta.tone)}`;
+    wendyPublisherMode.innerHTML = `
+      <span>${renderIcon(meta.icon)}${escapeHTML(meta.label)}</span>
+      ${failureMarkup}
+    `;
+  }
+
+  [
+    wendyCopyField,
+    wendyDateField,
+    wendyClockField
+  ].forEach(field => {
+    if (field) field.disabled = readOnly;
+  });
+
+  document.querySelectorAll('.wendy-platform-picker button, .wendy-content-type-grid button, .wendy-media-grid button, .wendy-schedule-tabs button, [data-wendy-generate-caption], [data-wendy-save-draft], [data-wendy-schedule-post]').forEach(control => {
+    control.disabled = readOnly;
+  });
+
+  const scheduleButton = document.querySelector('[data-wendy-schedule-post]');
+  if (scheduleButton) {
+    scheduleButton.innerHTML = status === 'failed'
+      ? '<i data-lucide="refresh-cw"></i>重新发布'
+      : '<i data-lucide="send"></i>发布';
+  }
+  refreshIcons();
+}
+
+function openWendyPublisher({ platform = 'LinkedIn', time = '2026-07-15T10:30:00', copy = '', status = 'draft', postId = null, failureReason = '' } = {}) {
   if (!wendyPublisher) return;
+  wendyState.activePostId = postId;
   wendyPublisher.hidden = false;
   setWendyPublisherPlatform(platform);
-  setWendyPublisherDateTime(time);
-  if (wendyCopyField && copy) wendyCopyField.value = copy;
+  setWendyPublisherDateTime(time || '2026-07-15T10:30:00');
+  if (wendyCopyField) wendyCopyField.value = copy || '面向欧洲储能安装商的新一代并网组件已经完成批量测试。点击了解交付稳定性、认证资料和项目支持方案。';
+  setWendyPublisherAccess(status, failureReason);
   syncWendyPublisherPreview();
-  window.setTimeout(() => wendyCopyField?.focus(), 0);
+  if (status !== 'published') window.setTimeout(() => wendyCopyField?.focus(), 0);
   refreshIcons();
 }
 
 function closeWendyPublisher() {
   if (wendyPublisher) wendyPublisher.hidden = true;
+  wendyState.activePostId = null;
 }
 
 function addWendyCalendarPost({ platform, time, copy, isLive = false }) {
-  const date = new Date(time);
-  const day = Number.isNaN(date.getTime()) ? 7 : date.getDate();
-  const hour = Number.isNaN(date.getTime()) ? 9 : date.getHours();
-  const minute = Number.isNaN(date.getTime()) ? 30 : date.getMinutes();
-  const start = Math.min(12, Math.max(0, hour + minute / 60 - 8));
-  const column = Array.from(document.querySelectorAll('.wendy-day-column'))
-    .find(item => item.dataset.day?.includes(`7月${day}日`)) || document.querySelector('.wendy-day-column');
-  if (!column) return;
-  const label = isLive ? `${platform} 刚发布` : `${platform} 已排期`;
-  column.insertAdjacentHTML('beforeend', `
-    <button class="wendy-event ${getWendyEventColor(platform, isLive)}" style="--start: ${start}; --duration: .86;" data-wendy-event data-platform="${escapeHTML(platform)}" data-time="${escapeHTML(time)}" data-copy="${escapeHTML(copy)}" type="button">
-      <i class="wendy-platform-icon" data-lucide="${getWendyPlatformIcon(platform)}"></i><span>${escapeHTML(label)}</span>
-    </button>
-  `);
-  refreshIcons();
+  const existingPost = wendyState.activePostId ? getWendyPostById(wendyState.activePostId) : null;
+  const nextStatus = isLive ? 'published' : 'scheduled';
+  if (existingPost) {
+    existingPost.platform = platform;
+    existingPost.time = time;
+    existingPost.copy = copy;
+    existingPost.status = nextStatus;
+    existingPost.failureReason = '';
+  } else {
+    wendyCalendarPosts.push({
+      id: `wendy-post-${Date.now()}`,
+      platform,
+      title: isLive ? `${platform} 刚发布` : `${platform} 已排期`,
+      time,
+      copy,
+      status: nextStatus
+    });
+  }
+  renderWendyCalendars();
+}
+
+function saveWendyDraftPost({ platform, copy }) {
+  const existingPost = wendyState.activePostId ? getWendyPostById(wendyState.activePostId) : null;
+  if (existingPost) {
+    existingPost.platform = platform;
+    existingPost.time = '';
+    existingPost.copy = copy;
+    existingPost.status = 'draft';
+    existingPost.failureReason = '';
+  } else {
+    wendyCalendarPosts.push({
+      id: `wendy-draft-${Date.now()}`,
+      platform,
+      title: `${platform} 内容草稿`,
+      time: '',
+      copy,
+      status: 'draft'
+    });
+  }
+  renderWendyCalendars();
 }
 
 function resetWendyThinking() {
@@ -2149,16 +2510,53 @@ document.querySelector('#wendyPage')?.addEventListener('click', event => {
 
   const openButton = event.target.closest('[data-wendy-open-publisher]');
   if (openButton) {
-    openWendyPublisher();
+    openWendyPublisher({ status: 'draft' });
+    return;
+  }
+
+  const viewButton = event.target.closest('[data-wendy-calendar-view]');
+  if (viewButton) {
+    setWendyCalendarView(viewButton.dataset.wendyCalendarView || 'week');
+    return;
+  }
+
+  const republishButton = event.target.closest('[data-wendy-republish]');
+  if (republishButton) {
+    const post = getWendyPostById(republishButton.dataset.wendyPostId);
+    if (post) {
+      openWendyPublisher({
+        platform: post.platform,
+        time: post.time || '2026-07-15T10:30:00',
+        copy: post.copy,
+        status: 'failed',
+        postId: post.id,
+        failureReason: post.failureReason || '发布失败'
+      });
+    }
     return;
   }
 
   const eventButton = event.target.closest('[data-wendy-event]');
   if (eventButton) {
+    const post = getWendyPostById(eventButton.dataset.wendyPostId);
+    if (post) {
+      const status = getWendyPostStatus(post);
+      openWendyPublisher({
+        platform: post.platform,
+        time: post.time || '2026-07-15T10:30:00',
+        copy: post.copy,
+        status,
+        postId: post.id,
+        failureReason: post.failureReason || ''
+      });
+      return;
+    }
     openWendyPublisher({
       platform: eventButton.dataset.platform || 'LinkedIn',
       time: eventButton.dataset.time || '2026-07-07T09:30',
-      copy: eventButton.dataset.copy || ''
+      copy: eventButton.dataset.copy || '',
+      status: eventButton.dataset.status || 'scheduled',
+      failureReason: eventButton.dataset.failureReason || ''
     });
     return;
   }
@@ -2200,6 +2598,8 @@ document.querySelector('#wendyPage')?.addEventListener('click', event => {
   const saveDraftButton = event.target.closest('[data-wendy-save-draft]');
   if (saveDraftButton) {
     const platform = wendyPlatformField?.value || 'LinkedIn';
+    const copy = wendyCopyField?.value.trim() || '新的社媒内容';
+    saveWendyDraftPost({ platform, copy });
     closeWendyPublisher();
     showToast(`${platform} 内容已保存为草稿`);
     return;
@@ -2747,5 +3147,7 @@ renderStrategies('news');
 updateJohnCampaign();
 filterJohnKeywords();
 syncWendyAccountSummary();
+renderWendyCalendars();
+setWendyCalendarView('week');
 refreshIcons();
 updateLilyRoute();

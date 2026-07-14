@@ -727,31 +727,36 @@
           <section class="wendy-calendar-shell" aria-label="Wendy发布日历">
             <div class="wendy-calendar-toolbar">
               <div class="wendy-range-controls" aria-label="日历日期控制">
-                <button class="wendy-icon-button" type="button" aria-label="上一周"><i data-lucide="chevron-left"></i></button>
+                <button class="wendy-icon-button" type="button" aria-label="上一段时间"><i data-lucide="chevron-left"></i></button>
                 <button class="wendy-text-button" type="button">今天</button>
-                <button class="wendy-icon-button" type="button" aria-label="下一周"><i data-lucide="chevron-right"></i></button>
-                <strong>2026年7月6日 - 12日</strong>
+                <button class="wendy-icon-button" type="button" aria-label="下一段时间"><i data-lucide="chevron-right"></i></button>
+                <strong id="wendyCalendarRange">2026年7月13日 - 19日</strong>
               </div>
               <div class="wendy-view-controls">
+                <div class="wendy-segmented" role="tablist" aria-label="日历视图">
+                  <button class="active" data-wendy-calendar-view="week" type="button" role="tab" aria-selected="true">周</button>
+                  <button data-wendy-calendar-view="month" type="button" role="tab" aria-selected="false">月</button>
+                  <button data-wendy-calendar-view="list" type="button" role="tab" aria-selected="false">列表</button>
+                </div>
                 <button class="wendy-primary wendy-send-button" data-wendy-open-publisher type="button"><i data-lucide="send"></i>发布</button>
               </div>
             </div>
 
             <div class="wendy-calendar-subbar">
-              <p><i data-lucide="sparkles"></i>本周最佳发布窗口集中在周二至周四 10:00-16:00，已自动避开内容冲突。</p>
+              <p id="wendyCalendarHint"><i data-lucide="sparkles"></i>本周最佳发布窗口集中在周二至周四 10:00-16:00，已自动避开内容冲突。</p>
               <button type="button"><i data-lucide="calendar-range"></i>自动排期</button>
             </div>
 
-            <div class="wendy-week-calendar">
+            <div class="wendy-week-calendar" data-wendy-calendar-panel="week">
               <div class="wendy-week-header" aria-hidden="true">
                 <span>时间</span>
-                <strong>周一 7/6</strong>
-                <strong>周二 7/7</strong>
-                <strong>周三 7/8</strong>
-                <strong class="active">周四 7/9</strong>
-                <strong>周五 7/10</strong>
-                <strong>周六 7/11</strong>
-                <strong>周日 7/12</strong>
+                <strong>周一 7/13</strong>
+                <strong class="active">周二 7/14</strong>
+                <strong>周三 7/15</strong>
+                <strong>周四 7/16</strong>
+                <strong>周五 7/17</strong>
+                <strong>周六 7/18</strong>
+                <strong>周日 7/19</strong>
               </div>
 
               <div class="wendy-week-body">
@@ -761,39 +766,40 @@
                   <span>16:00</span><span>17:00</span><span>18:00</span><span>19:00</span>
                   <span>20:00</span>
                 </div>
-                <div class="wendy-day-column" data-day="7月6日 周一">
-                  <button class="wendy-event blue" style="--start: 2; --duration: .86;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-06T10:00" data-copy="发布欧洲储能安装商案例图文，强调交付稳定性和认证资料完整度。" type="button"><i class="wendy-platform-icon" data-lucide="linkedin"></i><span>LinkedIn 案例图文</span></button>
-                  <button class="wendy-event hot" style="--start: 7; --duration: .86;" data-wendy-event data-platform="TikTok" data-time="2026-07-06T15:00" data-copy="发布工厂测试流程短视频，开头展示高压测试台和质检标签。" type="button"><i class="wendy-platform-icon" data-lucide="music-2"></i><span>TikTok 案例图文</span></button>
-                  <button class="wendy-event pink" style="--start: 10; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-06T18:00" data-copy="发布产品应用场景轮播图，导流到独立站资料页。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
-                </div>
-                <div class="wendy-day-column" data-day="7月7日 周二">
-                  <button class="wendy-event pink" style="--start: 1; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-07T09:00" data-copy="展示新一代并网组件的产品细节，附带官网资料下载链接。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
-                  <button class="wendy-event blue" style="--start: 4; --duration: .86;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-07T12:00" data-copy="分享项目交付时间线，突出海外安装商能快速获取技术资料。" type="button"><i class="wendy-platform-icon" data-lucide="linkedin"></i><span>LinkedIn 案例图文</span></button>
-                  <button class="wendy-event youtube" style="--start: 8; --duration: .86;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-07T16:00" data-copy="发布 30 秒 YouTube Shorts，展示产品包装、测试和出货节点。" type="button"><i class="wendy-platform-icon" data-lucide="youtube"></i><span>YouTube 案例图文</span></button>
-                </div>
-                <div class="wendy-day-column" data-day="7月8日 周三">
-                  <button class="wendy-event hot" style="--start: 3; --duration: .86;" data-wendy-event data-platform="TikTok" data-time="2026-07-08T11:00" data-copy="15 秒工厂测试流程短视频，开头展示高压测试台和质检标签。" type="button"><i class="wendy-platform-icon" data-lucide="music-2"></i><span>TikTok 案例图文</span></button>
-                  <button class="wendy-event pink" style="--start: 6; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-08T14:00" data-copy="发布客户常见问题短图，解释认证资料、质保和售后响应。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
-                  <button class="wendy-event blue" style="--start: 9; --duration: .86;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-08T17:00" data-copy="午后发布 LinkedIn 投票，询问海外买家最关注的并网组件指标。" type="button"><i class="wendy-platform-icon" data-lucide="linkedin"></i><span>LinkedIn 案例图文</span></button>
-                </div>
-                <div class="wendy-day-column" data-day="7月9日 周四">
-                  <button class="wendy-event youtube" style="--start: 2; --duration: .86;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-09T10:00" data-copy="发布 30 秒 YouTube Shorts，展示产品包装、测试和出货节点。" type="button"><i class="wendy-platform-icon" data-lucide="youtube"></i><span>YouTube 案例图文</span></button>
-                  <button class="wendy-event blue" style="--start: 5; --duration: .86;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-09T13:00" data-copy="发布一条面向采购负责人的交付承诺帖，附带联系入口。" type="button"><i class="wendy-platform-icon" data-lucide="linkedin"></i><span>LinkedIn 案例图文</span></button>
-                  <button class="wendy-event pink" style="--start: 8; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-09T16:00" data-copy="清晨发布海外项目安装现场图，配合热门标签获取自然流量。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
-                  <button class="wendy-event hot" style="--start: 11; --duration: .86;" data-wendy-event data-platform="TikTok" data-time="2026-07-09T19:00" data-copy="发布工厂测试流程短视频，开头展示高压测试台和质检标签。" type="button"><i class="wendy-platform-icon" data-lucide="music-2"></i><span>TikTok 案例图文</span></button>
-                </div>
-                <div class="wendy-day-column" data-day="7月10日 周五">
-                  <button class="wendy-event blue" style="--start: 1; --duration: .86;" data-wendy-event data-platform="LinkedIn" data-time="2026-07-10T09:00" data-copy="发布一条面向采购负责人的交付承诺帖，附带联系入口。" type="button"><i class="wendy-platform-icon" data-lucide="linkedin"></i><span>LinkedIn 案例图文</span></button>
-                  <button class="wendy-event hot" style="--start: 4; --duration: .86;" data-wendy-event data-platform="TikTok" data-time="2026-07-10T12:00" data-copy="发布售后备件短视频，强化长期维护能力。" type="button"><i class="wendy-platform-icon" data-lucide="music-2"></i><span>TikTok 案例图文</span></button>
-                  <button class="wendy-event pink" style="--start: 7; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-10T15:00" data-copy="发布安装商合作清单，说明交付前、中、后的支持动作。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
-                </div>
-                <div class="wendy-day-column" data-day="7月11日 周六">
-                  <button class="wendy-event youtube" style="--start: 5; --duration: .86;" data-wendy-event data-platform="YouTube Shorts" data-time="2026-07-11T13:00" data-copy="同步一条 Shorts 精简版产品亮点。" type="button"><i class="wendy-platform-icon" data-lucide="youtube"></i><span>YouTube 案例图文</span></button>
-                </div>
-                <div class="wendy-day-column" data-day="7月12日 周日">
-                  <button class="wendy-event pink" style="--start: 3; --duration: .86;" data-wendy-event data-platform="Instagram" data-time="2026-07-12T11:00" data-copy="发布下周预告图文，展示新素材拍摄计划。" type="button"><i class="wendy-platform-icon" data-lucide="instagram"></i><span>Instagram 案例图文</span></button>
-                </div>
+                <div class="wendy-day-column" data-day="2026-07-13"></div>
+                <div class="wendy-day-column" data-day="2026-07-14"></div>
+                <div class="wendy-day-column" data-day="2026-07-15"></div>
+                <div class="wendy-day-column" data-day="2026-07-16"></div>
+                <div class="wendy-day-column" data-day="2026-07-17"></div>
+                <div class="wendy-day-column" data-day="2026-07-18"></div>
+                <div class="wendy-day-column" data-day="2026-07-19"></div>
               </div>
+            </div>
+
+            <div class="wendy-month-calendar" data-wendy-calendar-panel="month" hidden>
+              <div class="wendy-month-weekdays" aria-hidden="true">
+                <span>周一</span><span>周二</span><span>周三</span><span>周四</span><span>周五</span><span>周六</span><span>周日</span>
+              </div>
+              <div class="wendy-month-grid" id="wendyMonthGrid" aria-label="2026年7月月视图"></div>
+            </div>
+
+            <div class="wendy-status-board" data-wendy-calendar-panel="list" hidden>
+              <section class="wendy-status-column" data-wendy-status-column="published" aria-labelledby="wendy-status-published">
+                <header><h3 id="wendy-status-published">已发布</h3><span>只能查看</span></header>
+                <div class="wendy-status-list"></div>
+              </section>
+              <section class="wendy-status-column" data-wendy-status-column="scheduled" aria-labelledby="wendy-status-scheduled">
+                <header><h3 id="wendy-status-scheduled">已排期</h3><span>未到发布时间</span></header>
+                <div class="wendy-status-list"></div>
+              </section>
+              <section class="wendy-status-column" data-wendy-status-column="draft" aria-labelledby="wendy-status-draft">
+                <header><h3 id="wendy-status-draft">草稿</h3><span>可继续编辑</span></header>
+                <div class="wendy-status-list"></div>
+              </section>
+              <section class="wendy-status-column" data-wendy-status-column="failed" aria-labelledby="wendy-status-failed">
+                <header><h3 id="wendy-status-failed">发布失败</h3><span>可重新发布</span></header>
+                <div class="wendy-status-list"></div>
+              </section>
             </div>
           </section>
 
@@ -821,6 +827,7 @@
                 </div>
                 <button class="wendy-icon-button" data-wendy-close-publisher type="button" aria-label="关闭"><i data-lucide="x"></i></button>
               </header>
+              <div class="wendy-publisher-mode" id="wendyPublisherMode" hidden></div>
               <div class="wendy-publisher-body">
                 <section class="wendy-publisher-main" aria-label="Post内容设置">
                   <div class="wendy-publisher-block">
