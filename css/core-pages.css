@@ -22,8 +22,8 @@
 .core-card {
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+  background: var(--oz-white);
+  box-shadow: 0 1px 3px var(--oz-black-10);
 }
 
 .core-card h1,
@@ -55,7 +55,7 @@
 .team-member span,
 .team-member p {
   border-radius: 6px;
-  background: #f9f9f9;
+  background: var(--oz-neutral-50);
 }
 
 .overview-stats article {
@@ -107,7 +107,7 @@
   gap: 2px;
   padding: 4px;
   border-radius: 10px;
-  background: rgba(0,0,0,.04);
+  background: var(--oz-black-4);
 }
 
 .period-toggle button {
@@ -120,8 +120,8 @@
 }
 
 .period-toggle .active {
-  background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,.12);
+  background: var(--oz-white);
+  box-shadow: 0 1px 3px var(--oz-black-12);
 }
 
 .filter-row {
@@ -145,7 +145,7 @@
   padding: 0 10px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: #fff;
+  background: var(--oz-white);
   font-size: 12px;
 }
 
@@ -175,7 +175,7 @@
   position: relative;
   height: 12px;
   border-radius: 1px;
-  background: linear-gradient(90deg, #7cc7f5 0 var(--a), #3b99df var(--a) var(--b), #f78b45 var(--b) var(--c), #ffe486 var(--c));
+  background: linear-gradient(90deg, var(--oz-sky-300) 0 var(--a), var(--oz-sky-500) var(--a) var(--b), var(--oz-orange-400) var(--b) var(--c), var(--oz-amber-200) var(--c));
 }
 
 .mini-metrics {
@@ -209,7 +209,7 @@
 .buyer-ranking th,
 .buyer-ranking td {
   padding: 9px 10px;
-  color: #525252;
+  color: var(--oz-neutral-600);
   text-align: right;
 }
 
@@ -226,11 +226,11 @@
   height: 24px;
   margin-right: 8px;
   border-radius: 2px;
-  background: #f5f5f5;
+  background: var(--oz-neutral-100);
 }
 
-.rank.hot { color: #ff4d4f; background: #fff1f0; }
-.rank.warm { color: #f59e0b; background: #fff7ed; }
+.rank.hot { color: var(--oz-red-500); background: var(--oz-red-50); }
+.rank.warm { color: var(--oz-amber-500); background: var(--oz-orange-50); }
 
 .core-side {
   display: flex;
@@ -242,9 +242,9 @@
 .zoe-progress p {
   margin: 8px 0 12px;
   padding: 8px;
-  border: 1px solid #6366f1;
+  border: 1px solid var(--oz-indigo-500);
   border-radius: 6px;
-  background: #eef2ff;
+  background: var(--oz-indigo-50);
 }
 
 .side-stat-grid {
@@ -300,7 +300,7 @@
   gap: 0;
   overflow: hidden;
   border-radius: 12px;
-  background: #fff;
+  background: var(--oz-white);
 }
 
 .customer-summary article {
@@ -327,7 +327,7 @@
   gap: 8px;
   padding: 0 10px;
   border-radius: 6px;
-  background: rgba(0,0,0,.04);
+  background: var(--oz-black-4);
 }
 
 .customer-toolbar input {
@@ -351,13 +351,13 @@
   height: 16px;
   border: 1px solid var(--border);
   border-radius: 4px;
-  background: #fff;
+  background: var(--oz-white);
 }
 
 .lead-list {
   overflow: hidden;
   border-radius: 12px;
-  background: #fff;
+  background: var(--oz-white);
 }
 
 .lead-card {
@@ -378,15 +378,15 @@
 .lead-meta span { display: inline-flex; align-items: center; gap: 4px; }
 .lead-tags { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .lead-tags small { width: 60px; color: var(--muted); font-size: 12px; }
-.tag { height: 24px; display: inline-flex; align-items: center; padding: 0 6px; border: 1px solid #ec4899; border-radius: 6px; color: #ec4899; background: #fdf2f8; font-size: 12px; }
-.tag.sky { color: #0ea5e9; border-color: #0ea5e9; background: #f0f9ff; }
-.tag.purple { color: #a855f7; border-color: #a855f7; background: #faf5ff; }
+.tag { height: 24px; display: inline-flex; align-items: center; padding: 0 6px; border: 1px solid var(--oz-pink-500); border-radius: 6px; color: var(--oz-pink-500); background: var(--oz-pink-50); font-size: 12px; }
+.tag.sky { color: var(--oz-sky-500); border-color: var(--oz-sky-500); background: var(--oz-sky-50); }
+.tag.purple { color: var(--oz-purple-500); border-color: var(--oz-purple-500); background: var(--oz-purple-50); }
 .lead-actions { display: flex; align-items: center; justify-content: flex-end; gap: 14px; }
 .lead-actions button { width: 32px; height: 32px; display: grid; place-items: center; border: 0; border-radius: 6px; background: transparent; }
-.lead-actions button:hover { background: #f5f5f5; }
-.pagination { display: flex; align-items: center; justify-content: flex-end; gap: 4px; height: 40px; padding: 4px; border-radius: 0 0 12px 12px; background: #fff; }
+.lead-actions button:hover { background: var(--oz-neutral-100); }
+.pagination { display: flex; align-items: center; justify-content: flex-end; gap: 4px; height: 40px; padding: 4px; border-radius: 0 0 12px 12px; background: var(--oz-white); }
 .pagination > * { min-width: 32px; height: 32px; display: inline-grid; place-items: center; border: 0; border-radius: 8px; background: transparent; font-size: 14px; }
-.pagination strong { border: 1px solid var(--border); box-shadow: 0 1px 1px rgba(0,0,0,.1); font-weight: 500; }
+.pagination strong { border: 1px solid var(--border); box-shadow: 0 1px 1px var(--oz-black-10); font-weight: 500; }
 
 .agent-page {
   display: grid;
@@ -400,8 +400,8 @@
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+  background: var(--oz-white);
+  box-shadow: 0 1px 3px var(--oz-black-10);
 }
 
 .agent-flow-card > header {
@@ -466,7 +466,7 @@
   width: 6px;
   height: 134px;
   border-radius: 6px;
-  background: linear-gradient(#6366f1 0 8px, #e5e7eb 8px);
+  background: linear-gradient(var(--oz-indigo-500) 0 8px, var(--oz-gray-200) 8px);
 }
 
 .step-anchor li { white-space: nowrap; }
@@ -475,7 +475,7 @@
 .question-bubble,
 .form-bubble {
   border-radius: 8px;
-  background: rgba(0,0,0,.04);
+  background: var(--oz-black-4);
 }
 
 .question-bubble {
@@ -511,7 +511,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   outline: 0;
-  background: #fff;
+  background: var(--oz-white);
   font-size: 14px;
   font-weight: 400;
 }
@@ -520,9 +520,9 @@
   height: 32px;
   border: 0;
   border-radius: 10px;
-  color: #fff;
+  color: var(--oz-white);
   background: var(--indigo);
-  box-shadow: 0 1px 1px rgba(0,0,0,.1);
+  box-shadow: 0 1px 1px var(--oz-black-10);
   font-size: 14px;
   font-weight: 500;
 }
@@ -533,8 +533,8 @@
 }
 
 .inline-actions .confirm-light {
-  color: #22c55e;
-  background: rgba(0,0,0,.04);
+  color: var(--oz-green-500);
+  background: var(--oz-black-4);
 }
 
 .assistant-pane {
@@ -564,7 +564,7 @@
 }
 
 .assistant-note > i {
-  color: #22c55e;
+  color: var(--oz-green-500);
 }
 
 .assistant-note strong {
