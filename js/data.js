@@ -274,6 +274,185 @@ const marketingPlans = {
   }
 };
 
+const wendyVisualStylesByPlatform = {
+  LinkedIn: [
+    {
+      id: 'cool-white-studio',
+      name: '冷白商业棚拍',
+      image: 'assets/wendy-styles/linkedin-01-cool-white-studio.jpg',
+      summary: '冷白影棚 · B2B 决策感',
+      description: '场景使用白色到浅灰的无缝商业影棚与磨砂地台；构图采用三分之四视角，三台产品形成稳定的高低层级并保留充足理性留白；柔光箱从左上方照明，边缘补光干净，投影真实克制；色彩以冷白、银灰和少量品牌红为主；突出白色哑光外壳、深灰侧边栅格与精密接缝；整体呈现可信、清晰、适合 B2B 采购决策的高端产品摄影。'
+    },
+    {
+      id: 'dark-cinematic-industrial',
+      name: '深色电影工业',
+      image: 'assets/wendy-styles/linkedin-02-dark-cinematic-industrial.jpg',
+      summary: '深色电影光 · 工业可靠性',
+      description: '场景置于炭黑与石墨灰的现代能源工业空间，背景有轻微薄雾和极克制的火花；低机位广角构图让三台产品形成稳固英雄阵列；使用锐利轮廓光、金属高光和局部暖色环境光，暗部仍保留结构细节；色彩以黑灰、冷白和微量琥珀色为主；强调外壳体块、侧边纹理与工业可靠性；电影感强但不娱乐化，保持 LinkedIn 的专业可信气质。'
+    },
+    {
+      id: 'field-industrial-documentary',
+      name: '现场工业纪实',
+      image: 'assets/wendy-styles/linkedin-03-field-industrial-documentary.jpg',
+      summary: '真实安装现场 · 工程纪实',
+      description: '场景为真实现代住宅的光储安装现场，包含克制的墙面、线缆槽、工具箱和工作痕迹，但不出现人物；三台产品按参考图的高低关系靠墙安装，主体占画面约一半；自然窗光与现场顶灯混合，保留真实阴影、轻微颗粒和不过度修饰的材质；色彩自然中性；呈现产品正在稳定运行的真实感、安装可信度和工程纪实氛围。'
+    },
+    {
+      id: 'blueprint-hud',
+      name: '技术蓝图 HUD',
+      image: 'assets/wendy-styles/linkedin-04-blueprint-hud.jpg',
+      summary: '工程网格 · 技术方案封面',
+      description: '场景使用深蓝到石墨色工程背景，叠加精密网格、能量路径、结构标注线、局部放大框和少量参数模块；三台产品保持真实材质与完整轮廓，中心产品最大，两侧产品作为容量扩展关系；冷青边缘光勾勒结构，界面发光强度克制；信息图形整齐、可验证、不过度科幻；整体像高端工程方案封面，兼具技术说明与 B2B 决策感。'
+    },
+    {
+      id: 'material-macro-craft',
+      name: '材质微距精工',
+      image: 'assets/wendy-styles/linkedin-05-material-macro-craft.jpg',
+      summary: '超清微距 · 精密制造品质',
+      description: '画面以三台完整产品为主，并在背景或边缘融入白色哑光外壳、深灰侧边散热纹理、模块接缝和前部指示面板的超清微距切片；构图像精密制造专题封面，层级规整；使用窄幅柔光与高锐度局部照明，浅景深只作用于微距区域；色彩保持白、深灰与少量红；强调表面均匀度、装配精度和高端制造品质。'
+    },
+    {
+      id: 'brand-minimal-geometry',
+      name: '品牌极简几何',
+      image: 'assets/wendy-styles/linkedin-06-brand-minimal-geometry.jpg',
+      summary: '瑞士网格 · 企业级秩序',
+      description: '场景采用大面积白色留白、浅灰几何地台与一块克制的品牌红色矩形；三台产品以清晰抠图感组成平衡阵列，视角和比例准确；光线柔和均匀，投影简洁；版式参考瑞士国际主义与现代企业年报，网格严谨、信息层级清楚；不添加装饰性道具，以产品轮廓、模块化关系和企业级秩序感为核心。'
+    }
+  ],
+  Instagram: [
+    {
+      id: 'editorial-studio',
+      name: '精品编辑棚拍',
+      image: 'assets/wendy-styles/instagram-01-editorial-studio.jpg',
+      summary: '暖灰影棚 · 设计杂志质感',
+      description: '场景为奶油白、暖灰与浅米色的编辑影棚，搭配石材、半透明玻璃和柔软织物等少量精致道具；三台产品采用非对称杂志式构图，留出优雅呼吸感；大窗柔光形成细长柔和阴影，局部高光细腻；色彩低饱和、温暖而高级；突出圆角外壳与精致材质，让画面像设计杂志中的高端家居科技广告。'
+    },
+    {
+      id: 'natural-lifestyle',
+      name: '自然生活方式',
+      image: 'assets/wendy-styles/instagram-02-natural-lifestyle.jpg',
+      summary: '当代住宅 · 高级生活方式',
+      description: '场景为明亮当代住宅的客厅与能源设备区域，窗外有柔和绿色庭院，室内使用浅木、石材和天然织物；三台产品自然融入空间但仍占据清晰视觉中心；清晨侧逆光与室内柔光形成温暖层次；色彩为暖白、浅木色和柔和绿色；整体松弛、真实、可向往，呈现家庭绿电产品与日常生活共存的高级生活方式。'
+    },
+    {
+      id: 'dopamine-geometry',
+      name: '多巴胺彩色几何',
+      image: 'assets/wendy-styles/instagram-03-dopamine-geometry.jpg',
+      summary: '高饱和几何 · 年轻停留感',
+      description: '场景使用珊瑚红、钴蓝、柠檬黄与奶油白组成的高饱和几何空间；三台产品分别站在不同高度的圆柱和方形台座上，形成俏皮但清楚的节奏；使用硬质直射光制造干净强烈的彩色阴影；产品白色外壳保持准确，不被彩色覆盖；整体明快、年轻、适合停留与收藏，同时保留高端工业设计感。'
+    },
+    {
+      id: 'sensory-material-macro',
+      name: '感官材质微距',
+      image: 'assets/wendy-styles/instagram-04-sensory-material-macro.jpg',
+      summary: '透明材质 · 洁净感官世界',
+      description: '场景以透明玻璃、水滴、柔和雾气、细腻石材和光滑液体曲面围绕三台产品，营造清洁、安静的感官世界；完整产品与侧边栅格、接缝和指示面板的微距细节交错；使用柔和逆光、折射高光和浅景深；色彩以冷白、透明、浅蓝灰为主；强调触感、静音、洁净和精密质感，画面如高级美容或家居产品编辑广告。'
+    },
+    {
+      id: 'surreal-giant-3d',
+      name: '超现实巨物 3D',
+      image: 'assets/wendy-styles/instagram-05-surreal-giant-3d.jpg',
+      summary: '漂浮巨物 · 精品 3D 艺术',
+      description: '场景将三台储能产品塑造成漂浮于极简未来住宅与柔和云层上方的超尺度雕塑，产品比例关系保持准确；构图具有梦境般纵深与大面积负空间；使用柔和日光、透明材质折射和少量液态金属光泽；色彩为珍珠白、天空蓝和淡银灰；画面高级、奇观化但不破坏产品真实造型，像精品品牌的 3D 艺术广告。'
+    },
+    {
+      id: 'handmade-editorial-collage',
+      name: '手作编辑拼贴',
+      image: 'assets/wendy-styles/instagram-06-handmade-editorial-collage.jpg',
+      summary: '纸张胶片 · 可收藏编辑感',
+      description: '场景采用象牙白纸张底、撕纸边缘、胶片颗粒、半透明胶带、扫描纹理与手绘线条；三台产品以完整主图加多个局部切片形成有层次的编辑拼贴，主次清晰；色彩使用黑白灰、暖米色和少量品牌红；光影保留真实产品摄影质感，拼贴元素呈手工触感；整体自由、艺术、可收藏，但不遮挡产品与统一文案。'
+    }
+  ],
+  TikTok: [
+    {
+      id: 'phone-flash',
+      name: '手机闪光直拍',
+      image: 'assets/wendy-styles/tiktok-01-phone-flash.jpg',
+      summary: '手机广角 · 原生 UGC 抓拍',
+      description: '场景为真实家庭车库或设备安装角落，保留混凝土地面、墙面和少量日常工具；使用近距离手机广角、轻微倾斜和直接闪光，三台产品像刚安装完成后被随手记录；高光直接、阴影清脆，允许少量噪点与不完美边缘；色彩真实偏冷；画面具有原生 UGC 与第一帧抓拍感，但产品造型、品牌标识和文案必须清楚准确。'
+    },
+    {
+      id: 'pop-sticker',
+      name: '高饱和波普贴纸',
+      image: 'assets/wendy-styles/tiktok-02-pop-sticker.jpg',
+      summary: '撞色贴纸 · 第一帧强钩子',
+      description: '场景使用亮紫、酸性绿、热粉与电光蓝的高饱和撞色背景；三台产品做粗白描边抠图，配合箭头、爆炸形、速度线和几何贴纸形成跳跃版式；硬光与彩色阴影增强立体感；产品主体保持白色真实材质，不被图形覆盖；整体像短视频第一帧即将弹出与震动，年轻、直接、强钩子，同时统一文案易读。'
+    },
+    {
+      id: 'cyber-neon-hud',
+      name: '赛博霓虹 HUD',
+      image: 'assets/wendy-styles/tiktok-03-cyber-neon-hud.jpg',
+      summary: '霓虹能量 · 系统启动关键帧',
+      description: '场景为深黑未来能源舱，青色与紫色霓虹沿产品边缘流动，背景带扫描线、数字网格、能量轨迹和发光界面；三台产品形成向前推进的透视阵列；使用高反差轮廓光与局部冷雾，白色外壳仍保留真实层次；画面像系统启动动画的关键帧，动势强、科技感浓，但避免细碎难读的小字。'
+    },
+    {
+      id: 'asmr-macro',
+      name: 'ASMR 微距质感',
+      image: 'assets/wendy-styles/tiktok-04-asmr-macro.jpg',
+      summary: '贴近表面 · 循环 ASMR 封面',
+      description: '画面将三台完整产品与模块接缝、侧边散热栅格、指示面板和边角圆弧的超清微距细节组合；视角贴近表面，像镜头缓慢滑过产品；使用柔滑条形高光、浅景深和干净反射，背景深而安静；色彩为白、深灰和少量冷蓝；视觉上让人联想到轻触、开合与机械卡扣的清脆声音，适合作为循环 ASMR 视频封面。'
+    },
+    {
+      id: 'surreal-morph-3d',
+      name: '超现实变形 3D',
+      image: 'assets/wendy-styles/tiktok-05-surreal-morph-3d.jpg',
+      summary: '无重力变形 · 动效延展',
+      description: '场景中三台产品在无重力空间悬浮并沿螺旋轨迹分离，模块之间有流畅能量光带连接，局部出现柔性拉伸、粒子化和几何变形，但主体外观仍可识别；构图像循环动画的暂停帧，中心动势强；使用青白与紫红霓虹光、柔和体积雾和高亮反射；整体奇异、年轻、可动效延展。'
+    },
+    {
+      id: 'y2k-collage',
+      name: 'Y2K 剪贴混媒',
+      image: 'assets/wendy-styles/tiktok-06-y2k-collage.jpg',
+      summary: '数码怀旧 · 高速翻页混媒',
+      description: '场景以半调网点、旧电脑窗口、屏幕截图质感、撕纸、手写涂鸦、金属银色块和像素网格构成；三台产品以多层抠图错位叠放，主产品轮廓最大最清楚；色彩使用银灰、黑、荧光蓝与亮红；版式快速、粗粝、略带数码怀旧，像高速翻页视频的一帧，同时避免额外无意义文字。'
+    }
+  ],
+  YouTube: [
+    {
+      id: 'cinematic-hero',
+      name: '电影级英雄主视觉',
+      image: 'assets/wendy-styles/youtube-01-cinematic-hero.jpg',
+      summary: '宏大空间 · 英雄级缩略图',
+      description: '场景为宏大的未来住宅能源空间与远处城市天际线，三台产品占画面约六成并按参考图高低关系组成英雄阵列；低机位广角与强透视带来力量感；使用戏剧性硬光、清晰轮廓光、体积光和深层环境；色彩为深蓝黑、冷白与少量金色能量光；缩小为视频缩略图时仍能一眼识别产品与标题。'
+    },
+    {
+      id: 'high-key-studio',
+      name: '高键商业棚拍',
+      image: 'assets/wendy-styles/youtube-02-high-key-studio.jpg',
+      summary: '高键纯净 · 紧凑高识别度',
+      description: '场景采用明亮纯白到浅灰渐变影棚与极简红色线条或色块；三台产品轮廓锐利、体块清楚，组成紧凑且高识别度的缩略图构图；大面积高键柔光配合轻微硬边补光，阴影干净；色彩简洁、对比明确；画面只保留产品和统一信息层级，避免道具与细节噪声。'
+    },
+    {
+      id: 'hardcore-industrial',
+      name: '硬核工业纪实',
+      image: 'assets/wendy-styles/youtube-03-hardcore-industrial.jpg',
+      summary: '工程现场 · 真实可靠故事',
+      description: '场景为真实能源设备安装工程现场，背景可见混凝土、工具、线缆和克制的尘埃，但不出现人物；三台产品以低机位放在画面中心，呈现刚完成安装并投入运行的状态；强侧光穿过空气颗粒，局部高光突出结构；色彩偏冷、对比强、力量感足；缩略图具有真实工程故事与可靠性。'
+    },
+    {
+      id: 'exploded-tech',
+      name: '爆炸剖面科技',
+      image: 'assets/wendy-styles/youtube-04-exploded-tech.jpg',
+      summary: '3D 爆炸图 · 技术揭秘',
+      description: '场景使用深色未来工程空间，三台产品中主产品以 3D 爆炸图方式沿垂直方向分解为功率模块、电池模块和结构层，另两台保持完整作为对照；能量路径与发光核心清晰可见；构图结构大而简单，避免密集小标注；使用冷蓝边缘光、白色高光和少量红色节点；形成强烈、易读的技术揭秘缩略图。'
+    },
+    {
+      id: 'extreme-macro',
+      name: '极致微距质感',
+      image: 'assets/wendy-styles/youtube-05-extreme-macro.jpg',
+      summary: '纹理特写 · 强视觉钩子',
+      description: '画面主体为深灰侧边散热纹理与白色外壳圆角接缝的超清特写，三台完整产品以较小但清晰的阵列出现在背景；微距纹理占据画面近一半，形成强视觉钩子；使用窄幅硬光、镜面高光、浅景深和高锐度；色彩黑白对比强，细节在缩略图尺寸下仍有冲击力。'
+    },
+    {
+      id: 'surreal-impact',
+      name: '超现实冲击合成',
+      image: 'assets/wendy-styles/youtube-06-surreal-impact.jpg',
+      summary: '未来地标 · 史诗级合成',
+      description: '场景将巨型储能产品置于未来城市与温暖住宅之间，三台产品像地标般沿透视线矗立，白色能量光流贯穿天空、建筑与家庭；构图使用强透视、前中后景和大尺度对比；冷蓝环境配合暖金能量光，云层与体积光增强史诗感；视觉冲击强但产品造型真实、文案准确，像高预算科技品牌影片封面。'
+    }
+  ]
+};
+
 const wendyPreviewPlatforms = {
   LinkedIn: {
     account: '@John Smith',
@@ -341,22 +520,6 @@ const wendySocialAccounts = [
     bound: false,
     account: '未绑定账号',
     detail: '用于短视频、测试流程和工厂场景素材。'
-  },
-  {
-    id: 'x',
-    platform: 'X',
-    icon: 'x',
-    bound: true,
-    account: '@ontoz_power',
-    detail: '用于新品动态、行业观点和运营公告快速发布。'
-  },
-  {
-    id: 'facebook',
-    platform: 'Facebook',
-    icon: 'facebook',
-    bound: false,
-    account: '未绑定账号',
-    detail: '绑定后可同步管理品牌主页和海外社群内容。'
   },
   {
     id: 'youtube',

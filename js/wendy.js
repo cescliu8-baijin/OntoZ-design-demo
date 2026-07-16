@@ -35,6 +35,10 @@ const wendyThinkingThread = document.querySelector('#wendyThinkingThread');
 const wendyPlanStep = document.querySelector('#wendyPlanStep');
 const wendyGeneratePlan = document.querySelector('#wendyGeneratePlan');
 const wendyPlanUpload = document.querySelector('#wendyPlanUpload');
+const wendyVisualGrid = document.querySelector('#wendyVisualGrid');
+const wendyVisualDetailLabel = document.querySelector('#wendyVisualDetailLabel');
+const wendyVisualDetailTitle = document.querySelector('#wendyVisualDetailTitle');
+const wendyVisualDetailDescription = document.querySelector('#wendyVisualDetailDescription');
 const wendyThinkingCard = document.querySelector('#wendyThinkingCard');
 const wendyThinkingSteps = document.querySelector('#wendyThinkingSteps');
 const wendyThinkingTitle = document.querySelector('#wendy-thinking-title');
@@ -61,7 +65,7 @@ const wendyState = {
   agentStarted: false,
   planConfirmed: false,
   selectedPlatform: 'LinkedIn',
-  selectedVisual: '超写实摄影',
+  selectedVisual: '冷白商业棚拍',
   imageRegenerateCount: 0,
   imagePrompt: '',
   previewConfirmed: false,
@@ -78,8 +82,6 @@ const wendySocialIconSources = {
   linkedin: 'assets/LinkedIn.svg',
   instagram: 'assets/Instagram.svg',
   tiktok: 'assets/TikTok.svg',
-  x: 'assets/X.svg',
-  facebook: 'assets/Facebook.svg',
   youtube: 'assets/YouTube.svg'
 };
 
@@ -88,8 +90,6 @@ function getWendySocialIconKey(value = '') {
   if (normalized.includes('linkedin')) return 'linkedin';
   if (normalized.includes('instagram')) return 'instagram';
   if (normalized.includes('tiktok') || normalized === 'music-2') return 'tiktok';
-  if (normalized === 'x' || normalized.includes('twitter')) return 'x';
-  if (normalized.includes('facebook')) return 'facebook';
   if (normalized.includes('youtube')) return 'youtube';
   return '';
 }
@@ -377,12 +377,50 @@ function renderWendyAccounts() {
   refreshIcons();
 }
 
+function getWendyVisualStyles(platform = wendyState.selectedPlatform) {
+  return wendyVisualStylesByPlatform[platform] || wendyVisualStylesByPlatform.LinkedIn;
+}
+
+function renderWendyVisualStyles() {
+  const styles = getWendyVisualStyles();
+  const selectedStyle = styles.find(style => style.name === wendyState.selectedVisual) || styles[0];
+
+  if (wendyVisualGrid) {
+    wendyVisualGrid.innerHTML = styles.map(style => {
+      const selected = style.name === selectedStyle.name;
+      return `
+        <button class="wendy-visual-option${selected ? ' selected' : ''}" data-wendy-agent-visual="${escapeHTML(style.name)}" type="button" aria-pressed="${String(selected)}" aria-label="${escapeHTML(`${style.name}：${style.summary}`)}">
+          <span class="wendy-visual-media">
+            <img src="${escapeHTML(style.image)}" alt="" loading="lazy" decoding="async" />
+            <span class="wendy-visual-check" aria-hidden="true"><i data-lucide="check"></i></span>
+          </span>
+          <span class="wendy-visual-copy">
+            <strong>${escapeHTML(style.name)}</strong>
+            <small>${escapeHTML(style.summary)}</small>
+          </span>
+        </button>
+      `;
+    }).join('');
+  }
+
+  if (wendyVisualDetailLabel) wendyVisualDetailLabel.textContent = `${wendyState.selectedPlatform} 推荐`;
+  if (wendyVisualDetailTitle) wendyVisualDetailTitle.textContent = selectedStyle.name;
+  if (wendyVisualDetailDescription) wendyVisualDetailDescription.textContent = selectedStyle.description;
+}
+
 function syncWendyAgentSelections() {
   document.querySelectorAll('[data-wendy-agent-platform]').forEach(button => {
     const selected = button.dataset.wendyAgentPlatform === wendyState.selectedPlatform;
     button.classList.toggle('selected', selected);
     button.setAttribute('aria-pressed', String(selected));
   });
+
+  const styles = getWendyVisualStyles();
+  if (!styles.some(style => style.name === wendyState.selectedVisual)) {
+    wendyState.selectedVisual = styles[0].name;
+  }
+  renderWendyVisualStyles();
+
   document.querySelectorAll('[data-wendy-agent-visual]').forEach(button => {
     const selected = button.dataset.wendyAgentVisual === wendyState.selectedVisual;
     button.classList.toggle('selected', selected);
@@ -903,7 +941,7 @@ function submitWendyPrompt() {
   wendyState.agentStarted = false;
   wendyState.planConfirmed = false;
   wendyState.selectedPlatform = 'LinkedIn';
-  wendyState.selectedVisual = '超写实摄影';
+  wendyState.selectedVisual = '冷白商业棚拍';
   wendyState.imageRegenerateCount = 0;
   wendyState.imagePrompt = '';
   wendyState.previewConfirmed = false;
@@ -922,7 +960,7 @@ function startWendyAIGeneration(prompt = '帮我生成一条 LinkedIn 新品介�
   wendyState.agentStarted = false;
   wendyState.planConfirmed = false;
   wendyState.selectedPlatform = 'LinkedIn';
-  wendyState.selectedVisual = '超写实摄影';
+  wendyState.selectedVisual = '冷白商业棚拍';
   wendyState.imageRegenerateCount = 0;
   wendyState.imagePrompt = '';
   wendyState.previewConfirmed = false;
@@ -1284,7 +1322,7 @@ document.querySelector('#wendyAgentPage')?.addEventListener('click', event => {
 
   const visualButton = event.target.closest('[data-wendy-agent-visual]');
   if (visualButton) {
-    wendyState.selectedVisual = visualButton.dataset.wendyAgentVisual || '超写实摄影';
+    wendyState.selectedVisual = visualButton.dataset.wendyAgentVisual || getWendyVisualStyles()[0].name;
     syncWendyAgentSelections();
     return;
   }

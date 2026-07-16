@@ -1496,82 +1496,158 @@
 }
 
 .wendy-visual-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.wendy-visual-option,
-.wendy-visual-upload {
-  min-height: 132px;
-  flex-direction: column;
-  gap: 8px;
-  padding: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .wendy-visual-upload {
+  min-height: 34px;
   align-items: center;
   justify-content: center;
+  gap: 6px;
+  padding: 7px 10px;
   border-style: dashed;
-  color: var(--oz-neutral-500);
-  text-align: center;
+  color: var(--oz-neutral-600);
+  white-space: nowrap;
+}
+
+.wendy-visual-upload:focus-visible,
+.wendy-visual-option:focus-visible {
+  outline: 3px solid var(--oz-indigo-500-16);
+  outline-offset: 2px;
 }
 
 .wendy-visual-upload span {
-  max-width: 112px;
-  color: var(--oz-neutral-500);
+  color: inherit;
   font-size: 12px;
   line-height: 16px;
 }
 
-.wendy-visual-upload strong {
+.wendy-visual-option {
+  position: relative;
+  min-height: 0;
+  flex-direction: column;
+  gap: 0;
+  padding: 4px;
+  overflow: hidden;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.wendy-visual-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--oz-neutral-100);
+}
+
+.wendy-visual-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform .2s ease;
+}
+
+.wendy-visual-option:hover .wendy-visual-media img {
+  transform: scale(1.025);
+}
+
+.wendy-visual-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--oz-white);
+  border-radius: 999px;
+  color: var(--oz-white);
+  background: var(--oz-indigo-600);
+  box-shadow: 0 2px 8px var(--oz-black-18);
+  opacity: 0;
+  transform: scale(.78);
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.wendy-visual-check svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 3;
+}
+
+.wendy-visual-option.selected .wendy-visual-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.wendy-visual-copy {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 6px 6px;
+}
+
+.wendy-visual-copy strong,
+.wendy-visual-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wendy-visual-copy small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.wendy-visual-detail {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--oz-indigo-100);
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--oz-indigo-50), var(--oz-white));
+}
+
+.wendy-visual-detail-label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: var(--oz-indigo-700);
+  background: var(--oz-indigo-100);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.wendy-visual-detail div {
+  min-width: 0;
+}
+
+.wendy-visual-detail strong {
+  display: block;
+  margin-bottom: 4px;
   color: var(--foreground);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 20px;
   font-weight: 600;
 }
 
-.wendy-visual-swatch {
-  width: 100%;
-  min-height: 98px;
-  flex: 1;
-  border-radius: 2px;
-  background: var(--oz-neutral-200);
-}
-
-.wendy-visual-swatch.photo {
-  background:
-    linear-gradient(135deg, var(--oz-indigo-500-18), transparent 46%),
-    linear-gradient(180deg, var(--oz-slate-200) 0%, var(--oz-slate-300) 100%);
-}
-
-.wendy-visual-swatch.cinematic {
-  background:
-    linear-gradient(180deg, var(--oz-black-12) 0 12%, transparent 12% 88%, var(--oz-black-12) 88%),
-    linear-gradient(135deg, var(--oz-neutral-200), var(--oz-zinc-300));
-}
-
-.wendy-visual-swatch.minimal {
-  background:
-    linear-gradient(135deg, transparent 0 52%, var(--oz-indigo-500-12) 52%),
-    var(--oz-neutral-100);
-}
-
-.wendy-visual-swatch.industrial {
-  background:
-    linear-gradient(90deg, var(--oz-zinc-950-8) 1px, transparent 1px),
-    linear-gradient(180deg, var(--oz-neutral-200), var(--oz-gray-300));
-  background-size: 18px 18px, 100% 100%;
-}
-
-.wendy-visual-swatch.poster {
-  background:
-    radial-gradient(circle at 76% 24%, var(--oz-indigo-500-28), transparent 28%),
-    linear-gradient(135deg, var(--oz-neutral-100), var(--oz-zinc-200));
-}
-
-.wendy-visual-swatch.native {
-  background:
-    linear-gradient(180deg, var(--oz-zinc-200) 0 58%, var(--oz-zinc-300) 58%),
-    linear-gradient(90deg, var(--oz-white-45), transparent);
+.wendy-visual-detail p {
+  color: var(--oz-neutral-600);
+  font-size: 12px;
+  line-height: 19px;
 }
 
 .wendy-generate-plan {
@@ -3645,6 +3721,15 @@
 }
 
 @media (max-width: 560px) {
+  .wendy-visual-detail {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .wendy-visual-detail-label {
+    justify-self: start;
+  }
+
   .wendy-agent-topbar,
   .sidebar.collapsed + .lily-workspace .wendy-agent-topbar {
     top: 56px;

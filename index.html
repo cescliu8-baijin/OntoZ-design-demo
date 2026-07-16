@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no" />
     <title>OntoZ · 专业建站 Lucas</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=professional-static-2" />
+    <link rel="stylesheet" href="styles.css?v=professional-static-3" />
     <link rel="stylesheet" href="lucide-icons.css" />
   </head>
   <body>
@@ -739,7 +739,7 @@
             <aside class="wendy-account-summary" aria-label="社媒账号绑定状态">
               <div>
                 <span>已绑定社媒平台</span>
-                <strong>3<small>/4</small></strong>
+                <strong>1<small>/4</small></strong>
                 <p>为了全平台运营，建议绑定所有社媒账号</p>
               </div>
               <button class="wendy-account-manage" data-wendy-account-manage type="button"><i data-lucide="circle-user-round"></i>账号管理</button>
@@ -1031,40 +1031,21 @@
                 <header>
                   <div>
                     <h2>选择视觉方案</h2>
-                    <p>已经为你预设了不同的风格</p>
+                    <p>已根据发布平台匹配 6 套推荐风格</p>
                   </div>
-                </header>
-                <div class="wendy-visual-grid" role="group" aria-label="选择视觉方案">
                   <button class="wendy-visual-upload" id="wendyPlanUpload" type="button">
                     <i data-lucide="upload"></i>
-                    <span>上传或从知识库选择</span>
-                    <strong>自定义风格</strong>
+                    <span>上传自定义参考图</span>
                   </button>
-                  <button class="wendy-visual-option" data-wendy-agent-visual="电影级" type="button" aria-pressed="false">
-                    <span class="wendy-visual-swatch cinematic"></span>
-                    <strong>电影级</strong>
-                  </button>
-                  <button class="wendy-visual-option selected" data-wendy-agent-visual="超写实摄影" type="button" aria-pressed="true">
-                    <span class="wendy-visual-swatch photo"></span>
-                    <strong>超写实摄影</strong>
-                  </button>
-                  <button class="wendy-visual-option" data-wendy-agent-visual="日系极简" type="button" aria-pressed="false">
-                    <span class="wendy-visual-swatch minimal"></span>
-                    <strong>日系极简</strong>
-                  </button>
-                  <button class="wendy-visual-option" data-wendy-agent-visual="工业产品场景" type="button" aria-pressed="false">
-                    <span class="wendy-visual-swatch industrial"></span>
-                    <strong>工业产品场景</strong>
-                  </button>
-                  <button class="wendy-visual-option" data-wendy-agent-visual="品牌海报" type="button" aria-pressed="false">
-                    <span class="wendy-visual-swatch poster"></span>
-                    <strong>品牌海报</strong>
-                  </button>
-                  <button class="wendy-visual-option" data-wendy-agent-visual="社媒原生短图" type="button" aria-pressed="false">
-                    <span class="wendy-visual-swatch native"></span>
-                    <strong>社媒原生短图</strong>
-                  </button>
-                </div>
+                </header>
+                <div class="wendy-visual-grid" id="wendyVisualGrid" role="group" aria-label="选择视觉方案"></div>
+                <article class="wendy-visual-detail" id="wendyVisualDetail" aria-live="polite">
+                  <span class="wendy-visual-detail-label" id="wendyVisualDetailLabel">LinkedIn 推荐</span>
+                  <div>
+                    <strong id="wendyVisualDetailTitle">冷白商业棚拍</strong>
+                    <p id="wendyVisualDetailDescription">高端、可信且清晰的 B2B 产品摄影方向。</p>
+                  </div>
+                </article>
                 <input id="wendyImageInput" type="file" accept="image/*" aria-label="上传社媒图片素材" multiple hidden />
                 <span class="wendy-upload-status" id="wendyUploadStatus" aria-live="polite"></span>
               </section>
@@ -1488,13 +1469,13 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"><i data-lucide="circle-check" aria-hidden="true"></i><span></span></div>
     <script src="assets/lucide.min.js"></script>
-    <script src="js/data.js?v=professional-static-2"></script>
-    <script src="js/shared.js?v=professional-static-2"></script>
-    <script src="js/lily.js?v=professional-static-2"></script>
-    <script src="js/route.js?v=professional-static-2"></script>
-    <script src="js/wendy.js?v=professional-static-2"></script>
-    <script src="js/john.js?v=professional-static-2"></script>
-    <script src="js/lucas.js?v=professional-static-2"></script>
-    <script src="js/main.js?v=professional-static-2"></script>
+    <script src="js/data.js?v=professional-static-3"></script>
+    <script src="js/shared.js?v=professional-static-3"></script>
+    <script src="js/lily.js?v=professional-static-3"></script>
+    <script src="js/route.js?v=professional-static-3"></script>
+    <script src="js/wendy.js?v=professional-static-3"></script>
+    <script src="js/john.js?v=professional-static-3"></script>
+    <script src="js/lucas.js?v=professional-static-3"></script>
+    <script src="js/main.js?v=professional-static-3"></script>
   </body>
 </html>

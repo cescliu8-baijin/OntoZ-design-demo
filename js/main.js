@@ -6,6 +6,7 @@ renderStrategies('news');
 updateJohnCampaign();
 filterJohnKeywords();
 syncWendyAccountSummary();
+syncWendyAgentSelections();
 renderWendyCalendars();
 setWendyCalendarView('week');
 refreshIcons();
