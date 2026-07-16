@@ -325,7 +325,7 @@
 
 .wendy-account-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
   margin: 52px 28px 0;
 }
@@ -395,6 +395,11 @@
   width: 12px;
   height: 12px;
   stroke-width: 2;
+}
+
+.wendy-managed-account-status.pending {
+  color: var(--oz-zinc-600);
+  background: var(--oz-zinc-100);
 }
 
 .wendy-managed-account-action {
@@ -672,6 +677,28 @@
   height: 14px;
 }
 
+.wendy-calendar-state-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  color: var(--oz-zinc-600);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.wendy-calendar-state-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.wendy-calendar-state-legend .published { color: var(--oz-green-700); }
+.wendy-calendar-state-legend .current { color: var(--oz-violet-700); }
+.wendy-calendar-state-legend .scheduled { color: var(--oz-platform-linkedin); }
+
 .wendy-trend-pill {
   height: 40px;
   padding: 0 18px;
@@ -826,6 +853,10 @@
   white-space: normal;
 }
 
+.wendy-event span b {
+  font-weight: 700;
+}
+
 .wendy-event small {
   display: block;
   margin-top: 4px;
@@ -874,7 +905,27 @@
 }
 
 .wendy-event.published {
-  opacity: .6;
+  opacity: .58;
+  filter: saturate(.72);
+}
+
+.wendy-event.current {
+  padding-right: 30px;
+  border: 1px solid var(--oz-violet-500);
+  box-shadow: 0 0 0 3px var(--oz-violet-100);
+}
+
+.wendy-event.current::after {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--oz-white);
+  border-radius: 999px;
+  background: var(--oz-violet-500);
+  box-shadow: 0 0 0 4px var(--oz-violet-100);
+  content: '';
 }
 
 .wendy-event.failed {
@@ -1133,6 +1184,11 @@
   background: var(--oz-sky-50);
 }
 
+.wendy-list-row.current .wendy-list-status > span {
+  color: var(--oz-violet-700);
+  background: var(--oz-violet-100);
+}
+
 .wendy-list-row.draft .wendy-list-status > span {
   color: var(--oz-neutral-500);
   background: var(--oz-zinc-100);
@@ -1205,6 +1261,16 @@
   background:
     linear-gradient(135deg, transparent 0 42%, var(--oz-neutral-900-14) 42% 58%, transparent 58%),
     var(--oz-amber-500);
+}
+
+.wendy-list-image > img {
+  width: 56px;
+  height: 48px;
+  display: block;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--oz-neutral-100);
 }
 
 .wendy-list-account > span {
@@ -1445,8 +1511,7 @@
   white-space: nowrap;
 }
 
-.wendy-plan-goal,
-.wendy-product-select {
+.wendy-plan-goal {
   display: block;
   width: 100%;
 }
@@ -1465,28 +1530,256 @@
   outline: 0;
 }
 
-.wendy-plan-goal textarea:focus,
-.wendy-product-select select:focus {
+.wendy-plan-goal textarea:focus {
   border-color: var(--oz-indigo-500);
   box-shadow: 0 0 0 3px var(--oz-indigo-500-16);
 }
 
-.wendy-product-select select {
+.wendy-product-picker {
+  position: relative;
   width: 100%;
-  height: 40px;
-  appearance: none;
-  padding: 0 40px 0 12px;
+}
+
+.wendy-product-trigger {
+  width: 100%;
+  min-height: 66px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 8px 8px;
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--foreground);
-  background-color: var(--oz-white);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
+  background: var(--oz-white);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.wendy-product-trigger:hover {
+  border-color: var(--oz-indigo-200);
+  background: var(--oz-indigo-50);
+}
+
+.wendy-product-trigger:focus-visible,
+.wendy-product-picker.open .wendy-product-trigger {
+  border-color: var(--oz-indigo-500);
+  box-shadow: 0 0 0 3px var(--oz-indigo-500-16);
+  outline: 0;
+}
+
+.wendy-product-thumbnail {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  flex: 0 0 48px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 8px;
+  color: var(--oz-indigo-600);
+  background: var(--oz-neutral-50);
+}
+
+.wendy-product-thumbnail img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  background: var(--oz-white);
+}
+
+.wendy-product-thumbnail svg {
+  width: 20px;
+  height: 20px;
+}
+
+.wendy-product-trigger-copy,
+.wendy-product-option-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wendy-product-trigger-copy {
+  gap: 3px;
+}
+
+.wendy-product-trigger-copy strong,
+.wendy-product-trigger-copy small,
+.wendy-product-option-copy strong,
+.wendy-product-option-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wendy-product-trigger-copy strong {
   font-size: 14px;
   line-height: 20px;
+  font-weight: 600;
+}
+
+.wendy-product-trigger-copy small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.wendy-product-chevron {
+  width: 18px;
+  height: 18px;
+  color: var(--oz-neutral-500);
+  transition: transform .18s ease;
+}
+
+.wendy-product-picker.open .wendy-product-chevron {
+  transform: rotate(180deg);
+}
+
+.wendy-product-menu {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+  max-height: 420px;
+  overflow-y: auto;
+  padding: 8px;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 12px;
+  background: var(--oz-white);
+  box-shadow: 0 18px 44px var(--oz-black-18), 0 2px 8px var(--oz-black-10);
+}
+
+.wendy-product-menu[hidden] {
+  display: none;
+}
+
+.wendy-product-catalog + .wendy-product-catalog {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--oz-neutral-100);
+}
+
+.wendy-product-catalog-title {
+  display: block;
+  padding: 4px 8px 6px;
+  color: var(--oz-neutral-500);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.wendy-product-option {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--foreground);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .16s ease, background .16s ease;
+}
+
+.wendy-product-option + .wendy-product-option {
+  margin-top: 4px;
+}
+
+.wendy-product-option:hover,
+.wendy-product-option:focus-visible {
+  border-color: var(--oz-indigo-100);
+  background: var(--oz-indigo-50);
   outline: 0;
+}
+
+.wendy-product-option.selected {
+  border-color: var(--oz-indigo-200);
+  background: var(--oz-indigo-50);
+}
+
+.wendy-product-option .wendy-product-thumbnail {
+  width: 56px;
+  height: 56px;
+  flex-basis: 56px;
+}
+
+.wendy-product-option-copy {
+  gap: 2px;
+}
+
+.wendy-product-option-copy strong {
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.wendy-product-option-copy small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 17px;
+}
+
+.wendy-product-option-check {
+  width: 18px;
+  height: 18px;
+  color: var(--oz-indigo-600);
+  opacity: 0;
+}
+
+.wendy-product-option.selected .wendy-product-option-check {
+  opacity: 1;
+}
+
+.wendy-product-status {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.wendy-product-status svg {
+  width: 16px;
+  height: 16px;
+  animation: wendy-spin .8s linear infinite;
+}
+
+.wendy-product-status.error {
+  flex-direction: column;
+}
+
+.wendy-product-retry {
+  min-height: 36px;
+  padding: 7px 12px;
+  border: 1px solid var(--oz-indigo-200);
+  border-radius: 8px;
+  color: var(--oz-indigo-700);
+  background: var(--oz-indigo-50);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@keyframes wendy-spin {
+  to { transform: rotate(360deg); }
 }
 
 .wendy-visual-upload svg,
@@ -1808,7 +2101,7 @@
   transform: translateY(0);
 }
 
-.wendy-thinking-result header {
+.wendy-thinking-result > header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -1859,32 +2152,9 @@
   line-height: 18px;
 }
 
-.wendy-result-grid,
-.wendy-result-brief {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.wendy-result-brief {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.wendy-result-grid article,
-.wendy-result-brief article,
-.wendy-platform-summary article {
-  min-width: 0;
-  padding: 12px;
-  border: 1px solid var(--oz-zinc-100);
-  border-radius: 10px;
-  background: var(--oz-neutral-50);
-}
-
-.wendy-result-grid span,
-.wendy-result-brief span,
-.wendy-platform-summary span {
+.wendy-result-label {
   display: inline-flex;
-  height: 22px;
+  min-height: 22px;
   align-items: center;
   padding: 0 8px;
   border-radius: 999px;
@@ -1895,31 +2165,426 @@
   font-weight: 700;
 }
 
-.wendy-result-grid strong,
-.wendy-result-brief strong {
-  display: block;
-  margin-top: 10px;
-  color: var(--foreground);
-  font-size: 14px;
-  line-height: 20px;
+.wendy-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.wendy-platform-summary {
-  margin-top: 12px;
+.wendy-poster-requirements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.wendy-platform-summary h3 {
-  margin: 0 0 8px;
+.wendy-poster-requirements li {
+  display: contents;
+}
+
+.wendy-poster-requirements button {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 10px;
+  color: var(--oz-neutral-500);
+  background: var(--oz-neutral-50);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 16px;
+  transition: border-color .18s ease, color .18s ease, background-color .18s ease;
+}
+
+.wendy-poster-requirements button:hover {
+  border-color: var(--oz-indigo-300);
+  color: var(--oz-neutral-700);
+}
+
+.wendy-poster-requirements button.selected {
+  border-color: var(--oz-indigo-200);
+  color: var(--oz-indigo-800);
+  background: var(--oz-indigo-50);
+}
+
+.wendy-poster-requirements button:focus-visible {
+  outline: 3px solid var(--oz-indigo-500-16);
+  outline-offset: 2px;
+}
+
+.wendy-poster-check {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--oz-neutral-300);
+  border-radius: 5px;
+  color: transparent;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.wendy-poster-requirements button.selected .wendy-poster-check {
+  border-color: var(--oz-indigo-600);
+  color: var(--oz-white);
+  background: var(--oz-indigo-600);
+}
+
+.wendy-generation-composer {
+  position: relative;
+  margin-top: 14px;
+  padding: 20px;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 22px;
+  background: var(--oz-white);
+  box-shadow: 0 10px 32px var(--oz-black-8);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.wendy-generation-composer:focus-within {
+  border-color: var(--oz-indigo-200);
+  box-shadow: 0 12px 36px var(--oz-black-10), 0 0 0 2px var(--oz-indigo-500-8);
+}
+
+.wendy-composer-heading {
+  display: grid;
+  gap: 8px;
+}
+
+.wendy-composer-heading > label {
   color: var(--foreground);
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 650;
+}
+
+.wendy-composer-heading > p {
+  margin: 0;
+  color: var(--oz-neutral-500);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.wendy-generation-composer > textarea {
+  width: 100%;
+  min-height: 170px;
+  margin-top: 8px;
+  resize: vertical;
+  padding: 14px 2px;
+  border: 0;
+  border-radius: 10px;
+  color: var(--foreground);
+  background: transparent;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 26px;
+  outline: 0;
+}
+
+.wendy-generation-composer > textarea::placeholder {
+  color: var(--oz-neutral-400);
+}
+
+.wendy-generation-composer > textarea[aria-invalid="true"] {
+  box-shadow: inset 0 0 0 1px var(--oz-red-500), 0 0 0 3px var(--oz-red-100);
+}
+
+.wendy-composer-context {
+  margin: 0 0 12px !important;
+  color: var(--oz-neutral-400) !important;
+  font-size: 11px !important;
+  line-height: 16px !important;
+}
+
+.wendy-composer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--oz-neutral-100);
+}
+
+.wendy-composer-controls {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.wendy-composer-menu > summary {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 13px;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 12px;
+  color: var(--oz-neutral-700);
+  background: var(--oz-white);
+  box-shadow: 0 1px 2px var(--oz-black-4);
+  cursor: pointer;
+  transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease, color .18s ease;
+}
+
+.wendy-composer-menu > summary:hover,
+.wendy-composer-menu[open] > summary {
+  border-color: var(--oz-indigo-300);
+  color: var(--oz-indigo-800);
+  background: var(--oz-indigo-50);
+  box-shadow: 0 3px 10px var(--oz-indigo-500-8);
+}
+
+.wendy-composer-menu > summary:focus-visible {
+  border-color: var(--oz-indigo-500);
+  box-shadow: 0 0 0 3px var(--oz-indigo-500-16);
+  outline: 0;
+}
+
+.wendy-composer-menu > summary svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--oz-neutral-500);
+  transition: color .18s ease, transform .18s ease;
+}
+
+.wendy-composer-menu[open] > summary svg,
+.wendy-composer-menu > summary:hover svg {
+  color: var(--oz-indigo-600);
+}
+
+.wendy-composer-menu {
+  position: relative;
+}
+
+.wendy-composer-menu > summary {
+  list-style: none;
+  font-size: 13px;
   line-height: 20px;
+  font-weight: 650;
+}
+
+.wendy-composer-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.wendy-composer-menu > summary small {
+  color: var(--oz-neutral-400);
+  font-size: 11px;
   font-weight: 600;
 }
 
-.wendy-platform-summary > div {
+.wendy-composer-menu[open] > summary svg:last-child {
+  transform: rotate(180deg);
+}
+
+.wendy-composer-popover {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 12px);
+  z-index: 30;
+  padding: 14px;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 16px;
+  background: var(--oz-white);
+  box-shadow: 0 18px 48px var(--oz-black-18), 0 2px 8px var(--oz-black-8);
+}
+
+.wendy-compact-popover {
+  width: 190px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  padding: 7px;
+}
+
+.wendy-language-popover {
+  width: 230px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wendy-compact-popover button {
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 10px;
+  color: var(--oz-neutral-700);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: color .16s ease, background-color .16s ease;
+}
+
+.wendy-compact-popover button:hover {
+  color: var(--oz-indigo-800);
+  background: var(--oz-neutral-50);
+}
+
+.wendy-compact-popover button.selected {
+  color: var(--oz-indigo-800);
+  background: var(--oz-indigo-50);
+}
+
+.wendy-compact-popover button:focus-visible {
+  outline: 2px solid var(--oz-indigo-500);
+  outline-offset: -2px;
+}
+
+.wendy-compact-popover button span {
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wendy-compact-popover button small {
+  flex: none;
+  color: var(--oz-neutral-400);
+  font-size: 10px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.wendy-compact-popover button.selected small {
+  color: var(--oz-indigo-600);
+}
+
+.wendy-composer-popover > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.wendy-composer-popover > header strong {
+  display: block;
+  color: var(--foreground);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 650;
+}
+
+.wendy-composer-popover > header > span,
+.wendy-composer-popover > header > div > span {
+  display: block;
+  margin-top: 2px;
+  color: var(--oz-neutral-500);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.wendy-poster-popover {
+  width: 360px;
+}
+
+.wendy-poster-popover .wendy-poster-requirements {
+  margin-top: 14px;
+}
+
+.wendy-inline-visual {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 16px;
+  background: var(--oz-white);
+}
+
+.wendy-inline-visual > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.wendy-inline-visual h3 {
+  margin: 8px 0 0;
+  color: var(--foreground);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 650;
+}
+
+.wendy-inline-visual .wendy-visual-grid,
+.wendy-inline-visual .wendy-visual-detail {
+  margin-top: 12px;
+}
+
+.wendy-composer-submit {
+  position: relative;
+  width: auto;
+  min-width: 88px;
+  height: 46px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 12px;
+  color: var(--oz-white);
+  background: var(--oz-neutral-900);
+  box-shadow: 0 8px 20px var(--oz-black-18);
+  cursor: pointer;
+  transition: background-color .18s ease, transform .18s ease;
+}
+
+.wendy-composer-submit:hover {
+  background: var(--oz-indigo-800);
+  transform: translateY(-1px);
+}
+
+.wendy-composer-submit:focus-visible {
+  outline: 3px solid var(--oz-indigo-500-16);
+  outline-offset: 3px;
+}
+
+.wendy-composer-submit svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.5;
+}
+
+.wendy-composer-submit span {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 700;
+}
+
+.wendy-composer-submit-group {
+  flex: none;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wendy-composer-submit-group > small {
+  color: var(--oz-neutral-400);
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .wendy-result-notes {
@@ -1953,6 +2618,14 @@
 
 .wendy-post-previews.is-confirmed {
   margin-bottom: 48px;
+}
+
+.wendy-post-previews.is-generating {
+  margin-bottom: 48px;
+}
+
+.wendy-post-previews.is-generating .wendy-image-reprompt {
+  display: none;
 }
 
 .wendy-single-preview {
@@ -2099,6 +2772,8 @@
 }
 
 .wendy-preview-media {
+  position: relative;
+  aspect-ratio: 4 / 5;
   min-height: 344px;
   display: flex;
   flex-direction: column;
@@ -2114,6 +2789,113 @@
     radial-gradient(circle at 70% 26%, var(--oz-white-55) 0 7%, transparent 8%),
     linear-gradient(135deg, var(--oz-blue-600), var(--oz-teal-500));
   overflow: hidden;
+}
+
+.wendy-preview-media > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.wendy-preview-media-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  color: var(--oz-neutral-700);
+  border-radius: inherit;
+  background: #f4f4f5;
+  animation: wendyGenerationCardIn .35s ease both;
+}
+
+.wendy-post-preview-card.is-busy .wendy-post-preview-body {
+  grid-template-columns: minmax(280px, 480px);
+  justify-content: center;
+}
+
+.wendy-post-preview-card.is-busy .wendy-preview-media {
+  width: 100%;
+  min-height: 0;
+  justify-self: center;
+  border-color: var(--oz-zinc-200);
+  background: #f4f4f5;
+}
+
+.wendy-post-preview-card.is-busy .wendy-preview-media > img,
+.wendy-post-preview-card.is-busy .wendy-preview-media > em {
+  opacity: 0;
+}
+
+.wendy-generation-status,
+.wendy-generation-footer {
+  display: flex;
+  align-items: center;
+}
+
+.wendy-generation-status {
+  position: relative;
+  z-index: 2;
+  justify-content: flex-start;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 650;
+}
+
+.wendy-generation-dots {
+  position: relative;
+  width: 100%;
+  height: 54%;
+  flex: 1;
+  border-radius: 22px;
+  background-image: radial-gradient(circle, rgb(113 113 122 / .44) 0 1.7px, transparent 1.9px);
+  background-position: center;
+  background-size: 20px 20px;
+  mask-image: radial-gradient(ellipse at 28% 30%, #000 0 20%, transparent 58%), radial-gradient(ellipse at 72% 72%, #000 0 20%, transparent 58%);
+  mask-composite: add;
+  animation: wendyGenerationDots 2.6s ease-in-out infinite alternate;
+}
+
+.wendy-generation-dots::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(110deg, transparent 22%, rgb(255 255 255 / .78) 48%, transparent 74%);
+  background-size: 220% 100%;
+  content: '';
+  animation: wendyPreviewGenerate 2.2s linear infinite;
+}
+
+.wendy-preview-media-loading > p {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  color: var(--oz-neutral-500);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.wendy-generation-footer {
+  width: 100%;
+  justify-content: center;
+  gap: 8px;
+  color: var(--oz-violet-700);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.wendy-generation-footer svg {
+  width: 17px;
+  height: 17px;
+  animation: wendyPreviewSpin 1.8s linear infinite;
 }
 
 .wendy-preview-media.instagram {
@@ -2150,7 +2932,14 @@
 }
 
 .wendy-preview-media em {
+  position: relative;
+  z-index: 1;
   max-width: 100%;
+  padding: 6px 9px;
+  border: 1px solid var(--oz-white-45);
+  border-radius: 999px;
+  background: rgb(0 0 0 / .55);
+  backdrop-filter: blur(8px);
   overflow: hidden;
   font-size: 12px;
   line-height: 16px;
@@ -2276,81 +3065,16 @@
   background: var(--oz-neutral-800);
 }
 
+.wendy-post-preview-actions button:disabled,
+.wendy-post-preview-actions button:disabled:hover {
+  cursor: wait;
+  border-color: var(--oz-neutral-200);
+  color: var(--oz-neutral-400);
+  background: var(--oz-neutral-100);
+  box-shadow: none;
+}
+
 .wendy-post-preview-actions svg {
-  width: 16px;
-  height: 16px;
-}
-
-.wendy-strategy-composer {
-  position: fixed;
-  left: calc(240px + (100vw - 240px) / 2);
-  bottom: 24px;
-  z-index: 24;
-  width: min(800px, calc(100vw - 240px - 64px));
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px;
-  border: 1px solid var(--oz-neutral-200);
-  border-radius: 24px;
-  background: var(--oz-white-82);
-  box-shadow: 0 1px 3px var(--oz-black-10);
-  backdrop-filter: blur(14px);
-  transform: translateX(-50%);
-}
-
-.wendy-strategy-composer[hidden] {
-  display: none;
-}
-
-.wendy-strategy-composer label {
-  color: var(--oz-neutral-500);
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.wendy-strategy-composer > div {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: end;
-}
-
-.wendy-strategy-composer textarea {
-  width: 100%;
-  min-height: 32px;
-  max-height: 96px;
-  resize: vertical;
-  border: 0;
-  outline: 0;
-  padding: 0;
-  color: var(--oz-neutral-950);
-  background: transparent;
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.wendy-strategy-composer button {
-  height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 0 10px;
-  border: 0;
-  border-radius: 10px;
-  color: var(--oz-white);
-  background: var(--oz-neutral-900);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
-}
-
-.wendy-strategy-composer button:hover {
-  background: var(--oz-neutral-800);
-}
-
-.wendy-strategy-composer svg {
   width: 16px;
   height: 16px;
 }
@@ -2510,9 +3234,42 @@
   background: var(--oz-violet-100);
 }
 
+.wendy-image-reprompt button:disabled {
+  cursor: wait;
+  opacity: .72;
+}
+
+.wendy-image-reprompt button.is-generating > i {
+  animation: wendyPreviewSpin .9s linear infinite;
+}
+
+.wendy-image-reprompt button.is-generating span::after {
+  content: ' · 生成中';
+}
+
 .wendy-image-reprompt svg {
   width: 16px;
   height: 16px;
+}
+
+@keyframes wendyPreviewGenerate {
+  from { background-position: 200% 0; }
+  to { background-position: -20% 0; }
+}
+
+@keyframes wendyGenerationCardIn {
+  from { opacity: 0; transform: scale(.985); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes wendyGenerationDots {
+  0% { opacity: .48; transform: translate3d(-2%, -1%, 0) scale(.98); }
+  50% { opacity: .9; }
+  100% { opacity: .56; transform: translate3d(2%, 1.5%, 0) scale(1.03); }
+}
+
+@keyframes wendyPreviewSpin {
+  to { transform: rotate(360deg); }
 }
 
 .wendy-bottom-composer {
@@ -2753,6 +3510,11 @@
   background: var(--oz-green-50);
 }
 
+.wendy-publisher-mode.current {
+  color: var(--oz-violet-700);
+  background: var(--oz-violet-100);
+}
+
 .wendy-publisher-mode.scheduled {
   color: var(--oz-platform-linkedin);
   background: var(--oz-blue-50);
@@ -2779,6 +3541,364 @@
 .wendy-publisher-panel.is-readonly .wendy-ai-button,
 .wendy-publisher-panel.is-readonly .wendy-publisher-footer-actions {
   opacity: .56;
+}
+
+.wendy-publisher-panel.is-sent-preview {
+  width: min(980px, calc(100vw - 48px));
+}
+
+.wendy-sent-preview[hidden],
+.wendy-publisher-body[hidden],
+.wendy-publisher-panel > footer[hidden] {
+  display: none;
+}
+
+.wendy-sent-preview {
+  min-height: 0;
+  display: block;
+  overflow: auto;
+  background: #f4f5f7;
+}
+
+.wendy-native-stage {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 22px;
+}
+
+.wendy-native-stage.linkedin {
+  background: #f3f2ef;
+}
+
+.wendy-native-stage.instagram {
+  background: #fafafa;
+}
+
+.wendy-native-stage-label,
+.wendy-native-stage-footer {
+  width: min(100%, 620px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #5f6872;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.wendy-native-stage.instagram .wendy-native-stage-label,
+.wendy-native-stage.instagram .wendy-native-stage-footer {
+  width: min(100%, 470px);
+}
+
+.wendy-native-stage-label span,
+.wendy-native-stage-footer span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wendy-native-stage-label span:last-child {
+  color: #14733f;
+  font-weight: 650;
+}
+
+.wendy-native-stage-label .wendy-social-icon,
+.wendy-native-stage-label svg,
+.wendy-native-stage-footer svg {
+  width: 16px;
+  height: 16px;
+}
+
+.wendy-native-stage-footer {
+  padding-top: 2px;
+}
+
+.wendy-native-stage-footer .wendy-secondary {
+  min-height: 34px;
+  padding: 0 14px;
+}
+
+.wendy-native-post {
+  width: min(100%, 620px);
+  overflow: hidden;
+  border: 1px solid #d6d9dc;
+  color: #191919;
+  background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+}
+
+.wendy-instagram-post {
+  width: min(100%, 470px);
+  border-color: #dbdbdb;
+  border-radius: 8px;
+  color: #000;
+  box-shadow: none;
+}
+
+.wendy-native-post-header {
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr) 32px;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+}
+
+.wendy-instagram-post .wendy-native-post-header {
+  grid-template-columns: 44px minmax(0, 1fr) 28px;
+  padding: 10px 14px;
+}
+
+.wendy-nox-avatar {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #e1e4e7;
+  border-radius: 6px;
+  background: #f5f5f5;
+}
+
+.wendy-nox-avatar.instagram {
+  width: 42px;
+  height: 42px;
+  padding: 2px;
+  border: 0;
+  border-radius: 999px;
+  background: conic-gradient(from 210deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75);
+}
+
+.wendy-nox-avatar-logo {
+  width: 38px;
+  height: 16px;
+  display: block;
+  background: url('../assets/nox-logo-source.png') -42px -79px / 170px 170px no-repeat;
+}
+
+.wendy-nox-avatar.instagram .wendy-nox-avatar-logo {
+  width: 38px;
+  height: 38px;
+  border: 2px solid #fff;
+  border-radius: inherit;
+  background-color: #f5f5f5;
+  background-position: -42px -68px;
+}
+
+.wendy-nox-avatar.compact {
+  width: 36px;
+  height: 36px;
+}
+
+.wendy-nox-avatar.compact .wendy-nox-avatar-logo {
+  transform: scale(.78);
+}
+
+.wendy-nox-avatar.instagram.compact {
+  width: 34px;
+  height: 34px;
+}
+
+.wendy-nox-avatar.instagram.compact .wendy-nox-avatar-logo {
+  width: 30px;
+  height: 30px;
+  transform: none;
+  background-position: -46px -72px;
+}
+
+.wendy-native-identity {
+  min-width: 0;
+}
+
+.wendy-native-identity strong,
+.wendy-native-identity span {
+  display: flex;
+  align-items: center;
+}
+
+.wendy-native-identity strong {
+  gap: 4px;
+  color: inherit;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 650;
+}
+
+.wendy-native-identity span {
+  gap: 3px;
+  color: #666;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.wendy-native-identity svg {
+  width: 12px;
+  height: 12px;
+}
+
+.wendy-native-identity.instagram strong svg {
+  width: 14px;
+  height: 14px;
+  color: #0095f6;
+  fill: #0095f6;
+  stroke: #fff;
+}
+
+.wendy-native-more {
+  display: grid;
+  place-items: center;
+  color: #262626;
+}
+
+.wendy-native-more svg {
+  width: 22px;
+  height: 22px;
+}
+
+.wendy-linkedin-copy {
+  padding: 0 16px 14px;
+}
+
+.wendy-linkedin-copy p,
+.wendy-instagram-caption p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: pre-line;
+}
+
+.wendy-native-hashtags {
+  margin-top: 8px !important;
+  color: #0a66c2;
+}
+
+.wendy-instagram-caption .wendy-native-hashtags {
+  color: #00376b;
+}
+
+.wendy-native-media {
+  width: 100%;
+  max-height: 520px;
+  display: block;
+  border-block: 1px solid #e2e5e8;
+  object-fit: contain;
+  background: #0a0a0a;
+}
+
+.wendy-instagram-post .wendy-native-media {
+  max-height: 560px;
+  border-color: #efefef;
+}
+
+.wendy-linkedin-engagement {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 16px;
+  border-bottom: 1px solid #e2e5e8;
+  color: #666;
+  font-size: 12px;
+}
+
+.wendy-linkedin-reactions {
+  display: flex;
+  align-items: center;
+}
+
+.wendy-linkedin-reactions i {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  margin-right: -3px;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  color: #fff;
+  background: #378fe9;
+}
+
+.wendy-linkedin-reactions i:nth-child(2) { background: #df704d; }
+.wendy-linkedin-reactions i:nth-child(3) { margin-right: 6px; background: #f5bb5c; }
+
+.wendy-linkedin-reactions svg {
+  width: 10px;
+  height: 10px;
+}
+
+.wendy-linkedin-actions {
+  min-height: 48px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 4px 10px;
+}
+
+.wendy-linkedin-actions span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: #404040;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.wendy-linkedin-actions svg {
+  width: 20px;
+  height: 20px;
+}
+
+.wendy-instagram-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px 8px;
+}
+
+.wendy-instagram-actions span {
+  display: grid;
+  place-items: center;
+}
+
+.wendy-instagram-actions .save {
+  margin-left: auto;
+}
+
+.wendy-instagram-actions svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 1.8;
+}
+
+.wendy-instagram-caption {
+  display: grid;
+  gap: 6px;
+  padding: 0 14px 14px;
+}
+
+.wendy-instagram-caption > strong {
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.wendy-instagram-caption > span {
+  color: #737373;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.wendy-instagram-caption time {
+  color: #737373;
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }
 
 .wendy-publisher-body {
@@ -2903,7 +4023,7 @@
 }
 
 .wendy-platform-picker {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .wendy-media-grid {
@@ -3301,35 +4421,87 @@
 
 .wendy-publisher-preview {
   width: 100%;
-  min-height: 318px;
-  display: grid;
-  gap: 12px;
-  padding: 12px;
-  border: 1px solid var(--oz-zinc-200);
-  border-radius: 14px;
-  background: var(--oz-white);
+  min-height: 300px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #f3f2ef;
+}
+
+.wendy-publisher-preview .wendy-native-post {
+  width: 100%;
+  border-radius: 0;
   box-shadow: none;
 }
 
-.wendy-publisher-preview-media {
-  height: 214px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+.wendy-publisher-preview .wendy-native-post-header {
+  grid-template-columns: 38px minmax(0, 1fr) 24px;
   gap: 8px;
-  padding: 14px;
-  border-radius: 12px;
-  color: var(--oz-white);
-  background:
-    radial-gradient(circle at 26% 22%, var(--oz-white-80) 0 12%, transparent 13%),
-    radial-gradient(circle at 72% 28%, var(--oz-white-45) 0 9%, transparent 10%),
-    linear-gradient(135deg, var(--oz-blue-600), var(--oz-teal-500));
-  font-weight: 700;
+  padding: 10px 12px;
 }
 
-.wendy-publisher-preview-media svg {
-  width: 24px;
-  height: 24px;
+.wendy-publisher-preview .wendy-linkedin-copy {
+  padding: 0 12px 10px;
+}
+
+.wendy-publisher-preview .wendy-linkedin-copy p,
+.wendy-publisher-preview .wendy-instagram-caption p {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 17px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.wendy-publisher-preview .wendy-native-hashtags {
+  -webkit-line-clamp: 1;
+}
+
+.wendy-publisher-preview .wendy-native-media {
+  height: 210px;
+  max-height: none;
+  object-fit: contain;
+}
+
+.wendy-publisher-preview .wendy-linkedin-engagement {
+  min-height: 34px;
+  margin: 0 12px;
+  font-size: 12px;
+}
+
+.wendy-publisher-preview .wendy-linkedin-actions {
+  min-height: 40px;
+  padding-inline: 4px;
+}
+
+.wendy-publisher-preview .wendy-linkedin-actions span {
+  gap: 4px;
+  font-size: 10px;
+}
+
+.wendy-publisher-preview .wendy-linkedin-actions svg {
+  width: 15px;
+  height: 15px;
+}
+
+.wendy-publisher-preview .wendy-instagram-actions {
+  padding: 9px 12px 6px;
+}
+
+.wendy-publisher-preview .wendy-instagram-actions svg {
+  width: 20px;
+  height: 20px;
+}
+
+.wendy-publisher-preview .wendy-instagram-caption {
+  gap: 4px;
+  padding: 0 12px 12px;
+}
+
+.wendy-publisher-preview .wendy-instagram-caption > strong,
+.wendy-publisher-preview .wendy-instagram-caption > span {
+  font-size: 12px;
+  line-height: 16px;
 }
 
 .wendy-publisher-panel footer {
@@ -3521,20 +4693,6 @@
     min-height: 180px;
   }
 
-  .wendy-strategy-composer {
-    left: 50%;
-    width: calc(100% - 32px);
-    bottom: 16px;
-  }
-
-  .wendy-strategy-composer > div {
-    grid-template-columns: 1fr;
-  }
-
-  .wendy-strategy-composer button {
-    width: 100%;
-  }
-
   .wendy-image-reprompt {
     left: 50%;
     width: calc(100% - 32px);
@@ -3632,6 +4790,49 @@
     max-height: calc(100vh - 28px);
   }
 
+  .wendy-native-stage {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .wendy-native-stage-label,
+  .wendy-native-stage-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .wendy-native-stage-footer .wendy-secondary {
+    width: 100%;
+  }
+
+  .wendy-native-post-header {
+    grid-template-columns: 44px minmax(0, 1fr) 26px;
+    padding-inline: 12px;
+  }
+
+  .wendy-nox-avatar {
+    width: 42px;
+    height: 42px;
+  }
+
+  .wendy-linkedin-copy {
+    padding-inline: 12px;
+  }
+
+  .wendy-native-media {
+    max-height: 420px;
+  }
+
+  .wendy-linkedin-actions span {
+    gap: 4px;
+    font-size: 11px;
+  }
+
+  .wendy-linkedin-actions svg {
+    width: 17px;
+    height: 17px;
+  }
+
   .wendy-publisher-panel footer {
     flex-direction: row;
     align-items: center;
@@ -3653,11 +4854,10 @@
     width: 100%;
   }
 
-  .wendy-thinking-result header,
+  .wendy-thinking-result > header,
   .wendy-preview-heading,
   .wendy-post-preview-top,
   .wendy-result-actions,
-  .wendy-result-grid,
   .wendy-post-preview-body,
   .wendy-post-preview-actions,
   .wendy-composer-footer {
@@ -3672,9 +4872,49 @@
     padding-inline: 16px;
   }
 
-  .wendy-result-brief,
-  .wendy-platform-summary > div {
-    grid-template-columns: 1fr;
+  .wendy-generation-composer {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .wendy-inline-visual {
+    padding: 14px;
+  }
+
+  .wendy-inline-visual > header {
+    flex-direction: column;
+  }
+
+  .wendy-generation-composer > textarea {
+    min-height: 190px;
+  }
+
+  .wendy-composer-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .wendy-composer-controls {
+    width: 100%;
+  }
+
+  .wendy-composer-menu {
+    position: static;
+  }
+
+  .wendy-composer-menu[open] {
+    flex-basis: 100%;
+  }
+
+  .wendy-composer-popover {
+    position: static;
+    width: 100%;
+    margin-top: 8px;
+    box-shadow: 0 8px 24px var(--oz-black-10);
+  }
+
+  .wendy-composer-submit-group {
+    align-self: flex-end;
   }
 
   .wendy-preview-time {
@@ -3721,6 +4961,10 @@
 }
 
 @media (max-width: 560px) {
+  .wendy-thinking-result {
+    padding: 14px;
+  }
+
   .wendy-visual-detail {
     grid-template-columns: 1fr;
     gap: 8px;

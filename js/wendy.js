@@ -15,8 +15,14 @@ const wendyScheduleCalendarGrid = document.querySelector('#wendyScheduleCalendar
 const wendyScheduleHour = document.querySelector('#wendyScheduleHour');
 const wendyScheduleMinute = document.querySelector('#wendyScheduleMinute');
 const wendyCopyField = document.querySelector('#wendyPublishCopy');
-const wendyPublisherPreviewText = document.querySelector('#wendyPublisherPreviewText');
+const wendyPublisherPanel = document.querySelector('#wendyPublisherPanel');
+const wendyPublisherTitle = document.querySelector('#wendyPublisherTitle');
+const wendyPublisherSubtitle = document.querySelector('#wendyPublisherSubtitle');
+const wendyPublisherBody = document.querySelector('#wendyPublisherBody');
+const wendyPublisherFooter = document.querySelector('#wendyPublisherFooter');
+const wendyPublisherPreview = document.querySelector('#wendyPublisherPreview');
 const wendyPublisherMode = document.querySelector('#wendyPublisherMode');
+const wendySentPreview = document.querySelector('#wendySentPreview');
 const wendyPublisherAvatar = document.querySelector('#wendyPublisherAvatar');
 const wendyPublisherPostingTo = document.querySelector('#wendyPublisherPostingTo');
 const wendyCalendarRange = document.querySelector('#wendyCalendarRange');
@@ -34,11 +40,31 @@ const wendyUploadStatus = document.querySelector('#wendyUploadStatus');
 const wendyThinkingThread = document.querySelector('#wendyThinkingThread');
 const wendyPlanStep = document.querySelector('#wendyPlanStep');
 const wendyGeneratePlan = document.querySelector('#wendyGeneratePlan');
+const wendyPlanProduct = document.querySelector('#wendyPlanProduct');
+const wendyProductPicker = document.querySelector('#wendyProductPicker');
+const wendyProductTrigger = document.querySelector('#wendyProductTrigger');
+const wendyProductMenu = document.querySelector('#wendyProductMenu');
+const wendyProductOptions = document.querySelector('#wendyProductOptions');
 const wendyPlanUpload = document.querySelector('#wendyPlanUpload');
 const wendyVisualGrid = document.querySelector('#wendyVisualGrid');
 const wendyVisualDetailLabel = document.querySelector('#wendyVisualDetailLabel');
 const wendyVisualDetailTitle = document.querySelector('#wendyVisualDetailTitle');
 const wendyVisualDetailDescription = document.querySelector('#wendyVisualDetailDescription');
+const wendyVisualPlatformName = document.querySelector('#wendyVisualPlatformName');
+const wendySpecPlatform = document.querySelector('#wendySpecPlatform');
+const wendySpecLocations = document.querySelector('#wendySpecLocations');
+const wendyImageRatioMenu = document.querySelector('#wendyImageRatioMenu');
+const wendyImageRatioLabel = document.querySelector('#wendyImageRatioLabel');
+const wendyImageRatioOptions = document.querySelector('#wendyImageRatioOptions');
+const wendyLanguageMenu = document.querySelector('#wendyLanguageMenu');
+const wendyLanguageLabel = document.querySelector('#wendyLanguageLabel');
+const wendyLanguageOptions = document.querySelector('#wendyLanguageOptions');
+const wendyLanguageHint = document.querySelector('#wendyLanguageHint');
+const wendyMarketingPlan = document.querySelector('#wendyMarketingPlan');
+const wendyPosterRequirementsList = document.querySelector('#wendyPosterRequirementsList');
+const wendyPosterRequirementCount = document.querySelector('#wendyPosterRequirementCount');
+const wendyPosterRequirementsMenu = document.querySelector('#wendyPosterRequirementsMenu');
+const wendyGenerationSummary = document.querySelector('#wendyGenerationSummary');
 const wendyThinkingCard = document.querySelector('#wendyThinkingCard');
 const wendyThinkingSteps = document.querySelector('#wendyThinkingSteps');
 const wendyThinkingTitle = document.querySelector('#wendy-thinking-title');
@@ -46,9 +72,6 @@ const wendyThinkingToggle = document.querySelector('#wendyThinkingToggle');
 const wendyThinkingResult = document.querySelector('#wendyThinkingResult');
 const wendyPostPreviews = document.querySelector('#wendyPostPreviews');
 const wendySinglePreview = document.querySelector('#wendySinglePreview');
-const wendyStrategyComposer = document.querySelector('#wendyStrategyComposer');
-const wendyStrategyPrompt = document.querySelector('#wendyStrategyPrompt');
-const wendyStrategySend = document.querySelector('#wendyStrategySend');
 const wendyImageReprompt = document.querySelector('#wendyImageReprompt');
 const wendyRegenerateImage = document.querySelector('#wendyRegenerateImage');
 const wendyImageRegenerateCount = document.querySelector('#wendyImageRegenerateCount');
@@ -58,24 +81,42 @@ const wendyAccountsBoundCount = document.querySelector('#wendyAccountsBoundCount
 const wendyAccountsTotalCount = document.querySelector('#wendyAccountsTotalCount');
 const wendyAccountsPendingCount = document.querySelector('#wendyAccountsPendingCount');
 const wendyHomeAccountCount = document.querySelector('.wendy-account-summary strong');
+const wendyHomeAccountStatus = document.querySelector('#wendyHomeAccountStatus');
 let wendyThinkingTimer = null;
+let wendyImageRegenerateTimer = null;
+let wendyProductCatalogs = [];
+const WENDY_DEFAULT_PRODUCT_ID = 1593;
+const WENDY_DEFAULT_POSTER_IMAGE = 'assets/wendy-pallet-truck/pallet-truck-scenario-quality-4x5.png';
+const WENDY_IMAGE_GENERATION_SECONDS = 30;
 const wendyState = {
   pendingPrompt: '',
   pendingImageCount: 0,
   agentStarted: false,
   planConfirmed: false,
   selectedPlatform: 'LinkedIn',
+  selectedProductId: WENDY_DEFAULT_PRODUCT_ID,
   selectedVisual: '冷白商业棚拍',
+  selectedRatio: '4:5',
+  selectedLanguage: 'en',
+  marketingPlan: '',
+  marketingPlanInitialized: false,
+  selectedPosterRequirements: ['productName', 'sellingPoints', 'certifications', 'scenarios', 'cta'],
   imageRegenerateCount: 0,
   imagePrompt: '',
+  isImageRegenerating: false,
+  imageGenerationMode: 'initial',
+  imageGenerationRemaining: 0,
   previewConfirmed: false,
   selectedSyncPlatforms: [],
-  strategyPrompt: '',
-  strategyRevisionCount: 0,
+  syncPreviewPlatforms: [],
+  confirmedSyncPlatforms: [],
+  previewDrafts: {},
   calendarView: 'week',
   activePostId: null,
   scheduleMode: 'now',
-  schedulePickerMonth: null
+  schedulePickerMonth: null,
+  publisherImage: WENDY_DEFAULT_POSTER_IMAGE,
+  publisherTitle: 'Manual & Electric Pallet Truck'
 };
 
 const wendySocialIconSources = {
@@ -89,7 +130,7 @@ function getWendySocialIconKey(value = '') {
   const normalized = String(value).toLowerCase();
   if (normalized.includes('linkedin')) return 'linkedin';
   if (normalized.includes('instagram')) return 'instagram';
-  if (normalized.includes('tiktok') || normalized === 'music-2') return 'tiktok';
+  if (normalized.includes('tiktok')) return 'tiktok';
   if (normalized.includes('youtube')) return 'youtube';
   return '';
 }
@@ -103,7 +144,7 @@ function renderWendySocialIcon(value, label = '') {
 
 function getWendyPostStatus(post) {
   if (!post) return 'draft';
-  if (post.status === 'failed' || post.status === 'draft' || post.status === 'published') return post.status;
+  if (['failed', 'draft', 'published', 'current', 'scheduled'].includes(post.status)) return post.status;
   if (!post.time) return 'draft';
   const publishAt = new Date(post.time);
   if (!Number.isNaN(publishAt.getTime()) && publishAt > wendyToday) return 'scheduled';
@@ -128,15 +169,13 @@ function getWendyPostById(postId) {
 function getWendyAccountInfo(platform) {
   const account = wendySocialAccounts.find(item => item.platform === platform);
   return {
-    account: account?.account || '@OntoZ',
+    account: account?.account || '@NOXRobotics',
     platform,
     bound: account?.bound !== false
   };
 }
 
 function getWendyImageInfo(platform) {
-  if (platform.includes('TikTok')) return { label: '短视频封面', icon: 'play' };
-  if (platform.includes('YouTube')) return { label: 'Shorts 封面', icon: 'youtube' };
   if (platform.includes('Instagram')) return { label: '轮播图', icon: 'image' };
   return { label: '图文配图', icon: 'image' };
 }
@@ -163,17 +202,19 @@ function getWendyListActions(status, postId) {
 
 function renderWendyEventButton(post) {
   const status = getWendyPostStatus(post);
+  const meta = wendyStatusMeta[status] || wendyStatusMeta.draft;
   const safePostId = escapeHTML(post.id);
   const safePlatform = escapeHTML(post.platform);
   const safeTitle = escapeHTML(post.title);
   const safeTime = escapeHTML(post.time || '');
   const safeCopy = escapeHTML(post.copy || '');
+  const displayTime = escapeHTML(formatWendyDateTime(post.time, '').split(' ').pop() || '');
   const failure = post.failureReason ? ` data-failure-reason="${escapeHTML(post.failureReason)}"` : '';
 
   return `
     <button class="wendy-event ${getWendyEventColor(post.platform)} ${escapeHTML(status)}" style="--start: ${getWendyWeekStart(post.time)}; --duration: .86;" data-wendy-event data-wendy-post-id="${safePostId}" data-platform="${safePlatform}" data-time="${safeTime}" data-copy="${safeCopy}" data-status="${escapeHTML(status)}"${failure} type="button">
       ${renderWendySocialIcon(post.platform, post.platform)}
-      <span>${safePlatform} ${safeTitle}</span>
+      <span><b>${safePlatform}</b> ${safeTitle}<small>${displayTime} · ${escapeHTML(meta.label)}</small></span>
     </button>
   `;
 }
@@ -243,7 +284,7 @@ function renderWendyMonthCalendar() {
 
 function renderWendyStatusBoard() {
   if (!wendyStatusList) return;
-  const statusOrder = { scheduled: 1, draft: 2, failed: 3, published: 4 };
+  const statusOrder = { current: 1, scheduled: 2, draft: 3, failed: 4, published: 5 };
   const posts = [...wendyCalendarPosts].sort((a, b) => {
     const statusDiff = (statusOrder[getWendyPostStatus(a)] || 9) - (statusOrder[getWendyPostStatus(b)] || 9);
     if (statusDiff) return statusDiff;
@@ -262,7 +303,7 @@ function renderWendyStatusBoard() {
       const status = getWendyPostStatus(post);
       const meta = wendyStatusMeta[status] || wendyStatusMeta.draft;
       const accountInfo = getWendyAccountInfo(post.platform);
-      const listAccountName = '@EricLiu';
+      const listAccountName = '@NOXRobotics';
       const imageInfo = getWendyImageInfo(post.platform);
       const timeText = status === 'failed' && post.failureReason
         ? `${formatWendyDateTime(post.time)} · ${post.failureReason}`
@@ -275,7 +316,9 @@ function renderWendyStatusBoard() {
             <p>${escapeHTML(post.copy)}</p>
           </div>
           <div class="wendy-list-image">
-            <span class="${escapeHTML(getWendyEventColor(post.platform))}" aria-label="${escapeHTML(imageInfo.label)}">${renderWendySocialIcon(imageInfo.icon, imageInfo.label)}</span>
+            ${post.image
+              ? `<img src="${escapeHTML(post.image)}" alt="${escapeHTML(post.title)} artwork" loading="lazy" decoding="async" />`
+              : `<span class="${escapeHTML(getWendyEventColor(post.platform))}" aria-label="${escapeHTML(imageInfo.label)}">${renderWendySocialIcon(imageInfo.icon, imageInfo.label)}</span>`}
           </div>
           <div class="wendy-list-status">
             <span>${renderIcon(meta.icon)}${escapeHTML(meta.label)}</span>
@@ -327,18 +370,182 @@ function setWendyCalendarView(view) {
   }
   if (wendyCalendarHint) {
     const hintText = view === 'month'
-      ? '月视图按自然月呈现全部已排期、已发布和失败记录，适合检查内容密度。'
+      ? '月视图汇总 NOX Global Launch 的已发送、当前待发和未来排期。'
       : view === 'list'
-        ? '列表按状态分栏：已发布只能查看，草稿可编辑，失败项显示原因并支持重新发布。'
-        : '本周最佳发布窗口集中在周二至周四 10:00-16:00，已自动避开内容冲突。';
+        ? '已发送内容打开为成帖预览；当前与未来内容可继续编辑。'
+        : 'NOX Global Launch · LinkedIn + Instagram · English only';
     wendyCalendarHint.innerHTML = `${renderIcon('sparkles')}${escapeHTML(hintText)}`;
     refreshIcons();
   }
 }
 
+function getWendyPreviewCaptionParts(value = '') {
+  const lines = String(value)
+    .split(/\n+/)
+    .map(line => line.trim())
+    .filter(Boolean);
+  return {
+    copy: lines.filter(line => !line.startsWith('#')).join('\n'),
+    hashtags: lines.filter(line => line.startsWith('#')).join(' ')
+  };
+}
+
+function formatWendyNativeDateTime(value = '') {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Just now';
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit'
+  }).format(date);
+}
+
+function renderWendyNoxAvatar(platform = 'LinkedIn', compact = false) {
+  const platformClass = platform.includes('Instagram') ? 'instagram' : 'linkedin';
+  return `
+    <span class="wendy-nox-avatar ${platformClass} ${compact ? 'compact' : ''}" aria-label="NOX Robotics">
+      <span class="wendy-nox-avatar-logo" aria-hidden="true"></span>
+    </span>
+  `;
+}
+
+function renderWendyLinkedInPost({
+  copy = '',
+  hashtags = '',
+  image = WENDY_DEFAULT_POSTER_IMAGE,
+  title = 'NOX Robotics',
+  time = '',
+  metrics = {},
+  compact = false
+} = {}) {
+  const reactions = metrics.reactions || '96';
+  const comments = metrics.comments || '18';
+  return `
+    <article class="wendy-native-post wendy-linkedin-post ${compact ? 'compact' : ''}" aria-label="LinkedIn post preview">
+      <header class="wendy-native-post-header">
+        ${renderWendyNoxAvatar('LinkedIn', compact)}
+        <div class="wendy-native-identity">
+          <strong>NOX Robotics</strong>
+          <span>${compact ? '2,184 followers' : '2,184 followers · Robotics'}</span>
+          <span>${escapeHTML(formatWendyNativeDateTime(time))} · ${renderIcon('globe-2')}</span>
+        </div>
+        <span class="wendy-native-more" aria-hidden="true">${renderIcon('ellipsis')}</span>
+      </header>
+      <div class="wendy-linkedin-copy">
+        <p>${escapeHTML(copy || 'Your LinkedIn post will appear here.')}</p>
+        ${hashtags ? `<p class="wendy-native-hashtags">${escapeHTML(hashtags)}</p>` : ''}
+      </div>
+      ${image ? `<img class="wendy-native-media" src="${escapeHTML(image)}" alt="${escapeHTML(title)} artwork" />` : ''}
+      <div class="wendy-linkedin-engagement">
+        <span class="wendy-linkedin-reactions" aria-label="${escapeHTML(reactions)} reactions">
+          <i>${renderIcon('thumbs-up')}</i><i>${renderIcon('heart')}</i><i>${renderIcon('lightbulb')}</i>${escapeHTML(reactions)}
+        </span>
+        <span>${escapeHTML(comments)} comments</span>
+      </div>
+      <div class="wendy-linkedin-actions" aria-label="LinkedIn post actions">
+        <span>${renderIcon('thumbs-up')}Like</span>
+        <span>${renderIcon('message-square')}Comment</span>
+        <span>${renderIcon('repeat-2')}Repost</span>
+        <span>${renderIcon('send')}Send</span>
+      </div>
+    </article>
+  `;
+}
+
+function renderWendyInstagramPost({
+  copy = '',
+  hashtags = '',
+  image = WENDY_DEFAULT_POSTER_IMAGE,
+  title = 'NOX Robotics',
+  time = '',
+  metrics = {},
+  compact = false
+} = {}) {
+  const reactions = metrics.reactions || '184';
+  const comments = metrics.comments || '27';
+  return `
+    <article class="wendy-native-post wendy-instagram-post ${compact ? 'compact' : ''}" aria-label="Instagram post preview">
+      <header class="wendy-native-post-header">
+        ${renderWendyNoxAvatar('Instagram', compact)}
+        <div class="wendy-native-identity instagram">
+          <strong>nox.robotics ${renderIcon('badge-check')}</strong>
+          <span>NOX Robotics</span>
+        </div>
+        <span class="wendy-native-more" aria-hidden="true">${renderIcon('ellipsis')}</span>
+      </header>
+      ${image ? `<img class="wendy-native-media" src="${escapeHTML(image)}" alt="${escapeHTML(title)} artwork" />` : ''}
+      <div class="wendy-instagram-actions" aria-label="Instagram post actions">
+        <span>${renderIcon('heart')}</span>
+        <span>${renderIcon('message-circle')}</span>
+        <span>${renderIcon('send')}</span>
+        <span class="save">${renderIcon('bookmark')}</span>
+      </div>
+      <div class="wendy-instagram-caption">
+        <strong>${escapeHTML(reactions)} likes</strong>
+        <p><b>nox.robotics</b> ${escapeHTML(copy || 'Your Instagram caption will appear here.')}</p>
+        ${hashtags ? `<p class="wendy-native-hashtags">${escapeHTML(hashtags)}</p>` : ''}
+        <span>View all ${escapeHTML(comments)} comments</span>
+        <time>${escapeHTML(formatWendyNativeDateTime(time))}</time>
+      </div>
+    </article>
+  `;
+}
+
+function renderWendyNativePost(platform, post, compact = false) {
+  return platform.includes('Instagram')
+    ? renderWendyInstagramPost({ ...post, compact })
+    : renderWendyLinkedInPost({ ...post, compact });
+}
+
 function syncWendyPublisherPreview() {
-  if (!wendyPublisherPreviewText || !wendyCopyField) return;
-  wendyPublisherPreviewText.textContent = wendyCopyField.value.trim() || '发布预览会显示在这里';
+  if (!wendyPublisherPreview || !wendyCopyField) return;
+  const platform = wendyPlatformField?.value || 'LinkedIn';
+  const caption = getWendyPreviewCaptionParts(wendyCopyField.value);
+  wendyPublisherPreview.innerHTML = renderWendyNativePost(platform, {
+    ...caption,
+    image: wendyState.publisherImage,
+    title: wendyState.publisherTitle,
+    time: wendyTimeField?.value || '',
+    metrics: platform.includes('Instagram')
+      ? { reactions: '184', comments: '27' }
+      : { reactions: '96', comments: '18' }
+  }, true);
+  refreshIcons();
+}
+
+function setWendyPublisherArtwork(image = WENDY_DEFAULT_POSTER_IMAGE, title = 'Manual & Electric Pallet Truck') {
+  wendyState.publisherImage = image;
+  wendyState.publisherTitle = title;
+  syncWendyPublisherPreview();
+}
+
+function renderWendySentPreview(post = {}) {
+  if (!wendySentPreview) return;
+  const platform = post.platform || 'LinkedIn';
+  const account = getWendyAccountInfo(platform);
+  const stageLabel = post.campaignStage ? `NOX Global Launch · ${post.campaignStage}` : 'NOX Global Launch';
+  wendySentPreview.innerHTML = `
+    <section class="wendy-native-stage ${platform.includes('Instagram') ? 'instagram' : 'linkedin'}">
+      <div class="wendy-native-stage-label">
+        <span>${renderWendySocialIcon(platform, platform)}${escapeHTML(platform)} feed preview</span>
+        <span>${renderIcon('circle-check-big')}Published as ${escapeHTML(account.account)}</span>
+      </div>
+      ${renderWendyNativePost(platform, {
+        copy: post.copy || '',
+        hashtags: post.hashtags || '',
+        image: post.image || WENDY_DEFAULT_POSTER_IMAGE,
+        title: post.title || 'NOX Robotics',
+        time: post.time || '',
+        metrics: post.metrics || {}
+      })}
+      <footer class="wendy-native-stage-footer">
+        <span>${escapeHTML(stageLabel)}</span>
+        <button class="wendy-secondary" data-wendy-close-publisher type="button">关闭预览</button>
+      </footer>
+    </section>
+  `;
+  refreshIcons();
 }
 
 function getWendyBoundCount() {
@@ -352,13 +559,19 @@ function syncWendyAccountSummary() {
   if (wendyAccountsTotalCount) wendyAccountsTotalCount.textContent = String(totalCount);
   if (wendyAccountsPendingCount) wendyAccountsPendingCount.textContent = String(totalCount - boundCount);
   if (wendyHomeAccountCount) wendyHomeAccountCount.innerHTML = `${boundCount}<small>/${totalCount}</small>`;
+  if (wendyHomeAccountStatus) {
+    const pendingCount = totalCount - boundCount;
+    wendyHomeAccountStatus.textContent = pendingCount
+      ? `LinkedIn、Instagram 已绑定，${pendingCount} 个平台未授权`
+      : '全部社媒平台均已授权';
+  }
 }
 
 function renderWendyAccountCard(account) {
   const actionText = account.bound ? '解绑' : '去绑定';
   const status = account.bound
     ? `<span class="wendy-managed-account-status"><i data-lucide="circle-check"></i>已授权</span>`
-    : '';
+    : `<span class="wendy-managed-account-status pending"><i data-lucide="circle-alert"></i>未授权</span>`;
 
   return `
     <article class="wendy-managed-account-card" data-wendy-account-id="${escapeHTML(account.id)}">
@@ -379,6 +592,226 @@ function renderWendyAccounts() {
 
 function getWendyVisualStyles(platform = wendyState.selectedPlatform) {
   return wendyVisualStylesByPlatform[platform] || wendyVisualStylesByPlatform.LinkedIn;
+}
+
+function getWendyGenerationSpec(platform = wendyState.selectedPlatform) {
+  return wendyPlatformGenerationSpecs[platform] || wendyPlatformGenerationSpecs.LinkedIn;
+}
+
+function getWendyPostLanguage(code = wendyState.selectedLanguage) {
+  return wendyPostLanguages.find(language => language.code === code) || wendyPostLanguages[0];
+}
+
+function getWendyProducts() {
+  return wendyProductCatalogs.flatMap(catalog => (catalog.products || []).map(product => ({
+    ...product,
+    catalogId: catalog.id,
+    catalogName: catalog.catalogName
+  })));
+}
+
+function getWendySelectedProductRecord() {
+  const productId = Number(wendyState.selectedProductId || wendyPlanProduct?.value);
+  return getWendyProducts().find(product => product.id === productId) || null;
+}
+
+function getWendySelectedProduct() {
+  return getWendySelectedProductRecord()?.productName || '未选择商品';
+}
+
+function getWendyProductSummary(product) {
+  return product?.productSummary || product?.productDescription || '暂无商品简介';
+}
+
+function renderWendyProductThumbnail(product) {
+  const image = product?.localImage || product?.productImages?.[0];
+  return `
+    <span class="wendy-product-thumbnail${image ? '' : ' placeholder'}" aria-hidden="true">
+      <i data-lucide="package"></i>
+      ${image ? `<img data-wendy-product-image src="${escapeHTML(image)}" alt="" loading="lazy" decoding="async" />` : ''}
+    </span>
+  `;
+}
+
+function renderWendyProductSelection() {
+  if (!wendyProductTrigger) return;
+  const product = getWendySelectedProductRecord();
+
+  if (wendyPlanProduct) wendyPlanProduct.value = product ? String(product.id) : '';
+  wendyProductTrigger.innerHTML = product
+    ? `
+      ${renderWendyProductThumbnail(product)}
+      <span class="wendy-product-trigger-copy">
+        <strong>${escapeHTML(product.productName)}</strong>
+        <small>${escapeHTML(product.catalogName)}</small>
+      </span>
+      <i class="wendy-product-chevron" data-lucide="chevrons-up-down" aria-hidden="true"></i>
+    `
+    : `
+      <span class="wendy-product-thumbnail placeholder" aria-hidden="true"><i data-lucide="package-search"></i></span>
+      <span class="wendy-product-trigger-copy">
+        <strong>请选择商品</strong>
+        <small>从商品库中选择本次内容引用的产品</small>
+      </span>
+      <i class="wendy-product-chevron" data-lucide="chevrons-up-down" aria-hidden="true"></i>
+    `;
+  wendyProductTrigger.setAttribute('aria-label', product ? `已选择 ${product.productName}，点击更换商品` : '请选择商品');
+  refreshIcons();
+}
+
+function renderWendyProductOptions() {
+  if (!wendyProductOptions) return;
+  const selectedId = Number(wendyState.selectedProductId);
+  const catalogs = wendyProductCatalogs.filter(catalog => Array.isArray(catalog.products) && catalog.products.length);
+
+  if (!catalogs.length) {
+    wendyProductOptions.innerHTML = '<div class="wendy-product-status"><span>暂无可选择的商品</span></div>';
+    wendyProductOptions.setAttribute('aria-busy', 'false');
+    return;
+  }
+
+  wendyProductOptions.innerHTML = catalogs.map(catalog => `
+    <div class="wendy-product-catalog" role="group" aria-labelledby="wendy-product-catalog-${escapeHTML(catalog.id)}">
+      <span class="wendy-product-catalog-title" id="wendy-product-catalog-${escapeHTML(catalog.id)}">${escapeHTML(catalog.catalogName)}</span>
+      ${(catalog.products || []).map(product => {
+        const selected = product.id === selectedId;
+        return `
+          <button class="wendy-product-option${selected ? ' selected' : ''}" data-wendy-product-id="${escapeHTML(product.id)}" type="button" role="option" aria-selected="${String(selected)}">
+            ${renderWendyProductThumbnail(product)}
+            <span class="wendy-product-option-copy">
+              <strong>${escapeHTML(product.productName)}</strong>
+              <small>${escapeHTML(getWendyProductSummary(product))}</small>
+            </span>
+            <i class="wendy-product-option-check" data-lucide="check" aria-hidden="true"></i>
+          </button>
+        `;
+      }).join('')}
+    </div>
+  `).join('');
+  wendyProductOptions.setAttribute('aria-busy', 'false');
+  refreshIcons();
+}
+
+function setWendyProductPickerOpen(open) {
+  if (!wendyProductPicker || !wendyProductTrigger || !wendyProductMenu) return;
+  wendyProductPicker.classList.toggle('open', open);
+  wendyProductTrigger.setAttribute('aria-expanded', String(open));
+  wendyProductMenu.hidden = !open;
+}
+
+function selectWendyProduct(productId) {
+  const product = getWendyProducts().find(item => item.id === Number(productId));
+  if (!product) return;
+  wendyState.selectedProductId = product.id;
+  renderWendyProductSelection();
+  renderWendyProductOptions();
+  wendyPlanProduct?.dispatchEvent(new Event('change', { bubbles: true }));
+  setWendyProductPickerOpen(false);
+  wendyProductTrigger?.focus();
+}
+
+function loadWendyProducts() {
+  if (!wendyProductOptions) return;
+
+  try {
+    wendyProductCatalogs = Array.isArray(wendyProductCatalogSource) ? wendyProductCatalogSource : [];
+    const products = getWendyProducts();
+    if (!products.some(product => product.id === Number(wendyState.selectedProductId))) {
+      wendyState.selectedProductId = products.find(product => product.id === WENDY_DEFAULT_PRODUCT_ID)?.id || products[0]?.id || null;
+    }
+    renderWendyProductSelection();
+    renderWendyProductOptions();
+  } catch (error) {
+    wendyProductOptions.setAttribute('aria-busy', 'false');
+    wendyProductOptions.innerHTML = `
+      <div class="wendy-product-status error">
+        <span>商品信息加载失败，请刷新页面后重试。</span>
+        <button class="wendy-product-retry" data-wendy-product-retry type="button">重新加载</button>
+      </div>
+    `;
+  }
+}
+
+function getWendyDefaultMarketingPlan() {
+  const product = getWendySelectedProductRecord();
+  if (!product) return '营销目标产品，凸显企业知识库中已验证的产品认证、核心卖点与应用场景。';
+  const verifiedFacts = [product.productSummary, product.productDescription]
+    .filter(Boolean)
+    .join(' ')
+    .slice(0, 220);
+  return `营销「${product.productName}」，凸显商品资料中已验证的认证与核心卖点：「${verifiedFacts}」。`;
+}
+
+function renderWendyGenerationSettings() {
+  const spec = getWendyGenerationSpec();
+
+  if (!spec.ratios.includes(wendyState.selectedRatio)) {
+    wendyState.selectedRatio = spec.ratios[0];
+  }
+  if (!wendyPostLanguages.some(item => item.code === wendyState.selectedLanguage)) {
+    wendyState.selectedLanguage = wendyPostLanguages[0].code;
+  }
+  if (!wendyState.marketingPlanInitialized) {
+    wendyState.marketingPlan = getWendyDefaultMarketingPlan();
+    wendyState.marketingPlanInitialized = true;
+  }
+  wendyState.selectedPosterRequirements = wendyState.selectedPosterRequirements.filter(id => (
+    wendyPosterRequirements.some(item => item.id === id)
+  ));
+  if (!wendyState.selectedPosterRequirements.length) {
+    wendyState.selectedPosterRequirements = [wendyPosterRequirements[0].id];
+  }
+
+  const language = getWendyPostLanguage();
+
+  if (wendySpecPlatform) wendySpecPlatform.textContent = wendyState.selectedPlatform;
+  if (wendyVisualPlatformName) wendyVisualPlatformName.textContent = wendyState.selectedPlatform;
+  if (wendySpecLocations) {
+    wendySpecLocations.textContent = `适用于 ${spec.locations.join('、')}`;
+  }
+  if (wendyImageRatioLabel) {
+    wendyImageRatioLabel.textContent = `图片 ${wendyState.selectedRatio}`;
+  }
+  if (wendyImageRatioOptions) {
+    wendyImageRatioOptions.innerHTML = spec.ratios.map(ratio => {
+      const selected = ratio === wendyState.selectedRatio;
+      return `<button class="${selected ? 'selected' : ''}" data-wendy-image-ratio="${escapeHTML(ratio)}" type="button" role="option" aria-selected="${String(selected)}"><span>图片 ${escapeHTML(ratio)}</span><small>${selected ? '当前规格' : '选择规格'}</small></button>`;
+    }).join('');
+  }
+  if (wendyLanguageLabel) {
+    wendyLanguageLabel.textContent = `${language.name} · ${language.code}`;
+  }
+  if (wendyLanguageOptions) {
+    wendyLanguageOptions.innerHTML = wendyPostLanguages.map(item => {
+      const selected = item.code === wendyState.selectedLanguage;
+      return `<button class="${selected ? 'selected' : ''}" data-wendy-post-language="${escapeHTML(item.code)}" type="button" role="option" aria-selected="${String(selected)}"><span>${escapeHTML(item.name)}</span><small>${escapeHTML(item.code)}</small></button>`;
+    }).join('');
+  }
+  if (wendyLanguageHint) {
+    wendyLanguageHint.textContent = `当前使用${language.name}（${language.code}）生成 Post 文案`;
+  }
+  if (wendyMarketingPlan && wendyMarketingPlan.value !== wendyState.marketingPlan) {
+    wendyMarketingPlan.value = wendyState.marketingPlan;
+  }
+  if (wendyPosterRequirementsList) {
+    wendyPosterRequirementsList.innerHTML = wendyPosterRequirements.map(item => {
+      const selected = wendyState.selectedPosterRequirements.includes(item.id);
+      return `
+        <li>
+          <button class="${selected ? 'selected' : ''}" data-wendy-poster-requirement="${escapeHTML(item.id)}" type="button" aria-pressed="${String(selected)}">
+            <span class="wendy-poster-check" aria-hidden="true">✓</span>
+            <span>${escapeHTML(item.label)}</span>
+          </button>
+        </li>
+      `;
+    }).join('');
+  }
+  if (wendyPosterRequirementCount) {
+    wendyPosterRequirementCount.textContent = `${wendyState.selectedPosterRequirements.length} 项`;
+  }
+  if (wendyGenerationSummary) {
+    wendyGenerationSummary.innerHTML = `<strong>预计生成：</strong>1 张 ${escapeHTML(wendyState.selectedPlatform)} 海报（${escapeHTML(wendyState.selectedRatio)}）、1 套${escapeHTML(language.name)} Post 文案，海报保留 ${wendyState.selectedPosterRequirements.length} 项必含信息。`;
+  }
 }
 
 function renderWendyVisualStyles() {
@@ -419,6 +852,7 @@ function syncWendyAgentSelections() {
   if (!styles.some(style => style.name === wendyState.selectedVisual)) {
     wendyState.selectedVisual = styles[0].name;
   }
+  renderWendyGenerationSettings();
   renderWendyVisualStyles();
 
   document.querySelectorAll('[data-wendy-agent-visual]').forEach(button => {
@@ -444,23 +878,13 @@ function hideWendyPlanStep() {
   if (wendyThinkingThread) wendyThinkingThread.hidden = false;
 }
 
-function showWendyStrategyComposer() {
-  if (!wendyStrategyComposer) return;
-  wendyStrategyComposer.hidden = false;
-  refreshIcons();
-}
-
-function hideWendyStrategyComposer() {
-  if (!wendyStrategyComposer) return;
-  wendyStrategyComposer.hidden = true;
-}
-
 function getWendyThinkingScript() {
+  const product = getWendySelectedProductRecord();
   return wendyThinkingScript.map(item => {
-    if (item.text.includes('已确认发布平台和视觉方案')) {
+    if (item.text.includes('已确认发布平台和内容目标')) {
       return {
         ...item,
-        text: `已确认 ${wendyState.selectedPlatform} 为主发布平台，视觉方案使用「${wendyState.selectedVisual}」`
+        text: `已确认 ${wendyState.selectedPlatform} 为主发布平台${product ? `，引用商品「${product.productName}」` : ''}，正在整理图片规格、语言和视觉风格选项…`
       };
     }
     if (item.text.includes('已生成 LinkedIn 长文')) {
@@ -473,18 +897,42 @@ function getWendyThinkingScript() {
   });
 }
 
-function getWendyPreviewConfig() {
-  return wendyPreviewPlatforms[wendyState.selectedPlatform] || wendyPreviewPlatforms.LinkedIn;
+function getWendyPreviewConfig(platform = wendyState.selectedPlatform) {
+  return wendyPreviewPlatforms[platform] || wendyPreviewPlatforms.LinkedIn;
 }
 
-function getWendyPreviewCaption() {
-  const config = getWendyPreviewConfig();
-  if (!wendyState.strategyPrompt) return config.caption;
-  return `${config.caption} 已根据策略修改补充：${wendyState.strategyPrompt}`;
+function getWendyPreviewCaption(platform = wendyState.selectedPlatform) {
+  const config = getWendyPreviewConfig(platform);
+  return wendyLocalizedPostCopy[wendyState.selectedLanguage] || config.caption;
+}
+
+function getWendyPosterImage() {
+  const product = getWendySelectedProductRecord();
+  return product?.posterImage || WENDY_DEFAULT_POSTER_IMAGE;
 }
 
 function getWendySyncPlatformOptions() {
   return Object.keys(wendyPreviewPlatforms).filter(platform => platform !== wendyState.selectedPlatform);
+}
+
+function resetWendyPreviewDrafts() {
+  wendyState.previewDrafts = {};
+}
+
+function getWendyPreviewDraft(platform) {
+  if (!wendyState.previewDrafts[platform]) {
+    const config = getWendyPreviewConfig(platform);
+    wendyState.previewDrafts[platform] = {
+      caption: getWendyPreviewCaption(platform),
+      publishTime: config.timeLabel
+    };
+  }
+  return wendyState.previewDrafts[platform];
+}
+
+function updateWendyPreviewDraft(platform, changes) {
+  const draft = getWendyPreviewDraft(platform);
+  Object.assign(draft, changes);
 }
 
 function renderWendySyncPrompt() {
@@ -511,19 +959,42 @@ function renderWendySyncPrompt() {
   `;
 }
 
-function renderWendySinglePreview() {
-  if (!wendySinglePreview) return;
-  const platform = wendyState.selectedPlatform || 'LinkedIn';
-  const config = getWendyPreviewConfig();
+function renderWendyPreviewCard(platform, isConfirmed = false) {
+  const config = getWendyPreviewConfig(platform);
+  const draft = getWendyPreviewDraft(platform);
   const promptNote = wendyState.imagePrompt
     ? `<em>已按修改建议更新：${escapeHTML(wendyState.imagePrompt)}</em>`
-    : `<em>${escapeHTML(wendyState.selectedVisual)} 视觉方案</em>`;
-  const previewCaption = getWendyPreviewCaption();
-  const captionMarkup = wendyState.previewConfirmed
-    ? `<p class="wendy-confirmed-caption">${escapeHTML(previewCaption)}</p>`
-    : `<textarea rows="8">${escapeHTML(previewCaption)}</textarea>`;
-  wendySinglePreview.innerHTML = `
-    <article class="wendy-post-preview-card ${wendyState.previewConfirmed ? 'confirmed' : ''}" data-preview-platform="${escapeHTML(platform)}">
+    : `<em>${escapeHTML(wendyState.selectedVisual)} · ${escapeHTML(wendyState.selectedRatio)} · ${escapeHTML(getWendyPostLanguage().code)}</em>`;
+  const product = getWendySelectedProductRecord();
+  const posterImage = getWendyPosterImage();
+  const isGenerating = wendyState.isImageRegenerating && platform === wendyState.selectedPlatform;
+  const publishTimeOptions = [...new Set([
+    config.timeLabel,
+    '2026/07/10 09:30',
+    '2026/07/10 13:00'
+  ])];
+  const captionMarkup = isConfirmed
+    ? `<p class="wendy-confirmed-caption">${escapeHTML(draft.caption)}</p>`
+    : `<textarea rows="8" data-wendy-preview-caption="${escapeHTML(platform)}">${escapeHTML(draft.caption)}</textarea>`;
+  const generationTitle = wendyState.imageGenerationMode === 'initial' ? '正在生成海报' : '正在重新生成海报';
+  const generationStage = wendyState.imageGenerationRemaining > 20
+    ? '正在理解产品与使用场景'
+    : wendyState.imageGenerationRemaining > 10
+      ? '正在构建画面与认证信息'
+      : '正在完成排版与细节';
+  const loadingMarkup = isGenerating
+    ? `
+      <div class="wendy-preview-media-loading" role="status" aria-live="polite">
+        <div class="wendy-generation-status">
+          <span>${escapeHTML(generationTitle)}</span>
+        </div>
+        <div class="wendy-generation-dots" aria-hidden="true"></div>
+        <p>${escapeHTML(generationStage)}</p>
+      </div>
+    `
+    : '';
+  return `
+    <article class="wendy-post-preview-card ${isConfirmed ? 'confirmed' : ''} ${isGenerating ? 'is-busy' : ''}" data-preview-platform="${escapeHTML(platform)}" aria-busy="${String(isGenerating)}">
       <header class="wendy-post-preview-top">
         <div class="wendy-preview-account">
           <div class="wendy-preview-avatar ${escapeHTML(config.avatarClass)}">${renderWendySocialIcon(platform, platform)}</div>
@@ -531,28 +1002,30 @@ function renderWendySinglePreview() {
         </div>
         <label class="wendy-preview-time">
           <span>发布时间</span>
-          <select aria-label="${escapeHTML(platform)} 发布时间" ${wendyState.previewConfirmed ? 'disabled' : ''}>
-            <option>${escapeHTML(config.timeLabel)}</option>
-            <option>2026/07/10 09:30</option>
-            <option>2026/07/10 13:00</option>
+          <select data-wendy-preview-time="${escapeHTML(platform)}" aria-label="${escapeHTML(platform)} 发布时间" ${isConfirmed || isGenerating ? 'disabled' : ''}>
+            ${publishTimeOptions.map(time => `<option value="${escapeHTML(time)}" ${draft.publishTime === time ? 'selected' : ''}>${escapeHTML(time)}</option>`).join('')}
           </select>
         </label>
       </header>
       <div class="wendy-post-preview-body">
         <div class="wendy-preview-media ${escapeHTML(config.mediaClass)}" aria-label="${escapeHTML(platform)}素材预览">
-          ${renderWendySocialIcon(config.icon, platform)}
-          <strong>${escapeHTML(config.mediaLabel)}</strong>
+          <img src="${escapeHTML(posterImage)}" alt="${escapeHTML(product?.productName || 'Manual & Electric Pallet Truck')} 海报" />
           ${promptNote}
+          ${loadingMarkup}
         </div>
-        <section class="wendy-caption-card">
-          <label>
-            <span>推送文案</span>
-            ${captionMarkup}
-          </label>
-        </section>
+        ${isGenerating ? '' : `
+          <section class="wendy-caption-card">
+            <label>
+              <span>推送文案</span>
+              ${captionMarkup}
+            </label>
+          </section>
+        `}
       </div>
       <footer class="wendy-post-preview-actions">
-        ${wendyState.previewConfirmed
+        ${isGenerating
+          ? `<div class="wendy-generation-footer"><i data-lucide="sparkles"></i><span>生成中</span></div>`
+          : isConfirmed
           ? `<div class="wendy-preview-confirmed"><i data-lucide="circle-check-big"></i><span>已确认社媒发布</span></div>`
           : `
             <button data-wendy-preview-save="${escapeHTML(platform)}" type="button"><i data-lucide="save"></i>保存草稿</button>
@@ -560,9 +1033,63 @@ function renderWendySinglePreview() {
           `}
       </footer>
     </article>
-    ${wendyState.previewConfirmed ? renderWendySyncPrompt() : ''}
+  `;
+}
+
+function renderWendySinglePreview() {
+  if (!wendySinglePreview) return;
+  const platform = wendyState.selectedPlatform || 'LinkedIn';
+  const syncPreviews = wendyState.syncPreviewPlatforms
+    .map(syncPlatform => renderWendyPreviewCard(syncPlatform, wendyState.confirmedSyncPlatforms.includes(syncPlatform)))
+    .join('');
+  wendySinglePreview.innerHTML = `
+    ${renderWendyPreviewCard(platform, wendyState.previewConfirmed)}
+    ${wendyState.previewConfirmed && !syncPreviews ? renderWendySyncPrompt() : ''}
+    ${syncPreviews}
   `;
   refreshIcons();
+}
+
+function setWendyImageRegenerationState(isGenerating, mode = wendyState.imageGenerationMode) {
+  wendyState.isImageRegenerating = isGenerating;
+  wendyState.imageGenerationMode = mode;
+  wendyPostPreviews?.classList.toggle('is-generating', isGenerating);
+  if (!wendyRegenerateImage) return;
+  const busyLabel = mode === 'initial' ? 'AI 正在生成海报' : 'AI 正在重新生图';
+  wendyRegenerateImage.disabled = isGenerating;
+  wendyRegenerateImage.classList.toggle('is-generating', isGenerating);
+  wendyRegenerateImage.setAttribute('aria-busy', String(isGenerating));
+  wendyRegenerateImage.setAttribute('aria-label', isGenerating ? busyLabel : 'AI 重新生图');
+}
+
+function resetWendyImageRegeneration() {
+  window.clearTimeout(wendyImageRegenerateTimer);
+  wendyImageRegenerateTimer = null;
+  wendyState.imageGenerationRemaining = 0;
+  setWendyImageRegenerationState(false);
+}
+
+function startWendyImageGeneration(mode = 'initial', prompt = '') {
+  resetWendyImageRegeneration();
+  wendyState.imageGenerationRemaining = WENDY_IMAGE_GENERATION_SECONDS;
+  setWendyImageRegenerationState(true, mode);
+  renderWendySinglePreview();
+
+  wendyImageRegenerateTimer = window.setTimeout(() => {
+    wendyState.imageGenerationRemaining = 0;
+    wendyImageRegenerateTimer = null;
+    if (mode === 'regenerate') {
+      wendyState.imageRegenerateCount += 1;
+      wendyState.imagePrompt = prompt;
+      if (wendyImageRegenerateCount) wendyImageRegenerateCount.textContent = String(wendyState.imageRegenerateCount);
+      if (wendyImageReprompt) wendyImageReprompt.value = '';
+    }
+    setWendyImageRegenerationState(false, mode);
+    renderWendySinglePreview();
+    showToast(mode === 'regenerate'
+      ? `Wendy 已按建议重新生图 ${wendyState.imageRegenerateCount}/8`
+      : `已生成 ${wendyState.selectedPlatform} 预览`);
+  }, WENDY_IMAGE_GENERATION_SECONDS * 1000);
 }
 
 function normalizeWendyDateTime(value = '2026-07-07T10:30:00') {
@@ -711,6 +1238,7 @@ function setWendyPublisherPlatform(platform) {
   if (wendyPublisherAvatar) {
     wendyPublisherAvatar.innerHTML = renderWendySocialIcon(platform, platform);
   }
+  syncWendyPublisherPreview();
 }
 
 function setWendyActiveButton(button, selector) {
@@ -721,14 +1249,34 @@ function setWendyActiveButton(button, selector) {
 function getWendyEventColor(platform) {
   if (platform.includes('LinkedIn')) return 'blue';
   if (platform.includes('Instagram')) return 'pink';
-  if (platform.includes('YouTube')) return 'youtube';
-  return 'hot';
+  return 'blue';
 }
 
-function setWendyPublisherAccess(status = 'draft', failureReason = '', showMode = true) {
+function setWendyPublisherAccess(status = 'draft', failureReason = '', showMode = true, post = {}) {
   const readOnly = status === 'published';
-  const form = document.querySelector('#wendyPublisher form');
-  form?.classList.toggle('is-readonly', readOnly);
+  wendyPublisherPanel?.classList.toggle('is-readonly', readOnly);
+  wendyPublisherPanel?.classList.toggle('is-sent-preview', readOnly);
+  if (wendyPublisherBody) wendyPublisherBody.hidden = readOnly;
+  if (wendyPublisherFooter) wendyPublisherFooter.hidden = readOnly;
+  if (wendySentPreview) wendySentPreview.hidden = !readOnly;
+  if (readOnly) renderWendySentPreview(post);
+
+  if (wendyPublisherTitle) {
+    wendyPublisherTitle.textContent = readOnly
+      ? '已发送内容预览'
+      : status === 'current'
+        ? '发送前检查'
+        : status === 'scheduled'
+          ? '编辑排期内容'
+          : '快速发布';
+  }
+  if (wendyPublisherSubtitle) {
+    wendyPublisherSubtitle.textContent = readOnly
+      ? '按真实社媒成帖样式查看内容与演示数据'
+      : status === 'current'
+        ? '当前处于发布窗口，确认内容后即可发送'
+        : '仅支持 LinkedIn 与 Instagram 英文内容';
+  }
   if (wendyPublisherMode) {
     if (showMode) {
       const meta = wendyStatusMeta[status] || wendyStatusMeta.draft;
@@ -773,15 +1321,42 @@ function setWendyPublisherAccess(status = 'draft', failureReason = '', showMode 
   refreshIcons();
 }
 
-function openWendyPublisher({ platform = 'LinkedIn', time = '2026-07-15T10:30:00', copy = '', status = 'draft', postId = null, failureReason = '', showMode = true } = {}) {
+function openWendyPublisher({
+  platform = 'LinkedIn',
+  title = 'Manual & Electric Pallet Truck',
+  campaignStage = '',
+  time = '2026-07-15T10:30:00',
+  copy = '',
+  hashtags = '',
+  image = '',
+  metrics = null,
+  status = 'draft',
+  postId = null,
+  failureReason = '',
+  showMode = true
+} = {}) {
   if (!wendyPublisher) return;
   wendyState.activePostId = postId;
   wendyPublisher.hidden = false;
   setWendyPublisherPlatform(platform);
   setWendyPublisherDateTime(time || '2026-07-15T10:30:00');
   setWendyScheduleMode(status === 'scheduled' || status === 'failed' ? 'schedule' : 'now');
-  if (wendyCopyField) wendyCopyField.value = copy || '面向欧洲储能安装商的新一代并网组件已经完成批量测试。点击了解交付稳定性、认证资料和项目支持方案。';
-  setWendyPublisherAccess(status, failureReason, showMode);
+  if (wendyCopyField) {
+    wendyCopyField.value = [copy || wendyLocalizedPostCopy.en, hashtags]
+      .filter(Boolean)
+      .join('\n\n');
+  }
+  setWendyPublisherArtwork(image || WENDY_DEFAULT_POSTER_IMAGE, title);
+  setWendyPublisherAccess(status, failureReason, showMode, {
+    platform,
+    title,
+    campaignStage,
+    time,
+    copy,
+    hashtags,
+    image,
+    metrics
+  });
   syncWendyPublisherPreview();
   if (status !== 'published') window.setTimeout(() => wendyCopyField?.focus(), 0);
   refreshIcons();
@@ -839,6 +1414,7 @@ function saveWendyDraftPost({ platform, copy }) {
 function resetWendyThinking() {
   window.clearInterval(wendyThinkingTimer);
   wendyThinkingTimer = null;
+  resetWendyImageRegeneration();
   if (wendyThinkingSteps) wendyThinkingSteps.innerHTML = '';
   if (wendyThinkingTitle) wendyThinkingTitle.textContent = 'Wendy 正在分析社媒内容诉求';
   wendyThinkingCard?.classList.remove('done', 'collapsed');
@@ -850,7 +1426,6 @@ function resetWendyThinking() {
   if (wendyPostPreviews) {
     wendyPostPreviews.hidden = true;
   }
-  hideWendyStrategyComposer();
 }
 
 function appendWendyThinkingItem(item, index) {
@@ -862,45 +1437,13 @@ function appendWendyThinkingItem(item, index) {
   wendyThinkingSteps.appendChild(node);
 }
 
-function applyWendyStrategyRevisionToResult() {
-  if (!wendyState.strategyPrompt || !wendyThinkingResult || wendyThinkingResult.hidden) return;
-  const intentCard = Array.from(document.querySelectorAll('.wendy-result-brief article'))
-    .find(item => item.querySelector('span')?.textContent === '发布意图');
-  const styleCard = Array.from(document.querySelectorAll('.wendy-result-brief article'))
-    .find(item => item.querySelector('span')?.textContent === '风格');
-  if (intentCard) {
-    intentCard.querySelector('strong').textContent = '已按你的补充诉求调整内容策略';
-    intentCard.querySelector('p').textContent = `新的策略会优先响应「${wendyState.strategyPrompt}」，同时保留产品价值、应用场景和独立站行动入口。`;
-  }
-  if (styleCard) {
-    styleCard.querySelector('p').textContent = `视觉方向仍使用「${wendyState.selectedVisual}」，但文案与画面重点会按你的补充诉求重新排序。`;
-  }
-}
-
-function submitWendyStrategyPrompt() {
-  const prompt = wendyStrategyPrompt?.value.trim() || '';
-  if (!prompt) {
-    showToast('请输入想修改的策略方向');
-    wendyStrategyPrompt?.focus();
-    return;
-  }
-  wendyState.strategyPrompt = prompt;
-  wendyState.strategyRevisionCount += 1;
-  appendWendyThinkingItem({
-    type: 'line',
-    text: `收到修改诉求：${prompt}，正在更新整体策略…`
-  }, wendyThinkingSteps?.children.length || 0);
-  applyWendyStrategyRevisionToResult();
-  if (wendyStrategyPrompt) wendyStrategyPrompt.value = '';
-  showToast('Wendy 已按补充诉求更新策略');
-}
-
 function completeWendyThinking(prompt) {
   window.clearInterval(wendyThinkingTimer);
   wendyThinkingTimer = null;
   if (wendyThinkingTitle) wendyThinkingTitle.textContent = 'Wendy 已生成社媒内容建议摘要';
   wendyThinkingCard?.classList.add('done', 'collapsed');
   wendyThinkingToggle?.setAttribute('aria-expanded', 'false');
+  syncWendyAgentSelections();
   if (wendyThinkingResult) {
     wendyThinkingResult.hidden = false;
     window.requestAnimationFrame(() => {
@@ -909,21 +1452,8 @@ function completeWendyThinking(prompt) {
     });
   }
   if (wendyCopyField && prompt) {
-    wendyCopyField.value = `围绕「${prompt.slice(0, 54)}」生成一条面向海外买家的社媒 Post，突出产品价值、应用场景和访问独立站的行动入口。`;
+    wendyCopyField.value = getWendyPreviewCaption();
   }
-  const targetPlatform = Array.from(document.querySelectorAll('.wendy-result-brief article'))
-    .find(item => item.querySelector('span')?.textContent === '目标平台');
-  const targetStyle = Array.from(document.querySelectorAll('.wendy-result-brief article'))
-    .find(item => item.querySelector('span')?.textContent === '风格');
-  if (targetPlatform) {
-    targetPlatform.querySelector('strong').textContent = `主发布平台：${wendyState.selectedPlatform}`;
-    targetPlatform.querySelector('p').textContent = `${wendyState.selectedPlatform} 将作为本次内容的主发布平台，Wendy 会优先匹配该平台的版式比例、内容长度、语气和行动入口；其他平台可在预览阶段继续扩展。`;
-  }
-  if (targetStyle) {
-    targetStyle.querySelector('strong').textContent = wendyState.selectedVisual;
-    targetStyle.querySelector('p').textContent = `视觉方向将优先采用「${wendyState.selectedVisual}」，并结合上传素材、企业知识库和平台展示习惯生成可编辑海报。`;
-  }
-  applyWendyStrategyRevisionToResult();
   showToast('Wendy 已生成社媒内容建议');
   refreshIcons();
 }
@@ -936,40 +1466,60 @@ function submitWendyPrompt() {
     wendyPromptInput?.focus();
     return;
   }
+  resetWendyImageRegeneration();
   wendyState.pendingPrompt = prompt;
   wendyState.pendingImageCount = imageCount;
   wendyState.agentStarted = false;
   wendyState.planConfirmed = false;
   wendyState.selectedPlatform = 'LinkedIn';
+  wendyState.selectedProductId = WENDY_DEFAULT_PRODUCT_ID;
   wendyState.selectedVisual = '冷白商业棚拍';
+  wendyState.selectedRatio = '4:5';
+  wendyState.selectedLanguage = 'en';
+  wendyState.marketingPlan = '';
+  wendyState.marketingPlanInitialized = false;
+  wendyState.selectedPosterRequirements = wendyPosterRequirements.map(item => item.id);
   wendyState.imageRegenerateCount = 0;
   wendyState.imagePrompt = '';
+  wendyState.isImageRegenerating = false;
   wendyState.previewConfirmed = false;
   wendyState.selectedSyncPlatforms = [];
-  wendyState.strategyPrompt = '';
-  wendyState.strategyRevisionCount = 0;
-  if (wendyStrategyPrompt) wendyStrategyPrompt.value = '';
+  wendyState.syncPreviewPlatforms = [];
+  wendyState.confirmedSyncPlatforms = [];
+  resetWendyPreviewDrafts();
   if (wendyImageReprompt) wendyImageReprompt.value = '';
   if (wendyImageRegenerateCount) wendyImageRegenerateCount.textContent = '0';
+  renderWendyProductSelection();
+  renderWendyProductOptions();
   window.location.hash = 'wendy/agent';
 }
 
-function startWendyAIGeneration(prompt = '帮我生成一条 LinkedIn 新品介绍，强调产品价值和独立站访问入口。', imageCount = 0) {
+function startWendyAIGeneration(prompt = '为 Manual & Electric Pallet Truck 生成一条 LinkedIn 新品介绍，突出 2T / 3T / 5T 载重、CE 认证和耐用结构。', imageCount = 0) {
+  resetWendyImageRegeneration();
   wendyState.pendingPrompt = prompt;
   wendyState.pendingImageCount = imageCount;
   wendyState.agentStarted = false;
   wendyState.planConfirmed = false;
   wendyState.selectedPlatform = 'LinkedIn';
+  wendyState.selectedProductId = WENDY_DEFAULT_PRODUCT_ID;
   wendyState.selectedVisual = '冷白商业棚拍';
+  wendyState.selectedRatio = '4:5';
+  wendyState.selectedLanguage = 'en';
+  wendyState.marketingPlan = '';
+  wendyState.marketingPlanInitialized = false;
+  wendyState.selectedPosterRequirements = wendyPosterRequirements.map(item => item.id);
   wendyState.imageRegenerateCount = 0;
   wendyState.imagePrompt = '';
+  wendyState.isImageRegenerating = false;
   wendyState.previewConfirmed = false;
   wendyState.selectedSyncPlatforms = [];
-  wendyState.strategyPrompt = '';
-  wendyState.strategyRevisionCount = 0;
-  if (wendyStrategyPrompt) wendyStrategyPrompt.value = '';
+  wendyState.syncPreviewPlatforms = [];
+  wendyState.confirmedSyncPlatforms = [];
+  resetWendyPreviewDrafts();
   if (wendyImageReprompt) wendyImageReprompt.value = '';
   if (wendyImageRegenerateCount) wendyImageRegenerateCount.textContent = '0';
+  renderWendyProductSelection();
+  renderWendyProductOptions();
   window.location.hash = 'wendy/agent';
 }
 
@@ -978,7 +1528,6 @@ function startWendyThinking() {
   const imageCount = wendyState.pendingImageCount || wendyImageInput?.files?.length || 0;
   hideWendyPlanStep();
   resetWendyThinking();
-  showWendyStrategyComposer();
   if (wendyThinkingTitle) {
     wendyThinkingTitle.textContent = imageCount > 0
       ? `Wendy 正在分析诉求和 ${imageCount} 张图片`
@@ -1003,7 +1552,7 @@ function startWendyThinking() {
 function resumeWendyAgent() {
   if (wendyState.agentStarted || wendyThinkingTimer) return;
   if (!wendyState.pendingPrompt && !wendyState.pendingImageCount) {
-    wendyState.pendingPrompt = '帮我生成一条 LinkedIn 新品介绍，强调产品价值和独立站访问入口。';
+    wendyState.pendingPrompt = '为 Manual & Electric Pallet Truck 生成一条 LinkedIn 新品介绍，突出 2T / 3T / 5T 载重、CE 认证和耐用结构。';
   }
   if (!wendyState.planConfirmed) {
     resetWendyThinking();
@@ -1018,23 +1567,30 @@ function showWendyPostPreviews() {
     wendyThinkingResult.classList.remove('ready');
     wendyThinkingResult.hidden = true;
   }
-  hideWendyStrategyComposer();
   wendyState.previewConfirmed = false;
   wendyState.selectedSyncPlatforms = [];
-  renderWendySinglePreview();
+  wendyState.syncPreviewPlatforms = [];
+  wendyState.confirmedSyncPlatforms = [];
+  resetWendyImageRegeneration();
+  resetWendyPreviewDrafts();
   if (wendyPostPreviews) {
     wendyPostPreviews.classList.remove('is-confirmed');
     wendyPostPreviews.hidden = false;
     wendyPostPreviews.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+  startWendyImageGeneration('initial');
   if (wendyThinkingTitle) wendyThinkingTitle.textContent = 'Wendy 已生成社媒内容建议摘要';
-  showToast(`已生成 ${wendyState.selectedPlatform} 预览`);
+  showToast('Wendy 正在生成海报');
   refreshIcons();
 }
 
 function regenerateWendyImage() {
   if (wendyState.previewConfirmed) {
     showToast('已确认的预览不能继续改图');
+    return;
+  }
+  if (wendyState.isImageRegenerating) {
+    showToast('图片正在生成，请稍候');
     return;
   }
   const prompt = wendyImageReprompt?.value.trim() || '';
@@ -1047,16 +1603,25 @@ function regenerateWendyImage() {
     showToast('本次已达到 8 次重新生图上限');
     return;
   }
-  wendyState.imageRegenerateCount += 1;
-  wendyState.imagePrompt = prompt;
-  if (wendyImageRegenerateCount) wendyImageRegenerateCount.textContent = String(wendyState.imageRegenerateCount);
-  renderWendySinglePreview();
-  showToast(`Wendy 已按建议重新生图 ${wendyState.imageRegenerateCount}/8`);
+  startWendyImageGeneration('regenerate', prompt);
+  showToast('Wendy 正在重新生成海报');
 }
 
 function confirmWendyPreview(platform) {
+  if (wendyState.isImageRegenerating) {
+    showToast('图片生成完成后才能发布');
+    return;
+  }
+  if (platform !== wendyState.selectedPlatform && wendyState.syncPreviewPlatforms.includes(platform)) {
+    wendyState.confirmedSyncPlatforms = [...new Set([...wendyState.confirmedSyncPlatforms, platform])];
+    renderWendySinglePreview();
+    showToast(`${platform} 预览已确认`);
+    return;
+  }
   wendyState.previewConfirmed = true;
   wendyState.selectedSyncPlatforms = [];
+  wendyState.syncPreviewPlatforms = [];
+  wendyState.confirmedSyncPlatforms = [];
   renderWendySinglePreview();
   wendyPostPreviews?.classList.add('is-confirmed');
   showToast(`${platform} 预览已确认`);
@@ -1072,6 +1637,18 @@ function toggleWendySyncPlatform(platform) {
   renderWendySinglePreview();
 }
 
+function showWendySyncPreviews() {
+  if (!wendyState.selectedSyncPlatforms.length) return false;
+  wendyState.syncPreviewPlatforms = [...wendyState.selectedSyncPlatforms];
+  wendyState.selectedSyncPlatforms = [];
+  wendyState.confirmedSyncPlatforms = [];
+  renderWendySinglePreview();
+  const previews = document.querySelectorAll('.wendy-post-preview-card');
+  previews[previews.length - 1]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  showToast(`已生成 ${wendyState.syncPreviewPlatforms.join('、')} 的发布预览`);
+  return true;
+}
+
 wendyAttachImage?.addEventListener('click', () => {
   wendyImageInput?.click();
 });
@@ -1085,21 +1662,62 @@ wendyImageInput?.addEventListener('change', () => {
   showToast(files.length ? `已添加 ${files.length} 张图片` : '已清空图片');
 });
 
+wendyPlanProduct?.addEventListener('change', () => {
+  wendyState.marketingPlan = getWendyDefaultMarketingPlan();
+  wendyState.marketingPlanInitialized = true;
+  renderWendyGenerationSettings();
+});
+
+wendyProductPicker?.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && wendyProductMenu?.hidden === false) {
+    event.preventDefault();
+    setWendyProductPickerOpen(false);
+    wendyProductTrigger?.focus();
+    return;
+  }
+
+  if (event.target === wendyProductTrigger && event.key === 'ArrowDown') {
+    event.preventDefault();
+    setWendyProductPickerOpen(true);
+    wendyProductOptions?.querySelector('[data-wendy-product-id]')?.focus();
+    return;
+  }
+
+  const currentOption = event.target.closest('[data-wendy-product-id]');
+  if (!currentOption || !['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+  const options = Array.from(wendyProductOptions?.querySelectorAll('[data-wendy-product-id]') || []);
+  const currentIndex = options.indexOf(currentOption);
+  if (currentIndex < 0) return;
+  event.preventDefault();
+  const nextIndex = event.key === 'Home'
+    ? 0
+    : event.key === 'End'
+      ? options.length - 1
+      : (currentIndex + (event.key === 'ArrowDown' ? 1 : -1) + options.length) % options.length;
+  options[nextIndex]?.focus();
+});
+
+wendyMarketingPlan?.addEventListener('input', () => {
+  wendyState.marketingPlan = wendyMarketingPlan.value;
+  wendyState.marketingPlanInitialized = true;
+  wendyMarketingPlan.setAttribute('aria-invalid', 'false');
+});
+
+[wendyImageRatioMenu, wendyLanguageMenu, wendyPosterRequirementsMenu].forEach(menu => {
+  menu?.addEventListener('toggle', () => {
+    if (!menu.open) return;
+    [wendyImageRatioMenu, wendyLanguageMenu, wendyPosterRequirementsMenu].forEach(otherMenu => {
+      if (otherMenu && otherMenu !== menu) otherMenu.open = false;
+    });
+  });
+});
+
 wendyPromptSend?.addEventListener('click', submitWendyPrompt);
 
 wendyPromptInput?.addEventListener('keydown', event => {
   if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
     event.preventDefault();
     submitWendyPrompt();
-  }
-});
-
-wendyStrategySend?.addEventListener('click', submitWendyStrategyPrompt);
-
-wendyStrategyPrompt?.addEventListener('keydown', event => {
-  if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
-    event.preventDefault();
-    submitWendyStrategyPrompt();
   }
 });
 
@@ -1111,9 +1729,9 @@ wendyThinkingToggle?.addEventListener('click', () => {
 backFromWendyAgent?.addEventListener('click', () => {
   window.clearInterval(wendyThinkingTimer);
   wendyThinkingTimer = null;
+  resetWendyImageRegeneration();
   wendyState.agentStarted = false;
   wendyState.planConfirmed = false;
-  hideWendyStrategyComposer();
   window.location.hash = 'wendy';
 });
 
@@ -1154,8 +1772,13 @@ document.querySelector('#wendyPage')?.addEventListener('click', event => {
     if (post) {
       openWendyPublisher({
         platform: post.platform,
+        title: post.title,
+        campaignStage: post.campaignStage,
         time: post.time || '2026-07-15T10:30:00',
         copy: post.copy,
+        hashtags: post.hashtags,
+        image: post.image,
+        metrics: post.metrics,
         status: 'failed',
         postId: post.id,
         failureReason: post.failureReason || '发布失败'
@@ -1182,8 +1805,13 @@ document.querySelector('#wendyPage')?.addEventListener('click', event => {
       const status = getWendyPostStatus(post);
       openWendyPublisher({
         platform: post.platform,
+        title: post.title,
+        campaignStage: post.campaignStage,
         time: post.time || '2026-07-15T10:30:00',
         copy: post.copy,
+        hashtags: post.hashtags,
+        image: post.image,
+        metrics: post.metrics,
         status,
         postId: post.id,
         failureReason: post.failureReason || ''
@@ -1251,7 +1879,7 @@ document.querySelector('#wendyPage')?.addEventListener('click', event => {
   const generateCaptionButton = event.target.closest('[data-wendy-generate-caption]');
   if (generateCaptionButton) {
     if (wendyCopyField) {
-      wendyCopyField.value = '面向海外安装商的新一代并网组件已经完成批量测试。Wendy 已根据产品资料整理出认证、交付排期与售后响应亮点，帮助采购团队更快完成供应商评估。';
+      wendyCopyField.value = wendyLocalizedPostCopy.en;
     }
     syncWendyPublisherPreview();
     showToast('Wendy 已生成 Post 文案');
@@ -1306,17 +1934,87 @@ document.querySelector('#wendyAccountsPage')?.addEventListener('click', event =>
 
   account.bound = !account.bound;
   if (account.bound && account.account === '未绑定账号') {
-    account.account = account.id === 'youtube' ? '@OntoZ Shorts' : `@ontoz.${account.id}`;
+    const defaultAccounts = {
+      linkedin: '@NOXRobotics',
+      instagram: '@nox.robotics',
+      tiktok: '@nox.robotics',
+      youtube: '@NOXRobotics'
+    };
+    account.account = defaultAccounts[account.id] || `@nox.${account.id}`;
   }
   renderWendyAccounts();
   showToast(`${account.platform} 已${account.bound ? '绑定' : '解绑'}`);
 });
 
-document.querySelector('#wendyAgentPage')?.addEventListener('click', event => {
+const wendyAgentPage = document.querySelector('#wendyAgentPage');
+
+wendyAgentPage?.addEventListener('input', event => {
+  const captionField = event.target.closest('[data-wendy-preview-caption]');
+  if (!captionField) return;
+  updateWendyPreviewDraft(captionField.dataset.wendyPreviewCaption, { caption: captionField.value });
+});
+
+wendyAgentPage?.addEventListener('change', event => {
+  const timeField = event.target.closest('[data-wendy-preview-time]');
+  if (!timeField) return;
+  updateWendyPreviewDraft(timeField.dataset.wendyPreviewTime, { publishTime: timeField.value });
+});
+
+wendyAgentPage?.addEventListener('click', event => {
+  const productTrigger = event.target.closest('#wendyProductTrigger');
+  if (productTrigger) {
+    setWendyProductPickerOpen(wendyProductMenu?.hidden !== false);
+    return;
+  }
+
+  const productOption = event.target.closest('[data-wendy-product-id]');
+  if (productOption) {
+    selectWendyProduct(productOption.dataset.wendyProductId);
+    return;
+  }
+
+  const productRetry = event.target.closest('[data-wendy-product-retry]');
+  if (productRetry) {
+    loadWendyProducts();
+    return;
+  }
+
   const platformButton = event.target.closest('[data-wendy-agent-platform]');
   if (platformButton) {
     wendyState.selectedPlatform = platformButton.dataset.wendyAgentPlatform || 'LinkedIn';
+    wendyState.selectedRatio = getWendyGenerationSpec().ratios[0];
     syncWendyAgentSelections();
+    return;
+  }
+
+  const ratioButton = event.target.closest('[data-wendy-image-ratio]');
+  if (ratioButton) {
+    wendyState.selectedRatio = ratioButton.dataset.wendyImageRatio || getWendyGenerationSpec().ratios[0];
+    renderWendyGenerationSettings();
+    if (wendyImageRatioMenu) wendyImageRatioMenu.open = false;
+    return;
+  }
+
+  const languageButton = event.target.closest('[data-wendy-post-language]');
+  if (languageButton) {
+    wendyState.selectedLanguage = languageButton.dataset.wendyPostLanguage || 'en';
+    renderWendyGenerationSettings();
+    if (wendyLanguageMenu) wendyLanguageMenu.open = false;
+    return;
+  }
+
+  const posterRequirementButton = event.target.closest('[data-wendy-poster-requirement]');
+  if (posterRequirementButton) {
+    const requirementId = posterRequirementButton.dataset.wendyPosterRequirement;
+    const selected = wendyState.selectedPosterRequirements.includes(requirementId);
+    if (selected && wendyState.selectedPosterRequirements.length === 1) {
+      showToast('海报必含信息至少保留 1 项');
+      return;
+    }
+    wendyState.selectedPosterRequirements = selected
+      ? wendyState.selectedPosterRequirements.filter(id => id !== requirementId)
+      : [...wendyState.selectedPosterRequirements, requirementId];
+    renderWendyGenerationSettings();
     return;
   }
 
@@ -1345,6 +2043,18 @@ document.querySelector('#wendyAgentPage')?.addEventListener('click', event => {
 
   const confirmButton = event.target.closest('[data-wendy-agent-confirm]');
   if (confirmButton) {
+    const marketingPlan = wendyMarketingPlan?.value.trim() || '';
+    if (!marketingPlan) {
+      wendyMarketingPlan?.setAttribute('aria-invalid', 'true');
+      showToast('请填写营销方案后再生成');
+      wendyMarketingPlan?.focus();
+      return;
+    }
+    if (!wendyState.selectedPosterRequirements.length) {
+      showToast('请至少选择 1 项海报必含信息');
+      return;
+    }
+    wendyState.marketingPlan = marketingPlan;
     showWendyPostPreviews();
     return;
   }
@@ -1357,6 +2067,10 @@ document.querySelector('#wendyAgentPage')?.addEventListener('click', event => {
 
   const saveButton = event.target.closest('[data-wendy-preview-save]');
   if (saveButton) {
+    if (wendyState.isImageRegenerating) {
+      showToast('图片生成完成后才能保存草稿');
+      return;
+    }
     showToast(`${saveButton.dataset.wendyPreviewSave} Post 已保存为草稿`);
     return;
   }
@@ -1375,8 +2089,7 @@ document.querySelector('#wendyAgentPage')?.addEventListener('click', event => {
 
   const syncConfirmButton = event.target.closest('[data-wendy-sync-confirm]');
   if (syncConfirmButton) {
-    const count = wendyState.selectedSyncPlatforms.length;
-    showToast(count ? `已同步发送至 ${wendyState.selectedSyncPlatforms.join('、')}` : '请先选择需要同步的平台');
+    if (!showWendySyncPreviews()) showToast('请先选择需要同步的平台');
     return;
   }
 
@@ -1424,10 +2137,20 @@ wendyScheduleMinute?.addEventListener('change', () => {
 
 document.addEventListener('click', event => {
   if (!event.target.closest('.wendy-picker-field')) closeWendySchedulePickers();
+  if (!event.target.closest('.wendy-product-picker')) setWendyProductPickerOpen(false);
 });
 
 document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && wendyProductMenu?.hidden === false) {
+    setWendyProductPickerOpen(false);
+  }
   if (event.key === 'Escape' && !wendyPublisher?.hidden) {
     closeWendyPublisher();
   }
 });
+
+document.addEventListener('error', event => {
+  if (event.target.matches?.('[data-wendy-product-image]')) event.target.hidden = true;
+}, true);
+
+loadWendyProducts();

@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no" />
     <title>OntoZ · 专业建站 Lucas</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=professional-static-3" />
+    <link rel="stylesheet" href="styles.css?v=professional-static-12" />
     <link rel="stylesheet" href="lucide-icons.css" />
   </head>
   <body>
@@ -730,7 +730,7 @@
             <div class="wendy-hero-copy">
               <p class="wendy-kicker">2026年6月23日 星期二</p>
               <h1 id="wendy-title">Wendy 帮你持续运营海外社媒</h1>
-              <p>连接账号、生成内容方案、排期发布，把 LinkedIn、TikTok、YouTube Shorts 和 Instagram 变成独立站的稳定引流入口。</p>
+              <p>连接账号、生成内容方案、排期发布，把 LinkedIn 和 Instagram 变成独立站的稳定引流入口。</p>
               <div class="wendy-hero-actions" aria-label="Wendy快捷操作">
                 <button class="wendy-primary wendy-ai-generate-button" data-wendy-ai-generate type="button"><i data-lucide="wand-sparkles"></i>AI生成</button>
                 <button class="wendy-secondary wendy-quick-publish-button" data-wendy-open-publisher type="button"><i data-lucide="send"></i>快速发布</button>
@@ -739,8 +739,8 @@
             <aside class="wendy-account-summary" aria-label="社媒账号绑定状态">
               <div>
                 <span>已绑定社媒平台</span>
-                <strong>1<small>/4</small></strong>
-                <p>为了全平台运营，建议绑定所有社媒账号</p>
+                <strong>2<small>/4</small></strong>
+                <p id="wendyHomeAccountStatus">LinkedIn、Instagram 已绑定，2 个平台未授权</p>
               </div>
               <button class="wendy-account-manage" data-wendy-account-manage type="button"><i data-lucide="circle-user-round"></i>账号管理</button>
             </aside>
@@ -765,7 +765,11 @@
 
             <div class="wendy-calendar-subbar">
               <p id="wendyCalendarHint"><i data-lucide="sparkles"></i>本周最佳发布窗口集中在周二至周四 10:00-16:00，已自动避开内容冲突。</p>
-              <button type="button"><i data-lucide="calendar-range"></i>自动排期</button>
+              <div class="wendy-calendar-state-legend" aria-label="发布状态说明">
+                <span class="published"><i data-lucide="circle-check-big"></i>过去 · 已发送</span>
+                <span class="current"><i data-lucide="radio"></i>现在 · 待检查</span>
+                <span class="scheduled"><i data-lucide="clock-3"></i>未来 · 已排期</span>
+              </div>
             </div>
 
             <div class="wendy-week-calendar" data-wendy-calendar-panel="week">
@@ -811,16 +815,17 @@
 
           <div class="wendy-publisher" id="wendyPublisher" hidden>
             <div class="wendy-publisher-backdrop" data-wendy-close-publisher></div>
-            <form class="wendy-publisher-panel" aria-labelledby="wendyPublisherTitle">
+            <form class="wendy-publisher-panel" id="wendyPublisherPanel" aria-labelledby="wendyPublisherTitle">
               <header>
                 <div>
                   <h2 id="wendyPublisherTitle">快速发布</h2>
-                  <span>选择平台、内容、素材与排期，快速发布社媒内容</span>
+                  <span id="wendyPublisherSubtitle">选择平台、内容、素材与排期，快速发布社媒内容</span>
                 </div>
                 <button class="wendy-icon-button" data-wendy-close-publisher type="button" aria-label="关闭"><i data-lucide="x"></i></button>
               </header>
               <div class="wendy-publisher-mode" id="wendyPublisherMode" hidden></div>
-              <div class="wendy-publisher-body">
+              <div class="wendy-sent-preview" id="wendySentPreview" hidden></div>
+              <div class="wendy-publisher-body" id="wendyPublisherBody">
                 <section class="wendy-publisher-main" aria-label="Post内容设置">
                   <div class="wendy-publisher-block">
                     <div class="wendy-block-heading">
@@ -831,15 +836,11 @@
                       <select id="wendyPublishPlatform" aria-label="主发布平台" hidden>
                         <option>LinkedIn</option>
                         <option>Instagram</option>
-                        <option>TikTok</option>
-                        <option>YouTube Shorts</option>
                       </select>
                     </div>
                     <div class="wendy-platform-picker" aria-label="目标平台">
                       <button class="active" data-wendy-platform-option="LinkedIn" type="button"><img class="wendy-social-icon" data-wendy-social-icon="linkedin" src="assets/LinkedIn.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" /><span>LinkedIn</span></button>
                       <button data-wendy-platform-option="Instagram" type="button"><img class="wendy-social-icon" data-wendy-social-icon="instagram" src="assets/Instagram.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" /><span>Instagram</span></button>
-                      <button data-wendy-platform-option="TikTok" type="button"><img class="wendy-social-icon" data-wendy-social-icon="tiktok" src="assets/TikTok.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" /><span>TikTok</span></button>
-                      <button data-wendy-platform-option="YouTube Shorts" type="button"><img class="wendy-social-icon" data-wendy-social-icon="youtube" src="assets/YouTube.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" /><span>YouTube</span></button>
                     </div>
                   </div>
 
@@ -851,7 +852,7 @@
                       </div>
                     </div>
                     <label class="wendy-field wendy-caption-field">
-                      <textarea id="wendyPublishCopy" rows="7">面向欧洲储能安装商的新一代并网组件已经完成批量测试。点击了解交付稳定性、认证资料和项目支持方案。</textarea>
+                      <textarea id="wendyPublishCopy" rows="7">Built for daily warehouse use, our Manual &amp; Electric Pallet Truck range is available in 2T, 3T and 5T capacities. A one-piece hydraulic cylinder, stamped fork, reinforced steel frame and CE certification deliver dependable handling with long-term value.</textarea>
                       <button class="wendy-ai-button" data-wendy-generate-caption type="button"><i data-lucide="wand-sparkles"></i>AI 润色</button>
                     </label>
                   </div>
@@ -929,14 +930,11 @@
                         <span>当前平台发布预览</span>
                       </div>
                     </div>
-                    <article class="wendy-publisher-preview">
-                      <div class="wendy-publisher-preview-media"><i data-lucide="image"></i><span>Product testing</span></div>
-                      <p id="wendyPublisherPreviewText">面向欧洲储能安装商的新一代并网组件已经完成批量测试。点击了解交付稳定性、认证资料和项目支持方案。</p>
-                    </article>
+                    <article class="wendy-publisher-preview" id="wendyPublisherPreview" aria-live="polite"></article>
                   </section>
                 </aside>
               </div>
-              <footer>
+              <footer id="wendyPublisherFooter">
                 <button class="wendy-secondary" data-wendy-close-publisher type="button">取消</button>
                 <div class="wendy-publisher-footer-actions">
                   <button class="wendy-secondary" data-wendy-save-draft type="button"><i data-lucide="save"></i>保存草稿</button>
@@ -975,7 +973,7 @@
                 <header>
                   <div>
                     <h2 id="wendy-plan-platform-title">选择发布平台</h2>
-                    <p>选择一个主力发布平台，后续可以调整为全平台发布</p>
+                    <p>选择 LinkedIn 或 Instagram 作为主发布平台</p>
                   </div>
                 </header>
                 <div class="wendy-plan-platform-grid" role="group" aria-label="选择发布平台">
@@ -986,14 +984,6 @@
                   <button class="wendy-plan-option instagram" data-wendy-agent-platform="Instagram" type="button" aria-pressed="false">
                     <img class="wendy-social-icon" data-wendy-social-icon="instagram" src="assets/Instagram.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
                     <span>Instagram</span>
-                  </button>
-                  <button class="wendy-plan-option tiktok" data-wendy-agent-platform="TikTok" type="button" aria-pressed="false">
-                    <img class="wendy-social-icon" data-wendy-social-icon="tiktok" src="assets/TikTok.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
-                    <span>TikTok</span>
-                  </button>
-                  <button class="wendy-plan-option youtube" data-wendy-agent-platform="YouTube" type="button" aria-pressed="false">
-                    <img class="wendy-social-icon" data-wendy-social-icon="youtube" src="assets/YouTube.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
-                    <span>YouTube</span>
                   </button>
                 </div>
               </section>
@@ -1017,38 +1007,26 @@
                     <p>选择本次发布需要引用的商品和资料来源</p>
                   </div>
                 </header>
-                <label class="wendy-product-select" for="wendyPlanProduct">
-                  <select id="wendyPlanProduct">
-                    <option>请选择</option>
-                    <option>新一代并网组件</option>
-                    <option>欧洲安装商案例</option>
-                    <option>海外仓交付服务</option>
-                  </select>
-                </label>
+                <div class="wendy-product-picker" id="wendyProductPicker">
+                  <button class="wendy-product-trigger" id="wendyProductTrigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="wendyProductOptions">
+                    <span class="wendy-product-thumbnail placeholder" aria-hidden="true"><i data-lucide="package-search"></i></span>
+                    <span class="wendy-product-trigger-copy">
+                      <strong>请选择商品</strong>
+                      <small>从商品库中选择本次内容引用的产品</small>
+                    </span>
+                    <i class="wendy-product-chevron" data-lucide="chevrons-up-down" aria-hidden="true"></i>
+                  </button>
+                  <div class="wendy-product-menu" id="wendyProductMenu" hidden>
+                    <div class="wendy-product-options" id="wendyProductOptions" role="listbox" aria-label="选择商品" aria-busy="true">
+                      <div class="wendy-product-status"><i data-lucide="loader-circle" aria-hidden="true"></i><span>正在加载商品信息…</span></div>
+                    </div>
+                  </div>
+                  <input id="wendyPlanProduct" name="wendyPlanProduct" type="hidden" />
+                </div>
               </section>
 
-              <section class="wendy-plan-card">
-                <header>
-                  <div>
-                    <h2>选择视觉方案</h2>
-                    <p>已根据发布平台匹配 6 套推荐风格</p>
-                  </div>
-                  <button class="wendy-visual-upload" id="wendyPlanUpload" type="button">
-                    <i data-lucide="upload"></i>
-                    <span>上传自定义参考图</span>
-                  </button>
-                </header>
-                <div class="wendy-visual-grid" id="wendyVisualGrid" role="group" aria-label="选择视觉方案"></div>
-                <article class="wendy-visual-detail" id="wendyVisualDetail" aria-live="polite">
-                  <span class="wendy-visual-detail-label" id="wendyVisualDetailLabel">LinkedIn 推荐</span>
-                  <div>
-                    <strong id="wendyVisualDetailTitle">冷白商业棚拍</strong>
-                    <p id="wendyVisualDetailDescription">高端、可信且清晰的 B2B 产品摄影方向。</p>
-                  </div>
-                </article>
-                <input id="wendyImageInput" type="file" accept="image/*" aria-label="上传社媒图片素材" multiple hidden />
-                <span class="wendy-upload-status" id="wendyUploadStatus" aria-live="polite"></span>
-              </section>
+              <input id="wendyImageInput" type="file" accept="image/*" aria-label="上传社媒图片素材" multiple hidden />
+              <span class="wendy-upload-status" id="wendyUploadStatus" aria-live="polite"></span>
 
               <button class="wendy-generate-plan" id="wendyGeneratePlan" type="button">
                 <i data-lucide="send"></i>
@@ -1075,55 +1053,95 @@
                 <header>
                   <div>
                     <h2>社媒生成方案</h2>
-                    <p>Wendy 已整理本次发布的目标、素材来源。</p>
-                  </div>
-                  <div class="wendy-result-actions">
-                    <button class="wendy-result-consume" data-wendy-agent-confirm type="button">消耗 289 生成</button>
+                    <p>以营销方案为核心，补充必要的生成设置。</p>
                   </div>
                 </header>
-                <div class="wendy-result-brief">
-                  <article>
-                    <span>发布意图</span>
-                    <strong>完成一组面向海外买家的新品社媒发布</strong>
-                    <p>目标是介绍产品价值、建立品牌可信度，并把感兴趣的客户导流到独立站资料页或询盘入口。</p>
+
+                <section class="wendy-inline-visual" aria-labelledby="wendy-result-visual-title">
+                  <header>
+                    <div>
+                      <span class="wendy-result-label">视觉风格</span>
+                      <h3 id="wendy-result-visual-title">选择适合 <span id="wendyVisualPlatformName">LinkedIn</span> 的画面方向</h3>
+                      <p>选择后将应用到下方营销方案的海报生成。</p>
+                    </div>
+                    <button class="wendy-visual-upload" id="wendyPlanUpload" type="button">
+                      <i data-lucide="upload"></i>
+                      <span>上传自定义参考图</span>
+                    </button>
+                  </header>
+                  <div class="wendy-visual-grid" id="wendyVisualGrid" role="group" aria-label="选择视觉方案"></div>
+                  <article class="wendy-visual-detail" id="wendyVisualDetail" aria-live="polite">
+                    <span class="wendy-visual-detail-label" id="wendyVisualDetailLabel">LinkedIn 推荐</span>
+                    <div>
+                      <strong id="wendyVisualDetailTitle">冷白商业棚拍</strong>
+                      <p id="wendyVisualDetailDescription">高端、可信且清晰的 B2B 产品摄影方向。</p>
+                    </div>
                   </article>
-                  <article>
-                    <span>目标平台</span>
-                    <strong>已纳入 LinkedIn、Instagram、TikTok</strong>
-                    <p>LinkedIn 适合 B2B 价值说明，Instagram 适合产品视觉种草，TikTok 适合短视频触达；Facebook、YouTube 未纳入，因为本次素材和文案目标更适合轻量多平台快速发布。</p>
-                  </article>
-                  <article>
-                    <span>素材来源</span>
-                    <strong>上传素材、企业知识库、AI 生成内容库、AI 自行生成</strong>
-                    <p>优先读取用户上传图片；补充企业知识库中的产品卖点、认证和交付资料；调用 AI 生成内容库中的历史表达；缺少成套视觉时由 AI 自行生成海报。</p>
-                  </article>
-                  <article>
-                    <span>素材用途</span>
-                    <strong>已有图片直接发布，缺口由海报生成补齐</strong>
-                    <p>清晰产品图可直接作为发布图片；参考图、现场图和资料页信息用于生成平台海报，不会替代事实依据。</p>
-                  </article>
-                  <article>
-                    <span>产品对象与事实</span>
-                    <strong>本次使用产品资料、认证信息、交付能力和应用场景</strong>
-                    <p>文案只引用已上传素材和企业资料中的可验证事实，包括产品特点、适用场景、服务能力、安装商合作价值和独立站入口。</p>
-                  </article>
-                  <article>
-                    <span>风格</span>
-                    <strong>专业可信，兼顾平台原生表达</strong>
-                    <p>若用户指定风格，将优先遵循；未指定时，Wendy 推荐使用清晰产品主视觉、克制卖点表达和明确行动入口。</p>
-                  </article>
-                </div>
-                <div class="wendy-platform-summary" aria-label="平台适配摘要">
-                  <h3>平台适配摘要</h3>
-                  <div>
-                    <article><span>LinkedIn</span><p>建议 1.91:1 或 4:5 海报；构图突出产品和关键参数；文案密度中高，语气偏专业、可信、面向采购和合作伙伴。</p></article>
-                    <article><span>Instagram</span><p>建议 4:5 或 1:1 海报；构图更重视产品细节和视觉层次；文案密度中低，语气更轻快、直观、便于收藏。</p></article>
-                    <article><span>TikTok</span><p>建议 9:16 竖版海报或视频封面；构图保留强钩子标题；文案密度低，语气更直接，适合短句和行动号召。</p></article>
+                </section>
+
+                <article class="wendy-generation-composer" aria-labelledby="wendy-marketing-title">
+                  <div class="wendy-composer-heading">
+                    <span class="wendy-result-label">营销方案</span>
+                    <label id="wendy-marketing-title" for="wendyMarketingPlan">描述要营销的产品、需要凸显的认证与核心卖点</label>
+                    <p>内容越具体，生成的海报和 Post 越贴近营销目标。</p>
                   </div>
-                </div>
+
+                  <textarea id="wendyMarketingPlan" rows="7" maxlength="420" required aria-required="true" placeholder="例如：营销「Manual &amp; Electric Pallet Truck」，凸显 2T / 3T / 5T 载重、CE 认证、一体式液压缸与冲压货叉。">营销「Manual &amp; Electric Pallet Truck」，凸显 2T / 3T / 5T 载重、CE 认证、一体式液压缸与冲压货叉。</textarea>
+
+                  <p class="wendy-composer-context"><span id="wendySpecPlatform">LinkedIn</span> · <span id="wendySpecLocations">适用于 Feed、方图、链接卡</span></p>
+
+                  <footer class="wendy-composer-toolbar">
+                    <div class="wendy-composer-controls">
+                      <details class="wendy-composer-menu wendy-compact-menu" id="wendyImageRatioMenu">
+                        <summary aria-label="选择图片规格" aria-describedby="wendySpecLocations">
+                          <i data-lucide="scan" aria-hidden="true"></i>
+                          <span id="wendyImageRatioLabel">图片 4:5</span>
+                          <i data-lucide="chevron-down" aria-hidden="true"></i>
+                        </summary>
+                        <div class="wendy-composer-popover wendy-compact-popover" id="wendyImageRatioOptions" role="listbox" aria-label="图片规格选项"></div>
+                      </details>
+
+                      <details class="wendy-composer-menu wendy-compact-menu" id="wendyLanguageMenu">
+                        <summary aria-label="选择 Post 语言" aria-describedby="wendyLanguageHint">
+                          <i data-lucide="languages" aria-hidden="true"></i>
+                          <span id="wendyLanguageLabel">英语 · en</span>
+                          <i data-lucide="chevron-down" aria-hidden="true"></i>
+                        </summary>
+                        <small id="wendyLanguageHint" class="wendy-sr-only">当前使用英语（en）生成 Post 文案</small>
+                        <div class="wendy-composer-popover wendy-compact-popover wendy-language-popover" id="wendyLanguageOptions" role="listbox" aria-label="Post 语言选项"></div>
+                      </details>
+
+                      <details class="wendy-composer-menu" id="wendyPosterRequirementsMenu">
+                        <summary>
+                          <i data-lucide="list-checks" aria-hidden="true"></i>
+                          <span>海报信息</span>
+                          <small id="wendyPosterRequirementCount">5 项</small>
+                          <i data-lucide="chevron-down" aria-hidden="true"></i>
+                        </summary>
+                        <div class="wendy-composer-popover wendy-poster-popover">
+                          <header>
+                            <strong id="wendy-poster-title">海报必含信息</strong>
+                            <span>必选，至少保留 1 项</span>
+                          </header>
+                          <ul class="wendy-poster-requirements" id="wendyPosterRequirementsList" aria-labelledby="wendy-poster-title"></ul>
+                        </div>
+                      </details>
+
+                    </div>
+
+                    <div class="wendy-composer-submit-group">
+                      <button class="wendy-composer-submit" data-wendy-agent-confirm type="button" aria-label="发送">
+                        <i data-lucide="arrow-up" aria-hidden="true"></i>
+                        <span>发送</span>
+                      </button>
+                      <small>本次预计消耗 289 点</small>
+                    </div>
+                  </footer>
+                </article>
+
                 <div class="wendy-result-notes">
-                  <p><strong>预计动作：</strong>每个平台将创建 1 个平台发布项，包含 1 张海报和 1 套平台文案。</p>
-                  <p><strong>消耗提示：</strong>AI 自行生成海报会产生生成消耗；直接发布已有图片不产生海报生成消耗。</p>
+                  <p id="wendyGenerationSummary"><strong>预计生成：</strong>1 张 LinkedIn 海报（4:5）和 1 套英语 Post 文案。</p>
+                  <p><strong>事实依据：</strong>产品、认证和交付信息仅从上传素材与企业知识库引用；缺失信息不会由 AI 虚构。</p>
                 </div>
               </section>
 
@@ -1141,16 +1159,6 @@
             </section>
           </div>
 
-          <section class="wendy-strategy-composer" id="wendyStrategyComposer" aria-labelledby="wendy-strategy-composer-title" hidden>
-            <label id="wendy-strategy-composer-title" for="wendyStrategyPrompt">如需修改整体策略，请输入</label>
-            <div>
-              <textarea id="wendyStrategyPrompt" rows="2" maxlength="360" placeholder="例如：更强调海外安装商痛点，弱化品牌宣传，多给一个行动号召"></textarea>
-              <button id="wendyStrategySend" type="button">
-                <i data-lucide="send"></i>
-                <span>重新生成</span>
-              </button>
-            </div>
-          </section>
         </section>
 
         <section class="lucas-page" id="lucasPage" aria-labelledby="lucas-title" hidden>
@@ -1469,13 +1477,13 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"><i data-lucide="circle-check" aria-hidden="true"></i><span></span></div>
     <script src="assets/lucide.min.js"></script>
-    <script src="js/data.js?v=professional-static-3"></script>
-    <script src="js/shared.js?v=professional-static-3"></script>
-    <script src="js/lily.js?v=professional-static-3"></script>
-    <script src="js/route.js?v=professional-static-3"></script>
-    <script src="js/wendy.js?v=professional-static-3"></script>
-    <script src="js/john.js?v=professional-static-3"></script>
-    <script src="js/lucas.js?v=professional-static-3"></script>
-    <script src="js/main.js?v=professional-static-3"></script>
+    <script src="js/data.js?v=professional-static-9"></script>
+    <script src="js/shared.js?v=professional-static-4"></script>
+    <script src="js/lily.js?v=professional-static-4"></script>
+    <script src="js/route.js?v=professional-static-4"></script>
+    <script src="js/wendy.js?v=professional-static-13"></script>
+    <script src="js/john.js?v=professional-static-4"></script>
+    <script src="js/lucas.js?v=professional-static-4"></script>
+    <script src="js/main.js?v=professional-static-4"></script>
   </body>
 </html>

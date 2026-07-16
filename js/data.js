@@ -453,9 +453,41 @@ const wendyVisualStylesByPlatform = {
   ]
 };
 
+const wendyPlatformGenerationSpecs = {
+  LinkedIn: {
+    locations: ['Feed', '方图', '链接卡'],
+    ratios: ['4:5', '1:1', '1.91:1']
+  },
+  Instagram: {
+    locations: ['Feed', '轮播', 'Story'],
+    ratios: ['4:5', '1:1', '9:16']
+  }
+};
+
+const wendyPostLanguages = [
+  { name: '英语', code: 'en' }
+];
+
+const wendyPosterRequirements = [
+  { id: 'productName', label: '产品名称' },
+  { id: 'sellingPoints', label: '核心卖点' },
+  { id: 'certifications', label: '认证信息' },
+  { id: 'scenarios', label: '应用场景' },
+  { id: 'cta', label: '官网 / 询盘入口' }
+];
+
+const wendyLocalizedPostCopy = {
+  en: 'Built for daily warehouse use, our Manual & Electric Pallet Truck range is available in 2T, 3T and 5T capacities. A one-piece hydraulic cylinder, stamped fork, reinforced steel frame and CE certification deliver dependable handling with long-term value.',
+  es: 'Diseñada para el trabajo diario en almacenes, nuestra gama de transpaletas manuales y eléctricas está disponible en capacidades de 2T, 3T y 5T. El cilindro hidráulico de una pieza, la horquilla estampada, el bastidor de acero reforzado y la certificación CE ofrecen una manipulación fiable y duradera.',
+  vi: 'Được thiết kế cho hoạt động kho hằng ngày, dòng xe nâng tay và xe nâng điện có tải trọng 2T, 3T và 5T. Xi lanh thủy lực liền khối, càng dập nguyên tấm, khung thép gia cường và chứng nhận CE mang lại khả năng vận chuyển bền bỉ, đáng tin cậy.',
+  fr: 'Conçue pour les opérations quotidiennes en entrepôt, notre gamme de transpalettes manuels et électriques est disponible en capacités de 2T, 3T et 5T. Le vérin hydraulique monobloc, les fourches embouties, le châssis renforcé et la certification CE assurent une manutention fiable et durable.',
+  ko: '일상적인 창고 작업을 위해 설계된 수동·전동 팔레트 트럭은 2T, 3T, 5T 용량으로 제공됩니다. 일체형 유압 실린더, 프레스 성형 포크, 강화 강철 프레임과 CE 인증으로 내구성과 안정적인 운반 성능을 제공합니다.',
+  ja: '日常の倉庫作業向けに設計された手動・電動パレットトラックは、2T・3T・5Tに対応。溶接のない一体型油圧シリンダー、プレス成形フォーク、強化スチールフレーム、CE認証により、耐久性と信頼性の高い荷役を実現します。'
+};
+
 const wendyPreviewPlatforms = {
   LinkedIn: {
-    account: '@John Smith',
+    account: '@NOXRobotics',
     badge: 'in',
     avatarClass: 'linkedin',
     mediaClass: 'linkedin',
@@ -465,7 +497,7 @@ const wendyPreviewPlatforms = {
     caption: '围绕新品上市生成一条面向海外买家的社媒 Post，突出产品价值、应用场景和访问独立站的行动入口。'
   },
   Instagram: {
-    account: '@ontoz.global',
+    account: '@nox.robotics',
     badge: 'ig',
     avatarClass: 'instagram',
     mediaClass: 'instagram',
@@ -473,26 +505,6 @@ const wendyPreviewPlatforms = {
     mediaLabel: 'Carousel cover',
     timeLabel: '立即发布',
     caption: '用更强视觉冲击呈现新品细节、应用场景和品牌可信度，引导海外买家收藏并访问独立站了解完整资料。'
-  },
-  TikTok: {
-    account: '@ontoz_lab',
-    badge: 'tt',
-    avatarClass: 'tiktok',
-    mediaClass: 'tiktok',
-    icon: 'play',
-    mediaLabel: 'Video cover',
-    timeLabel: '立即发布',
-    caption: '用短视频封面和直接钩子介绍新品亮点，突出测试流程、实际应用场景和快速了解产品资料的入口。'
-  },
-  YouTube: {
-    account: '@OntoZ Shorts',
-    badge: 'yt',
-    avatarClass: 'youtube',
-    mediaClass: 'youtube',
-    icon: 'youtube',
-    mediaLabel: 'Shorts cover',
-    timeLabel: '立即发布',
-    caption: '围绕新品应用场景生成一条 Shorts 预告内容，强调核心卖点、画面节奏和引导访问独立站的行动入口。'
   }
 };
 
@@ -502,24 +514,24 @@ const wendySocialAccounts = [
     platform: 'LinkedIn',
     icon: 'linkedin',
     bound: true,
-    account: '@OntoZ Power',
-    detail: '用于 B2B 客户案例、行业观点和独立站资料导流。'
+    account: '@NOXRobotics',
+    detail: '已绑定，用于企业动态、行业观点和产品发布。'
   },
   {
     id: 'instagram',
     platform: 'Instagram',
     icon: 'instagram',
-    bound: false,
-    account: '未绑定账号',
-    detail: '用于产品视觉、轮播图和海外项目现场内容。'
+    bound: true,
+    account: '@nox.robotics',
+    detail: '已绑定，用于产品视觉、品牌内容和活动发布。'
   },
   {
     id: 'tiktok',
     platform: 'TikTok',
-    icon: 'music-2',
+    icon: 'tiktok',
     bound: false,
     account: '未绑定账号',
-    detail: '用于短视频、测试流程和工厂场景素材。'
+    detail: '尚未授权，授权后可管理短视频内容。'
   },
   {
     id: 'youtube',
@@ -527,7 +539,7 @@ const wendySocialAccounts = [
     icon: 'youtube',
     bound: false,
     account: '未绑定账号',
-    detail: '绑定后可同步管理 Shorts 内容和视频预告。'
+    detail: '尚未授权，授权后可管理视频频道内容。'
   }
 ];
 
@@ -538,6 +550,13 @@ const wendyStatusMeta = {
     icon: 'circle-check-big',
     action: '查看',
     hint: '内容已发布，历史记录不可修改。'
+  },
+  current: {
+    label: '当前待发',
+    tone: 'current',
+    icon: 'radio',
+    action: '检查',
+    hint: '内容正在当前发布窗口中，发送前仍可检查和调整。'
   },
   scheduled: {
     label: '待发布',
@@ -565,99 +584,336 @@ const wendyStatusMeta = {
 const wendyToday = new Date('2026-07-14T12:00:00+08:00');
 const wendyCalendarPosts = [
   {
-    id: 'wendy-post-0713-linkedin',
+    id: 'nox-linkedin-01',
     platform: 'LinkedIn',
-    title: '欧洲安装商案例图文',
-    time: '2026-07-13T10:00:00',
-    copy: '发布欧洲储能安装商案例图文，强调交付稳定性和认证资料完整度。',
-    status: 'published'
+    title: 'Meet NOX',
+    campaignStage: 'T-21',
+    time: '2026-07-13T09:30:00',
+    copy: 'Meet NOX—a next-generation humanoid robot designed to bring AI into the physical world. Built for open integration and real-world workflows, NOX turns intelligence into action. Over the next three weeks, we’ll reveal how it is engineered, where it works, and how enterprises can put it to the test.',
+    hashtags: '#NOX #HumanoidRobotics #EmbodiedAI #EnterpriseAI',
+    image: 'assets/nox-campaign/linkedin-01-meet-nox.png',
+    status: 'published',
+    metrics: { impressions: '1,284', reactions: '96', comments: '18' }
   },
   {
-    id: 'wendy-post-0714-instagram',
+    id: 'nox-instagram-01',
     platform: 'Instagram',
-    title: '产品细节轮播',
+    title: 'Meet NOX',
+    campaignStage: 'T-21',
+    time: '2026-07-13T15:00:00',
+    copy: 'Intelligence is about to take a new shape. Meet NOX—built to move, perceive and work in the world around us. This is AI with a body. The countdown begins.',
+    hashtags: '#MeetNOX #FutureDesign #Humanoid #EmbodiedAI',
+    image: 'assets/nox-campaign/instagram-01-meet-nox.png',
+    status: 'published',
+    metrics: { impressions: '2,106', reactions: '184', comments: '27' }
+  },
+  {
+    id: 'nox-linkedin-02',
+    platform: 'LinkedIn',
+    title: 'Global Standards',
+    campaignStage: 'T-14',
     time: '2026-07-14T09:00:00',
-    copy: '展示新一代并网组件的产品细节，附带官网资料下载链接。',
-    status: 'published'
+    copy: 'Trust starts with engineering discipline. NOX is designed for global deployment with CE, LVD, EMC and UL requirements embedded into the product journey. From electrical safety to electromagnetic compatibility, compliance is treated as a design input—not a final checklist.',
+    hashtags: '#ProductSafety #ComplianceByDesign #Robotics #NOX',
+    image: 'assets/nox-campaign/linkedin-02-global-standards.png',
+    status: 'published',
+    metrics: { impressions: '948', reactions: '71', comments: '12' }
   },
   {
-    id: 'wendy-post-0714-tiktok-failed',
-    platform: 'TikTok',
-    title: '工厂测试流程短视频',
-    time: '2026-07-14T11:00:00',
-    copy: '15 秒工厂测试流程短视频，开头展示高压测试台和质检标签。',
-    status: 'failed',
-    failureReason: '内容被拒'
+    id: 'nox-instagram-02',
+    platform: 'Instagram',
+    title: 'Global Standards',
+    campaignStage: 'T-14',
+    time: '2026-07-14T10:30:00',
+    copy: 'Confidence, designed in. From electrical safety to electromagnetic compatibility, NOX is built around the standards that help technology travel further. CE. LVD. EMC. UL.',
+    hashtags: '#DesignedForTrust #NOX #IndustrialDesign #Robotics',
+    image: 'assets/nox-campaign/instagram-02-global-standards.png',
+    status: 'published',
+    metrics: { impressions: '1,763', reactions: '149', comments: '21' }
   },
   {
-    id: 'wendy-post-0715-linkedin',
+    id: 'nox-linkedin-03',
     platform: 'LinkedIn',
-    title: '交付时间线长图',
+    title: 'Smart Manufacturing',
+    campaignStage: 'T-7',
+    time: '2026-07-14T12:00:00',
+    copy: 'Manufacturing needs flexibility without rebuilding every workstation. NOX is designed to assist operators, handle repeatable components and support visual inspection across human-scale production environments. One humanoid form, multiple workflows, faster adaptation.',
+    hashtags: '#SmartManufacturing #IndustrialAutomation #HumanoidRobot #NOX',
+    image: 'assets/nox-campaign/linkedin-03-smart-manufacturing.png',
+    status: 'current'
+  },
+  {
+    id: 'nox-instagram-03',
+    platform: 'Instagram',
+    title: 'Smart Manufacturing',
+    campaignStage: 'T-7',
+    time: '2026-07-14T13:15:00',
+    copy: 'Built for the rhythm of modern production. NOX can assist, handle and inspect—moving between workflows with the adaptability of a human-scale form.',
+    hashtags: '#SmartFactory #DesignMeetsIndustry #NOX #FutureOfWork',
+    image: 'assets/nox-campaign/instagram-03-smart-manufacturing.png',
+    status: 'current'
+  },
+  {
+    id: 'nox-linkedin-04',
+    platform: 'LinkedIn',
+    title: 'Warehouse & Logistics',
+    campaignStage: 'T-3',
     time: '2026-07-15T10:30:00',
-    copy: '分享项目交付时间线，突出海外安装商能快速获取技术资料。',
+    copy: 'Warehouse demand changes by the hour. NOX is built to support picking, tote movement and replenishment in spaces already designed for people. The goal is not automation for one fixed task—it is a workforce layer that can move with the operation.',
+    hashtags: '#WarehouseAutomation #LogisticsTech #FlexibleAutomation #NOX',
+    image: 'assets/nox-campaign/linkedin-04-warehouse-logistics.png',
     status: 'scheduled'
   },
   {
-    id: 'wendy-post-0716-youtube',
-    platform: 'YouTube Shorts',
-    title: '包装测试 Shorts',
-    time: '2026-07-16T16:00:00',
-    copy: '发布 30 秒 YouTube Shorts，展示产品包装、测试和出货节点。',
-    status: 'scheduled'
-  },
-  {
-    id: 'wendy-post-0717-instagram-failed',
+    id: 'nox-instagram-04',
     platform: 'Instagram',
-    title: '海外项目现场图',
+    title: 'Warehouse & Logistics',
+    campaignStage: 'T-3',
+    time: '2026-07-15T15:00:00',
+    copy: 'One aisle. A thousand moving parts. NOX brings a new kind of flexibility to picking, carrying and replenishment—designed to work where people already work.',
+    hashtags: '#WarehouseDesign #LogisticsInnovation #HumanoidRobot #NOX',
+    image: 'assets/nox-campaign/instagram-04-warehouse-logistics.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-linkedin-05',
+    platform: 'LinkedIn',
+    title: 'Facility Inspection',
+    campaignStage: 'Launch Day',
+    time: '2026-07-16T10:00:00',
+    copy: 'Today, NOX enters the real world. In facility inspection, the humanoid form can follow human routes, observe equipment at human eye level and turn field findings into structured reports. More coverage, more consistency, and fewer routine inspection gaps.',
+    hashtags: '#FacilityManagement #InspectionRobotics #EmbodiedAI #NOXLaunch',
+    image: 'assets/nox-campaign/linkedin-05-facility-inspection.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-instagram-05',
+    platform: 'Instagram',
+    title: 'Facility Inspection',
+    campaignStage: 'Launch Day',
+    time: '2026-07-16T15:30:00',
+    copy: 'Launch day. NOX is here to see the spaces that keep our world running—inspecting, detecting and reporting with consistent attention from one route to the next.',
+    hashtags: '#NOXLaunch #FacilityInspection #FutureInMotion #EmbodiedAI',
+    image: 'assets/nox-campaign/instagram-05-facility-inspection.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-linkedin-06',
+    platform: 'LinkedIn',
+    title: 'Pilot Program',
+    campaignStage: 'T+7',
+    time: '2026-07-17T10:30:00',
+    copy: 'The launch is only the beginning. The NOX Pilot Program is now open for manufacturing, warehousing and facility-inspection teams. Bring us one workflow, one site and one measurable objective—we’ll design the pilot around the work that matters.',
+    hashtags: '#RobotPilot #EnterpriseInnovation #FutureOfWork #NOX',
+    image: 'assets/nox-campaign/linkedin-06-pilot-program.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-instagram-06',
+    platform: 'Instagram',
+    title: 'Pilot Program',
+    campaignStage: 'T+7',
     time: '2026-07-17T15:00:00',
-    copy: '发布海外项目安装现场图，配合热门标签获取自然流量。',
-    status: 'failed',
-    failureReason: '平台账号失效'
-  },
-  {
-    id: 'wendy-post-0718-instagram',
-    platform: 'Instagram',
-    title: '安装商合作清单',
-    time: '2026-07-18T14:00:00',
-    copy: '发布安装商合作清单，说明交付前、中、后的支持动作。',
+    copy: 'The future gets real when it enters a workflow. The NOX Pilot Program is now open. Choose the first task. Define the outcome. Let’s build the path together.',
+    hashtags: '#BookAPilot #NOX #RoboticsFuture #EnterpriseInnovation',
+    image: 'assets/nox-campaign/instagram-06-pilot-program.png',
     status: 'scheduled'
   },
   {
-    id: 'wendy-post-draft-linkedin',
+    id: 'nox-linkedin-jul02',
     platform: 'LinkedIn',
-    title: '采购负责人交付承诺帖',
-    time: '',
-    copy: '发布一条面向采购负责人的交付承诺帖，附带联系入口。',
-    status: 'draft'
+    title: 'AI Enters the Physical World',
+    campaignStage: 'Warm-up',
+    time: '2026-07-02T10:00:00',
+    copy: 'The next chapter of AI will not live only on a screen. It will perceive, move and contribute inside the environments where real work happens. NOX is being built for that chapter.',
+    hashtags: '#PhysicalAI #EmbodiedAI #HumanoidRobotics #NOX',
+    image: 'assets/nox-campaign/linkedin-01-meet-nox.png',
+    status: 'published',
+    metrics: { impressions: '816', reactions: '54', comments: '9' }
   },
   {
-    id: 'wendy-post-draft-instagram',
+    id: 'nox-instagram-jul03',
     platform: 'Instagram',
-    title: '下周预告图文',
-    time: '',
-    copy: '发布下周预告图文，展示新素材拍摄计划。',
-    status: 'draft'
+    title: 'A New Shape for Intelligence',
+    campaignStage: 'Warm-up',
+    time: '2026-07-03T09:30:00',
+    copy: 'What happens when intelligence can step into the room? A new shape is coming.',
+    hashtags: '#MeetNOX #FutureDesign #EmbodiedAI',
+    image: 'assets/nox-campaign/instagram-01-meet-nox.png',
+    status: 'published',
+    metrics: { impressions: '1,408', reactions: '121', comments: '16' }
   },
   {
-    id: 'wendy-post-0721-linkedin',
+    id: 'nox-linkedin-jul03',
     platform: 'LinkedIn',
-    title: '认证资料下载导流',
-    time: '2026-07-21T13:30:00',
-    copy: '午后发布 LinkedIn 投票，询问海外买家最关注的并网组件指标。',
+    title: 'Designed for Open Workflows',
+    campaignStage: 'Warm-up',
+    time: '2026-07-03T15:00:00',
+    copy: 'Useful robotics starts with the workflow, not the demo. NOX is designed around open integration so teams can connect perception, actions and enterprise systems around measurable work.',
+    hashtags: '#EnterpriseAI #OpenIntegration #Robotics #NOX',
+    image: 'assets/nox-campaign/linkedin-03-smart-manufacturing.png',
+    status: 'published',
+    metrics: { impressions: '932', reactions: '68', comments: '11' }
+  },
+  {
+    id: 'nox-linkedin-jul06',
+    platform: 'LinkedIn',
+    title: 'Compliance Starts in Design',
+    campaignStage: 'Engineering',
+    time: '2026-07-06T11:00:00',
+    copy: 'Global deployment demands more than a final certification sprint. Safety, electrical design and electromagnetic compatibility need to shape the product from the first engineering decisions.',
+    hashtags: '#ComplianceByDesign #ProductSafety #RoboticsEngineering',
+    image: 'assets/nox-campaign/linkedin-02-global-standards.png',
+    status: 'published',
+    metrics: { impressions: '1,106', reactions: '82', comments: '13' }
+  },
+  {
+    id: 'nox-instagram-jul08',
+    platform: 'Instagram',
+    title: 'Built Around Trust',
+    campaignStage: 'Engineering',
+    time: '2026-07-08T16:00:00',
+    copy: 'Trust is not a label added at the end. It is designed into every system.',
+    hashtags: '#DesignedForTrust #IndustrialDesign #NOX',
+    image: 'assets/nox-campaign/instagram-02-global-standards.png',
+    status: 'published',
+    metrics: { impressions: '1,894', reactions: '163', comments: '22' }
+  },
+  {
+    id: 'nox-linkedin-jul10',
+    platform: 'LinkedIn',
+    title: 'One Form, Multiple Workflows',
+    campaignStage: 'Use cases',
+    time: '2026-07-10T10:30:00',
+    copy: 'Factories change by product, shift and line. A human-scale robotic form can move between stations and support the work without rebuilding every environment around a single machine.',
+    hashtags: '#SmartManufacturing #FlexibleAutomation #HumanoidRobot',
+    image: 'assets/nox-campaign/linkedin-03-smart-manufacturing.png',
+    status: 'published',
+    metrics: { impressions: '1,321', reactions: '103', comments: '17' }
+  },
+  {
+    id: 'nox-instagram-jul10',
+    platform: 'Instagram',
+    title: 'Made to Move with Production',
+    campaignStage: 'Use cases',
+    time: '2026-07-10T15:30:00',
+    copy: 'Assist. Handle. Inspect. Adapt to the next workflow.',
+    hashtags: '#SmartFactory #FutureOfWork #NOX',
+    image: 'assets/nox-campaign/instagram-03-smart-manufacturing.png',
+    status: 'published',
+    metrics: { impressions: '2,044', reactions: '191', comments: '25' }
+  },
+  {
+    id: 'nox-instagram-jul20',
+    platform: 'Instagram',
+    title: 'Inside the Workflow',
+    campaignStage: 'Post-launch',
+    time: '2026-07-20T14:00:00',
+    copy: 'The real test starts inside a real workflow. One route. One task. One measurable outcome.',
+    hashtags: '#NOXInAction #RoboticsFuture #EnterpriseInnovation',
+    image: 'assets/nox-campaign/instagram-04-warehouse-logistics.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-linkedin-jul22',
+    platform: 'LinkedIn',
+    title: 'Start with One Warehouse Route',
+    campaignStage: 'Post-launch',
+    time: '2026-07-22T09:30:00',
+    copy: 'A strong automation pilot begins with a bounded route and a clear baseline. Map the touches, travel and exceptions first—then define where a humanoid robot can create measurable value.',
+    hashtags: '#WarehouseAutomation #PilotDesign #LogisticsTech #NOX',
+    image: 'assets/nox-campaign/linkedin-04-warehouse-logistics.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-instagram-jul22',
+    platform: 'Instagram',
+    title: 'Designed for Human Spaces',
+    campaignStage: 'Post-launch',
+    time: '2026-07-22T16:00:00',
+    copy: 'Existing aisles. Existing tools. A new workforce layer designed to move through both.',
+    hashtags: '#WarehouseDesign #HumanoidRobot #NOX',
+    image: 'assets/nox-campaign/instagram-04-warehouse-logistics.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-linkedin-jul24',
+    platform: 'LinkedIn',
+    title: 'Inspection at Human Eye Level',
+    campaignStage: 'Post-launch',
+    time: '2026-07-24T11:00:00',
+    copy: 'Facilities are already designed around human movement and human sightlines. NOX can follow those routes, observe equipment and structure findings for the teams responsible for uptime.',
+    hashtags: '#FacilityInspection #AssetManagement #EmbodiedAI #NOX',
+    image: 'assets/nox-campaign/linkedin-05-facility-inspection.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-instagram-jul27',
+    platform: 'Instagram',
+    title: 'See More of Every Route',
+    campaignStage: 'Post-launch',
+    time: '2026-07-27T15:30:00',
+    copy: 'Observe. Detect. Report. Bring consistent attention to every inspection route.',
+    hashtags: '#FacilityInspection #FutureInMotion #NOX',
+    image: 'assets/nox-campaign/instagram-05-facility-inspection.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-linkedin-jul29',
+    platform: 'LinkedIn',
+    title: 'How to Scope a NOX Pilot',
+    campaignStage: 'Pilot program',
+    time: '2026-07-29T10:00:00',
+    copy: 'Choose one workflow, one site and one measurable objective. A focused pilot gives operations, safety and technology teams the evidence they need to plan the next step.',
+    hashtags: '#RobotPilot #EnterpriseInnovation #NOX #FutureOfWork',
+    image: 'assets/nox-campaign/linkedin-06-pilot-program.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-instagram-jul29',
+    platform: 'Instagram',
+    title: 'Choose the First Task',
+    campaignStage: 'Pilot program',
+    time: '2026-07-29T16:30:00',
+    copy: 'The first step is not a full transformation. It is one task worth proving.',
+    hashtags: '#BookAPilot #NOX #RoboticsFuture',
+    image: 'assets/nox-campaign/instagram-06-pilot-program.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-linkedin-jul31',
+    platform: 'LinkedIn',
+    title: 'From Launch to Learning',
+    campaignStage: 'Month recap',
+    time: '2026-07-31T09:30:00',
+    copy: 'July introduced NOX. The next phase is about learning from real environments: task fit, integration, operator experience and measurable impact. That is where the future becomes operational.',
+    hashtags: '#NOX #EmbodiedAI #EnterpriseRobotics #MonthInReview',
+    image: 'assets/nox-campaign/linkedin-06-pilot-program.png',
+    status: 'scheduled'
+  },
+  {
+    id: 'nox-instagram-jul31',
+    platform: 'Instagram',
+    title: 'The Next Step Is Real Work',
+    campaignStage: 'Month recap',
+    time: '2026-07-31T15:00:00',
+    copy: 'Meet the robot. Map the workflow. Measure what changes. The next chapter starts on site.',
+    hashtags: '#NOX #FutureOfWork #EmbodiedAI',
+    image: 'assets/nox-campaign/instagram-06-pilot-program.png',
     status: 'scheduled'
   }
 ];
 
 const wendyThinkingScript = [
   { type: 'line', text: '正在读取你的社媒诉求和上传素材…' },
-  { type: 'line', text: '已确认发布平台和视觉方案，正在锁定生成约束…' },
+  { type: 'line', text: '已确认发布平台和内容目标，正在锁定生成约束…' },
   { type: 'line', text: '正在识别适合发布的平台、语气和内容长度…' },
   { type: 'layer', text: '第 1 层 · 内容目标' },
   { type: 'line', text: '判断：这条内容适合用新品价值点切入，并导流到独立站资料页' },
   { type: 'layer', text: '第 2 层 · 发布时间' },
   { type: 'line', text: '正在结合本周日历里的最佳发布时间，避开同平台密集发布时段…' },
   { type: 'layer', text: '第 3 层 · 素材与格式' },
-  { type: 'line', text: '已生成 LinkedIn 长文、Instagram 轮播和 TikTok 短视频三个方向，正在整理…' }
+  { type: 'line', text: '已生成 LinkedIn 长文和 Instagram 视觉内容两个方向，正在整理…' }
 ];
 
 const johnCampaignData = {
@@ -758,3 +1014,71 @@ const johnCampaignData = {
     }
   }
 };
+
+// Product catalog data imported from the user-provided 2260.json.
+const wendyProductCatalogSource = [ {
+  "id" : 512,
+  "parentId" : 0,
+  "catalogName" : "Material Handling",
+  "catalogDescription" : null,
+  "introImages" : [ ],
+  "sortOrder" : 0,
+  "subCatalogs" : null,
+  "products" : [ {
+    "id" : 1593,
+    "productName" : "Manual & Electric Pallet Truck",
+    "productSummary" : "Chenli hand pallet trucks are built for daily warehouse use.",
+    "localImage" : "assets/wendy-pallet-truck/manual-1-original.jpg",
+    "posterImage" : "assets/wendy-pallet-truck/pallet-truck-scenario-quality-4x5.png",
+    "productImages" : [ "https://static.100x-agent.com/image/2026/06/15/manual-1_20260615093921A377.jpg", "https://static.100x-agent.com/image/2026/06/15/electric-2_20260615093921A378.jpg", "https://static.100x-agent.com/image/2026/06/15/manual-2_20260615093921A378.jpg", "https://static.100x-agent.com/image/2026/06/15/detail_20260615093921A378.jpg", "https://static.100x-agent.com/image/2026/06/15/manual-3_20260615093922A379.jpg", "https://static.100x-agent.com/image/2026/06/15/electric-1_20260615093922A379.jpg", "https://static.100x-agent.com/image/2026/06/15/electric-3_20260615093922A379.jpg", "https://static.100x-agent.com/image/2026/06/15/total_20260615093922A380.jpg", "https://static.100x-agent.com/image/2026/06/15/electric-4_20260615093922A380.jpg" ],
+    "productDescription" : "Available in 2T, 3T, and 5T capacities. One-piece cylinder, stamped fork (not welded), and reinforced steel frame. CE certified, German seal system, and optional wheels. Designed for durability and value.",
+    "productFeatures" : "1. One-piece hydraulic cylinder (not welded)\n-Integrated pump body, no weld seams\n-German sealing system – leak-proof, long service life\n-Built-in overload safety valve and controlled lowering function\n\n2. Stamped fork – no weld joints\n-Fork is formed by one-piece stamping, not welded from multiple pieces\n-Eliminates weak points at weld seams\n-Higher strength and better resistance to bending\n\n3. Reinforced steel frame – real thickness\n-2T / 3T model: powder-coated chassis thickness 3.75mm\n-5T model: powder-coated chassis thickness 6.0mm\n-All-welded structure with 75cm reinforced arm – no deformation under full load\n4. Flexible wheel options for different floors\n-Nylon / PU / Plastic / Steel\n5. User-friendly design\n-Anti-slip plastic handle – comfortable grip, sweat-proof\n-Optional upgraded handle available for heavy use\n-CE certified – meets European safety standards",
+    "technicalSpecification" : null,
+    "sortOrder" : 0
+  }, {
+    "id" : 1591,
+    "productName" : "Manual & Electric Stracker",
+    "productSummary" : "1ton-3ton capactiy available,",
+    "productImages" : [ "https://static.100x-agent.com/image/2026/06/15/2_20260615093920A373.jpg", "https://static.100x-agent.com/image/2026/06/15/3_20260615093920A374.jpg", "https://static.100x-agent.com/image/2026/06/15/1_20260615093921A374.jpg", "https://static.100x-agent.com/image/2026/06/15/4_20260615093921A374.jpg", "https://static.100x-agent.com/image/2026/06/15/5_20260615093921A375.jpg" ],
+    "productDescription" : "Chenli manual / Electric stackers are designed for light to medium-duty lifting and stacking in warehouses, workshops, and retail spaces. Available in 1000kg and 2000kg capacities. CE certified, compact design, and easy to operate.",
+    "productFeatures" : "1.Reliable-High-quality one-piece hydraulic cylinder with German seals – reliable lifting performance, low leak rate\n\n2.C-section mast made of high-strength manganese steel – forklift-grade profile for long-term heavy use\n\n3.Lightweight design – easy to maneuver, reduces operator fatigue\n\n4.Nylon wheels front and rear with built-in brake – durable, low rolling resistance, and safe operation when stationary\n\n5.Dual operation mode – hand pump or foot pedal, flexible for different user preferences\n\n6.Compact size, works in narrow aisles and fits into cargo elevators – ideal for tight spaces   Contact us for load capacity, lift height, fork size, and other specifications.",
+    "technicalSpecification" : null,
+    "sortOrder" : 0
+  }, {
+    "id" : 1592,
+    "productName" : "Foklift",
+    "productSummary" : null,
+    "productImages" : [ "https://static.100x-agent.com/image/2026/06/15/diesel%20to%20electric%20project_20260615093921A375.jpg", "https://static.100x-agent.com/image/2026/06/15/2_20260615093921A375.jpg", "https://static.100x-agent.com/image/2026/06/15/battery_20260615093921A376.jpg", "https://static.100x-agent.com/image/2026/06/15/3_20260615093921A376.jpg", "https://static.100x-agent.com/image/2026/06/15/1_20260615093921A376.jpg", "https://static.100x-agent.com/image/2026/06/15/4_20260615093921A377.jpg", "https://static.100x-agent.com/image/2026/06/15/5_20260615093921A377.jpg" ],
+    "productDescription" : null,
+    "productFeatures" : null,
+    "technicalSpecification" : null,
+    "sortOrder" : 0
+  } ]
+}, {
+  "id" : 511,
+  "parentId" : 0,
+  "catalogName" : "Sling and Lashing",
+  "catalogDescription" : null,
+  "introImages" : [ ],
+  "sortOrder" : 0,
+  "subCatalogs" : null,
+  "products" : [ {
+    "id" : 1589,
+    "productName" : "Sling (Round&Webbing )(Endless&Eye-eye)",
+    "productSummary" : "Chenli lifting slings are widely used in factory lifting, steel coil handling, equipment installation, mold maintenance, construction projects, port operations, and heavy machinery moving.",
+    "productImages" : [ "https://static.100x-agent.com/image/2026/06/15/EA-A_20260615093919A369.png", "https://static.100x-agent.com/image/2026/06/15/total-2_20260615093919A369.jpg", "https://static.100x-agent.com/image/2026/06/15/sling-worker_20260615093919A369.jpg", "https://static.100x-agent.com/image/2026/06/15/Dyneema%20Sling_20260615093919A370.png", "https://static.100x-agent.com/image/2026/06/15/EB-A_20260615093919A370.png", "https://static.100x-agent.com/image/2026/06/15/lifting%20sling_20260615093919A370.png", "https://static.100x-agent.com/image/2026/06/15/total-1_20260615093920A371.jpg" ],
+    "productDescription" : "Chenli synthetic lifting slings are designed for safe, efficient lifting in industrial environments. Available as flat webbing slings and round slings. CE certified, 7:1 safety factor, and fully traceable from our own factory.",
+    "productFeatures" : "-7:1 safety factor – standard across all Chenli slings, higher than industry minimum,\n-CE / GS certified – compliant with European safety standards\n-Full traceability – from raw polyester yarn to finished sling, all made in our own factory\n-Wear-resistant webbing – reinforced stitching for longer service life\n-Color-coded capacity – easy identification on site (purple/green/yellow etc.)\n-Custom sizes available – length, width, and load capacity can be tailored to your project",
+    "technicalSpecification" : null,
+    "sortOrder" : 0
+  }, {
+    "id" : 1590,
+    "productName" : "Cargo Lashing",
+    "productSummary" : "Ratchet tie down is also called ratchet lashing、lashing belt、cargo lashing which is used while transporting、moving、loading and warehousing, for keep the goods stable or fix the goods while they are transporting by truck, train and ship. It is easy to apply the max force you need to handle it by hand is 500N, and after the ratchet locked it will not loose, safety flexible.",
+    "productImages" : [ "https://static.100x-agent.com/image/2026/06/15/testing_20260615093920A371.jpg", "https://static.100x-agent.com/image/2026/06/15/1_20260615093920A371.png", "https://static.100x-agent.com/image/2026/06/15/3_20260615093920A372.png", "https://static.100x-agent.com/image/2026/06/15/2_20260615093920A372.png", "https://static.100x-agent.com/image/2026/06/15/patent%20product_20260615093920A372.png", "https://static.100x-agent.com/image/2026/06/15/total_20260615093920A373.png", "https://static.100x-agent.com/image/2026/06/15/workshop_20260615093920A373.jpg" ],
+    "productDescription" : "\"Chenli\" ratchet straps are strictly produced as per EN12195-2:2000 standard, after long time development .we already have huge producing ability and technology for producing variety of types and sizes cargo lashings for make our products quality and price better and better.",
+    "productFeatures" : "1. Patent-protected head design (PATENT NO: ZL 2021 2 038738.0)\n-Double ratchet design – dual ratchet mechanism for increased safety factor\n-Curved handle with reinforced ribs – comfortable grip, reduced hand fatigue\n-Flanged edge design – adds comfort during operation\n-Groove design – reduces friction, makes ratchet mechanism run smoother, lowers handle pulling force\n-Sloped chamfer on lower plate – reduces gap between ratchet and plate, increases safety factor, improves contact with cargo for more stable lashing\n2. CE certified – meets EN 12195-2 standard\n3. High-strength materials\n-Made of high-grade alloy steel for impact resistance and high load capacity\n-High-tenacity polyester webbing with reinforced stitching\n4.Wide operating range\n-Operating temperature: -40°C to +100°C\n-Standard length: 8 meters, customizable from 1m to 50m\n-Pre-tension force: up to 5000kg for ratchet straps\n\n5. Custom sizes available – length, width, and fitting types can be tailored",
+    "technicalSpecification" : null,
+    "sortOrder" : 0
+  } ]
+} ]
