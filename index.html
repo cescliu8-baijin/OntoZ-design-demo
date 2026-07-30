@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no" />
     <title>OntoZ · 专业建站 Lucas</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=buyer-strategy-1" />
+    <link rel="stylesheet" href="styles.css?v=keyword-validation-1" />
     <link rel="stylesheet" href="lucide-icons.css" />
   </head>
   <body>
@@ -1426,9 +1426,15 @@
                 <h1 id="buyer-strategy-title">买家搜索策略</h1>
                 <p>从买家画像出发，逐层定义搜索关键词、主营业务与产业链身份，让潜在买家搜索更准确、更可解释。</p>
               </div>
-              <div class="buyer-strategy-meta">
-                <span><i data-lucide="git-branch"></i>策略版本 v3.2</span>
-                <span><i data-lucide="clock-3"></i>更新于 2 天前</span>
+              <div class="buyer-strategy-header-actions">
+                <a class="buyer-strategy-validation-entry" href="#ontology/buyer-search-strategy/keyword-validation">
+                  <i data-lucide="search-check"></i>
+                  搜索词验证
+                </a>
+                <div class="buyer-strategy-meta">
+                  <span><i data-lucide="git-branch"></i>策略版本 v3.2</span>
+                  <span><i data-lucide="clock-3"></i>更新于 2 天前</span>
+                </div>
               </div>
             </header>
 
@@ -1602,6 +1608,111 @@
           </div>
         </section>
 
+        <section class="core-page keyword-validation-page" id="keywordValidationPage" aria-labelledby="keyword-validation-title" hidden>
+          <div class="keyword-validation-container">
+            <nav class="keyword-validation-breadcrumb" aria-label="搜索词验证路径">
+              <a href="#ontology">企业本体</a>
+              <i data-lucide="chevron-right" aria-hidden="true"></i>
+              <a href="#ontology/buyer-search-strategy">买家搜索策略</a>
+              <i data-lucide="chevron-right" aria-hidden="true"></i>
+              <span>搜索词验证</span>
+            </nav>
+
+            <section class="keyword-search-card" aria-labelledby="keyword-validation-title">
+              <header class="keyword-search-heading">
+                <div>
+                  <h1 id="keyword-validation-title">搜索词验证</h1>
+                  <p>试搜关键词并查看企业结果，验证搜索词是否能准确找到目标买家。</p>
+                </div>
+                <button class="keyword-configure-button" id="keywordConfigureButton" type="button" hidden>
+                  配置搜索词至画像
+                  <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+                </button>
+              </header>
+              <form class="keyword-search-form" id="keywordSearchForm">
+                <label class="keyword-search-input">
+                  <i data-lucide="search" aria-hidden="true"></i>
+                  <input id="keywordSearchInput" type="search" autocomplete="off" placeholder="输入买家搜索关键词，如 Solar energy" aria-label="输入搜索关键词" />
+                </label>
+                <button class="keyword-search-submit" id="keywordSearchSubmit" type="submit">
+                  <span>开始搜索</span>
+                  <i data-lucide="arrow-right" aria-hidden="true"></i>
+                </button>
+              </form>
+            </section>
+
+            <section class="keyword-zoe-prompt" id="keywordZoePrompt" aria-labelledby="keyword-zoe-title" hidden>
+              <span class="keyword-zoe-icon"><i data-lucide="sparkles" aria-hidden="true"></i></span>
+              <div>
+                <h2 id="keyword-zoe-title">让 Zoe 自动判断客户信息</h2>
+                <p>本次搜索所有的“待判定”都交由 Zoe 进行后续的匹配。</p>
+              </div>
+              <button id="keywordZoeConfirm" type="button">
+                确认交给 Zoe
+                <i data-lucide="arrow-right" aria-hidden="true"></i>
+              </button>
+            </section>
+
+            <section class="keyword-results-card" aria-labelledby="keyword-results-title">
+              <header class="keyword-results-header" id="keywordResultsHeader" hidden>
+                <div>
+                  <h2 id="keyword-results-title">搜索结果</h2>
+                  <p id="keywordResultsSummary">共找到 20 家企业</p>
+                </div>
+                <div class="keyword-result-counts" id="keywordResultCounts" aria-label="结果类型统计"></div>
+              </header>
+              <div class="keyword-results" id="keywordResults" aria-live="polite" aria-busy="false">
+                <div class="keyword-empty-state keyword-initial-state">
+                  <span class="keyword-empty-icon"><i data-lucide="search-check" aria-hidden="true"></i></span>
+                  <h2>试搜一个关键词</h2>
+                  <p>每次返回 20 家企业，先验证搜索质量，再配置到买家画像。</p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="keyword-modal" id="keywordDuplicateModal" role="dialog" aria-modal="true" aria-labelledby="keyword-duplicate-title" aria-hidden="true" hidden>
+          <button class="keyword-modal-backdrop" type="button" data-close-keyword-modal aria-label="关闭弹窗"></button>
+          <div class="keyword-modal-panel">
+            <header>
+              <h2 id="keyword-duplicate-title">该词已在画像中</h2>
+              <button type="button" data-close-keyword-modal aria-label="关闭"><i data-lucide="x" aria-hidden="true"></i></button>
+            </header>
+            <p id="keywordDuplicateDescription"></p>
+            <footer>
+              <button class="keyword-modal-secondary" type="button" data-close-keyword-modal>取消</button>
+              <button class="keyword-modal-primary" id="keywordDuplicateContinue" type="button">继续搜索</button>
+            </footer>
+          </div>
+        </section>
+
+        <section class="keyword-modal" id="keywordConfigureModal" role="dialog" aria-modal="true" aria-labelledby="keyword-configure-title" aria-hidden="true" hidden>
+          <button class="keyword-modal-backdrop" type="button" data-close-keyword-modal aria-label="关闭弹窗"></button>
+          <div class="keyword-modal-panel">
+            <header>
+              <h2 id="keyword-configure-title">配置搜索词至画像</h2>
+              <button type="button" data-close-keyword-modal aria-label="关闭"><i data-lucide="x" aria-hidden="true"></i></button>
+            </header>
+            <label class="keyword-persona-field">
+              <span>请选择具体配置到哪个画像</span>
+              <span class="keyword-persona-select">
+                <select id="keywordPersonaSelect">
+                  <option value="">选择买家画像</option>
+                  <option value="工业制造企业">工业制造企业</option>
+                  <option value="仓储物流运营商">仓储物流运营商</option>
+                  <option value="设施管理服务商">设施管理服务商</option>
+                </select>
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </span>
+            </label>
+            <footer>
+              <button class="keyword-modal-secondary" type="button" data-close-keyword-modal>取消</button>
+              <button class="keyword-modal-primary" id="keywordConfigureConfirm" type="button" disabled>确认配置</button>
+            </footer>
+          </div>
+        </section>
+
         <section class="core-page dashboard-page" id="dashboardPage" aria-labelledby="core-dashboard-title" hidden>
           <div class="core-grid">
             <div class="core-main">
@@ -1764,9 +1875,10 @@
     <script src="js/data.js?v=professional-static-9"></script>
     <script src="js/shared.js?v=professional-static-4"></script>
     <script src="js/lily.js?v=professional-static-4"></script>
-    <script src="js/route.js?v=buyer-strategy-1"></script>
+    <script src="js/route.js?v=keyword-validation-1"></script>
     <script src="js/ontology.js?v=buyer-strategy-1"></script>
     <script src="js/ontology-strategy.js?v=buyer-strategy-1"></script>
+    <script src="js/keyword-validation.js?v=keyword-validation-1"></script>
     <script src="js/wendy.js?v=professional-static-13"></script>
     <script src="js/john.js?v=professional-static-4"></script>
     <script src="js/lucas.js?v=professional-static-4"></script>

@@ -76,6 +76,7 @@ const appPages = {
   'lily/tasks': document.querySelector('#lilyTasksPage'),
   ontology: document.querySelector('#ontologyPage'),
   'ontology/buyer-search-strategy': document.querySelector('#buyerStrategyPage'),
+  'ontology/buyer-search-strategy/keyword-validation': document.querySelector('#keywordValidationPage'),
   dashboard: document.querySelector('#dashboardPage'),
   customers: document.querySelector('#customersPage'),
   zoe: document.querySelector('#zoePage'),
@@ -94,7 +95,8 @@ const standalonePageTitles = {
   'lily/templates': '话术模板',
   'lily/tasks': '任务管理',
   ontology: '企业本体',
-  'ontology/buyer-search-strategy': '买家搜索策略 · 企业本体'
+  'ontology/buyer-search-strategy': '买家搜索策略 · 企业本体',
+  'ontology/buyer-search-strategy/keyword-validation': '搜索词验证 · 买家搜索策略'
 };
 
 function getCurrentRoute() {
