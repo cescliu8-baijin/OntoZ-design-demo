@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no" />
     <title>OntoZ · 专业建站 Lucas</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=professional-static-12" />
+    <link rel="stylesheet" href="styles.css?v=enterprise-ontology-1" />
     <link rel="stylesheet" href="lucide-icons.css" />
   </head>
   <body>
@@ -1318,6 +1318,100 @@
           </div>
         </section>
 
+        <section class="core-page ontology-page" id="ontologyPage" aria-labelledby="ontology-title" hidden>
+          <div class="ontology-container">
+            <header class="ontology-page-header">
+              <div>
+                <h1 id="ontology-title">企业本体</h1>
+                <p>集中查看 OntoZ 对企业业务、产品与市场知识的理解</p>
+              </div>
+              <span class="ontology-updated"><i data-lucide="clock-3"></i>最近更新：2026年7月30日</span>
+            </header>
+
+            <section class="ontology-card ontology-score-card" aria-labelledby="ontology-score-title">
+              <div class="ontology-gauge-column">
+                <div class="ontology-gauge" role="img" aria-label="企业本体得分 82 分，满分 100 分">
+                  <div class="ontology-gauge-value"><strong>82</strong><span>/ 100</span></div>
+                </div>
+                <p class="ontology-score-level">理解良好</p>
+              </div>
+              <div class="ontology-score-content">
+                <p class="ontology-eyebrow">企业本体得分</p>
+                <h2 id="ontology-score-title">OntoZ 对企业的理解程度</h2>
+                <p class="ontology-summary">已能较准确理解企业的核心业务、产品能力与目标市场，可支持智能体开展日常获客与营销工作。</p>
+                <div class="ontology-dimensions" aria-label="企业本体得分维度">
+                  <div class="ontology-dimension">
+                    <header><span>业务信息</span><strong>92%</strong></header>
+                    <div class="ontology-progress" role="progressbar" aria-label="业务信息完整度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="92"><span style="--progress: 92%"></span></div>
+                  </div>
+                  <div class="ontology-dimension">
+                    <header><span>产品知识</span><strong>84%</strong></header>
+                    <div class="ontology-progress" role="progressbar" aria-label="产品知识完整度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="84"><span style="--progress: 84%"></span></div>
+                  </div>
+                  <div class="ontology-dimension">
+                    <header><span>市场认知</span><strong>70%</strong></header>
+                    <div class="ontology-progress" role="progressbar" aria-label="市场认知完整度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"><span style="--progress: 70%"></span></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="ontology-card ontology-section" aria-labelledby="company-profile-title">
+              <header class="ontology-section-header">
+                <div>
+                  <h2 id="company-profile-title">企业简介</h2>
+                  <p>从企业资料与公开信息中识别的基础档案</p>
+                </div>
+                <span class="ontology-verified"><i data-lucide="badge-check"></i>核心信息已核验</span>
+              </header>
+              <dl class="company-facts">
+                <div class="company-fact"><dt>公司名称</dt><dd>NOX Robotics Ltd.</dd></div>
+                <div class="company-fact"><dt>官网</dt><dd><a href="https://noxrobotics.ai" target="_blank" rel="noreferrer">noxrobotics.ai<i data-lucide="external-link"></i></a></dd></div>
+                <div class="company-fact"><dt>国家 / 地区</dt><dd>新加坡</dd></div>
+                <div class="company-fact"><dt>成立年份</dt><dd>2021</dd></div>
+                <div class="company-fact"><dt>公司类型</dt><dd>私营企业</dd></div>
+                <div class="company-fact"><dt>员工人数</dt><dd>201–500 人</dd></div>
+              </dl>
+              <div class="company-description">
+                <h3>公司简介</h3>
+                <p>NOX Robotics 专注于面向制造、仓储与设施巡检场景的通用人形机器人及具身智能解决方案，通过开放集成能力帮助企业将感知、决策与执行接入真实业务流程。</p>
+              </div>
+            </section>
+
+            <section class="ontology-card ontology-section" aria-labelledby="ontology-modules-title">
+              <header class="ontology-section-header">
+                <div>
+                  <h2 id="ontology-modules-title">本体功能模块</h2>
+                  <p>按业务场景组织企业知识，为各智能体提供统一依据</p>
+                </div>
+              </header>
+              <div class="ontology-module-grid">
+                <a class="ontology-module buyer" href="#ontology/buyer-search-strategy" data-ontology-module="买家搜索策略">
+                  <span class="ontology-module-icon"><i data-lucide="scan-search"></i></span>
+                  <h3>买家搜索策略</h3>
+                  <p class="ontology-module-count">12 套策略</p>
+                  <p class="ontology-module-description">沉淀目标市场、买家画像、搜索条件和线索判断规则，让 Zoe 更准确地定位潜在客户。</p>
+                  <footer><span>更新于 2 天前</span><span class="ontology-module-action">查看模块<i data-lucide="arrow-right"></i></span></footer>
+                </a>
+                <a class="ontology-module graph" href="#ontology/industry-knowledge-graph" data-ontology-module="行业知识图谱">
+                  <span class="ontology-module-icon"><i data-lucide="network"></i></span>
+                  <h3>行业知识图谱</h3>
+                  <p class="ontology-module-count">386 个实体</p>
+                  <p class="ontology-module-description">连接行业、应用场景、产品能力、标准认证与竞争关系，形成可追溯的业务知识网络。</p>
+                  <footer><span>更新于昨天</span><span class="ontology-module-action">查看模块<i data-lucide="arrow-right"></i></span></footer>
+                </a>
+                <a class="ontology-module knowledge" href="#ontology/enterprise-knowledge-base" data-ontology-module="企业知识库">
+                  <span class="ontology-module-icon"><i data-lucide="library-big"></i></span>
+                  <h3>企业知识库</h3>
+                  <p class="ontology-module-count">128 份资料</p>
+                  <p class="ontology-module-description">统一管理产品手册、客户案例、FAQ、品牌资料与销售素材，确保团队使用同一版本。</p>
+                  <footer><span>更新于 3 小时前</span><span class="ontology-module-action">查看模块<i data-lucide="arrow-right"></i></span></footer>
+                </a>
+              </div>
+            </section>
+          </div>
+        </section>
+
         <section class="core-page dashboard-page" id="dashboardPage" aria-labelledby="core-dashboard-title" hidden>
           <div class="core-grid">
             <div class="core-main">
@@ -1480,7 +1574,8 @@
     <script src="js/data.js?v=professional-static-9"></script>
     <script src="js/shared.js?v=professional-static-4"></script>
     <script src="js/lily.js?v=professional-static-4"></script>
-    <script src="js/route.js?v=professional-static-4"></script>
+    <script src="js/route.js?v=enterprise-ontology-1"></script>
+    <script src="js/ontology.js?v=enterprise-ontology-1"></script>
     <script src="js/wendy.js?v=professional-static-13"></script>
     <script src="js/john.js?v=professional-static-4"></script>
     <script src="js/lucas.js?v=professional-static-4"></script>

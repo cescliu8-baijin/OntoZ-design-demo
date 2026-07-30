@@ -74,6 +74,7 @@ const appPages = {
   'lily/messages': document.querySelector('#lilyInquiryPage'),
   'lily/templates': document.querySelector('#lilyTemplatesPage'),
   'lily/tasks': document.querySelector('#lilyTasksPage'),
+  ontology: document.querySelector('#ontologyPage'),
   dashboard: document.querySelector('#dashboardPage'),
   customers: document.querySelector('#customersPage'),
   zoe: document.querySelector('#zoePage'),
@@ -90,7 +91,8 @@ const standalonePageTitles = {
   'john/ads': '广告管理 · 24/7 投流 John',
   'lily/messages': '询盘消息',
   'lily/templates': '话术模板',
-  'lily/tasks': '任务管理'
+  'lily/tasks': '任务管理',
+  ontology: '企业本体'
 };
 
 function getCurrentRoute() {
@@ -217,7 +219,7 @@ document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', event => {
     const target = item.getAttribute('href');
     setMobileNavigation(false);
-    if (['#dashboard', '#customers', '#zoe', '#leo', '#lily', '#wendy', '#lucas', '#john'].includes(target)) return;
+    if (['#ontology', '#dashboard', '#customers', '#zoe', '#leo', '#lily', '#wendy', '#lucas', '#john'].includes(target)) return;
     event.preventDefault();
     showToast('该模块暂未在本次设计稿中展开', 1800);
   });
