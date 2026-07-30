@@ -214,6 +214,40 @@
   animation: keyword-spin .8s linear infinite;
 }
 
+.keyword-mock-cases {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  color: var(--oz-slate-400);
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.keyword-mock-cases button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  border: 1px solid var(--oz-slate-200);
+  border-radius: 6px;
+  color: var(--oz-slate-500);
+  background: var(--oz-slate-50);
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.keyword-mock-cases button:hover {
+  border-color: var(--oz-indigo-300);
+  color: var(--oz-indigo-700);
+  background: var(--oz-indigo-50);
+}
+
+.keyword-mock-cases svg {
+  width: 12px;
+  height: 12px;
+}
+
 @keyframes keyword-spin {
   to { transform: rotate(360deg); }
 }
@@ -782,6 +816,15 @@ body.keyword-modal-open {
   }
 
   .keyword-search-submit {
+    width: 100%;
+  }
+
+  .keyword-mock-cases {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .keyword-mock-cases > span {
     width: 100%;
   }
 

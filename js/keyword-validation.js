@@ -19,6 +19,7 @@ const keywordConfigureModal = document.querySelector('#keywordConfigureModal');
 const keywordConfigureTitle = document.querySelector('#keyword-configure-title');
 const keywordPersonaSelect = document.querySelector('#keywordPersonaSelect');
 const keywordConfigureConfirm = document.querySelector('#keywordConfigureConfirm');
+const keywordMockButtons = document.querySelectorAll('[data-keyword-mock]');
 
 const keywordDemoResults = [
   { name: 'HelioGrid Energy GmbH', website: 'heliogrid-energy.example', country: '德国', address: '慕尼黑，巴伐利亚州', companyType: '能源设备制造商', status: 'pending', detail: '等待判断' },
@@ -218,6 +219,14 @@ function keywordRequestSearch(term, { skipDuplicateCheck = false } = {}) {
 keywordSearchForm?.addEventListener('submit', event => {
   event.preventDefault();
   keywordRequestSearch(keywordSearchInput.value);
+});
+
+keywordMockButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const term = button.dataset.keywordMock === 'duplicate' ? 'Solar energy' : 'no-results';
+    keywordSearchInput.value = term;
+    keywordRequestSearch(term);
+  });
 });
 
 keywordDuplicateContinue?.addEventListener('click', () => {
