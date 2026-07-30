@@ -36,6 +36,7 @@ assets/             图片、图标与本地依赖
 - `#john`、`#john/keywords`、`#john/ads`：24/7 投流 John
 - `#lily`、`#lily/scan`、`#lily/messages`、`#lily/templates`、`#lily/tasks`：触达转化 Lily
 - `#ontology`：企业本体总览
+- `#ontology/buyer-search-strategy`：买家搜索策略图谱
 - `#dashboard`、`#customers`、`#zoe`、`#leo`：工作台与其他智能体视图
 
 ## 开发约定

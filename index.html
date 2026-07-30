@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no" />
     <title>OntoZ · 专业建站 Lucas</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=enterprise-ontology-1" />
+    <link rel="stylesheet" href="styles.css?v=buyer-strategy-1" />
     <link rel="stylesheet" href="lucide-icons.css" />
   </head>
   <body>
@@ -1386,7 +1386,7 @@
                 </div>
               </header>
               <div class="ontology-module-grid">
-                <a class="ontology-module buyer" href="#ontology/buyer-search-strategy" data-ontology-module="买家搜索策略">
+                <a class="ontology-module buyer" href="#ontology/buyer-search-strategy" data-ontology-module="买家搜索策略" data-ontology-ready="true">
                   <span class="ontology-module-icon"><i data-lucide="scan-search"></i></span>
                   <h3>买家搜索策略</h3>
                   <p class="ontology-module-count">12 套策略</p>
@@ -1407,6 +1407,196 @@
                   <p class="ontology-module-description">统一管理产品手册、客户案例、FAQ、品牌资料与销售素材，确保团队使用同一版本。</p>
                   <footer><span>更新于 3 小时前</span><span class="ontology-module-action">查看模块<i data-lucide="arrow-right"></i></span></footer>
                 </a>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="core-page buyer-strategy-page" id="buyerStrategyPage" aria-labelledby="buyer-strategy-title" hidden>
+          <div class="buyer-strategy-container">
+            <nav class="buyer-strategy-breadcrumb" aria-label="买家搜索策略路径">
+              <a href="#ontology"><i data-lucide="arrow-left"></i>返回企业本体</a>
+              <span aria-hidden="true">/</span>
+              <span>买家搜索策略</span>
+            </nav>
+
+            <header class="buyer-strategy-header">
+              <div>
+                <p class="buyer-strategy-eyebrow">企业本体 · 买家理解</p>
+                <h1 id="buyer-strategy-title">买家搜索策略</h1>
+                <p>从买家画像出发，逐层定义搜索关键词、主营业务与产业链身份，让潜在买家搜索更准确、更可解释。</p>
+              </div>
+              <div class="buyer-strategy-meta">
+                <span><i data-lucide="git-branch"></i>策略版本 v3.2</span>
+                <span><i data-lucide="clock-3"></i>更新于 2 天前</span>
+              </div>
+            </header>
+
+            <section class="buyer-strategy-overview" aria-label="图谱规模">
+              <article><span>第一层级</span><strong>3</strong><p>买家画像</p></article>
+              <article><span>第二层级</span><strong>9</strong><p>搜索关键词</p></article>
+              <article><span>第三层级</span><strong>15</strong><p>主营 / 排除业务</p></article>
+              <article><span>第四层级</span><strong>15</strong><p>产业链身份</p></article>
+            </section>
+
+            <section class="buyer-graph-card" aria-labelledby="buyer-graph-title">
+              <header class="buyer-graph-toolbar">
+                <div>
+                  <h2 id="buyer-graph-title">买家策略图谱</h2>
+                  <p>选择节点查看关系说明，或突出查看包含与排除条件</p>
+                </div>
+                <div class="buyer-graph-filters" role="group" aria-label="图谱关系筛选">
+                  <button class="active" type="button" data-graph-filter="all" aria-pressed="true">全部关系</button>
+                  <button type="button" data-graph-filter="include" aria-pressed="false"><span class="filter-dot include"></span>只看包含</button>
+                  <button type="button" data-graph-filter="exclude" aria-pressed="false"><span class="filter-dot exclude"></span>只看排除</button>
+                </div>
+              </header>
+
+              <section class="buyer-graph-focus" aria-live="polite" aria-atomic="true">
+                <span class="buyer-graph-focus-icon"><i data-lucide="focus"></i></span>
+                <div>
+                  <p id="buyerGraphFocusLevel">第一层级 · 买家画像</p>
+                  <h3 id="buyerGraphFocusTitle">工业制造企业</h3>
+                  <span id="buyerGraphFocusDescription">具备真实生产场景，希望通过柔性自动化和人机协作提升效率的制造企业。</span>
+                </div>
+              </section>
+
+              <p class="buyer-graph-swipe-hint"><i data-lucide="move-horizontal"></i>左右滑动查看完整四层关系</p>
+
+              <div class="buyer-graph-scroll" tabindex="0" aria-label="买家搜索策略四层图谱，可横向滚动">
+                <div class="buyer-graph-canvas" id="buyerGraphCanvas" data-filter="all">
+                  <header class="buyer-graph-levels" aria-hidden="true">
+                    <div><span>01</span><strong>买家画像</strong><small>目标客户是谁</small></div>
+                    <div><span>02</span><strong>买家搜索关键词</strong><small>如何找到他们</small></div>
+                    <div><span>03</span><strong>主营产品 / 业务</strong><small>经营什么</small></div>
+                    <div><span>04</span><strong>产业链身份</strong><small>处于什么位置</small></div>
+                  </header>
+
+                  <div class="buyer-graph-lanes">
+                    <article class="buyer-graph-lane active" data-graph-lane="manufacturing">
+                      <div class="buyer-graph-stage profile-stage">
+                        <button class="buyer-graph-node profile-node selected" type="button" data-graph-node data-node-level="第一层级 · 买家画像" data-node-title="工业制造企业" data-node-description="具备真实生产场景，希望通过柔性自动化和人机协作提升效率的制造企业。" aria-pressed="true">
+                          <span class="node-icon"><i data-lucide="factory"></i></span>
+                          <span><strong>工业制造企业</strong><small>柔性生产 · 质量检测</small></span>
+                        </button>
+                      </div>
+                      <div class="buyer-graph-stage keyword-stage">
+                        <button class="buyer-graph-node keyword-node" type="button" data-graph-node data-node-level="第二层级 · 买家搜索关键词" data-node-title="工业制造搜索词" data-node-description="使用买家常用的英文行业词组合，搜索正在关注人形机器人、柔性自动化和视觉质检的制造企业。" aria-pressed="false">
+                          <span class="node-label">搜索关键词</span>
+                          <span class="keyword-chip">humanoid robot manufacturing</span>
+                          <span class="keyword-chip">flexible automation</span>
+                          <span class="keyword-chip">robotic visual inspection</span>
+                        </button>
+                      </div>
+                      <div class="buyer-graph-stage relation-stage">
+                        <div class="buyer-graph-node-stack">
+                          <button class="buyer-graph-node relation-node include-node" type="button" data-graph-node data-relation="include" data-node-level="第三层级 · 应包含业务" data-node-title="工业自动化相关业务" data-node-description="这些业务表明企业具有生产自动化、柔性改造或视觉质检场景，是 NOX 的高相关买家。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-check-big"></i>应包含</span>
+                            <span class="node-tags"><b>工业自动化集成</b><b>生产线柔性改造</b><b>机器视觉质检</b></span>
+                          </button>
+                          <button class="buyer-graph-node relation-node exclude-node" type="button" data-graph-node data-relation="exclude" data-node-level="第三层级 · 需排除业务" data-node-title="非工业机器人业务" data-node-description="家用服务机器人和纯软件 RPA 缺少目标工业应用场景，需要从结果中排除。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-x"></i>需排除</span>
+                            <span class="node-tags"><b>家用服务机器人</b><b>纯软件 RPA</b></span>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="buyer-graph-stage identity-stage">
+                        <div class="buyer-graph-node-stack">
+                          <button class="buyer-graph-node relation-node include-node" type="button" data-graph-node data-relation="include" data-node-level="第四层级 · 应包含身份" data-node-title="具备采购或集成能力" data-node-description="终端制造商、方案集成商和工程承包商具备真实应用场景或项目采购能力。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-check-big"></i>应包含</span>
+                            <span class="node-tags"><b>终端制造商</b><b>自动化方案集成商</b><b>工厂工程承包商</b></span>
+                          </button>
+                          <button class="buyer-graph-node relation-node exclude-node" type="button" data-graph-node data-relation="exclude" data-node-level="第四层级 · 需排除身份" data-node-title="缺少终端决策能力" data-node-description="零部件贸易商和培训媒体机构通常不拥有机器人项目的最终采购决策权。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-x"></i>需排除</span>
+                            <span class="node-tags"><b>机器人零部件贸易商</b><b>培训 / 媒体机构</b></span>
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+
+                    <article class="buyer-graph-lane" data-graph-lane="warehouse">
+                      <div class="buyer-graph-stage profile-stage">
+                        <button class="buyer-graph-node profile-node" type="button" data-graph-node data-node-level="第一层级 · 买家画像" data-node-title="仓储物流运营商" data-node-description="拥有仓库、履约中心或内部物流场景，需要提升拣选、搬运与补货效率的企业。" aria-pressed="false">
+                          <span class="node-icon"><i data-lucide="warehouse"></i></span>
+                          <span><strong>仓储物流运营商</strong><small>拣选 · 搬运 · 补货</small></span>
+                        </button>
+                      </div>
+                      <div class="buyer-graph-stage keyword-stage">
+                        <button class="buyer-graph-node keyword-node" type="button" data-graph-node data-node-level="第二层级 · 买家搜索关键词" data-node-title="仓储物流搜索词" data-node-description="围绕仓内自动化、箱件拣选和人形机器人应用进行搜索，避免泛物流关键词带来的噪声。" aria-pressed="false">
+                          <span class="node-label">搜索关键词</span>
+                          <span class="keyword-chip">warehouse humanoid robot</span>
+                          <span class="keyword-chip">intralogistics automation</span>
+                          <span class="keyword-chip">case picking robot</span>
+                        </button>
+                      </div>
+                      <div class="buyer-graph-stage relation-stage">
+                        <div class="buyer-graph-node-stack">
+                          <button class="buyer-graph-node relation-node include-node" type="button" data-graph-node data-relation="include" data-node-level="第三层级 · 应包含业务" data-node-title="仓内运营相关业务" data-node-description="仓储运营、电商履约和内部物流自动化能够提供清晰、可测量的人形机器人应用任务。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-check-big"></i>应包含</span>
+                            <span class="node-tags"><b>仓储运营</b><b>电商履约</b><b>内部物流自动化</b></span>
+                          </button>
+                          <button class="buyer-graph-node relation-node exclude-node" type="button" data-graph-node data-relation="exclude" data-node-level="第三层级 · 需排除业务" data-node-title="非仓内应用业务" data-node-description="末端配送和家庭搬运的环境、产品形态与企业级仓内机器人需求不同。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-x"></i>需排除</span>
+                            <span class="node-tags"><b>快递末端配送</b><b>家庭搬运</b></span>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="buyer-graph-stage identity-stage">
+                        <div class="buyer-graph-node-stack">
+                          <button class="buyer-graph-node relation-node include-node" type="button" data-graph-node data-relation="include" data-node-level="第四层级 · 应包含身份" data-node-title="仓储资产运营方" data-node-description="仓库运营方、第三方物流企业和履约中心直接管理仓内流程并拥有自动化预算。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-check-big"></i>应包含</span>
+                            <span class="node-tags"><b>仓库运营方</b><b>第三方物流企业</b><b>电商履约中心</b></span>
+                          </button>
+                          <button class="buyer-graph-node relation-node exclude-node" type="button" data-graph-node data-relation="exclude" data-node-level="第四层级 · 需排除身份" data-node-title="非场景所有者" data-node-description="设备零售商和货代经纪通常不直接运营仓内流程，不是优先目标。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-x"></i>需排除</span>
+                            <span class="node-tags"><b>物流设备零售商</b><b>货代经纪</b></span>
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+
+                    <article class="buyer-graph-lane" data-graph-lane="facility">
+                      <div class="buyer-graph-stage profile-stage">
+                        <button class="buyer-graph-node profile-node" type="button" data-graph-node data-node-level="第一层级 · 买家画像" data-node-title="设施管理服务商" data-node-description="负责园区、厂房或公共设施巡检与资产运维，希望提高覆盖率和报告一致性的企业。" aria-pressed="false">
+                          <span class="node-icon"><i data-lucide="building-2"></i></span>
+                          <span><strong>设施管理服务商</strong><small>巡检 · 运维 · 报告</small></span>
+                        </button>
+                      </div>
+                      <div class="buyer-graph-stage keyword-stage">
+                        <button class="buyer-graph-node keyword-node" type="button" data-graph-node data-node-level="第二层级 · 买家搜索关键词" data-node-title="设施巡检搜索词" data-node-description="围绕自主巡检、设施机器人和预测性维护搜索拥有真实运维场景的企业。" aria-pressed="false">
+                          <span class="node-label">搜索关键词</span>
+                          <span class="keyword-chip">facility inspection robot</span>
+                          <span class="keyword-chip">autonomous inspection</span>
+                          <span class="keyword-chip">predictive maintenance</span>
+                        </button>
+                      </div>
+                      <div class="buyer-graph-stage relation-stage">
+                        <div class="buyer-graph-node-stack">
+                          <button class="buyer-graph-node relation-node include-node" type="button" data-graph-node data-relation="include" data-node-level="第三层级 · 应包含业务" data-node-title="设施资产运维业务" data-node-description="设施巡检、资产运维和园区管理拥有标准路线、观察任务和结构化报告需求。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-check-big"></i>应包含</span>
+                            <span class="node-tags"><b>设施巡检</b><b>资产运维</b><b>工业园区管理</b></span>
+                          </button>
+                          <button class="buyer-graph-node relation-node exclude-node" type="button" data-graph-node data-relation="exclude" data-node-level="第三层级 · 需排除业务" data-node-title="非企业设施业务" data-node-description="消费级摄像头和清洁家政与企业设施巡检的任务深度和采购逻辑不同。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-x"></i>需排除</span>
+                            <span class="node-tags"><b>消费级安防摄像头</b><b>清洁家政</b></span>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="buyer-graph-stage identity-stage">
+                        <div class="buyer-graph-node-stack">
+                          <button class="buyer-graph-node relation-node include-node" type="button" data-graph-node data-relation="include" data-node-level="第四层级 · 应包含身份" data-node-title="设施运营与管理方" data-node-description="设施管理公司、公用事业运营商和园区业主对巡检任务与资产结果负责。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-check-big"></i>应包含</span>
+                            <span class="node-tags"><b>设施管理公司</b><b>公用事业运营商</b><b>工业园区业主</b></span>
+                          </button>
+                          <button class="buyer-graph-node relation-node exclude-node" type="button" data-graph-node data-relation="exclude" data-node-level="第四层级 · 需排除身份" data-node-title="缺少设施运营职责" data-node-description="物业中介和设备耗材供应商通常不负责设施巡检流程与自动化投入。" aria-pressed="false">
+                            <span class="node-relation-label"><i data-lucide="circle-x"></i>需排除</span>
+                            <span class="node-tags"><b>物业中介</b><b>设备耗材供应商</b></span>
+                          </button>
+                        </div>
+                      </div>
+                    </article>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
@@ -1574,8 +1764,9 @@
     <script src="js/data.js?v=professional-static-9"></script>
     <script src="js/shared.js?v=professional-static-4"></script>
     <script src="js/lily.js?v=professional-static-4"></script>
-    <script src="js/route.js?v=enterprise-ontology-1"></script>
-    <script src="js/ontology.js?v=enterprise-ontology-1"></script>
+    <script src="js/route.js?v=buyer-strategy-1"></script>
+    <script src="js/ontology.js?v=buyer-strategy-1"></script>
+    <script src="js/ontology-strategy.js?v=buyer-strategy-1"></script>
     <script src="js/wendy.js?v=professional-static-13"></script>
     <script src="js/john.js?v=professional-static-4"></script>
     <script src="js/lucas.js?v=professional-static-4"></script>

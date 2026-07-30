@@ -75,6 +75,7 @@ const appPages = {
   'lily/templates': document.querySelector('#lilyTemplatesPage'),
   'lily/tasks': document.querySelector('#lilyTasksPage'),
   ontology: document.querySelector('#ontologyPage'),
+  'ontology/buyer-search-strategy': document.querySelector('#buyerStrategyPage'),
   dashboard: document.querySelector('#dashboardPage'),
   customers: document.querySelector('#customersPage'),
   zoe: document.querySelector('#zoePage'),
@@ -92,7 +93,8 @@ const standalonePageTitles = {
   'lily/messages': '询盘消息',
   'lily/templates': '话术模板',
   'lily/tasks': '任务管理',
-  ontology: '企业本体'
+  ontology: '企业本体',
+  'ontology/buyer-search-strategy': '买家搜索策略 · 企业本体'
 };
 
 function getCurrentRoute() {
@@ -120,6 +122,7 @@ function getActiveNavTarget(route) {
   if (route.standalonePage?.startsWith('lily/')) return 'lily';
   if (route.standalonePage?.startsWith('john/')) return 'john';
   if (route.standalonePage?.startsWith('wendy/')) return 'wendy';
+  if (route.standalonePage?.startsWith('ontology/')) return 'ontology';
   if (route.standalonePage) return route.standalonePage;
   if (route.showLilyDashboard) return 'dashboard';
   return 'lily';
