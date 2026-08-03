@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no" />
     <title>OntoZ · 专业建站 Lucas</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=keyword-validation-2" />
+    <link rel="stylesheet" href="styles.css?v=keyword-validation-history-3" />
     <link rel="stylesheet" href="lucide-icons.css" />
   </head>
   <body>
@@ -1624,10 +1624,17 @@
                   <h1 id="keyword-validation-title">搜索词验证</h1>
                   <p>试搜关键词并查看企业结果，验证搜索词是否能准确找到目标买家。</p>
                 </div>
-                <button class="keyword-configure-button" id="keywordConfigureButton" type="button" hidden>
-                  配置搜索词至画像
-                  <i data-lucide="arrow-up-right" aria-hidden="true"></i>
-                </button>
+                <div class="keyword-search-actions">
+                  <button class="keyword-history-button" id="keywordHistoryButton" type="button" aria-haspopup="dialog" aria-controls="keywordHistoryDrawer" aria-expanded="false">
+                    <i data-lucide="history" aria-hidden="true"></i>
+                    历史记录
+                    <span class="keyword-history-count" id="keywordHistoryCount" aria-label="0 条历史记录" hidden>0</span>
+                  </button>
+                  <button class="keyword-configure-button" id="keywordConfigureButton" type="button" hidden>
+                    配置搜索词至画像
+                    <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+                  </button>
+                </div>
               </header>
               <form class="keyword-search-form" id="keywordSearchForm">
                 <label class="keyword-search-input">
@@ -1716,6 +1723,25 @@
               <button class="keyword-modal-primary" id="keywordConfigureConfirm" type="button" disabled>确认配置</button>
             </footer>
           </div>
+        </section>
+
+        <section class="keyword-history-drawer" id="keywordHistoryDrawer" role="dialog" aria-modal="true" aria-labelledby="keyword-history-title" aria-hidden="true" hidden>
+          <button class="keyword-history-backdrop" type="button" data-close-keyword-history aria-label="关闭搜索历史"></button>
+          <aside class="keyword-history-panel" tabindex="-1">
+            <header>
+              <div>
+                <h2 id="keyword-history-title">搜索历史</h2>
+                <p>查看并重新打开之前的搜索结果</p>
+              </div>
+              <button type="button" data-close-keyword-history aria-label="关闭搜索历史"><i data-lucide="x" aria-hidden="true"></i></button>
+            </header>
+            <div class="keyword-history-columns" aria-hidden="true">
+              <span>搜索词</span>
+              <span>搜索时间</span>
+              <span>操作</span>
+            </div>
+            <div class="keyword-history-list" id="keywordHistoryList"></div>
+          </aside>
         </section>
 
         <section class="core-page dashboard-page" id="dashboardPage" aria-labelledby="core-dashboard-title" hidden>
@@ -1883,7 +1909,7 @@
     <script src="js/route.js?v=keyword-validation-1"></script>
     <script src="js/ontology.js?v=buyer-strategy-1"></script>
     <script src="js/ontology-strategy.js?v=buyer-strategy-1"></script>
-    <script src="js/keyword-validation.js?v=keyword-validation-2"></script>
+    <script src="js/keyword-validation.js?v=keyword-validation-history-1"></script>
     <script src="js/wendy.js?v=professional-static-13"></script>
     <script src="js/john.js?v=professional-static-4"></script>
     <script src="js/lucas.js?v=professional-static-4"></script>
