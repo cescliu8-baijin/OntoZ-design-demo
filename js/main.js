@@ -4,7 +4,6 @@ renderMyStrategies();
 renderAgentStrategies();
 renderStrategies('news');
 updateJohnCampaign();
-filterJohnKeywords();
 syncWendyAccountSummary();
 syncWendyAgentSelections();
 renderWendyCalendars();
