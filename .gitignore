@@ -3,3 +3,7 @@
 output/
 *.log
 .env*
+node_modules/
+dist/
+.wrangler/
+public/site/

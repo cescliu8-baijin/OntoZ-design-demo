@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no" />
     <title>OntoZ · 专业建站 Lucas</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=keyword-validation-2" />
+    <link rel="stylesheet" href="styles.css?v=john-create-flow-26" />
     <link rel="stylesheet" href="lucide-icons.css" />
   </head>
   <body>
@@ -489,241 +489,368 @@
               <p>实时分析广告、国家、渠道、人群和关键词表现，帮你发现预算机会、异常波动和下一步优化动作。</p>
             </div>
             <div class="john-entry-actions" aria-label="John 功能入口">
-              <button type="button" data-john-entry="关键词管理">
-                <i data-lucide="search-check"></i>
-                <span>关键词管理</span>
+              <button class="john-entry-primary" type="button" data-john-create-flow data-john-flow-mode="existing">
+                <i data-lucide="wand-sparkles"></i>
+                <span>新建广告</span>
               </button>
               <button type="button" data-john-entry="广告管理">
                 <i data-lucide="chart-no-axes-combined"></i>
-                <span>广告管理</span>
+                <span>广告系列管理</span>
               </button>
             </div>
           </header>
 
           <div class="john-metric-grid" aria-label="广告核心指标">
             <article class="john-metric-card">
-              <span>曝光 Impressions</span>
-              <strong data-john-metric="impressions">37,106</strong>
-              <p><i data-lucide="trending-up"></i><b data-john-delta="impressions">12%</b> vs 上周</p>
-            </article>
-            <article class="john-metric-card">
-              <span>点击 Clicks</span>
-              <strong data-john-metric="clicks">2,290</strong>
-              <p><i data-lucide="trending-up"></i><b data-john-delta="clicks">8%</b> vs 上周</p>
-            </article>
-            <article class="john-metric-card">
-              <span>花费 Cost</span>
+              <span>总费用</span>
               <strong data-john-metric="cost">$4,842</strong>
-              <p><i data-lucide="trending-up"></i><b data-john-delta="cost">5%</b> vs 上周</p>
+              <p><i data-lucide="album"></i><b>全部 Campaign 累计</b></p>
             </article>
             <article class="john-metric-card">
-              <span>转化 Conversions</span>
+              <span>总展示数</span>
+              <strong data-john-metric="impressions">37,106</strong>
+              <p><i data-lucide="eye"></i><b>Impressions 展示量</b></p>
+            </article>
+            <article class="john-metric-card">
+              <span>总点击数</span>
+              <strong data-john-metric="clicks">2,290</strong>
+              <p><i data-lucide="mouse-pointer-click"></i><b data-john-metric-detail="ctr">点击率 10.3%</b></p>
+            </article>
+            <article class="john-metric-card">
+              <span>总转化次数</span>
               <strong data-john-metric="conversions">229</strong>
-              <p><i data-lucide="trending-up"></i><b data-john-delta="conversions">15%</b> vs 上周</p>
+              <p><i data-lucide="target"></i><b data-john-metric-detail="conversion-rate">转化率 5.2%</b></p>
             </article>
           </div>
 
-          <div class="john-dashboard-grid">
-            <section class="john-card john-trend-card" aria-labelledby="john-trend-title">
-              <header>
-                <div>
-                  <h2 id="john-trend-title">花费 & 转化趋势</h2>
-                  <p id="johnTrendSubtitle">近 14 天 · 广告1 · 性能卖点</p>
-                </div>
-                <span class="john-legend"><i></i>花费 <i></i>转化</span>
-              </header>
-              <div class="john-trend-chart" role="img" aria-label="近14天花费和转化趋势折线图">
-                <div class="john-chart-y"><span>220</span><span>165</span><span>110</span><span>55</span><span>0</span></div>
-                <svg viewBox="0 0 720 260" preserveAspectRatio="none" aria-hidden="true">
-                  <g class="john-grid-lines">
-                    <line x1="0" y1="18" x2="720" y2="18"></line>
-                    <line x1="0" y1="76" x2="720" y2="76"></line>
-                    <line x1="0" y1="134" x2="720" y2="134"></line>
-                    <line x1="0" y1="192" x2="720" y2="192"></line>
-                    <line x1="0" y1="250" x2="720" y2="250"></line>
-                    <line x1="168" y1="18" x2="168" y2="250"></line>
-                    <line x1="336" y1="18" x2="336" y2="250"></line>
-                    <line x1="504" y1="18" x2="504" y2="250"></line>
-                  </g>
-                  <path class="john-cost-line" data-john-line="cost" d="M0 148 C28 42 55 8 84 33 S122 243 168 164 S225 104 252 138 S299 194 336 132 S407 95 420 114 S463 156 504 124 S568 -8 604 63 S660 177 720 146"></path>
-                  <path class="john-conversion-line" data-john-line="conversions" d="M0 250 C28 238 55 235 84 238 S120 254 168 246 S225 244 252 247 S298 249 336 245 S392 239 420 240 S470 243 504 237 S562 226 604 234 S668 243 720 241"></path>
-                  <line class="john-hover-line" x1="420" y1="18" x2="420" y2="250"></line>
-                  <circle class="john-point cost" cx="420" cy="114" r="4"></circle>
-                  <circle class="john-point conversions" cx="420" cy="240" r="4"></circle>
-                </svg>
-                <div class="john-tooltip">
-                  <strong>06-08</strong>
-                  <span>conversions: 8</span>
-                  <span>cost: 125.83</span>
-                </div>
-                <div class="john-chart-x">
-                  <span>06-01</span><span>06-02</span><span>06-03</span><span>06-04</span><span>06-05</span><span>06-06</span><span>06-07</span><span>06-08</span><span>06-09</span><span>06-10</span><span>06-11</span><span>06-12</span><span>06-13</span><span>06-14</span>
-                </div>
-              </div>
-              <footer>
-                <span>CTR <strong data-john-metric="ctr">6.17%</strong></span>
-                <span>CPA <strong data-john-metric="cpa">$21.14</strong></span>
-                <button type="button" data-john-action="diagnose"><i data-lucide="sparkles"></i>生成优化建议</button>
-              </footer>
-            </section>
-
-            <aside class="john-card john-distribution-card" aria-labelledby="john-distribution-title">
-              <header>
-                <div>
-                  <h2 id="john-distribution-title">花费分布</h2>
-                  <p>按国家 / 渠道 / 人群拆解预算效率</p>
-                </div>
-              </header>
-              <div class="john-tabs" role="tablist" aria-label="花费分布维度">
-                <button class="active" type="button" role="tab" aria-selected="true" data-john-segment="country">国家</button>
-                <button type="button" role="tab" aria-selected="false" data-john-segment="channel">渠道</button>
-                <button type="button" role="tab" aria-selected="false" data-john-segment="audience">人群</button>
-              </div>
-              <div class="john-donut" aria-hidden="true"></div>
-              <div class="john-distribution-list" id="johnDistributionList" aria-live="polite"></div>
-            </aside>
-          </div>
-
-          <div class="john-lower-grid">
-            <section class="john-card john-insight-card" aria-labelledby="john-insight-title">
-              <header>
-                <div>
-                  <h2 id="john-insight-title">John 的投流提醒</h2>
-                  <p>预算、转化和素材异常会优先提示。</p>
-                </div>
-                <button type="button" data-john-action="refresh" aria-label="刷新投流提醒"><i data-lucide="refresh-cw"></i></button>
-              </header>
-              <div class="john-insight-list">
-                <article><i data-lucide="badge-dollar-sign"></i><div><strong>US 预算还可上调 12%</strong><span>CPA 低于均值 $3.8，且过去 3 天转化稳定。</span></div><button type="button">采纳</button></article>
-                <article><i data-lucide="mouse-pointer-click"></i><div><strong>移动端点击率偏低</strong><span>素材首屏卖点不够直接，建议测试“认证 + 交付周期”版本。</span></div><button type="button">测试</button></article>
-                <article><i data-lucide="search-check"></i><div><strong>关键词「solar battery supplier」升温</strong><span>搜索量上涨 18%，可加入性能卖点广告组。</span></div><button type="button">添加</button></article>
-              </div>
-            </section>
-
-            <section class="john-card john-table-card" aria-labelledby="john-keyword-title">
-              <header>
-                <div>
-                  <h2 id="john-keyword-title">关键词表现</h2>
-                  <p>按转化效率排序，定位可加预算或需暂停的词。</p>
-                </div>
-              </header>
-              <div class="john-table-wrap">
-                <table class="john-table">
-                  <thead><tr><th>关键词</th><th>花费</th><th>点击</th><th>转化</th><th>CPA</th><th>动作</th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>solar battery supplier</strong><small>高意图 · US</small></td><td>$684</td><td>318</td><td><b>42</b></td><td>$16.29</td><td><span class="john-status good">加预算</span></td></tr>
-                    <tr><td><strong>home energy storage</strong><small>泛流量 · GB</small></td><td>$592</td><td>286</td><td><b>21</b></td><td>$28.19</td><td><span class="john-status watch">观察</span></td></tr>
-                    <tr><td><strong>lithium battery wholesale</strong><small>B2B · DE</small></td><td>$421</td><td>144</td><td><b>18</b></td><td>$23.38</td><td><span class="john-status good">扩词</span></td></tr>
-                    <tr><td><strong>cheap powerwall alternative</strong><small>低价意图 · JP</small></td><td>$236</td><td>92</td><td><b>3</b></td><td>$78.67</td><td><span class="john-status stop">暂停</span></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          </div>
-
-          <section class="john-composer" aria-label="描述你的投流分析诉求">
-            <textarea id="johnPromptInput" rows="2" maxlength="500" aria-label="描述你的投流分析诉求" placeholder="想要分析特定国家or人群，想要提升哪些广告表现，让John帮你提升"></textarea>
-            <div class="john-composer-actions">
-              <button class="john-prompt-send" id="johnPromptSend" type="button"><i data-lucide="sparkles"></i>让 John 分析</button>
+          <section class="john-card john-dashboard-table-card" aria-labelledby="john-campaign-performance-title">
+            <header>
+              <h2 id="john-campaign-performance-title">Campaign 数据明细</h2>
+              <nav class="john-table-pagination" aria-label="Campaign 数据分页">
+                <button type="button" aria-label="上一页"><i data-lucide="chevron-left"></i></button>
+                <button type="button">1</button>
+                <button class="active" type="button" aria-current="page">2</button>
+                <button type="button">3</button>
+                <span aria-hidden="true">···</span>
+                <button type="button" aria-label="下一页"><i data-lucide="chevron-right"></i></button>
+              </nav>
+            </header>
+            <div class="john-dashboard-table-wrap">
+              <table class="john-dashboard-table">
+                <colgroup><col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col /></colgroup>
+                <thead><tr><th>广告系列</th><th>产品线</th><th>投放国家</th><th>广告预算</th><th>费用</th><th>展示数</th><th>点击数</th><th>点击率</th><th>点击单价</th><th>转化次数</th><th>转化率</th><th>每次转化费用</th></tr></thead>
+                <tbody id="johnDashboardCampaignRows"></tbody>
+              </table>
             </div>
           </section>
+
+          <section class="john-card john-performance-card" aria-labelledby="john-performance-title">
+            <header>
+              <h2 id="john-performance-title">投放效果看板</h2>
+              <div class="john-performance-controls">
+                <label class="john-metric-select">
+                  <span class="sr-only">选择投放效果指标</span>
+                  <select id="johnDashboardMetricSelect" aria-label="选择投放效果指标">
+                    <option value="impressions">展示次数</option>
+                    <option value="clicks">点击次数</option>
+                    <option value="cost">费用</option>
+                    <option value="conversions">转化次数</option>
+                  </select>
+                  <i data-lucide="chevron-down" aria-hidden="true"></i>
+                </label>
+                <div class="john-range-tabs" role="tablist" aria-label="投放效果时间范围">
+                  <button type="button" role="tab" data-john-range="7">近 7 天</button>
+                  <button class="active" type="button" role="tab" data-john-range="14">近 14 天</button>
+                  <button type="button" role="tab" data-john-range="30">近 30 天</button>
+                </div>
+              </div>
+            </header>
+            <div class="john-performance-chart" id="johnPerformanceChart" role="img" aria-label="Campaign 投放效果趋势图"></div>
+            <div class="john-performance-legend" id="johnPerformanceLegend" aria-label="Campaign 图例"></div>
+          </section>
+
+          <section class="john-card john-insight-card john-dashboard-insight" aria-labelledby="john-insight-title">
+            <header>
+              <div>
+                <h2 id="john-insight-title">John 的优化建议</h2>
+                <p>基于 Campaign 的预算、点击率和转化效率生成可执行建议。</p>
+              </div>
+            </header>
+            <div class="john-insight-list" id="johnInsightList">
+              <article data-john-suggestion="budget-us"><span class="john-insight-icon"><i data-lucide="circle-dollar-sign"></i></span><div><strong>US 预算还可上调 12%</strong><span>CPA 低于均值 $3.8，且过去 3 天转化稳定。</span></div><div class="john-insight-actions"><button type="button" data-john-suggestion-action="ignore">忽略</button><button type="button" data-john-suggestion-action="accept">采纳 <i data-lucide="arrow-right"></i></button></div></article>
+              <article data-john-suggestion="budget-us-secondary"><span class="john-insight-icon"><i data-lucide="circle-dollar-sign"></i></span><div><strong>US 预算还可上调 12%</strong><span>CPA 低于均值 $3.8，且过去 3 天转化稳定。</span></div><div class="john-insight-actions"><button type="button" data-john-suggestion-action="ignore">忽略</button><button type="button" data-john-suggestion-action="accept">采纳 <i data-lucide="arrow-right"></i></button></div></article>
+              <article data-john-suggestion="budget-us-tertiary"><span class="john-insight-icon"><i data-lucide="circle-dollar-sign"></i></span><div><strong>US 预算还可上调 12%</strong><span>CPA 低于均值 $3.8，且过去 3 天转化稳定。</span></div><div class="john-insight-actions"><button type="button" data-john-suggestion-action="ignore">忽略</button><button type="button" data-john-suggestion-action="accept">采纳 <i data-lucide="arrow-right"></i></button></div></article>
+            </div>
+          </section>
+
         </section>
 
         <section class="john-manage-page john-ads-page" id="johnAdsPage" aria-labelledby="john-ads-title" hidden>
           <header class="john-manage-hero">
             <button class="john-back" type="button" data-john-back><i data-lucide="arrow-left"></i>返回 John</button>
-            <h1 id="john-ads-title">广告管理</h1>
-            <p>所有广告（不管是 campaign 还是广告组），颗粒度统一到「广告」层级。</p>
+            <div class="john-manage-title-row">
+              <div>
+                <h1 id="john-ads-title">广告投放管理</h1>
+                <p>广告系列负责投放范围、预算与排期；每个广告都必须归属于一个广告系列。</p>
+              </div>
+              <div class="john-manage-actions">
+                <button class="john-create-button john-create-button-secondary" type="button" data-john-create-flow data-john-flow-mode="existing"><i data-lucide="badge-plus"></i>新建广告</button>
+                <button class="john-create-button" type="button" data-john-create-flow data-john-flow-mode="new"><i data-lucide="circle-plus"></i>新建广告系列及广告</button>
+              </div>
+            </div>
           </header>
 
-          <div class="john-ad-products">
-            <section class="john-product-card" aria-labelledby="aurora-title">
-              <header>
-                <div>
-                  <h2 id="aurora-title">Aurora 降噪耳机</h2>
-                  <p>3 条广告</p>
-                </div>
-                <span>音频</span>
-              </header>
-              <div class="john-manage-table-wrap">
-                <table class="john-manage-table john-ad-table">
-                  <thead><tr><th>广告</th><th>状态</th><th>日预算</th><th>国家</th><th>渠道</th><th>关键词</th><th></th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>广告1 · 品牌主推</strong><small>Aurora 降噪耳机 · 沉浸聆听</small></td><td><span class="john-status good">运行中</span></td><td>$120</td><td>US, GB</td><td>2 个</td><td>3</td><td><button data-john-ad-action="pause" type="button">暂停</button><button data-john-ad-action="edit" type="button">编辑</button></td></tr>
-                    <tr><td><strong>广告2 · 再营销</strong><small>还在犹豫?今日下单立省 $40</small></td><td><span class="john-status good">运行中</span></td><td>$60</td><td>US</td><td>1 个</td><td>2</td><td><button data-john-ad-action="pause" type="button">暂停</button><button data-john-ad-action="edit" type="button">编辑</button></td></tr>
-                    <tr><td><strong>广告3 · 新国家测试</strong><small>Aurora Headphones — Now in DE</small></td><td><span class="john-status draft">草稿</span></td><td>$40</td><td>DE</td><td>2 个</td><td>1</td><td><button data-john-ad-action="enable" type="button">启用</button><button data-john-ad-action="edit" type="button">编辑</button></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
+          <nav class="john-management-tabs" aria-label="广告投放管理分类">
+            <button class="active" type="button" data-john-management-tab="campaigns" aria-selected="true"><i data-lucide="folders"></i>广告系列管理 <span id="johnCampaignTabCount">0</span></button>
+            <button type="button" data-john-management-tab="ads" aria-selected="false"><i data-lucide="rectangle-ellipsis"></i>广告管理 <span id="johnAdTabCount">0</span></button>
+          </nav>
 
-            <section class="john-product-card" aria-labelledby="lumos-title">
-              <header>
-                <div>
-                  <h2 id="lumos-title">Lumos 智能台灯</h2>
-                  <p>2 条广告</p>
+          <section data-john-management-panel="campaigns">
+            <div class="john-campaign-summary" aria-label="广告系列概览">
+              <article><span>广告系列总数</span><strong id="johnCampaignTotal">0</strong></article>
+              <article><span>投放中</span><strong id="johnCampaignEnabled">0</strong></article>
+              <article><span>待完善 / 已暂停</span><strong id="johnCampaignPaused">0</strong></article>
+            </div>
+            <div class="john-ad-products" id="johnCampaignGroups" aria-live="polite"></div>
+          </section>
+
+          <section data-john-management-panel="ads" hidden>
+            <div class="john-ad-filterbar">
+              <label><span>所属广告系列</span><select id="johnAdCampaignFilter"><option value="all">全部广告系列</option></select></label>
+              <label><span>状态</span><select id="johnAdStatusFilter"><option value="all">全部状态</option><option value="enabled">已启用</option><option value="paused">已暂停</option></select></label>
+              <p id="johnAdResultCount">共 0 个广告</p>
+            </div>
+            <div class="john-ad-products" id="johnAdList" aria-live="polite"></div>
+          </section>
+        </section>
+
+        <section class="john-create-flow" id="johnCreateFlowPage" aria-labelledby="john-flow-title" hidden>
+          <header class="john-flow-topbar">
+            <button type="button" data-john-flow-exit aria-label="返回 John"><i data-lucide="arrow-left"></i><span>返回</span></button>
+            <h1 id="john-flow-title">John 正在为您创建广告</h1>
+            <button type="button" data-john-flow-reset aria-label="重新开始"><i data-lucide="refresh-cw"></i><span>重新开始</span></button>
+          </header>
+
+          <div class="john-flow-shell">
+            <main class="john-flow-thread" aria-live="polite">
+              <section class="john-flow-step" id="johnFlowCampaignStep" data-john-flow-step="campaign">
+                <article class="john-flow-card john-flow-mode-card">
+                  <header><div><h2>选择投放到哪个广告系列</h2><p>可以复用已有系列，也可以从零配置新的投放范围</p></div></header>
+                  <div class="john-flow-mode-grid" role="radiogroup" aria-label="选择广告系列来源">
+                    <button type="button" role="radio" aria-checked="false" data-john-flow-mode="existing"><span><i data-lucide="folders"></i></span><div><strong>从已有广告系列开始</strong><small>复用已有范围、预算和系列关键词</small></div><i data-lucide="check"></i></button>
+                    <button type="button" role="radio" aria-checked="false" data-john-flow-mode="new"><span><i data-lucide="folder-plus"></i></span><div><strong>新建广告系列</strong><small>配置投放范围，并让 John 生成关键词</small></div><i data-lucide="check"></i></button>
+                  </div>
+                </article>
+
+                <article class="john-flow-card john-flow-existing-card" id="johnFlowExistingPanel" hidden>
+                  <header><div><h2>选择一个广告系列</h2><p>广告将继承该系列的域名、国家、预算和关键词</p></div></header>
+                  <div class="john-flow-campaign-list" id="johnFlowCampaignList"></div>
+                  <p class="john-flow-error" id="johnFlowExistingError" role="alert" hidden></p>
+                  <footer><button class="john-flow-primary" id="johnFlowUseCampaign" type="button">使用此广告系列</button></footer>
+                </article>
+
+                <article class="john-flow-card john-flow-new-card" id="johnFlowNewPanel" hidden>
+                  <header><div><h2>设置投放信息</h2><p>John 会根据这里的业务上下文生成系列级关键词</p></div></header>
+                  <div class="john-flow-form-grid">
+                    <label class="john-flow-field"><span>广告系列名称</span><input id="johnFlowCampaignName" type="text" maxlength="80" placeholder="请输入" /></label>
+                    <label class="john-flow-field"><span>独立站域名</span><input id="johnFlowDomain" type="url" placeholder="请输入，例如：www.baixyn.com" autocomplete="url" /></label>
+                    <fieldset class="john-flow-country-field">
+                      <legend>投放国家</legend>
+                      <div class="john-flow-country-select" id="johnFlowCountrySelect">
+                        <button class="john-flow-country-trigger" id="johnFlowCountryTrigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="johnFlowCountryMenu">
+                          <span id="johnFlowCountryValue">请选择</span><i data-lucide="chevron-down"></i>
+                        </button>
+                        <div class="john-flow-country-menu" id="johnFlowCountryMenu" role="listbox" aria-label="选择投放国家" aria-multiselectable="true" hidden>
+                          <div id="johnFlowCountryGrid"></div>
+                          <footer><span id="johnFlowCountryCount">尚未选择</span><button type="button" data-john-flow-country-done>完成</button></footer>
+                        </div>
+                      </div>
+                    </fieldset>
+                    <label class="john-flow-field"><span>产品线（可选）</span><select id="johnFlowProductLine"><option value="">全部产品</option><option>Solar Energy Storage</option><option>Commercial Battery</option><option>Home Battery</option><option>OEM Services</option></select></label>
+                  </div>
+                  <p class="john-flow-error" id="johnFlowCampaignError" role="alert" hidden></p>
+                  <footer><span id="johnFlowKeywordStaleNote" hidden>投放设置已变化，需要重新生成关键词。</span><button class="john-flow-primary" id="johnFlowStartKeywords" type="button"><i data-lucide="sparkles"></i>分析网站并生成关键词</button></footer>
+                </article>
+              </section>
+
+              <section class="john-flow-step" id="johnFlowKeywordStep" data-john-flow-step="keywords" hidden>
+                <div class="john-flow-agent-line"><span><i data-lucide="sparkles"></i></span><div><strong>我来分析网站并组织系列关键词</strong><p>我会持续展示分析依据，识别 B2B 采购意图，并把低价值流量整理为否定词。</p></div></div>
+                <article class="john-flow-card john-flow-keyword-card">
+                  <header><div><h2>这是我为广告系列整理的关键词</h2><p>同一系列下的所有广告都会共享这组关键词与否定词。</p></div><button class="john-flow-secondary" id="johnFlowRegenerateKeywords" type="button"><i data-lucide="refresh-cw"></i>重新生成</button></header>
+                  <div id="johnFlowKeywordWorkspace" aria-live="polite"></div>
+                  <p class="john-flow-error" id="johnFlowKeywordError" role="alert" hidden></p>
+                  <footer><button class="john-flow-secondary" type="button" data-john-flow-back="campaign"><i data-lucide="arrow-up"></i>修改投放设置</button><button class="john-flow-primary" id="johnFlowConfirmCampaign" type="button">确认广告系列并继续<i data-lucide="arrow-right"></i></button></footer>
+                </article>
+              </section>
+
+              <section class="john-flow-step" id="johnFlowScheduleStep" data-john-flow-step="schedule" hidden>
+                <article class="john-flow-card john-flow-schedule-card">
+                  <header><div><h2>设置投放排期和预算</h2><p>设置广告投放日期、时段与每日预算，灵活控制投放节奏和成本</p></div></header>
+                  <div class="john-flow-schedule-grid">
+                    <label class="john-flow-schedule-field"><span>开始日期</span><input id="johnFlowScheduleStartDate" type="date" /></label>
+                    <label class="john-flow-schedule-field"><span>结束日期（可选）</span><input id="johnFlowScheduleEndDate" type="date" /></label>
+                    <label class="john-flow-schedule-field john-flow-schedule-budget"><span>日预算</span><span class="john-flow-money-input"><b>$</b><input id="johnFlowScheduleBudget" type="number" min="1" step="1" inputmode="decimal" aria-describedby="johnFlowScheduleBudgetHint" /></span><small id="johnFlowScheduleBudgetHint">每日广告预算，最小值为 1，单位为美元</small></label>
+                  </div>
+                  <p class="john-flow-error" id="johnFlowScheduleError" role="alert" hidden></p>
+                  <footer><button class="john-flow-primary" id="johnFlowConfirmSchedule" type="button">确认创建广告系列</button></footer>
+                </article>
+              </section>
+
+              <section class="john-flow-step" id="johnFlowAdStep" data-john-flow-step="ad" hidden>
+                <div class="john-flow-agent-line"><span><i data-lucide="badge-plus"></i></span><div><strong>广告系列已就绪，开始创建广告</strong><p id="johnFlowAdContextCopy">广告会继承已确认的系列设置和关键词。</p></div></div>
+                <div class="john-flow-ad-layout">
+                  <article class="john-flow-card john-flow-ad-card">
+                    <header><div><h2>接下来我们来创建广告</h2><p>填写广告名称后生成广告素材。</p></div></header>
+                    <div class="john-flow-parent-summary" id="johnFlowAdParentSummary"></div>
+                    <label class="john-flow-field john-flow-field-wide"><span>广告名称</span><input id="johnFlowAdName" type="text" maxlength="80" placeholder="请输入" /></label>
+                    <button class="john-flow-generate-ad" id="johnFlowGenerateAd" type="button"><i data-lucide="sparkles"></i><span>生成广告素材</span></button>
+                    <p class="john-flow-error" id="johnFlowAdError" role="alert" hidden></p>
+                  </article>
+
+                  <div class="john-flow-ad-thinking" id="johnFlowAdThinking" aria-live="polite" hidden></div>
+
+                  <section class="john-flow-ad-result" id="johnFlowAdResult" hidden>
+                    <div class="john-flow-ad-complete-note"><i data-lucide="circle-check"></i><span>John 已生成广告素材对应的标题、描述和站内链接</span><i data-lucide="chevron-right"></i></div>
+                    <div class="john-flow-ad-assets" id="johnFlowAdAssets" hidden>
+                      <section class="john-flow-asset-section"><header><div><h3>广告标题</h3><p>John 已根据您网站的卖点写好了英文标题，也可以直接修改或补充。至少保留 1 条，每条不超过 30 个英文字符</p></div></header><div id="johnFlowHeadlineFields"></div><button class="john-flow-asset-add" type="button" data-john-flow-add-asset="headline"><i data-lucide="circle-plus"></i>添加标题</button></section>
+                      <section class="john-flow-asset-section"><header><div><h3>广告描述</h3><p>描述会显示在广告标题下方，向买家进一步介绍您的产品和服务</p></div></header><div id="johnFlowDescriptionFields"></div><button class="john-flow-asset-add" type="button" data-john-flow-add-asset="description"><i data-lucide="circle-plus"></i>添加描述</button></section>
+                      <section class="john-flow-asset-section"><header><div><h3>站内链接</h3><p>添加站内链接，引导用户快速访问网站中的重要页面</p></div></header><div class="john-flow-sitelinks" id="johnFlowSitelinkFields"></div><button class="john-flow-asset-add" type="button" data-john-flow-add-sitelink><i data-lucide="circle-plus"></i>添加站内链接</button></section>
+                    </div>
+                    <footer><button class="john-flow-primary" id="johnFlowCreateAd" type="button" disabled>创建并使用广告<i data-lucide="arrow-right"></i></button></footer>
+                  </section>
+
+                  <aside class="john-flow-preview" aria-label="Google 搜索广告实时预览">
+                    <header><div><span>实时预览</span><strong>Google 搜索广告</strong></div><button id="johnFlowPreviewToggle" type="button" aria-expanded="true" aria-label="关闭广告预览"><i data-lucide="x"></i></button></header>
+                    <article>
+                      <div class="john-flow-preview-content">
+                        <div class="john-preview-brand"><span>OZ</span><div><strong id="johnFlowPreviewBrand">Your Company</strong><small id="johnFlowPreviewUrl">https://yourcompany.com</small></div><b>⋮</b></div>
+                        <p class="john-preview-sponsored">赞助商广告</p>
+                        <h3 id="johnFlowPreviewHeadline">Custom Energy Solutions | Factory Direct</h3>
+                        <p id="johnFlowPreviewDescription">Reliable OEM manufacturing, strict quality control and global delivery support.</p>
+                        <div class="john-preview-links" id="johnFlowPreviewLinks"><span>Products</span><span>Contact Us</span></div>
+                      </div>
+                      <div class="john-flow-preview-skeleton" aria-hidden="true"><span class="brand"></span><span class="url"></span><span class="headline"></span><span class="headline short"></span><span class="copy"></span><span class="copy short"></span><span class="links"></span></div>
+                    </article>
+                    <div class="john-flow-preview-note"><i data-lucide="bot"></i><p><strong>John 会持续优化</strong><span>投放后自动监测预算、搜索词、地区与转化异常，并把可执行建议送到首页。</span></p></div>
+                  </aside>
                 </div>
-                <span>照明</span>
-              </header>
-              <div class="john-manage-table-wrap">
-                <table class="john-manage-table john-ad-table">
-                  <thead><tr><th>广告</th><th>状态</th><th>日预算</th><th>国家</th><th>渠道</th><th>关键词</th><th></th></tr></thead>
-                  <tbody>
-                    <tr><td><strong>广告1 · 通用搜索</strong><small>Lumos 智能台灯 · 护眼无频闪</small></td><td><span class="john-status good">运行中</span></td><td>$80</td><td>US, JP</td><td>2 个</td><td>2</td><td><button data-john-ad-action="pause" type="button">暂停</button><button data-john-ad-action="edit" type="button">编辑</button></td></tr>
-                    <tr><td><strong>广告2 · 礼品场景</strong><small>送礼之选 · Lumos 礼盒装</small></td><td><span class="john-status watch">已暂停</span></td><td>$50</td><td>US</td><td>1 个</td><td>1</td><td><button data-john-ad-action="enable" type="button">启用</button><button data-john-ad-action="edit" type="button">编辑</button></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
+              </section>
+
+              <section class="john-flow-step" id="johnFlowCompleteStep" data-john-flow-step="complete" hidden>
+                <article class="john-flow-card john-flow-success-card">
+                  <div class="john-flow-success-icon"><i data-lucide="circle-check-big"></i></div>
+                  <span class="john-flow-eyebrow">创建完成</span>
+                  <h2>广告已创建</h2>
+                  <p>John 会持续监测预算、搜索词、地区与转化异常。</p>
+                  <div class="john-flow-success-summary" id="johnFlowSuccessSummary"></div>
+                  <div class="john-flow-success-actions"><button class="john-flow-secondary" id="johnFlowGoManage" type="button"><i data-lucide="chart-no-axes-combined"></i>去广告管理</button><button class="john-flow-primary" id="johnFlowContinueAd" type="button"><i data-lucide="plus"></i>继续创建广告</button></div>
+                </article>
+              </section>
+            </main>
           </div>
         </section>
 
-        <section class="john-manage-page john-keywords-page" id="johnKeywordsPage" aria-labelledby="john-keywords-title" hidden>
-          <header class="john-manage-hero">
-            <button class="john-back" type="button" data-john-back><i data-lucide="arrow-left"></i>返回 John</button>
-            <h1 id="john-keywords-title">关键词管理</h1>
-            <p>需求 2c / 4：广告关联搜索词，支持启用/停用、补充负向词、调整词与广告的关联。</p>
-          </header>
+        <dialog class="john-campaign-dialog john-campaign-setup-dialog" id="johnCampaignSetupDialog" aria-labelledby="john-campaign-setup-title">
+          <form class="john-campaign-shell" id="johnCampaignSetupForm" method="dialog" novalidate>
+            <header class="john-campaign-dialog-header">
+              <div><p>Google Search · 投放设置</p><h2 id="john-campaign-setup-title">新建广告系列</h2></div>
+              <button class="john-dialog-close" type="button" data-john-campaign-close aria-label="关闭新建广告系列"><i data-lucide="x"></i></button>
+            </header>
+            <nav class="john-wizard-steps john-campaign-steps" aria-label="新建广告系列步骤">
+              <button class="active" type="button" data-john-campaign-step="0"><span>1</span>投放范围</button>
+              <button type="button" data-john-campaign-step="1"><span>2</span>预算排期</button>
+            </nav>
+            <div class="john-campaign-setup-main">
+              <section class="john-wizard-panel active" data-john-campaign-panel="0">
+                <div class="john-wizard-heading"><span>01</span><div><h3>设置广告系列的投放范围</h3><p>广告系列统一管理网站、目标市场和产品线，子广告会自动继承这些设置。</p></div></div>
+                <label class="john-field"><span>独立站域名</span><input id="johnCampaignDomain" type="url" placeholder="www.yourcompany.com" autocomplete="url" /></label>
+                <fieldset class="john-market-field"><legend>投放国家（可多选）</legend><div class="john-country-grid" id="johnCampaignCountryGrid"></div></fieldset>
+                <label class="john-field"><span>产品线（可选）</span><select id="johnCampaignProductLine"><option value="">全部产品</option><option>Solar Energy Storage</option><option>Commercial Battery</option><option>Home Battery</option><option>OEM Services</option></select></label>
+              </section>
+              <section class="john-wizard-panel" data-john-campaign-panel="1" hidden>
+                <div class="john-wizard-heading"><span>02</span><div><h3>设置预算与排期</h3><p>创建后广告系列先保持待完善状态；添加并启用至少一个广告后才能开始投放。</p></div></div>
+                <label class="john-field"><span>广告系列名称</span><input id="johnCampaignName" type="text" maxlength="80" placeholder="例如：US Solar Storage Search Campaign" /></label>
+                <div class="john-budget-fields"><label class="john-field"><span>开始日期</span><input id="johnCampaignStartDate" type="date" /></label><label class="john-field"><span>结束日期（可选）</span><input id="johnCampaignEndDate" type="date" /></label><label class="john-field john-budget-input"><span>日预算（USD）</span><div><b>$</b><input id="johnCampaignBudget" type="number" min="1" step="1" placeholder="100" /></div></label></div>
+              </section>
+              <p class="john-wizard-error" id="johnCampaignError" role="alert" hidden></p>
+            </div>
+            <footer class="john-wizard-footer"><span id="johnCampaignProgress">第 1 步，共 2 步</span><div><button class="john-button-secondary" id="johnCampaignBack" type="button" hidden>上一步</button><button class="john-button-primary" id="johnCampaignNext" type="button">下一步</button></div></footer>
+          </form>
+        </dialog>
 
-          <section class="john-keyword-panel">
-            <header>
-              <label>
-                <span>广告：</span>
-                <select id="johnKeywordAdFilter">
-                  <option value="all">全部广告</option>
-                  <option value="广告1 · 品牌主推">广告1 · 品牌主推</option>
-                  <option value="广告2 · 再营销">广告2 · 再营销</option>
-                  <option value="广告3 · 新国家测试">广告3 · 新国家测试</option>
-                  <option value="广告1 · 通用搜索">广告1 · 通用搜索</option>
-                  <option value="广告2 · 礼品场景">广告2 · 礼品场景</option>
-                </select>
-              </label>
-              <div class="john-keyword-tabs" role="tablist" aria-label="关键词类型">
-                <button class="active" type="button" role="tab" aria-selected="true" data-john-keyword-tab="keyword">关键词</button>
-                <button type="button" role="tab" aria-selected="false" data-john-keyword-tab="negative">负向词</button>
+        <dialog class="john-campaign-dialog" id="johnCampaignDialog" aria-labelledby="john-campaign-dialog-title">
+          <form class="john-campaign-shell" id="johnCampaignForm" method="dialog" novalidate>
+            <header class="john-campaign-dialog-header">
+              <div>
+                <p>Google Search · 广告素材</p>
+                <h2 id="john-campaign-dialog-title">新建广告</h2>
               </div>
+              <button class="john-dialog-close" type="button" data-john-dialog-close aria-label="关闭新建广告"><i data-lucide="x"></i></button>
             </header>
 
-            <div class="john-manage-table-wrap">
-              <table class="john-manage-table john-keyword-table">
-                <thead><tr><th>搜索词 / 关键词</th><th>匹配</th><th>归属广告</th><th>曝光</th><th>点击</th><th>花费</th><th>转化</th><th>状态</th><th></th></tr></thead>
-                <tbody id="johnKeywordRows">
-                  <tr data-keyword-type="keyword" data-ad-name="广告1 · 品牌主推"><td><strong>降噪耳机</strong></td><td><select><option>广泛</option><option>词组</option><option>精确</option></select></td><td><select><option>广告1 · 品牌主推</option><option>广告2 · 再营销</option></select></td><td>7,189</td><td>634</td><td>$722.87</td><td>74</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
-                  <tr data-keyword-type="keyword" data-ad-name="广告1 · 品牌主推"><td><strong>noise cancelling headphones</strong></td><td><select><option>词组</option><option>广泛</option><option>精确</option></select></td><td><select><option>广告1 · 品牌主推</option><option>广告3 · 新国家测试</option></select></td><td>9,568</td><td>325</td><td>$924.66</td><td>31</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
-                  <tr data-keyword-type="keyword" data-ad-name="广告1 · 品牌主推"><td><strong>无线耳机推荐</strong></td><td><select><option>广泛</option><option>词组</option><option>精确</option></select></td><td><select><option>广告1 · 品牌主推</option><option>广告2 · 再营销</option></select></td><td>2,601</td><td>230</td><td>$544.17</td><td>24</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
-                  <tr data-keyword-type="keyword" data-ad-name="广告2 · 再营销"><td><strong>aurora 耳机 优惠</strong></td><td><select><option>精确</option><option>词组</option><option>广泛</option></select></td><td><select><option>广告2 · 再营销</option><option>广告1 · 品牌主推</option></select></td><td>7,615</td><td>603</td><td>$1,570.92</td><td>47</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
-                  <tr data-keyword-type="keyword" data-ad-name="广告2 · 再营销"><td><strong>耳机 折扣码</strong></td><td><select disabled><option>词组</option></select></td><td><select disabled><option>广告2 · 再营销</option></select></td><td>8,405</td><td>678</td><td>$1,343.41</td><td>26</td><td><span class="john-status watch">停用</span></td><td><button data-john-keyword-action="enable" type="button">启用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
-                  <tr data-keyword-type="keyword" data-ad-name="广告3 · 新国家测试"><td><strong>kopfhörer anc</strong></td><td><select><option>词组</option><option>广泛</option><option>精确</option></select></td><td><select><option>广告3 · 新国家测试</option><option>广告1 · 品牌主推</option></select></td><td>8,594</td><td>522</td><td>$577.68</td><td>52</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
-                  <tr data-keyword-type="keyword" data-ad-name="广告1 · 通用搜索"><td><strong>智能台灯</strong></td><td><select><option>广泛</option><option>词组</option><option>精确</option></select></td><td><select><option>广告1 · 通用搜索</option><option>广告2 · 礼品场景</option></select></td><td>6,042</td><td>199</td><td>$484.68</td><td>6</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
-                  <tr data-keyword-type="keyword" data-ad-name="广告1 · 通用搜索"><td><strong>护眼台灯</strong></td><td><select><option>词组</option><option>广泛</option><option>精确</option></select></td><td><select><option>广告1 · 通用搜索</option><option>广告2 · 礼品场景</option></select></td><td>2,464</td><td>185</td><td>$169.36</td><td>9</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
-                  <tr data-keyword-type="keyword" data-ad-name="广告2 · 礼品场景"><td><strong>生日礼物 台灯</strong></td><td><select><option>词组</option><option>广泛</option><option>精确</option></select></td><td><select><option>广告2 · 礼品场景</option><option>广告1 · 通用搜索</option></select></td><td>1,681</td><td>65</td><td>$141.36</td><td>2</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
-                  <tr data-keyword-type="negative" data-ad-name="广告1 · 品牌主推"><td><strong>二手耳机</strong><small>避免低价二手流量</small></td><td><select><option>词组</option><option>精确</option></select></td><td><select><option>广告1 · 品牌主推</option><option>广告2 · 再营销</option></select></td><td>1,204</td><td>83</td><td>$96.24</td><td>0</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
-                  <tr data-keyword-type="negative" data-ad-name="广告1 · 通用搜索"><td><strong>维修台灯</strong><small>过滤售后维修类搜索</small></td><td><select><option>广泛</option><option>词组</option></select></td><td><select><option>广告1 · 通用搜索</option><option>广告2 · 礼品场景</option></select></td><td>842</td><td>41</td><td>$44.68</td><td>0</td><td><span class="john-status good">启用</span></td><td><button data-john-keyword-action="pause" type="button">停用</button><button class="danger" data-john-keyword-action="delete" type="button">删除</button></td></tr>
-                </tbody>
-              </table>
+            <nav class="john-wizard-steps john-ad-steps" aria-label="新建广告步骤">
+              <button class="active" type="button" data-john-wizard-step="0"><span>1</span>关键词</button>
+              <button type="button" data-john-wizard-step="1"><span>2</span>广告文案</button>
+              <button type="button" data-john-wizard-step="2"><span>3</span>站内链接</button>
+              <button type="button" data-john-wizard-step="3"><span>4</span>宣传信息</button>
+            </nav>
+
+            <div class="john-wizard-layout">
+              <div class="john-wizard-main">
+                <section class="john-wizard-panel active" data-john-panel="0">
+                  <div class="john-wizard-heading"><span>01</span><div><h3>为广告生成独立关键词</h3><p>选择所属广告系列并命名广告，John 会基于系列范围生成该广告专属的关键词与否定词。</p></div></div>
+                  <label class="john-field"><span>所属广告系列</span><select id="johnAdCampaignSelect"></select></label>
+                  <label class="john-field"><span>广告名称</span><input id="johnAdName" type="text" maxlength="80" placeholder="例如：核心产品采购意图广告" /></label>
+                  <div class="john-parent-scope" id="johnAdParentScope"></div>
+                  <button class="john-analyze-button" id="johnAnalyzeButton" type="button"><i data-lucide="sparkles"></i>让 John 分析网站并生成关键词</button>
+                </section>
+
+                <section class="john-wizard-panel" data-john-panel="1" hidden>
+                  <div class="john-wizard-heading"><span>02</span><div><h3>审核 John 生成的英文广告文案</h3><p>保留最适合的标题和描述，内容会同步更新到右侧广告预览。</p></div></div>
+                  <div class="john-asset-block"><header><h4>广告标题</h4><span>最多 30 个字符</span></header><div id="johnHeadlineFields"></div><button type="button" data-john-add-asset="headline"><i data-lucide="plus"></i>添加标题</button></div>
+                  <div class="john-asset-block"><header><h4>广告描述</h4><span>最多 90 个字符</span></header><div id="johnDescriptionFields"></div><button type="button" data-john-add-asset="description"><i data-lucide="plus"></i>添加描述</button></div>
+                </section>
+
+                <section class="john-wizard-panel" data-john-panel="2" hidden>
+                  <div class="john-wizard-heading"><span>03</span><div><h3>补充高意图站内链接</h3><p>把访客直接带到产品、案例、质量与联系页面，缩短转化路径。</p></div></div>
+                  <div class="john-sitelink-list" id="johnSitelinkFields"></div>
+                  <div class="john-sitelink-actions">
+                    <button class="john-add-row" type="button" data-john-add-sitelink><i data-lucide="plus"></i>添加站内链接</button>
+                    <span id="johnSitelinkCount" aria-live="polite">0 / 6</span>
+                  </div>
+                </section>
+
+                <section class="john-wizard-panel" data-john-panel="3" hidden>
+                  <div class="john-wizard-heading"><span>04</span><div><h3>选择宣传信息</h3><p>用短卖点强调询价速度、样品、定制与质量能力。</p></div></div>
+                  <div class="john-callout-grid" id="johnCalloutFields"></div>
+                  <div class="john-inline-add"><input id="johnCalloutInput" maxlength="25" placeholder="输入英文宣传信息" /><button type="button" data-john-add-callout>添加</button></div>
+                </section>
+
+                <p class="john-wizard-error" id="johnWizardError" role="alert" hidden></p>
+              </div>
+
+              <aside class="john-wizard-side">
+                <section class="john-keyword-workspace" id="johnKeywordWorkspace" aria-label="关键词分析与编辑" aria-live="polite"></section>
+                <section class="john-ad-preview" id="johnAdPreview" aria-label="Google 搜索广告实时预览" hidden>
+                  <header><span>实时预览</span><strong>Google 搜索广告</strong></header>
+                  <article>
+                    <div class="john-preview-brand"><span>OZ</span><div><strong id="johnPreviewBrand">Your Company</strong><small id="johnPreviewUrl">https://yourcompany.com</small></div><b>⋮</b></div>
+                    <p class="john-preview-sponsored">赞助商广告</p>
+                    <h3 id="johnPreviewHeadline">Custom Energy Solutions | Factory Direct</h3>
+                    <p id="johnPreviewDescription">Reliable OEM manufacturing, strict quality control and global delivery support.</p>
+                    <div class="john-preview-links" id="johnPreviewLinks"><span>Products</span><span>Contact Us</span></div>
+                  </article>
+                  <div class="john-preview-note"><i data-lucide="bot"></i><p><strong>John 会持续优化</strong><span>投放后自动监测预算、搜索词、地区与转化异常，并把可执行建议送到首页。</span></p></div>
+                </section>
+              </aside>
             </div>
-          </section>
-        </section>
+
+            <footer class="john-wizard-footer">
+              <span id="johnWizardProgress">第 1 步，共 4 步</span>
+              <div><button class="john-button-secondary" id="johnWizardBack" type="button" hidden>上一步</button><button class="john-button-primary" id="johnWizardNext" type="button">下一步</button></div>
+            </footer>
+          </form>
+        </dialog>
 
         <section class="wendy-page" id="wendyPage" aria-labelledby="wendy-title" hidden>
           <header class="wendy-hero">
@@ -1624,10 +1751,17 @@
                   <h1 id="keyword-validation-title">搜索词验证</h1>
                   <p>试搜关键词并查看企业结果，验证搜索词是否能准确找到目标买家。</p>
                 </div>
-                <button class="keyword-configure-button" id="keywordConfigureButton" type="button" hidden>
-                  配置搜索词至画像
-                  <i data-lucide="arrow-up-right" aria-hidden="true"></i>
-                </button>
+                <div class="keyword-search-actions">
+                  <button class="keyword-history-button" id="keywordHistoryButton" type="button" aria-haspopup="dialog" aria-controls="keywordHistoryDrawer" aria-expanded="false">
+                    <i data-lucide="history" aria-hidden="true"></i>
+                    历史记录
+                    <span class="keyword-history-count" id="keywordHistoryCount" aria-label="0 条历史记录" hidden>0</span>
+                  </button>
+                  <button class="keyword-configure-button" id="keywordConfigureButton" type="button" hidden>
+                    配置搜索词至画像
+                    <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+                  </button>
+                </div>
               </header>
               <form class="keyword-search-form" id="keywordSearchForm">
                 <label class="keyword-search-input">
@@ -1716,6 +1850,25 @@
               <button class="keyword-modal-primary" id="keywordConfigureConfirm" type="button" disabled>确认配置</button>
             </footer>
           </div>
+        </section>
+
+        <section class="keyword-history-drawer" id="keywordHistoryDrawer" role="dialog" aria-modal="true" aria-labelledby="keyword-history-title" aria-hidden="true" hidden>
+          <button class="keyword-history-backdrop" type="button" data-close-keyword-history aria-label="关闭搜索历史"></button>
+          <aside class="keyword-history-panel" tabindex="-1">
+            <header>
+              <div>
+                <h2 id="keyword-history-title">搜索历史</h2>
+                <p>查看并重新打开之前的搜索结果</p>
+              </div>
+              <button type="button" data-close-keyword-history aria-label="关闭搜索历史"><i data-lucide="x" aria-hidden="true"></i></button>
+            </header>
+            <div class="keyword-history-columns" aria-hidden="true">
+              <span>搜索词</span>
+              <span>搜索时间</span>
+              <span>操作</span>
+            </div>
+            <div class="keyword-history-list" id="keywordHistoryList"></div>
+          </aside>
         </section>
 
         <section class="core-page dashboard-page" id="dashboardPage" aria-labelledby="core-dashboard-title" hidden>
@@ -1880,13 +2033,13 @@
     <script src="js/data.js?v=professional-static-9"></script>
     <script src="js/shared.js?v=professional-static-4"></script>
     <script src="js/lily.js?v=professional-static-4"></script>
-    <script src="js/route.js?v=keyword-validation-1"></script>
+    <script src="js/route.js?v=john-create-flow-2"></script>
     <script src="js/ontology.js?v=buyer-strategy-1"></script>
     <script src="js/ontology-strategy.js?v=buyer-strategy-1"></script>
-    <script src="js/keyword-validation.js?v=keyword-validation-2"></script>
+    <script src="js/keyword-validation.js?v=keyword-validation-history-1"></script>
     <script src="js/wendy.js?v=professional-static-13"></script>
-    <script src="js/john.js?v=professional-static-4"></script>
+    <script src="js/john.js?v=john-create-flow-23"></script>
     <script src="js/lucas.js?v=professional-static-4"></script>
-    <script src="js/main.js?v=professional-static-4"></script>
+    <script src="js/main.js?v=john-create-flow-2"></script>
   </body>
 </html>

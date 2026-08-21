@@ -20,6 +20,14 @@ const keywordConfigureTitle = document.querySelector('#keyword-configure-title')
 const keywordPersonaSelect = document.querySelector('#keywordPersonaSelect');
 const keywordConfigureConfirm = document.querySelector('#keywordConfigureConfirm');
 const keywordMockButtons = document.querySelectorAll('[data-keyword-mock]');
+const keywordHistoryButton = document.querySelector('#keywordHistoryButton');
+const keywordHistoryCount = document.querySelector('#keywordHistoryCount');
+const keywordHistoryDrawer = document.querySelector('#keywordHistoryDrawer');
+const keywordHistoryPanel = keywordHistoryDrawer?.querySelector('.keyword-history-panel');
+const keywordHistoryList = document.querySelector('#keywordHistoryList');
+
+const keywordHistoryStorageKey = 'ontoz.keyword-validation.history.v1';
+const keywordHistoryLimit = 100;
 
 const keywordDemoResults = [
   { name: 'HelioGrid Energy GmbH', website: 'heliogrid-energy.example', country: '德国', address: '慕尼黑，巴伐利亚州', companyType: '能源设备制造商', status: 'pending', detail: '等待判断' },
@@ -62,6 +70,9 @@ let keywordPendingTerm = '';
 let keywordActiveModal = null;
 let keywordModalReturnFocus = null;
 let keywordSearchTimer = 0;
+let keywordHistoryEntries = keywordLoadHistory();
+let keywordHistoryReturnFocus = null;
+let keywordHistoryCloseTimer = 0;
 
 function keywordNormalize(value) {
   return String(value).trim().replace(/\s+/g, ' ').toLowerCase();
@@ -69,6 +80,115 @@ function keywordNormalize(value) {
 
 function keywordIsNoResultTerm(term) {
   return /无结果|不存在|no[\s-]?results?|zzzz|asdf/i.test(term);
+}
+
+function keywordLoadHistory() {
+  try {
+    const stored = JSON.parse(window.localStorage.getItem(keywordHistoryStorageKey) || '[]');
+    if (!Array.isArray(stored)) return [];
+    return stored
+      .filter(entry => entry
+        && typeof entry.id === 'string'
+        && typeof entry.term === 'string'
+        && entry.term.trim()
+        && Number.isFinite(entry.searchedAt)
+        && !Number.isNaN(new Date(entry.searchedAt).getTime()))
+      .slice(0, keywordHistoryLimit);
+  } catch {
+    return [];
+  }
+}
+
+function keywordSaveHistory() {
+  try {
+    window.localStorage.setItem(keywordHistoryStorageKey, JSON.stringify(keywordHistoryEntries));
+  } catch {
+    // The current session still keeps history when browser storage is unavailable.
+  }
+}
+
+function keywordFormatHistoryTime(timestamp) {
+  const date = new Date(timestamp);
+  if (Number.isNaN(date.getTime())) return '';
+  const parts = new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  }).formatToParts(date).reduce((result, part) => {
+    result[part.type] = part.value;
+    return result;
+  }, {});
+  return `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}`;
+}
+
+function keywordRenderHistory() {
+  const count = keywordHistoryEntries.length;
+  keywordHistoryCount.textContent = String(count);
+  keywordHistoryCount.hidden = count === 0;
+  keywordHistoryCount.setAttribute('aria-label', `${count} 条历史记录`);
+
+  if (!count) {
+    keywordHistoryList.innerHTML = `
+      <div class="keyword-history-empty">
+        <span>${renderIcon('history')}</span>
+        <h3>还没有搜索记录</h3>
+        <p>完成一次搜索后，记录会显示在这里。</p>
+      </div>
+    `;
+    refreshIcons();
+    return;
+  }
+
+  keywordHistoryList.innerHTML = keywordHistoryEntries.map(entry => `
+    <article class="keyword-history-row">
+      <strong title="${escapeHTML(entry.term)}">${escapeHTML(entry.term)}</strong>
+      <time datetime="${new Date(entry.searchedAt).toISOString()}">${keywordFormatHistoryTime(entry.searchedAt)}</time>
+      <button type="button" data-keyword-history-view="${escapeHTML(entry.id)}">查看</button>
+    </article>
+  `).join('');
+}
+
+function keywordAddHistory(term) {
+  const timestamp = Date.now();
+  keywordHistoryEntries.unshift({
+    id: `${timestamp}-${Math.random().toString(36).slice(2, 8)}`,
+    term: term.trim(),
+    searchedAt: timestamp
+  });
+  keywordHistoryEntries = keywordHistoryEntries.slice(0, keywordHistoryLimit);
+  keywordSaveHistory();
+  keywordRenderHistory();
+}
+
+function keywordOpenHistory() {
+  window.clearTimeout(keywordHistoryCloseTimer);
+  keywordHistoryReturnFocus = document.activeElement;
+  keywordRenderHistory();
+  keywordHistoryDrawer.hidden = false;
+  keywordHistoryDrawer.setAttribute('aria-hidden', 'false');
+  keywordHistoryButton.setAttribute('aria-expanded', 'true');
+  document.body.classList.add('keyword-history-open');
+  refreshIcons();
+  window.requestAnimationFrame(() => {
+    keywordHistoryDrawer.classList.add('open');
+    keywordHistoryPanel.focus();
+  });
+}
+
+function keywordCloseHistory({ restoreFocus = true } = {}) {
+  if (keywordHistoryDrawer.hidden) return;
+  keywordHistoryDrawer.classList.remove('open');
+  keywordHistoryDrawer.setAttribute('aria-hidden', 'true');
+  keywordHistoryButton.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('keyword-history-open');
+  window.clearTimeout(keywordHistoryCloseTimer);
+  keywordHistoryCloseTimer = window.setTimeout(() => {
+    if (!keywordHistoryDrawer.classList.contains('open')) keywordHistoryDrawer.hidden = true;
+  }, 180);
+  if (restoreFocus) keywordHistoryReturnFocus?.focus();
 }
 
 function keywordSetSearching(searching) {
@@ -169,8 +289,9 @@ function keywordCompleteSearch(term) {
   keywordRenderResults();
 }
 
-function keywordRunSearch(term) {
+function keywordRunSearch(term, { recordHistory = true } = {}) {
   window.clearTimeout(keywordSearchTimer);
+  if (recordHistory) keywordAddHistory(term);
   keywordSetSearching(true);
   keywordSearchTimer = window.setTimeout(() => keywordCompleteSearch(term), 420);
 }
@@ -290,14 +411,38 @@ keywordConfigureConfirm?.addEventListener('click', () => {
   showToast(`“${keywordCurrentTerm}” 已配置至「${persona}」`);
 });
 
+keywordHistoryButton?.addEventListener('click', keywordOpenHistory);
+
+keywordHistoryDrawer?.addEventListener('click', event => {
+  if (event.target.closest('[data-close-keyword-history]')) {
+    keywordCloseHistory();
+    return;
+  }
+
+  const viewButton = event.target.closest('[data-keyword-history-view]');
+  if (!viewButton) return;
+  const entry = keywordHistoryEntries.find(item => item.id === viewButton.dataset.keywordHistoryView);
+  if (!entry) return;
+  keywordSearchInput.value = entry.term;
+  keywordCloseHistory({ restoreFocus: false });
+  keywordSearchInput.focus();
+  keywordRunSearch(entry.term, { recordHistory: false });
+});
+
 document.querySelectorAll('[data-close-keyword-modal]').forEach(button => {
   button.addEventListener('click', () => keywordCloseModal(button.closest('.keyword-modal')));
 });
 
 document.addEventListener('keydown', event => {
-  if (event.key !== 'Escape' || !keywordActiveModal) return;
-  keywordCloseModal();
+  if (event.key !== 'Escape') return;
+  if (keywordActiveModal) {
+    keywordCloseModal();
+    return;
+  }
+  if (!keywordHistoryDrawer?.hidden) keywordCloseHistory();
 });
+
+window.addEventListener('hashchange', () => keywordCloseHistory({ restoreFocus: false }));
 
 keywordValidationPage?.addEventListener('keydown', event => {
   if (event.key === '/' && document.activeElement !== keywordSearchInput) {
@@ -305,3 +450,5 @@ keywordValidationPage?.addEventListener('keydown', event => {
     keywordSearchInput.focus();
   }
 });
+
+keywordRenderHistory();
