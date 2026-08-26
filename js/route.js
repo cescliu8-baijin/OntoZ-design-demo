@@ -86,7 +86,7 @@ const appPages = {
 const standalonePageTitles = {
   wendy: '社媒运营 Wendy',
   'wendy/accounts': '账号管理 · 社媒运营 Wendy',
-  'wendy/agent': '内容生成中 · 社媒运营 Wendy',
+  'wendy/agent': '制定周期策略 · 社媒运营 Wendy',
   lucas: '专业建站 Lucas',
   john: '24/7 投流 John',
   'john/ads': '广告管理 · 24/7 投流 John',
@@ -121,6 +121,7 @@ function syncRoutePages(route) {
 }
 
 function getActiveNavTarget(route) {
+  if (route.standalonePage === 'lily/messages') return 'lily/messages';
   if (route.standalonePage?.startsWith('lily/')) return 'lily';
   if (route.standalonePage?.startsWith('john/')) return 'john';
   if (route.standalonePage?.startsWith('wendy/')) return 'wendy';
@@ -197,6 +198,7 @@ function resumeAgentRoute() {
 
 function runRouteEffects(route) {
   if (route.standalonePage === 'customers') renderLeads();
+  if (route.standalonePage === 'lily/messages') window.scrollInquiryToLatest?.();
   if (route.standalonePage === 'wendy/accounts') renderWendyAccounts();
   if (route.standalonePage === 'wendy/agent') resumeWendyAgent();
   scrollToRouteTop(route);
@@ -224,7 +226,7 @@ document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', event => {
     const target = item.getAttribute('href');
     setMobileNavigation(false);
-    if (['#ontology', '#dashboard', '#customers', '#zoe', '#leo', '#lily', '#wendy', '#lucas', '#john'].includes(target)) return;
+    if (['#ontology', '#dashboard', '#customers', '#lily/messages', '#zoe', '#leo', '#lily', '#wendy', '#lucas', '#john'].includes(target)) return;
     event.preventDefault();
     showToast('该模块暂未在本次设计稿中展开', 1800);
   });

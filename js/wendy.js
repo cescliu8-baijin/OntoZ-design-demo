@@ -82,12 +82,94 @@ const wendyAccountsTotalCount = document.querySelector('#wendyAccountsTotalCount
 const wendyAccountsPendingCount = document.querySelector('#wendyAccountsPendingCount');
 const wendyHomeAccountCount = document.querySelector('.wendy-account-summary strong');
 const wendyHomeAccountStatus = document.querySelector('#wendyHomeAccountStatus');
+const wendyPlanOverview = document.querySelector('#wendyPlanOverview');
+const wendyPlanOverviewMeta = document.querySelector('#wendyPlanOverviewMeta');
+const wendyPlanReadyCount = document.querySelector('#wendyPlanReadyCount');
+const wendyStrategyShell = document.querySelector('#wendyStrategyShell');
+const wendyStrategyMessages = document.querySelector('#wendyStrategyMessages');
+const wendyStrategyInput = document.querySelector('#wendyStrategyInput');
+const wendyStrategyDimensionProgress = document.querySelector('#wendyStrategyDimensionProgress');
+const wendyStrategyDimensionTitle = document.querySelector('#wendyStrategyDimensionTitle');
+const wendyStrategyDimensionBar = document.querySelector('#wendyStrategyDimensionBar');
+const wendyStrategyDimensionHint = document.querySelector('#wendyStrategyDimensionHint');
+const wendyStrategyDimensionPrevious = document.querySelector('#wendyStrategyDimensionPrevious');
+const wendyStrategyDimensionNext = document.querySelector('#wendyStrategyDimensionNext');
+const wendyStrategyBriefSummary = document.querySelector('#wendyStrategyBriefSummary');
+const wendyStrategyEstimate = document.querySelector('#wendyStrategyEstimate');
+const wendyStrategyReviewSubtitle = document.querySelector('#wendyStrategyReviewSubtitle');
+const wendyStrategyStats = document.querySelector('#wendyStrategyStats');
+const wendyStrategyHeadline = document.querySelector('#wendyStrategyHeadline');
+const wendyStrategyNarrative = document.querySelector('#wendyStrategyNarrative');
+const wendyStrategyPillars = document.querySelector('#wendyStrategyPillars');
+const wendyStrategyChannelRoles = document.querySelector('#wendyStrategyChannelRoles');
+const wendyStrategyCalendarCount = document.querySelector('#wendyStrategyCalendarCount');
+const wendyStrategyCalendarList = document.querySelector('#wendyStrategyCalendarList');
+const wendySamplePlatformLabel = document.querySelector('#wendySamplePlatformLabel');
+const wendySamplePostLabel = document.querySelector('#wendySamplePostLabel');
+const wendyStrategySamplePreview = document.querySelector('#wendyStrategySamplePreview');
+const wendyStrategySampleCopy = document.querySelector('#wendyStrategySampleCopy');
+const wendyApproveSampleButton = document.querySelector('#wendyApproveSample');
+const wendyStrategyCompleteText = document.querySelector('#wendyStrategyCompleteText');
+const wendyStrategyCompleteMetrics = document.querySelector('#wendyStrategyCompleteMetrics');
 let wendyThinkingTimer = null;
 let wendyImageRegenerateTimer = null;
 let wendyProductCatalogs = [];
 const WENDY_DEFAULT_PRODUCT_ID = 1593;
 const WENDY_DEFAULT_POSTER_IMAGE = 'assets/wendy-pallet-truck/pallet-truck-scenario-quality-4x5.png';
 const WENDY_IMAGE_GENERATION_SECONDS = 30;
+const WENDY_STRATEGY_LABELS = {
+  period: {
+    one_week: '未来一周',
+    one_month: '未来一个月',
+    custom: '自定义 3 周'
+  },
+  goal: {
+    awareness: '提升品牌认知',
+    launch: '新品推广',
+    leads: '获取 B2B 线索',
+    education: '产品教育'
+  },
+  product: {
+    pallet_truck: 'Manual & Electric Pallet Truck',
+    brand: 'NOX 企业品牌'
+  },
+  directions: {
+    product_value: '产品价值',
+    use_case: '应用场景',
+    proof: '客户证明',
+    industry: '行业洞察'
+  }
+};
+const WENDY_STRATEGY_DIMENSIONS = [
+  { label: '运营周期', hint: '选择计划覆盖时间' },
+  { label: '营销目标', hint: '确认本周期主目标' },
+  { label: '主推产品', hint: '引用企业知识库资料' },
+  { label: '内容方向', hint: '可选择多个方向' },
+  { label: '社媒渠道', hint: '可选择多个平台' },
+  { label: '发布节奏', hint: '所有平台每周合计' }
+];
+const WENDY_STRATEGY_CHANNEL_ROLES = {
+  LinkedIn: '专业洞察与 B2B 决策证据',
+  Instagram: '产品视觉与品牌场景表达',
+  TikTok: '短视频演示与真实使用瞬间',
+  'YouTube Shorts': '产品知识与场景短视频'
+};
+const wendyStrategyState = {
+  started: false,
+  step: 'brief',
+  dimensionStep: 0,
+  period: 'one_month',
+  goal: 'leads',
+  product: 'pallet_truck',
+  directions: ['product_value', 'use_case'],
+  channels: ['LinkedIn', 'Instagram', 'TikTok'],
+  cadence: 5,
+  messages: [],
+  posts: [],
+  samplePostId: '',
+  sampleCopy: '',
+  propagated: false
+};
 const wendyState = {
   pendingPrompt: '',
   pendingImageCount: 0,
@@ -140,6 +222,470 @@ function renderWendySocialIcon(value, label = '') {
   if (!iconKey) return renderIcon(value);
   const safeLabel = escapeHTML(label || iconKey);
   return `<img class="wendy-social-icon" data-wendy-social-icon="${iconKey}" src="${wendySocialIconSources[iconKey]}" alt="" aria-hidden="true" loading="lazy" decoding="async" title="${safeLabel}" />`;
+}
+
+function getWendyStrategyLabel(group, value) {
+  return WENDY_STRATEGY_LABELS[group]?.[value] || String(value || '');
+}
+
+function getWendyStrategyWeeks() {
+  if (wendyStrategyState.period === 'one_week') return 1;
+  if (wendyStrategyState.period === 'custom') return 3;
+  return 4;
+}
+
+function getWendyStrategyPostCount() {
+  return getWendyStrategyWeeks() * Number(wendyStrategyState.cadence || 5);
+}
+
+function formatWendyStrategyDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  const weekday = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][date.getDay()];
+  return `${date.getMonth() + 1}月${date.getDate()}日 ${weekday} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+}
+
+function resetWendyStrategyState() {
+  Object.assign(wendyStrategyState, {
+    started: true,
+    step: 'brief',
+    dimensionStep: 0,
+    period: 'one_month',
+    goal: 'leads',
+    product: 'pallet_truck',
+    directions: ['product_value', 'use_case'],
+    channels: ['LinkedIn', 'Instagram', 'TikTok'],
+    cadence: 5,
+    messages: [],
+    posts: [],
+    samplePostId: '',
+    sampleCopy: '',
+    propagated: false
+  });
+  if (wendyApproveSampleButton) {
+    wendyApproveSampleButton.disabled = false;
+    wendyApproveSampleButton.removeAttribute('aria-busy');
+  }
+}
+
+function renderWendyStrategyMessages() {
+  if (!wendyStrategyMessages) return;
+  const conversation = wendyStrategyState.messages;
+  wendyStrategyMessages.hidden = conversation.length === 0;
+  wendyStrategyMessages.innerHTML = conversation.map(message => `
+    <article class="wendy-strategy-message ${escapeHTML(message.role)}">
+      <span class="wendy-strategy-message-avatar" aria-hidden="true">${message.role === 'assistant' ? 'W' : '你'}</span>
+      <div><strong>${message.role === 'assistant' ? 'Wendy' : '你'}</strong><p>${escapeHTML(message.text)}</p></div>
+    </article>
+  `).join('');
+  wendyStrategyMessages.scrollTop = wendyStrategyMessages.scrollHeight;
+}
+
+function renderWendyStrategyDimensionStep() {
+  const total = WENDY_STRATEGY_DIMENSIONS.length;
+  const activeIndex = Math.min(total - 1, Math.max(0, Number(wendyStrategyState.dimensionStep) || 0));
+  const activeDimension = WENDY_STRATEGY_DIMENSIONS[activeIndex];
+  wendyStrategyState.dimensionStep = activeIndex;
+
+  document.querySelectorAll('[data-wendy-strategy-dimension]').forEach(card => {
+    card.hidden = Number(card.dataset.wendyStrategyDimension) !== activeIndex;
+  });
+  if (wendyStrategyDimensionProgress) wendyStrategyDimensionProgress.textContent = `步骤 ${activeIndex + 1}/${total}`;
+  if (wendyStrategyDimensionTitle) wendyStrategyDimensionTitle.textContent = activeDimension.label;
+  if (wendyStrategyDimensionBar) wendyStrategyDimensionBar.style.width = `${((activeIndex + 1) / total) * 100}%`;
+  if (wendyStrategyDimensionHint) wendyStrategyDimensionHint.textContent = activeDimension.hint;
+  if (wendyStrategyDimensionPrevious) wendyStrategyDimensionPrevious.hidden = activeIndex === 0;
+  if (wendyStrategyDimensionNext) {
+    wendyStrategyDimensionNext.innerHTML = activeIndex === total - 1
+      ? `完成设置${renderIcon('check')}`
+      : `下一步${renderIcon('arrow-right')}`;
+  }
+  refreshIcons();
+}
+
+function moveWendyStrategyDimension(direction) {
+  const lastIndex = WENDY_STRATEGY_DIMENSIONS.length - 1;
+  if (direction > 0 && wendyStrategyState.dimensionStep === lastIndex) {
+    showToast('六项需求已完成，可以生成整期策略');
+    document.querySelector('#wendyGenerateStrategy')?.focus({ preventScroll: false });
+    return;
+  }
+  wendyStrategyState.dimensionStep = Math.min(lastIndex, Math.max(0, wendyStrategyState.dimensionStep + direction));
+  renderWendyStrategyDimensionStep();
+}
+
+function renderWendyStrategySelections() {
+  document.querySelectorAll('[data-wendy-strategy-option]').forEach(button => {
+    const group = button.dataset.group;
+    const value = button.dataset.value;
+    const selected = group === 'directions' || group === 'channels'
+      ? wendyStrategyState[group].includes(value)
+      : String(wendyStrategyState[group]) === value;
+    button.classList.toggle('selected', selected);
+    button.setAttribute('aria-pressed', String(selected));
+  });
+}
+
+function renderWendyStrategyBrief() {
+  if (wendyStrategyBriefSummary) {
+    const rows = [
+      ['calendar-range', '运营周期', getWendyStrategyLabel('period', wendyStrategyState.period)],
+      ['target', '营销目标', getWendyStrategyLabel('goal', wendyStrategyState.goal)],
+      ['package-search', '主推产品', getWendyStrategyLabel('product', wendyStrategyState.product)],
+      ['layout-grid', '内容方向', wendyStrategyState.directions.map(value => getWendyStrategyLabel('directions', value)).join('、')],
+      ['share-2', '社媒渠道', wendyStrategyState.channels.join('、')],
+      ['gauge', '发布节奏', `所有平台合计每周 ${wendyStrategyState.cadence} 篇`]
+    ];
+    wendyStrategyBriefSummary.innerHTML = rows.map(([icon, label, value]) => `
+      <div><dt>${renderIcon(icon)}<span>${escapeHTML(label)}</span></dt><dd>${escapeHTML(value)}</dd></div>
+    `).join('');
+  }
+  if (wendyStrategyEstimate) {
+    wendyStrategyEstimate.textContent = `${getWendyStrategyPostCount()} 篇帖子`;
+  }
+  renderWendyStrategySelections();
+  renderWendyStrategyDimensionStep();
+  refreshIcons();
+}
+
+function setWendyStrategyOption(group, value, multiple = false) {
+  if (!Object.prototype.hasOwnProperty.call(wendyStrategyState, group)) return;
+  if (multiple) {
+    const current = wendyStrategyState[group];
+    const selected = current.includes(value);
+    if (selected && current.length === 1) {
+      showToast(group === 'channels' ? '至少保留 1 个社媒渠道' : '至少保留 1 个内容方向');
+      return;
+    }
+    wendyStrategyState[group] = selected
+      ? current.filter(item => item !== value)
+      : [...current, value];
+  } else {
+    wendyStrategyState[group] = group === 'cadence' ? Number(value) : value;
+  }
+  renderWendyStrategyBrief();
+}
+
+function parseWendyStrategyMessage(message) {
+  const text = String(message || '');
+  if (/下个月|一个月|月度|未来一个月/.test(text)) wendyStrategyState.period = 'one_month';
+  else if (/一周|7\s*天|本周|下周/.test(text)) wendyStrategyState.period = 'one_week';
+  else if (/自定义|三周|3\s*周/.test(text)) wendyStrategyState.period = 'custom';
+
+  if (/询盘|线索|获客|客户/.test(text)) wendyStrategyState.goal = 'leads';
+  else if (/新品|上市|发布/.test(text)) wendyStrategyState.goal = 'launch';
+  else if (/教育|科普|认知产品/.test(text)) wendyStrategyState.goal = 'education';
+  else if (/品牌|曝光|认知/.test(text)) wendyStrategyState.goal = 'awareness';
+
+  if (/托盘|搬运车|Pallet/i.test(text)) wendyStrategyState.product = 'pallet_truck';
+  else if (/企业品牌|NOX\s*品牌/i.test(text)) wendyStrategyState.product = 'brand';
+
+  const detectedDirections = [];
+  if (/卖点|价值|性能|认证/.test(text)) detectedDirections.push('product_value');
+  if (/场景|仓储|使用|演示/.test(text)) detectedDirections.push('use_case');
+  if (/案例|客户证明|口碑/.test(text)) detectedDirections.push('proof');
+  if (/行业|趋势|洞察/.test(text)) detectedDirections.push('industry');
+  if (detectedDirections.length) wendyStrategyState.directions = [...new Set(detectedDirections)];
+
+  const detectedChannels = ['LinkedIn', 'Instagram', 'TikTok', 'YouTube Shorts']
+    .filter(platform => new RegExp(platform.replace(' ', '\\s*'), 'i').test(text));
+  if (detectedChannels.length) wendyStrategyState.channels = detectedChannels;
+
+  const cadenceMatch = text.match(/(?:每周\s*)?(\d+)\s*篇/);
+  if (cadenceMatch) wendyStrategyState.cadence = Math.max(1, Math.min(14, Number(cadenceMatch[1])));
+}
+
+function submitWendyStrategyMessage() {
+  const message = wendyStrategyInput?.value.trim() || '';
+  if (!message) {
+    wendyStrategyInput?.focus();
+    return;
+  }
+  wendyStrategyState.messages.push({ role: 'user', text: message });
+  parseWendyStrategyMessage(message);
+  wendyStrategyState.messages.push({
+    role: 'assistant',
+    text: `已同步到 Brief：${getWendyStrategyLabel('period', wendyStrategyState.period)}，目标为“${getWendyStrategyLabel('goal', wendyStrategyState.goal)}”，覆盖 ${wendyStrategyState.channels.join('、')}，每周 ${wendyStrategyState.cadence} 篇。`
+  });
+  if (wendyStrategyInput) wendyStrategyInput.value = '';
+  renderWendyStrategyMessages();
+  renderWendyStrategyBrief();
+}
+
+function getWendyStrategyFormat(platform, index) {
+  if (platform === 'TikTok' || platform === 'YouTube Shorts') return '视频';
+  if (platform === 'LinkedIn' && index % 3 === 2) return '纯文';
+  return index % 4 === 3 ? '视频' : '图文';
+}
+
+function getWendyStrategyCopy(platform, title, isSample = false) {
+  if (isSample && wendyStrategyState.sampleCopy) return wendyStrategyState.sampleCopy;
+  if (platform === 'Instagram') {
+    return `${title}. Built for busy warehouses that need dependable handling, clear safety standards and lasting value. See the full NOX solution. #Warehouse #MaterialHandling #NOXRobotics`;
+  }
+  if (platform === 'TikTok') {
+    return `${title} — see how dependable material handling keeps a busy warehouse moving. Built for daily work. #WarehouseTok #MaterialHandling`;
+  }
+  if (platform === 'YouTube Shorts') {
+    return `${title} | A quick look at dependable pallet handling for modern warehouse teams. Explore NOX Robotics.`;
+  }
+  return `${title}. NOX Manual & Electric Pallet Trucks combine 2T / 3T / 5T capacity options, a reinforced steel frame and CE-certified reliability for demanding warehouse operations. Explore the solution and talk to our team.`;
+}
+
+function buildWendyStrategyPlan() {
+  const weeks = getWendyStrategyWeeks();
+  const cadence = Number(wendyStrategyState.cadence || 5);
+  const channels = [...wendyStrategyState.channels];
+  const directions = [...wendyStrategyState.directions];
+  const topicSets = {
+    product_value: ['为什么耐用结构决定长期使用成本', '2T / 3T / 5T 载重如何匹配业务', 'CE 认证背后的可靠性标准'],
+    use_case: ['忙碌仓库中的高频搬运场景', '从卸货区到货架区的日常效率', '不同仓储动线中的灵活搬运'],
+    proof: ['长期客户如何评价稳定性', '真实项目中的交付与使用反馈', '从采购到落地的客户体验'],
+    industry: ['仓储自动化之外仍需关注的基本功', '现代仓储团队的设备选择趋势', '降低物料搬运总成本的关键']
+  };
+  const baseDate = new Date(2026, 6, 13, 9, 30, 0);
+  const posts = [];
+  for (let weekIndex = 0; weekIndex < weeks; weekIndex += 1) {
+    for (let postIndex = 0; postIndex < cadence; postIndex += 1) {
+      const absoluteIndex = weekIndex * cadence + postIndex;
+      const platform = channels[absoluteIndex % channels.length];
+      const direction = directions[absoluteIndex % directions.length];
+      const directionTopics = topicSets[direction] || topicSets.product_value;
+      const title = directionTopics[(weekIndex + postIndex) % directionTopics.length];
+      const date = new Date(baseDate);
+      date.setDate(baseDate.getDate() + weekIndex * 7 + Math.floor(postIndex * 7 / cadence));
+      date.setHours([9, 11, 13, 15, 16][postIndex % 5], postIndex % 2 ? 0 : 30, 0, 0);
+      const isoTime = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:00`;
+      posts.push({
+        id: `wendy-v2-${absoluteIndex + 1}`,
+        sourceType: 'strategy-v2',
+        week: weekIndex + 1,
+        platform,
+        title,
+        time: isoTime,
+        format: getWendyStrategyFormat(platform, absoluteIndex),
+        direction,
+        copy: getWendyStrategyCopy(platform, title),
+        hashtags: '#NOXRobotics #Warehouse #MaterialHandling',
+        image: WENDY_DEFAULT_POSTER_IMAGE,
+        status: 'draft'
+      });
+    }
+  }
+  wendyStrategyState.posts = posts;
+  const representative = posts.find(post => post.platform === 'LinkedIn') || posts[0];
+  wendyStrategyState.samplePostId = representative?.id || '';
+  wendyStrategyState.sampleCopy = representative ? getWendyStrategyCopy(representative.platform, representative.title) : '';
+}
+
+function getWendyStrategyHeadline() {
+  const headlines = {
+    awareness: '用一致的专业表达建立 NOX 品牌认知',
+    launch: '围绕新品价值组织连续的上市传播节奏',
+    leads: '用真实场景与专业证明推动 B2B 询盘',
+    education: '用循序渐进的内容降低产品理解门槛'
+  };
+  return headlines[wendyStrategyState.goal] || headlines.leads;
+}
+
+function renderWendyStrategyReview() {
+  if (!wendyStrategyState.posts.length) buildWendyStrategyPlan();
+  const postCount = wendyStrategyState.posts.length;
+  const videoCount = wendyStrategyState.posts.filter(post => post.format === '视频').length;
+  const imageCount = wendyStrategyState.posts.filter(post => post.format === '图文').length;
+  if (wendyStrategyReviewSubtitle) {
+    wendyStrategyReviewSubtitle.textContent = `${getWendyStrategyLabel('period', wendyStrategyState.period)}，覆盖 ${wendyStrategyState.channels.length} 个平台，共 ${postCount} 篇内容。`;
+  }
+  if (wendyStrategyStats) {
+    const stats = [
+      ['calendar-days', getWendyStrategyLabel('period', wendyStrategyState.period), '运营周期'],
+      ['send', `${postCount} 篇`, `每周 ${wendyStrategyState.cadence} 篇`],
+      ['share-2', `${wendyStrategyState.channels.length} 个`, '社媒平台'],
+      ['clapperboard', `${videoCount} 视频 · ${imageCount} 图文`, '内容组合']
+    ];
+    wendyStrategyStats.innerHTML = stats.map(([icon, value, label]) => `
+      <article>${renderIcon(icon)}<div><strong>${escapeHTML(value)}</strong><span>${escapeHTML(label)}</span></div></article>
+    `).join('');
+  }
+  if (wendyStrategyHeadline) wendyStrategyHeadline.textContent = getWendyStrategyHeadline();
+  if (wendyStrategyNarrative) {
+    wendyStrategyNarrative.textContent = `以“${getWendyStrategyLabel('goal', wendyStrategyState.goal)}”为主目标，围绕 ${getWendyStrategyLabel('product', wendyStrategyState.product)}，把专业产品事实拆分为连续、互补且适合不同平台的内容。`;
+  }
+  if (wendyStrategyPillars) {
+    wendyStrategyPillars.innerHTML = wendyStrategyState.directions.map(direction => `<span>${escapeHTML(getWendyStrategyLabel('directions', direction))}</span>`).join('');
+  }
+  if (wendyStrategyChannelRoles) {
+    wendyStrategyChannelRoles.innerHTML = wendyStrategyState.channels.map(platform => `
+      <div><span>${renderWendySocialIcon(platform, platform)}</span><p><strong>${escapeHTML(platform)}</strong><small>${escapeHTML(WENDY_STRATEGY_CHANNEL_ROLES[platform] || '平台化内容表达')}</small></p></div>
+    `).join('');
+  }
+  if (wendyStrategyCalendarCount) wendyStrategyCalendarCount.textContent = `${postCount} 篇`;
+  if (wendyStrategyCalendarList) {
+    wendyStrategyCalendarList.innerHTML = wendyStrategyState.posts.map(post => `
+      <article>
+        <span class="wendy-strategy-week-tag">第 ${post.week} 周</span>
+        <time>${escapeHTML(formatWendyStrategyDate(post.time))}</time>
+        <span class="wendy-strategy-calendar-platform">${renderWendySocialIcon(post.platform, post.platform)}${escapeHTML(post.platform)}</span>
+        <div><strong>${escapeHTML(post.title)}</strong><small>${escapeHTML(getWendyStrategyLabel('directions', post.direction))}</small></div>
+        <span class="wendy-strategy-format">${escapeHTML(post.format)}</span>
+      </article>
+    `).join('');
+  }
+}
+
+function renderWendyStrategySample() {
+  const post = wendyStrategyState.posts.find(item => item.id === wendyStrategyState.samplePostId) || wendyStrategyState.posts[0];
+  if (!post) return;
+  if (wendySamplePlatformLabel) wendySamplePlatformLabel.textContent = post.platform;
+  if (wendySamplePostLabel) wendySamplePostLabel.textContent = `第 ${wendyStrategyState.posts.indexOf(post) + 1} 篇 · ${getWendyStrategyLabel('directions', post.direction)}`;
+  if (wendyStrategySampleCopy) wendyStrategySampleCopy.value = wendyStrategyState.sampleCopy;
+  if (wendyStrategySamplePreview) {
+    const caption = getWendyPreviewCaptionParts(wendyStrategyState.sampleCopy);
+    wendyStrategySamplePreview.innerHTML = post.platform === 'LinkedIn' || post.platform === 'Instagram'
+      ? renderWendyNativePost(post.platform, {
+          ...caption,
+          image: post.image,
+          title: post.title,
+          time: post.time,
+          metrics: { reactions: '—', comments: '—' }
+        })
+      : `
+        <article class="wendy-strategy-short-preview">
+          <img src="${escapeHTML(post.image)}" alt="${escapeHTML(post.title)}" />
+          <div><span>${renderWendySocialIcon(post.platform, post.platform)}${escapeHTML(post.platform)}</span><p>${escapeHTML(wendyStrategyState.sampleCopy)}</p></div>
+        </article>
+      `;
+  }
+}
+
+function syncWendyPlanOverview() {
+  if (!wendyPlanOverview) return;
+  const activePosts = wendyStrategyState.posts.filter(post => wendyStrategyState.propagated && post.sourceType === 'strategy-v2');
+  wendyPlanOverview.hidden = !activePosts.length;
+  if (!activePosts.length) return;
+  if (wendyPlanOverviewMeta) {
+    wendyPlanOverviewMeta.textContent = `${getWendyStrategyWeeks()} 周 · ${wendyStrategyState.channels.length} 个平台 · ${activePosts.length} 篇帖子`;
+  }
+  if (wendyPlanReadyCount) wendyPlanReadyCount.textContent = String(activePosts.length);
+}
+
+function applyWendyStrategyPlan() {
+  for (let index = wendyCalendarPosts.length - 1; index >= 0; index -= 1) {
+    if (wendyCalendarPosts[index].sourceType === 'strategy-v2') wendyCalendarPosts.splice(index, 1);
+  }
+  wendyStrategyState.posts.forEach((post, index) => {
+    const isSample = post.id === wendyStrategyState.samplePostId;
+    wendyCalendarPosts.push({
+      ...post,
+      copy: getWendyStrategyCopy(post.platform, post.title, isSample),
+      id: `${post.id}-${Date.now()}-${index}`
+    });
+  });
+}
+
+function renderWendyStrategyComplete() {
+  const posts = wendyStrategyState.posts;
+  if (wendyStrategyCompleteText) {
+    wendyStrategyCompleteText.textContent = `代表样稿已扩展为 ${posts.length} 篇帖子，覆盖 ${wendyStrategyState.channels.length} 个社媒平台。`;
+  }
+  if (wendyStrategyCompleteMetrics) {
+    const metrics = [
+      ['check-circle-2', '1 篇', '已确认样稿'],
+      ['panels-top-left', `${wendyStrategyState.channels.length} 个`, '已适配平台'],
+      ['files', `${posts.length} 篇`, '已创建草稿']
+    ];
+    wendyStrategyCompleteMetrics.innerHTML = metrics.map(([icon, value, label]) => `
+      <article>${renderIcon(icon)}<strong>${escapeHTML(value)}</strong><span>${escapeHTML(label)}</span></article>
+    `).join('');
+  }
+}
+
+function renderWendyStrategyFlow() {
+  if (!wendyStrategyShell) return;
+  const steps = ['brief', 'review', 'sample', 'complete'];
+  const currentIndex = Math.max(0, steps.indexOf(wendyStrategyState.step));
+  wendyStrategyShell.dataset.step = wendyStrategyState.step;
+  document.querySelectorAll('[data-wendy-strategy-view]').forEach(view => {
+    view.hidden = view.dataset.wendyStrategyView !== wendyStrategyState.step;
+  });
+  document.querySelectorAll('[data-wendy-strategy-progress]').forEach(item => {
+    const itemIndex = steps.indexOf(item.dataset.wendyStrategyProgress);
+    item.classList.toggle('active', itemIndex === currentIndex);
+    item.classList.toggle('done', itemIndex < currentIndex);
+  });
+  const pageTitle = document.querySelector('#wendy-agent-title');
+  if (pageTitle) {
+    pageTitle.textContent = wendyStrategyState.step === 'brief'
+      ? '制定周期社媒运营策略'
+      : wendyStrategyState.step === 'review'
+        ? '确认整期策略与内容日历'
+        : wendyStrategyState.step === 'sample'
+          ? '确认代表样稿'
+          : '整期计划已准备';
+  }
+  if (wendyStrategyState.step === 'brief') {
+    renderWendyStrategyMessages();
+    renderWendyStrategyBrief();
+  } else if (wendyStrategyState.step === 'review') {
+    renderWendyStrategyReview();
+  } else if (wendyStrategyState.step === 'sample') {
+    renderWendyStrategySample();
+  } else {
+    renderWendyStrategyComplete();
+  }
+  refreshIcons();
+}
+
+function startWendyStrategy({ reset = true } = {}) {
+  if (reset) resetWendyStrategyState();
+  else wendyStrategyState.started = true;
+  if (window.location.hash === '#wendy/agent') renderWendyStrategyFlow();
+  else window.location.hash = 'wendy/agent';
+}
+
+function generateWendyStrategy() {
+  buildWendyStrategyPlan();
+  wendyStrategyState.step = 'review';
+  renderWendyStrategyFlow();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function approveWendyStrategySample() {
+  if (wendyStrategyState.propagated) return;
+  const samplePost = wendyStrategyState.posts.find(post => post.id === wendyStrategyState.samplePostId);
+  wendyStrategyState.sampleCopy = wendyStrategySampleCopy?.value.trim() || wendyStrategyState.sampleCopy;
+  if (samplePost) samplePost.copy = wendyStrategyState.sampleCopy;
+
+  if (wendyApproveSampleButton) {
+    wendyApproveSampleButton.disabled = true;
+    wendyApproveSampleButton.setAttribute('aria-busy', 'true');
+  }
+
+  try {
+    applyWendyStrategyPlan();
+  } catch (error) {
+    console.error('Failed to apply Wendy strategy plan', error);
+    if (wendyApproveSampleButton) {
+      wendyApproveSampleButton.disabled = false;
+      wendyApproveSampleButton.removeAttribute('aria-busy');
+    }
+    showToast('计划推广未完成，请重试');
+    return;
+  }
+
+  wendyStrategyState.propagated = true;
+  wendyStrategyState.step = 'complete';
+  renderWendyStrategyFlow();
+
+  try {
+    renderWendyCalendars();
+    syncWendyPlanOverview();
+  } catch (error) {
+    console.error('Wendy strategy plan was created, but calendar refresh failed', error);
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  showToast(`已将代表样稿推广到 ${wendyStrategyState.posts.length} 篇计划帖子`);
 }
 
 function getWendyPostStatus(post) {
@@ -1550,16 +2096,8 @@ function startWendyThinking() {
 }
 
 function resumeWendyAgent() {
-  if (wendyState.agentStarted || wendyThinkingTimer) return;
-  if (!wendyState.pendingPrompt && !wendyState.pendingImageCount) {
-    wendyState.pendingPrompt = '为 Manual & Electric Pallet Truck 生成一条 LinkedIn 新品介绍，突出 2T / 3T / 5T 载重、CE 认证和耐用结构。';
-  }
-  if (!wendyState.planConfirmed) {
-    resetWendyThinking();
-    showWendyPlanStep();
-    return;
-  }
-  startWendyThinking();
+  if (!wendyStrategyState.started) resetWendyStrategyState();
+  renderWendyStrategyFlow();
 }
 
 function showWendyPostPreviews() {
@@ -1730,12 +2268,22 @@ backFromWendyAgent?.addEventListener('click', () => {
   window.clearInterval(wendyThinkingTimer);
   wendyThinkingTimer = null;
   resetWendyImageRegeneration();
-  wendyState.agentStarted = false;
-  wendyState.planConfirmed = false;
   window.location.hash = 'wendy';
 });
 
 document.querySelector('#wendyPage')?.addEventListener('click', event => {
+  const strategyCreateButton = event.target.closest('[data-wendy-strategy-create]');
+  if (strategyCreateButton) {
+    startWendyStrategy({ reset: true });
+    return;
+  }
+
+  const activePlanButton = event.target.closest('[data-wendy-open-active-plan]');
+  if (activePlanButton) {
+    startWendyStrategy({ reset: false });
+    return;
+  }
+
   const accountManageButton = event.target.closest('[data-wendy-account-manage]');
   if (accountManageButton) {
     window.location.hash = 'wendy/accounts';
@@ -1949,9 +2497,25 @@ document.querySelector('#wendyAccountsPage')?.addEventListener('click', event =>
 const wendyAgentPage = document.querySelector('#wendyAgentPage');
 
 wendyAgentPage?.addEventListener('input', event => {
+  if (event.target === wendyStrategySampleCopy) {
+    wendyStrategyState.sampleCopy = wendyStrategySampleCopy.value;
+    return;
+  }
   const captionField = event.target.closest('[data-wendy-preview-caption]');
   if (!captionField) return;
   updateWendyPreviewDraft(captionField.dataset.wendyPreviewCaption, { caption: captionField.value });
+});
+
+wendyStrategyInput?.addEventListener('keydown', event => {
+  if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+    event.preventDefault();
+    submitWendyStrategyMessage();
+  }
+});
+
+wendyApproveSampleButton?.addEventListener('click', event => {
+  event.preventDefault();
+  approveWendyStrategySample();
 });
 
 wendyAgentPage?.addEventListener('change', event => {
@@ -1961,6 +2525,71 @@ wendyAgentPage?.addEventListener('change', event => {
 });
 
 wendyAgentPage?.addEventListener('click', event => {
+  const strategyResetButton = event.target.closest('[data-wendy-strategy-reset]');
+  if (strategyResetButton) {
+    resetWendyStrategyState();
+    renderWendyStrategyFlow();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  const strategyOption = event.target.closest('[data-wendy-strategy-option]');
+  if (strategyOption) {
+    setWendyStrategyOption(
+      strategyOption.dataset.group,
+      strategyOption.dataset.value,
+      strategyOption.dataset.multi === 'true'
+    );
+    return;
+  }
+
+  const strategyDimensionPrevious = event.target.closest('#wendyStrategyDimensionPrevious');
+  if (strategyDimensionPrevious) {
+    moveWendyStrategyDimension(-1);
+    return;
+  }
+
+  const strategyDimensionNext = event.target.closest('#wendyStrategyDimensionNext');
+  if (strategyDimensionNext) {
+    moveWendyStrategyDimension(1);
+    return;
+  }
+
+  const strategySendButton = event.target.closest('#wendyStrategySend');
+  if (strategySendButton) {
+    submitWendyStrategyMessage();
+    return;
+  }
+
+  const generateStrategyButton = event.target.closest('#wendyGenerateStrategy');
+  if (generateStrategyButton) {
+    generateWendyStrategy();
+    return;
+  }
+
+  const strategyBackButton = event.target.closest('[data-wendy-strategy-back]');
+  if (strategyBackButton) {
+    wendyStrategyState.step = strategyBackButton.dataset.wendyStrategyBack || 'brief';
+    renderWendyStrategyFlow();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  const confirmStrategyButton = event.target.closest('#wendyConfirmStrategy');
+  if (confirmStrategyButton) {
+    wendyStrategyState.step = 'sample';
+    renderWendyStrategyFlow();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  const finishStrategyButton = event.target.closest('#wendyFinishStrategy');
+  if (finishStrategyButton) {
+    setWendyCalendarView('month');
+    window.location.hash = 'wendy';
+    return;
+  }
+
   const productTrigger = event.target.closest('#wendyProductTrigger');
   if (productTrigger) {
     setWendyProductPickerOpen(wendyProductMenu?.hidden !== false);
@@ -2154,3 +2783,4 @@ document.addEventListener('error', event => {
 }, true);
 
 loadWendyProducts();
+syncWendyPlanOverview();

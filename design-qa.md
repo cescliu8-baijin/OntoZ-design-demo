@@ -1,44 +1,48 @@
 **Source visual truth**
 
-- `/var/folders/b2/c8cw_gq15rl366xv9frqp13m0000gn/T/codex-clipboard-48a9242b-8fb1-4fa8-94f6-90402490e91f.png`
-- Source pixels: 1191 × 866. Desktop modal target, light theme.
+- `/var/folders/b2/c8cw_gq15rl366xv9frqp13m0000gn/T/codex-clipboard-896bb206-b905-453c-b238-4bb1a8eb773b.png`
+- Source pixels: 753 × 481. Focused desktop crop of the lower “基础信息” fields and the following CRM block, light theme.
 
 **Implementation evidence**
 
-- `/Users/baixing_12345/Documents/OntoZ/john-keyword-workspace-qa.png`
-- Implementation capture: 1190 × 669 visible browser content at a 1190 × 862 viewport, device scale factor 1.
-- State: step 1, analysis complete, B2B keyword groups and negative keywords shown.
-- Additional states tested in browser: empty, four-stage AI analysis loading, keyword add/delete, negative keyword delete, step 1 → step 2 → step 1 preview switching.
-- Responsive checks: 768 × 900 and 390 × 844. Dialog scroll width matched client width at both sizes; no horizontal overflow.
-- Console checked. No current application errors or missing-icon warnings after the final icon correction. Earlier historical `search-sparkles` warnings in the same browser log were generated before the correction.
+- Desktop full view: `/Users/baixing_12345/Documents/OntoZ/customer-detail-crm-desktop-final.png`
+- Focused comparison crop: `/Users/baixing_12345/Documents/OntoZ/customer-detail-crm-focused-final.png`
+- Mobile: `/Users/baixing_12345/Documents/OntoZ/customer-detail-crm-mobile-final.png`
+- Desktop implementation pixels: 1528 × 924 at a 1528 × 924 CSS viewport and 1:1 screenshot density.
+- Focused implementation pixels: 660 × 404, cropped from the desktop screenshot without scaling.
+- Mobile implementation pixels: 390 × 844 at a 390 × 844 CSS viewport and 1:1 screenshot density.
+- State: `#customers`, Sustainable Power Solutions selected, customer-detail drawer open, scrolled to the lower company fields with both “基础信息” and “CRM信息” expanded.
+- Primary interactions tested: open customer drawer; collapse and re-expand CRM信息; verify `aria-expanded` and content visibility; resize to mobile; confirm zero document and drawer horizontal overflow.
+- Browser console checked after final reload and interaction pass. No errors or warnings.
 
 **Findings**
 
 - No actionable P0/P1/P2 issues remain.
-- Fonts and typography: existing system font stack, weights, sizes, line heights, and hierarchy are preserved from the source product. The new right-side hierarchy matches the source modal density.
-- Spacing and layout rhythm: header, step navigation, two-column split, footer, borders, and radii remain aligned with the source. The new results panel intentionally scrolls independently when its grouped content exceeds the modal height.
-- Colors and tokens: existing indigo canvas, slate borders, emerald success, and red negative-keyword tokens are reused.
-- Image and asset fidelity: no raster imagery was needed. Existing bundled Lucide icons are used; no placeholder or handcrafted visual asset was introduced.
-- Copy and content: the step-one ad preview was removed as requested and replaced with empty, loading, and editable grouped-result content. The ad preview remains available from step two onward.
+- Fonts and typography: the project’s existing Inter/PingFang/system stack, 12 px detail text, muted labels, weights, line heights, and wrapping preserve the dense enterprise UI character of the reference.
+- Spacing and layout rhythm: the two-column definition list, compact chips, section divider, 48 px collapsible headings, and CRM row spacing closely follow the reference structure. The implementation crop is narrower because it reflects the existing drawer’s responsive company column rather than the reference crop width.
+- Colors and visual tokens: existing OntoZ neutral, pink, violet, orange, and indigo tokens are reused. Product chips remain pink; custom CRM labels use violet to distinguish their meaning without changing the established palette.
+- Image quality and asset fidelity: this region contains no raster imagery. The chevrons use the project’s bundled Lucide icon library; no placeholder or custom-drawn asset was introduced.
+- Copy and content: all omitted fields shown in the reference are present—公司类型、硬件优势、软件优势、推荐分数、创建时间、主营产品、当前阶段、自定义标签、归属人. Per the user’s explicit request, the second section is titled “CRM信息” rather than the screenshot’s “CRM状态”. Company-specific values remain realistic for the selected customer instead of copying the screenshot’s unrelated bakery data.
 
 **Focused region comparison**
 
-- The first-step right column was compared directly: source shows the premature Google ad card; implementation shows the requested keyword review workspace with the same column width, background, and product visual language.
-- Individual keyword tags, delete affordances, grouped headings, counts, and add controls were inspected at desktop size. No additional crop was necessary because all controls are legible in the implementation capture and live browser.
+- The 753 × 481 source crop and 660 × 404 implementation crop were opened together in one comparison input.
+- Both show the same field order and hierarchy: company type, hardware/software advantages, recommendation score, creation time, pink product chips, then a separately headed CRM section with stage, custom labels, and owner.
+- Remaining visible differences are intentional data adaptation and the user-authoritative “CRM信息” heading; neither is an actionable fidelity issue.
 
 **Comparison history**
 
-- Pass 1: found one unsupported empty-state icon warning. Replaced it with the bundled `scan-search` icon and rechecked.
-- Pass 2: verified no new missing-icon warning, no horizontal overflow at tablet/mobile sizes, and correct preview switching between steps one and two.
+- Pass 1: the initial focused browser clip included non-content canvas because clip coordinates were affected by browser capture scaling. Re-cropped the final 1528 × 924 screenshot directly at original pixel density.
+- Pass 2: the CRM heading showed a focus-visible outline after toggle testing. Moved keyboard focus to the next control and recaptured; the final focused crop has the settled, unfocused visual state and no P0/P1/P2 mismatch.
+- Responsive pass: verified the complete field set at 390 × 844. Document, drawer body, and panel widths all equal 390 px, with no horizontal overflow.
 
 **Implementation checklist**
 
-- [x] Hide Google ad preview in step one.
-- [x] Show grouped keyword and negative-word results on the right.
-- [x] Support manual add and individual delete.
-- [x] Provide empty and AI thinking/loading states.
-- [x] Preserve ad preview for later wizard steps.
-- [x] Verify desktop, tablet, mobile, build, and browser interactions.
+- [x] Split 公司详情 into 基础信息 and CRM信息.
+- [x] Add hardware advantage, software advantage, recommendation score, creation time, and main products.
+- [x] Add current stage, custom labels, and owner.
+- [x] Make both company-detail sections independently collapsible with accessible expanded state.
+- [x] Verify build, browser interactions, console, focused visual comparison, and mobile overflow.
 
 **Follow-up polish**
 
