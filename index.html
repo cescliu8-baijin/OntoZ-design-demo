@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no" />
     <title>OntoZ · 专业建站 Lucas</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=john-create-flow-26" />
+    <link rel="stylesheet" href="styles.css?v=customer-detail-3" />
     <link rel="stylesheet" href="lucide-icons.css" />
   </head>
   <body>
@@ -42,6 +42,7 @@
             <a class="nav-item" href="#ontology"><i data-lucide="brain-circuit"></i><span>企业本体</span></a>
             <a class="nav-item" href="#dashboard"><i data-lucide="chart-column-big"></i><span>数据看板</span></a>
             <a class="nav-item" href="#customers"><i data-lucide="contact-round"></i><span>客户池</span></a>
+            <a class="nav-item" href="#lily/messages"><i data-lucide="inbox"></i><span>询盘消息</span></a>
           </section>
           <section class="nav-section" aria-labelledby="agents-label">
             <h2 id="agents-label">智能体</h2>
@@ -373,57 +374,88 @@
           </section>
         </section>
 
-        <section class="lily-secondary inquiry-page" id="lilyInquiryPage" aria-labelledby="inquiry-title" hidden>
-          <nav class="lily-breadcrumb" aria-label="面包屑">
-            <button class="back-to-lily" type="button">触达转化Lily</button>
-            <i data-lucide="chevron-right" aria-hidden="true"></i>
-            <span aria-current="page" id="inquiry-title">询盘消息</span>
-          </nav>
-
-          <div class="inquiry-layout">
-            <aside class="inquiry-list" aria-label="询盘消息列表">
-              <header>
-                <h2>消息</h2>
-                <div class="compact-tabs" role="tablist" aria-label="消息筛选">
-                  <button class="active" type="button" role="tab" aria-selected="true">全部</button>
-                  <button type="button" role="tab" aria-selected="false">未读</button>
+        <section class="lily-secondary inquiry-page" id="lilyInquiryPage" aria-label="询盘消息" hidden>
+          <div class="inquiry-workbench">
+            <aside class="inquiry-list" aria-labelledby="inquiry-list-title">
+              <header class="inquiry-list-header">
+                <div class="inquiry-list-title-row">
+                  <div>
+                    <h2 id="inquiry-list-title">全部会话</h2>
+                    <span id="inquiryListCount">0 个会话</span>
+                  </div>
+                  <div class="inquiry-status-tabs" role="tablist" aria-label="会话状态">
+                    <button class="active" data-inquiry-status="all" type="button" role="tab" aria-selected="true">全部</button>
+                    <button data-inquiry-status="unread" type="button" role="tab" aria-selected="false">未读</button>
+                  </div>
+                </div>
+                <label class="inquiry-search">
+                  <i data-lucide="search" aria-hidden="true"></i>
+                  <input id="inquirySearchInput" type="search" autocomplete="off" placeholder="搜索客户、公司或消息" aria-label="搜索询盘消息" />
+                </label>
+                <div class="inquiry-channel-filters" role="group" aria-label="按渠道筛选">
+                  <button class="active" data-inquiry-channel="all" type="button" aria-pressed="true">全部</button>
+                  <button data-inquiry-channel="email" type="button" aria-pressed="false"><i data-lucide="mail"></i>邮件</button>
+                  <button data-inquiry-channel="whatsapp" type="button" aria-pressed="false"><i data-lucide="message-circle"></i>WhatsApp</button>
+                  <button data-inquiry-channel="linkedin" type="button" aria-pressed="false"><i data-lucide="briefcase-business"></i>LinkedIn</button>
                 </div>
               </header>
-              <button class="inquiry-item active" type="button">
-                <span class="avatar">C</span>
-                <span><strong>Chris</strong><small>Hello! I'm Chris from Shanghai Wei Yuan</small></span>
-                <time>14:36</time>
-              </button>
-              <button class="inquiry-item" type="button">
-                <span class="avatar blue">M</span>
-                <span><strong>Mia</strong><small>Can you share the battery catalog?</small></span>
-                <time>12:18</time>
-              </button>
-              <button class="inquiry-item" type="button">
-                <span class="avatar green">A</span>
-                <span><strong>Ava</strong><small>We need delivery details this week.</small></span>
-                <time>昨天</time>
-              </button>
+              <div class="inquiry-conversation-list" id="inquiryConversationList" role="listbox" aria-label="会话列表"></div>
+              <p class="inquiry-empty" id="inquiryEmpty" hidden><i data-lucide="search-x"></i><strong>没有找到会话</strong><span>试试清除搜索或切换筛选条件</span></p>
             </aside>
 
-            <article class="inquiry-chat" aria-label="询盘详情">
-              <header>
-                <div><span class="avatar">C</span><h2>Chris</h2></div>
-                <div class="compact-tabs" role="tablist" aria-label="会话类型">
-                  <button class="active" type="button" role="tab" aria-selected="true">消息</button>
-                  <button type="button" role="tab" aria-selected="false">邮件</button>
+            <article class="inquiry-chat" id="inquiryChat" aria-labelledby="inquiryChatName">
+              <header class="inquiry-chat-header">
+                <button class="inquiry-mobile-back" id="inquiryMobileBack" type="button" aria-label="返回会话列表"><i data-lucide="arrow-left"></i></button>
+                <span class="inquiry-avatar" id="inquiryChatAvatar">C</span>
+                <div class="inquiry-chat-person">
+                  <h2 id="inquiryChatName">Chris</h2>
+                  <p id="inquiryChatIdentity"></p>
                 </div>
+                <span class="inquiry-channel-pill" id="inquiryChatChannel"></span>
               </header>
-              <div class="chat-thread">
-                <div class="chat-row sent"><p>Hi，我想找电池的客户</p><span class="avatar self">J</span></div>
-                <div class="chat-row sent"><p class="file-message"><i data-lucide="file"></i>CZMH_20250820_000009.pdf <button type="button">查看</button><button type="button">下载</button></p></div>
-                <div class="chat-row"><span class="avatar">C</span><p>Hi，我想找电池的客户</p></div>
+
+              <div class="inquiry-thread-context" id="inquiryThreadContext" hidden>
+                <span>邮件主题</span>
+                <strong id="inquiryThreadSubject"></strong>
               </div>
-              <footer class="reply-box">
-                <textarea rows="2" aria-label="回复询盘消息" placeholder="请输入"></textarea>
-                <div>
-                  <button type="button"><i data-lucide="paperclip"></i>添加资料</button>
-                  <button class="send-reply" type="button">发送 <i data-lucide="send"></i></button>
+
+              <div class="chat-thread" id="inquiryChatThread" role="log" aria-live="polite" aria-label="会话消息"></div>
+
+              <footer class="inquiry-composer" id="inquiryComposer">
+                <div class="inquiry-ai-panel" id="inquiryAiPanel" aria-live="polite" hidden>
+                  <header>
+                    <div><span><i data-lucide="sparkles"></i></span><p><strong>AI 润色</strong><small>优化表达，不改变你的核心意思</small></p></div>
+                    <button id="inquiryAiClose" type="button" aria-label="关闭 AI 润色"><i data-lucide="x"></i></button>
+                  </header>
+                  <div class="inquiry-ai-tones" role="radiogroup" aria-label="选择润色语气">
+                    <button class="active" data-inquiry-tone="professional" type="button" role="radio" aria-checked="true">专业</button>
+                    <button data-inquiry-tone="friendly" type="button" role="radio" aria-checked="false">友好</button>
+                    <button data-inquiry-tone="concise" type="button" role="radio" aria-checked="false">简洁</button>
+                  </div>
+                  <div class="inquiry-ai-result" id="inquiryAiResult">
+                    <div class="inquiry-ai-loading" id="inquiryAiLoading"><i data-lucide="loader-circle"></i>正在优化回复…</div>
+                    <p id="inquiryAiText" hidden></p>
+                  </div>
+                  <footer id="inquiryAiActions" hidden>
+                    <button id="inquiryAiKeep" type="button">保留原文</button>
+                    <button id="inquiryAiRegenerate" type="button"><i data-lucide="refresh-cw"></i>重新生成</button>
+                    <button class="primary" id="inquiryAiApply" type="button"><i data-lucide="check"></i>替换草稿</button>
+                  </footer>
+                </div>
+
+                <p class="inquiry-reply-context" id="inquiryReplyContext"></p>
+                <div class="inquiry-attachment-list" id="inquiryAttachmentList" aria-label="待发送附件" hidden></div>
+                <textarea id="inquiryReplyInput" rows="3" maxlength="3000" aria-label="回复询盘消息" placeholder="输入回复内容"></textarea>
+                <div class="inquiry-composer-toolbar">
+                  <div>
+                    <input id="inquiryFileInput" type="file" multiple hidden />
+                    <button id="inquiryAttachButton" type="button"><i data-lucide="paperclip"></i>添加附件</button>
+                    <button class="inquiry-ai-trigger" id="inquiryAiTrigger" type="button" disabled><i data-lucide="sparkles"></i>AI 润色</button>
+                  </div>
+                  <div>
+                    <span id="inquiryCharacterCount">0 / 3000</span>
+                    <button class="send-reply" id="inquirySendReply" type="button" disabled>发送 <i data-lucide="send"></i></button>
+                  </div>
                 </div>
               </footer>
             </article>
@@ -857,9 +889,9 @@
             <div class="wendy-hero-copy">
               <p class="wendy-kicker">2026年6月23日 星期二</p>
               <h1 id="wendy-title">Wendy 帮你持续运营海外社媒</h1>
-              <p>连接账号、生成内容方案、排期发布，把 LinkedIn 和 Instagram 变成独立站的稳定引流入口。</p>
+              <p>先规划一整个运营周期，再一次性生成多平台、多内容形式的发布计划。</p>
               <div class="wendy-hero-actions" aria-label="Wendy快捷操作">
-                <button class="wendy-primary wendy-ai-generate-button" data-wendy-ai-generate type="button"><i data-lucide="wand-sparkles"></i>AI生成</button>
+                <button class="wendy-primary wendy-ai-generate-button" data-wendy-strategy-create type="button"><i data-lucide="calendar-range"></i>制定运营策略</button>
                 <button class="wendy-secondary wendy-quick-publish-button" data-wendy-open-publisher type="button"><i data-lucide="send"></i>快速发布</button>
               </div>
             </div>
@@ -872,6 +904,20 @@
               <button class="wendy-account-manage" data-wendy-account-manage type="button"><i data-lucide="circle-user-round"></i>账号管理</button>
             </aside>
           </header>
+
+          <section class="wendy-plan-overview" id="wendyPlanOverview" aria-labelledby="wendy-plan-overview-title" hidden>
+            <div class="wendy-plan-overview-icon" aria-hidden="true"><i data-lucide="calendar-check-2"></i></div>
+            <div class="wendy-plan-overview-copy">
+              <span>正在执行的周期计划</span>
+              <h2 id="wendy-plan-overview-title">NOX 海外社媒增长计划</h2>
+              <p id="wendyPlanOverviewMeta">4 周 · 4 个平台 · 20 篇帖子</p>
+            </div>
+            <div class="wendy-plan-overview-progress">
+              <span><b id="wendyPlanReadyCount">20</b> 篇草稿已准备</span>
+              <div aria-hidden="true"><i></i></div>
+            </div>
+            <button data-wendy-open-active-plan type="button">查看计划<i data-lucide="arrow-right"></i></button>
+          </section>
 
           <section class="wendy-calendar-shell" aria-label="Wendy发布日历">
             <div class="wendy-calendar-toolbar">
@@ -1086,15 +1132,205 @@
           <header class="wendy-agent-topbar">
             <button class="wendy-agent-back" id="backFromWendyAgent" type="button" aria-label="返回社媒运营 Wendy">
               <i data-lucide="arrow-left" aria-hidden="true"></i>
-              <span>返回日历</span>
+              <span>返回 Wendy</span>
             </button>
-            <h1 id="wendy-agent-title">Wendy 正在生成社媒内容方案</h1>
-            <button class="wendy-agent-panel-button" type="button" aria-label="重新生成">
+            <h1 id="wendy-agent-title">制定周期社媒运营策略</h1>
+            <button class="wendy-agent-panel-button" data-wendy-strategy-reset type="button" aria-label="重新制定策略">
               <i data-lucide="refresh-cw" aria-hidden="true"></i>
             </button>
           </header>
 
-          <div class="wendy-agent-thread" aria-live="polite">
+          <div class="wendy-strategy-shell" id="wendyStrategyShell" data-step="brief">
+            <ol class="wendy-strategy-progress" aria-label="策略制定进度">
+              <li class="active" data-wendy-strategy-progress="brief"><span>1</span><div><strong>需求沟通</strong><small>明确周期与目标</small></div></li>
+              <li data-wendy-strategy-progress="review"><span>2</span><div><strong>策略与日历</strong><small>查看整期计划</small></div></li>
+              <li data-wendy-strategy-progress="sample"><span>3</span><div><strong>确认代表样稿</strong><small>1 个平台 · 1 篇帖子</small></div></li>
+              <li data-wendy-strategy-progress="complete"><span>4</span><div><strong>推广至全计划</strong><small>批量创建草稿</small></div></li>
+            </ol>
+
+            <section class="wendy-strategy-view wendy-strategy-brief-view" data-wendy-strategy-view="brief">
+              <div class="wendy-strategy-layout">
+                <main class="wendy-strategy-conversation" aria-labelledby="wendy-strategy-conversation-title">
+                  <header class="wendy-strategy-section-heading">
+                    <div>
+                      <span class="wendy-strategy-eyebrow">策略对话</span>
+                      <h2 id="wendy-strategy-conversation-title">告诉 Wendy 这段时间想达成什么</h2>
+                      <p>可以直接输入完整需求，也可以点击快捷选项逐步调整。</p>
+                    </div>
+                    <span class="wendy-strategy-status"><i data-lucide="sparkles"></i>实时理解需求</span>
+                  </header>
+
+                  <div class="wendy-strategy-messages" id="wendyStrategyMessages" aria-live="polite"></div>
+
+                  <div class="wendy-strategy-quick-groups" aria-label="策略快捷选项">
+                    <div class="wendy-strategy-dimension-progress" aria-live="polite">
+                      <div>
+                        <span id="wendyStrategyDimensionProgress">步骤 1/6</span>
+                        <strong id="wendyStrategyDimensionTitle">运营周期</strong>
+                      </div>
+                      <span aria-hidden="true"><i id="wendyStrategyDimensionBar"></i></span>
+                    </div>
+
+                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="0">
+                      <header><span>01</span><div><strong>运营周期</strong><small>选择计划覆盖时间</small></div></header>
+                      <div class="wendy-strategy-chips">
+                        <button data-wendy-strategy-option data-group="period" data-value="one_week" type="button">未来一周</button>
+                        <button class="selected" data-wendy-strategy-option data-group="period" data-value="one_month" type="button">未来一个月</button>
+                        <button data-wendy-strategy-option data-group="period" data-value="custom" type="button">自定义 3 周</button>
+                      </div>
+                    </section>
+
+                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="1" hidden>
+                      <header><span>02</span><div><strong>营销目标</strong><small>确认本周期主目标</small></div></header>
+                      <div class="wendy-strategy-chips">
+                        <button data-wendy-strategy-option data-group="goal" data-value="awareness" type="button">提升品牌认知</button>
+                        <button data-wendy-strategy-option data-group="goal" data-value="launch" type="button">新品推广</button>
+                        <button class="selected" data-wendy-strategy-option data-group="goal" data-value="leads" type="button">获取 B2B 线索</button>
+                        <button data-wendy-strategy-option data-group="goal" data-value="education" type="button">产品教育</button>
+                      </div>
+                    </section>
+
+                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="2" hidden>
+                      <header><span>03</span><div><strong>主推产品</strong><small>引用企业知识库资料</small></div></header>
+                      <div class="wendy-strategy-chips">
+                        <button class="selected" data-wendy-strategy-option data-group="product" data-value="pallet_truck" type="button">Manual &amp; Electric Pallet Truck</button>
+                        <button data-wendy-strategy-option data-group="product" data-value="brand" type="button">NOX 企业品牌</button>
+                      </div>
+                    </section>
+
+                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="3" hidden>
+                      <header><span>04</span><div><strong>内容方向</strong><small>可选择多个方向</small></div></header>
+                      <div class="wendy-strategy-chips">
+                        <button class="selected" data-wendy-strategy-option data-group="directions" data-value="product_value" data-multi="true" type="button">产品价值</button>
+                        <button class="selected" data-wendy-strategy-option data-group="directions" data-value="use_case" data-multi="true" type="button">应用场景</button>
+                        <button data-wendy-strategy-option data-group="directions" data-value="proof" data-multi="true" type="button">客户证明</button>
+                        <button data-wendy-strategy-option data-group="directions" data-value="industry" data-multi="true" type="button">行业洞察</button>
+                      </div>
+                    </section>
+
+                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="4" hidden>
+                      <header><span>05</span><div><strong>社媒渠道</strong><small>可选择多个平台</small></div></header>
+                      <div class="wendy-strategy-chips wendy-strategy-channel-chips">
+                        <button class="selected" data-wendy-strategy-option data-group="channels" data-value="LinkedIn" data-multi="true" type="button"><img src="assets/LinkedIn.svg" alt="" />LinkedIn</button>
+                        <button class="selected" data-wendy-strategy-option data-group="channels" data-value="Instagram" data-multi="true" type="button"><img src="assets/Instagram.svg" alt="" />Instagram</button>
+                        <button class="selected" data-wendy-strategy-option data-group="channels" data-value="TikTok" data-multi="true" type="button"><img src="assets/TikTok.svg" alt="" />TikTok</button>
+                        <button data-wendy-strategy-option data-group="channels" data-value="YouTube Shorts" data-multi="true" type="button"><img src="assets/YouTube.svg" alt="" />YouTube Shorts</button>
+                      </div>
+                    </section>
+
+                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="5" hidden>
+                      <header><span>06</span><div><strong>发布节奏</strong><small>所有平台每周合计</small></div></header>
+                      <div class="wendy-strategy-chips">
+                        <button data-wendy-strategy-option data-group="cadence" data-value="3" type="button">每周 3 篇</button>
+                        <button class="selected" data-wendy-strategy-option data-group="cadence" data-value="5" type="button">每周 5 篇</button>
+                        <button data-wendy-strategy-option data-group="cadence" data-value="7" type="button">每周 7 篇</button>
+                      </div>
+                    </section>
+
+                    <div class="wendy-strategy-dimension-actions">
+                      <button class="wendy-strategy-dimension-back" id="wendyStrategyDimensionPrevious" type="button" hidden><i data-lucide="arrow-left"></i>上一步</button>
+                      <span id="wendyStrategyDimensionHint">选择计划覆盖时间</span>
+                      <button class="wendy-strategy-dimension-next" id="wendyStrategyDimensionNext" type="button">下一步<i data-lucide="arrow-right"></i></button>
+                    </div>
+                  </div>
+
+                  <div class="wendy-strategy-composer">
+                    <textarea id="wendyStrategyInput" rows="3" maxlength="480" placeholder="例如：下个月主推托盘搬运车，希望获取欧美仓储客户线索，每周发 5 篇，LinkedIn 偏专业、TikTok 多做场景视频。"></textarea>
+                    <div>
+                      <span>⌘ / Ctrl + Enter 发送</span>
+                      <button id="wendyStrategySend" type="button"><i data-lucide="arrow-up"></i><span>发送给 Wendy</span></button>
+                    </div>
+                  </div>
+                </main>
+
+                <aside class="wendy-strategy-brief" aria-labelledby="wendy-strategy-brief-title">
+                  <header>
+                    <div><span>结构化 Brief</span><h2 id="wendy-strategy-brief-title">本周期需求</h2></div>
+                    <span class="complete"><i data-lucide="circle-check-big"></i>6/6</span>
+                  </header>
+                  <dl id="wendyStrategyBriefSummary"></dl>
+                  <div class="wendy-strategy-estimate">
+                    <span>预计内容规模</span>
+                    <strong id="wendyStrategyEstimate">20 篇帖子</strong>
+                    <small>确认策略前不会创建帖子或扣点</small>
+                  </div>
+                  <button class="wendy-strategy-primary" id="wendyGenerateStrategy" type="button"><i data-lucide="sparkles"></i>生成整期营销策略</button>
+                </aside>
+              </div>
+            </section>
+
+            <section class="wendy-strategy-view" data-wendy-strategy-view="review" hidden>
+              <header class="wendy-strategy-page-heading">
+                <div><span class="wendy-strategy-eyebrow">整期策略 V1</span><h2>NOX 海外社媒增长计划</h2><p id="wendyStrategyReviewSubtitle">未来一个月的多平台内容日历已生成。</p></div>
+                <button class="wendy-strategy-secondary" data-wendy-strategy-back="brief" type="button"><i data-lucide="message-square-more"></i>继续调整需求</button>
+              </header>
+              <div class="wendy-strategy-stats" id="wendyStrategyStats"></div>
+              <div class="wendy-strategy-review-grid">
+                <article class="wendy-strategy-card wendy-strategy-summary-card">
+                  <span class="wendy-strategy-eyebrow">策略主线</span>
+                  <h3 id="wendyStrategyHeadline">用真实场景与专业证明推动 B2B 询盘</h3>
+                  <p id="wendyStrategyNarrative"></p>
+                  <div class="wendy-strategy-pill-list" id="wendyStrategyPillars"></div>
+                </article>
+                <article class="wendy-strategy-card">
+                  <span class="wendy-strategy-eyebrow">渠道分工</span>
+                  <div class="wendy-strategy-channel-roles" id="wendyStrategyChannelRoles"></div>
+                </article>
+              </div>
+              <article class="wendy-strategy-card wendy-strategy-calendar-card">
+                <header><div><span class="wendy-strategy-eyebrow">内容日历</span><h3>整期发布计划</h3></div><span id="wendyStrategyCalendarCount">20 篇</span></header>
+                <div class="wendy-strategy-calendar-list" id="wendyStrategyCalendarList"></div>
+              </article>
+              <footer class="wendy-strategy-sticky-actions">
+                <div><strong>下一步只需确认 1 篇代表样稿</strong><span>确认后，Wendy 会把样稿规则推广到所有渠道和帖子。</span></div>
+                <button class="wendy-strategy-primary" id="wendyConfirmStrategy" type="button">确认策略，生成代表样稿<i data-lucide="arrow-right"></i></button>
+              </footer>
+            </section>
+
+            <section class="wendy-strategy-view" data-wendy-strategy-view="sample" hidden>
+              <header class="wendy-strategy-page-heading">
+                <div><span class="wendy-strategy-eyebrow">代表样稿确认</span><h2>只确认一个平台的一篇帖子</h2><p>这篇样稿的产品事实、语气、视觉方向和 CTA 将作为整期生成基准。</p></div>
+                <button class="wendy-strategy-secondary" data-wendy-strategy-back="review" type="button"><i data-lucide="arrow-left"></i>返回策略</button>
+              </header>
+              <div class="wendy-strategy-sample-grid">
+                <section class="wendy-strategy-sample-preview">
+                  <header><div><span id="wendySamplePlatformLabel">LinkedIn</span><strong id="wendySamplePostLabel">第 1 篇 · 产品价值</strong></div><span class="wendy-strategy-representative">代表样稿</span></header>
+                  <div id="wendyStrategySamplePreview"></div>
+                </section>
+                <aside class="wendy-strategy-sample-editor">
+                  <span class="wendy-strategy-eyebrow">确认标准</span>
+                  <h3>确认一次，应用到整期</h3>
+                  <p>当前只审核这 1 篇。确认后，Wendy 按平台差异自动改写其余文案与素材规格，不再逐篇确认。</p>
+                  <label for="wendyStrategySampleCopy"><span>样稿文案</span><textarea id="wendyStrategySampleCopy" rows="9"></textarea></label>
+                  <div class="wendy-strategy-sample-rules">
+                    <p><i data-lucide="badge-check"></i><span><strong>产品事实</strong>仅引用企业知识库资料</span></p>
+                    <p><i data-lucide="swatch-book"></i><span><strong>视觉方向</strong>工业场景、真实产品、清晰信息层级</span></p>
+                    <p><i data-lucide="mouse-pointer-click"></i><span><strong>统一 CTA</strong>引导访问独立站或提交询盘</span></p>
+                  </div>
+                  <button class="wendy-strategy-primary" id="wendyApproveSample" type="button"><i data-lucide="check-check"></i>确认样稿并推广到全计划</button>
+                  <small>确认后创建全部计划草稿；本 Demo 暂不处理异常与失败分支。</small>
+                </aside>
+              </div>
+            </section>
+
+            <section class="wendy-strategy-view" data-wendy-strategy-view="complete" hidden>
+              <div class="wendy-strategy-complete-card">
+                <span class="wendy-strategy-complete-icon"><i data-lucide="party-popper"></i></span>
+                <span class="wendy-strategy-eyebrow">策略已推广</span>
+                <h2>整期多平台草稿已准备</h2>
+                <p id="wendyStrategyCompleteText">代表样稿已扩展为 20 篇帖子，覆盖 3 个社媒平台。</p>
+                <div class="wendy-strategy-complete-metrics" id="wendyStrategyCompleteMetrics"></div>
+                <div class="wendy-strategy-complete-flow" aria-label="推广完成步骤">
+                  <span class="done"><i data-lucide="check"></i>确认 1 篇样稿</span><i data-lucide="arrow-right"></i>
+                  <span class="done"><i data-lucide="check"></i>适配全部平台</span><i data-lucide="arrow-right"></i>
+                  <span class="done"><i data-lucide="check"></i>创建整期草稿</span>
+                </div>
+                <button class="wendy-strategy-primary" id="wendyFinishStrategy" type="button">返回 Wendy 查看整期计划<i data-lucide="calendar-days"></i></button>
+              </div>
+            </section>
+          </div>
+
+          <div class="wendy-agent-thread" aria-live="polite" hidden>
             <section class="wendy-plan-step" id="wendyPlanStep" aria-labelledby="wendy-plan-platform-title">
               <section class="wendy-plan-card">
                 <header>
@@ -1972,6 +2208,17 @@
           <p class="selection-line"><span></span>已选择 0 条数据</p>
           <div class="lead-list" id="leadList"></div>
           <footer class="pagination"><button type="button" aria-label="上一页"><i data-lucide="chevron-left"></i></button><span>1</span><strong>2</strong><span>3</span><span>...</span><button type="button" aria-label="下一页"><i data-lucide="chevron-right"></i></button></footer>
+
+          <section class="customer-detail-drawer" id="customerDetailDrawer" role="dialog" aria-modal="true" aria-labelledby="customer-detail-title" aria-hidden="true" hidden>
+            <button class="customer-detail-backdrop" type="button" data-close-customer-detail aria-label="关闭客户详情"></button>
+            <article class="customer-detail-panel" tabindex="-1">
+              <header class="customer-detail-header">
+                <h2 id="customer-detail-title">客户详情</h2>
+                <button class="customer-detail-close" id="closeCustomerDetail" type="button" aria-label="关闭客户详情"><i data-lucide="x"></i></button>
+              </header>
+              <div class="customer-detail-body" id="customerDetailBody"></div>
+            </article>
+          </section>
         </section>
 
         <section class="agent-page zoe-page" id="zoePage" aria-labelledby="zoe-title" hidden>
@@ -2030,14 +2277,14 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"><i data-lucide="circle-check" aria-hidden="true"></i><span></span></div>
     <script src="assets/lucide.min.js"></script>
-    <script src="js/data.js?v=professional-static-9"></script>
+    <script src="js/data.js?v=customer-detail-3"></script>
     <script src="js/shared.js?v=professional-static-4"></script>
-    <script src="js/lily.js?v=professional-static-4"></script>
-    <script src="js/route.js?v=john-create-flow-2"></script>
+    <script src="js/lily.js?v=customer-detail-3"></script>
+    <script src="js/route.js?v=inquiry-main-flow-2"></script>
     <script src="js/ontology.js?v=buyer-strategy-1"></script>
     <script src="js/ontology-strategy.js?v=buyer-strategy-1"></script>
     <script src="js/keyword-validation.js?v=keyword-validation-history-1"></script>
-    <script src="js/wendy.js?v=professional-static-13"></script>
+    <script src="js/wendy.js?v=professional-static-14"></script>
     <script src="js/john.js?v=john-create-flow-23"></script>
     <script src="js/lucas.js?v=professional-static-4"></script>
     <script src="js/main.js?v=john-create-flow-2"></script>

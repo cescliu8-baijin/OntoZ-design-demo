@@ -76,6 +76,10 @@
   padding-bottom: 8px;
 }
 
+.wendy-agent-thread[hidden] {
+  display: none !important;
+}
+
 .wendy-agent-page .wendy-thinking-thread {
   width: 100%;
   margin: 0;
@@ -4984,5 +4988,1561 @@
   .sidebar.collapsed + .lily-workspace .wendy-bottom-composer {
     left: 50%;
     width: calc(100vw - 36px);
+  }
+}
+
+/* Wendy V2 cycle strategy flow */
+.wendy-plan-overview {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) minmax(190px, 260px) auto;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--oz-violet-200);
+  border-radius: 16px;
+  background: linear-gradient(110deg, var(--oz-white), var(--oz-violet-50));
+  box-shadow: 0 4px 16px var(--oz-violet-500-12);
+}
+
+.wendy-plan-overview[hidden] {
+  display: none;
+}
+
+.wendy-plan-overview-icon {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  color: var(--oz-white);
+  background: var(--oz-violet-500);
+}
+
+.wendy-plan-overview-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.wendy-plan-overview-copy,
+.wendy-plan-overview-progress {
+  min-width: 0;
+}
+
+.wendy-plan-overview-copy > span,
+.wendy-plan-overview-progress > span {
+  display: block;
+  color: var(--oz-neutral-500);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.wendy-plan-overview-copy h2 {
+  margin: 1px 0 0;
+  color: var(--oz-neutral-950);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.wendy-plan-overview-copy p {
+  margin: 0;
+  color: var(--oz-neutral-500);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.wendy-plan-overview-progress > span {
+  margin-bottom: 7px;
+  color: var(--oz-neutral-700);
+}
+
+.wendy-plan-overview-progress > div {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: var(--oz-violet-100);
+}
+
+.wendy-plan-overview-progress > div i {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  background: var(--oz-violet-500);
+}
+
+.wendy-plan-overview > button {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 14px;
+  border: 1px solid var(--oz-violet-200);
+  border-radius: 10px;
+  color: var(--oz-violet-700);
+  background: var(--oz-white);
+  font-weight: 600;
+}
+
+.wendy-plan-overview > button:hover {
+  border-color: var(--oz-violet-400);
+  background: var(--oz-violet-50);
+}
+
+.wendy-plan-overview > button svg {
+  width: 15px;
+  height: 15px;
+}
+
+.wendy-strategy-shell {
+  width: min(1240px, calc(100% - 64px));
+  margin: 32px auto 72px;
+}
+
+.wendy-strategy-view[hidden] {
+  display: none !important;
+}
+
+.wendy-strategy-progress {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.wendy-strategy-progress li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--oz-neutral-400);
+}
+
+.wendy-strategy-progress li:not(:last-child)::after {
+  content: "";
+  height: 1px;
+  position: absolute;
+  top: 17px;
+  left: 44px;
+  right: 12px;
+  background: var(--oz-neutral-200);
+}
+
+.wendy-strategy-progress li > span {
+  z-index: 1;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 99px;
+  background: var(--oz-white);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.wendy-strategy-progress li div {
+  z-index: 1;
+  min-width: 0;
+  padding-right: 10px;
+  background: var(--canvas);
+}
+
+.wendy-strategy-progress strong,
+.wendy-strategy-progress small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wendy-strategy-progress strong {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.wendy-strategy-progress small {
+  margin-top: 1px;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.wendy-strategy-progress li.active,
+.wendy-strategy-progress li.done {
+  color: var(--oz-violet-700);
+}
+
+.wendy-strategy-progress li.active > span {
+  border-color: var(--oz-violet-500);
+  color: var(--oz-white);
+  background: var(--oz-violet-500);
+  box-shadow: 0 0 0 4px var(--oz-violet-100);
+}
+
+.wendy-strategy-progress li.done > span {
+  border-color: var(--oz-violet-200);
+  background: var(--oz-violet-100);
+}
+
+.wendy-strategy-progress li.done:not(:last-child)::after {
+  background: var(--oz-violet-300);
+}
+
+.wendy-strategy-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  align-items: start;
+  gap: 20px;
+}
+
+.wendy-strategy-conversation,
+.wendy-strategy-brief,
+.wendy-strategy-card,
+.wendy-strategy-sample-preview,
+.wendy-strategy-sample-editor,
+.wendy-strategy-complete-card {
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 18px;
+  background: var(--oz-white);
+  box-shadow: 0 4px 18px var(--oz-black-5);
+}
+
+.wendy-strategy-conversation {
+  padding: 22px;
+}
+
+.wendy-strategy-section-heading,
+.wendy-strategy-page-heading,
+.wendy-strategy-calendar-card > header,
+.wendy-strategy-sample-preview > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.wendy-strategy-section-heading h2,
+.wendy-strategy-page-heading h2,
+.wendy-strategy-card h3,
+.wendy-strategy-sample-editor h3,
+.wendy-strategy-complete-card h2 {
+  margin: 4px 0 0;
+  color: var(--oz-neutral-950);
+}
+
+.wendy-strategy-section-heading h2,
+.wendy-strategy-page-heading h2 {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.wendy-strategy-section-heading p,
+.wendy-strategy-page-heading p,
+.wendy-strategy-card > p,
+.wendy-strategy-sample-editor > p,
+.wendy-strategy-complete-card > p {
+  margin: 5px 0 0;
+  color: var(--oz-neutral-500);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.wendy-strategy-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  color: var(--oz-violet-600);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.wendy-strategy-status,
+.wendy-strategy-representative {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 0 9px;
+  border-radius: 99px;
+  color: var(--oz-violet-700);
+  background: var(--oz-violet-50);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.wendy-strategy-status svg {
+  width: 14px;
+  height: 14px;
+}
+
+.wendy-strategy-messages {
+  max-height: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 22px 0;
+  padding: 14px;
+  overflow-y: auto;
+  border-radius: 14px;
+  background: var(--oz-neutral-50);
+}
+
+.wendy-strategy-messages[hidden] {
+  display: none;
+}
+
+.wendy-strategy-message {
+  max-width: 88%;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.wendy-strategy-message.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.wendy-strategy-message-avatar {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: var(--oz-white);
+  background: var(--oz-violet-500);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.wendy-strategy-message.user .wendy-strategy-message-avatar {
+  color: var(--oz-neutral-700);
+  background: var(--oz-neutral-200);
+}
+
+.wendy-strategy-message > div {
+  min-width: 0;
+}
+
+.wendy-strategy-message strong {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--oz-neutral-700);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.wendy-strategy-message p {
+  margin: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 4px 13px 13px;
+  color: var(--oz-neutral-700);
+  background: var(--oz-white);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.wendy-strategy-message.user p {
+  border-color: var(--oz-violet-200);
+  border-radius: 13px 4px 13px 13px;
+  background: var(--oz-violet-50);
+}
+
+.wendy-strategy-quick-groups {
+  margin-top: 22px;
+}
+
+.wendy-strategy-dimension-progress {
+  display: grid;
+  grid-template-columns: auto minmax(140px, 1fr);
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 12px;
+}
+
+.wendy-strategy-dimension-progress > div {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.wendy-strategy-dimension-progress > div span {
+  color: var(--oz-violet-600);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+}
+
+.wendy-strategy-dimension-progress > div strong {
+  color: var(--oz-neutral-800);
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.wendy-strategy-dimension-progress > span {
+  height: 5px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: var(--oz-violet-100);
+}
+
+.wendy-strategy-dimension-progress > span i {
+  width: 16.6667%;
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  background: var(--oz-violet-500);
+  transition: width .24s ease;
+}
+
+.wendy-strategy-quick-group {
+  min-width: 0;
+  min-height: 168px;
+  padding: 22px;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 15px;
+  background: linear-gradient(135deg, var(--oz-white), var(--oz-violet-50));
+}
+
+.wendy-strategy-quick-group[hidden] {
+  display: none;
+}
+
+.wendy-strategy-quick-group > header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 18px;
+}
+
+.wendy-strategy-quick-group > header > span {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: var(--oz-violet-700);
+  background: var(--oz-violet-50);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.wendy-strategy-quick-group header strong,
+.wendy-strategy-quick-group header small {
+  display: block;
+}
+
+.wendy-strategy-quick-group header strong {
+  color: var(--oz-neutral-800);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.wendy-strategy-quick-group header small {
+  color: var(--oz-neutral-400);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.wendy-strategy-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wendy-strategy-chips button {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 9px;
+  color: var(--oz-neutral-600);
+  background: var(--oz-white);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.wendy-strategy-chips button:hover {
+  border-color: var(--oz-violet-300);
+}
+
+.wendy-strategy-chips button.selected {
+  border-color: var(--oz-violet-300);
+  color: var(--oz-violet-800);
+  background: var(--oz-violet-50);
+  box-shadow: inset 0 0 0 1px var(--oz-violet-100);
+}
+
+.wendy-strategy-channel-chips img {
+  width: 17px;
+  height: 17px;
+}
+
+.wendy-strategy-dimension-actions {
+  min-height: 40px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.wendy-strategy-dimension-actions > span {
+  grid-column: 2;
+  overflow: hidden;
+  color: var(--oz-neutral-400);
+  font-size: 11px;
+  line-height: 17px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wendy-strategy-dimension-actions button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.wendy-strategy-dimension-actions button[hidden] {
+  display: none;
+}
+
+.wendy-strategy-dimension-actions button svg {
+  width: 15px;
+  height: 15px;
+}
+
+.wendy-strategy-dimension-back {
+  grid-column: 1;
+  border: 1px solid var(--oz-neutral-200);
+  color: var(--oz-neutral-600);
+  background: var(--oz-white);
+}
+
+.wendy-strategy-dimension-back:hover {
+  border-color: var(--oz-neutral-300);
+  background: var(--oz-neutral-50);
+}
+
+.wendy-strategy-dimension-next {
+  grid-column: 3;
+  border: 0;
+  color: var(--oz-white);
+  background: var(--oz-violet-600);
+}
+
+.wendy-strategy-dimension-next:hover {
+  background: var(--oz-violet-700);
+}
+
+.wendy-strategy-composer {
+  margin-top: 14px;
+  padding: 11px;
+  border: 1px solid var(--oz-neutral-300);
+  border-radius: 14px;
+  background: var(--oz-white);
+  box-shadow: 0 3px 12px var(--oz-black-5);
+}
+
+.wendy-strategy-composer:focus-within {
+  border-color: var(--oz-violet-400);
+  box-shadow: 0 0 0 3px var(--oz-violet-500-16);
+}
+
+.wendy-strategy-composer textarea {
+  width: 100%;
+  min-height: 70px;
+  padding: 0;
+  resize: vertical;
+  border: 0;
+  outline: 0;
+  color: var(--oz-neutral-800);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.wendy-strategy-composer > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--oz-neutral-100);
+}
+
+.wendy-strategy-composer > div > span {
+  color: var(--oz-neutral-400);
+  font-size: 10px;
+}
+
+.wendy-strategy-composer button,
+.wendy-strategy-primary,
+.wendy-strategy-secondary {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.wendy-strategy-composer button,
+.wendy-strategy-primary {
+  border: 0;
+  color: var(--oz-white);
+  background: var(--oz-violet-600);
+  box-shadow: 0 2px 5px var(--oz-violet-500-16);
+}
+
+.wendy-strategy-composer button:hover,
+.wendy-strategy-primary:hover {
+  background: var(--oz-violet-700);
+}
+
+.wendy-strategy-composer button svg,
+.wendy-strategy-primary svg,
+.wendy-strategy-secondary svg {
+  width: 16px;
+  height: 16px;
+}
+
+.wendy-strategy-secondary {
+  border: 1px solid var(--oz-neutral-200);
+  color: var(--oz-neutral-700);
+  background: var(--oz-white);
+}
+
+.wendy-strategy-secondary:hover {
+  border-color: var(--oz-neutral-300);
+  background: var(--oz-neutral-50);
+}
+
+.wendy-strategy-brief {
+  position: sticky;
+  top: 64px;
+  padding: 18px;
+}
+
+.wendy-strategy-brief > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--oz-neutral-100);
+}
+
+.wendy-strategy-brief > header span,
+.wendy-strategy-brief > header h2 {
+  display: block;
+}
+
+.wendy-strategy-brief > header div > span {
+  color: var(--oz-neutral-400);
+  font-size: 10px;
+  line-height: 15px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.wendy-strategy-brief > header h2 {
+  margin: 2px 0 0;
+  font-size: 17px;
+  line-height: 24px;
+}
+
+.wendy-strategy-brief > header .complete {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 7px;
+  border-radius: 99px;
+  color: var(--oz-green-700);
+  background: var(--oz-green-50);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.wendy-strategy-brief > header .complete svg {
+  width: 13px;
+  height: 13px;
+}
+
+.wendy-strategy-brief dl {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 8px 0;
+}
+
+.wendy-strategy-brief dl > div {
+  display: grid;
+  grid-template-columns: 95px minmax(0, 1fr);
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--oz-neutral-100);
+}
+
+.wendy-strategy-brief dt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--oz-neutral-400);
+  font-size: 11px;
+  line-height: 17px;
+}
+
+.wendy-strategy-brief dt svg {
+  width: 14px;
+  height: 14px;
+}
+
+.wendy-strategy-brief dd {
+  margin: 0;
+  color: var(--oz-neutral-800);
+  font-size: 11px;
+  line-height: 17px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.wendy-strategy-estimate {
+  margin: 14px 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--oz-violet-50);
+}
+
+.wendy-strategy-estimate span,
+.wendy-strategy-estimate strong,
+.wendy-strategy-estimate small {
+  display: block;
+}
+
+.wendy-strategy-estimate span,
+.wendy-strategy-estimate small {
+  color: var(--oz-violet-600);
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.wendy-strategy-estimate strong {
+  margin: 2px 0;
+  color: var(--oz-violet-900);
+  font-size: 20px;
+  line-height: 27px;
+}
+
+.wendy-strategy-brief > .wendy-strategy-primary {
+  width: 100%;
+}
+
+.wendy-strategy-page-heading {
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.wendy-strategy-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.wendy-strategy-stats article {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 14px;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 13px;
+  background: var(--oz-white);
+}
+
+.wendy-strategy-stats article > svg {
+  width: 19px;
+  height: 19px;
+  flex: none;
+  color: var(--oz-violet-600);
+}
+
+.wendy-strategy-stats strong,
+.wendy-strategy-stats span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wendy-strategy-stats strong {
+  color: var(--oz-neutral-900);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.wendy-strategy-stats span {
+  color: var(--oz-neutral-400);
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.wendy-strategy-review-grid {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.wendy-strategy-card {
+  padding: 18px;
+}
+
+.wendy-strategy-card h3,
+.wendy-strategy-sample-editor h3 {
+  font-size: 18px;
+  line-height: 26px;
+}
+
+.wendy-strategy-pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 16px;
+}
+
+.wendy-strategy-pill-list span,
+.wendy-strategy-format,
+.wendy-strategy-week-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 26px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  color: var(--oz-violet-700);
+  background: var(--oz-violet-50);
+  font-size: 10px;
+  line-height: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.wendy-strategy-channel-roles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.wendy-strategy-channel-roles > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 10px;
+  background: var(--oz-neutral-50);
+}
+
+.wendy-strategy-channel-roles > div > span {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: var(--oz-white);
+}
+
+.wendy-strategy-channel-roles img {
+  width: 17px;
+  height: 17px;
+}
+
+.wendy-strategy-channel-roles p,
+.wendy-strategy-channel-roles strong,
+.wendy-strategy-channel-roles small {
+  display: block;
+  margin: 0;
+}
+
+.wendy-strategy-channel-roles strong {
+  color: var(--oz-neutral-800);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.wendy-strategy-channel-roles small {
+  color: var(--oz-neutral-400);
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.wendy-strategy-calendar-card {
+  margin-bottom: 82px;
+}
+
+.wendy-strategy-calendar-card > header {
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.wendy-strategy-calendar-card > header h3 {
+  font-size: 17px;
+  line-height: 24px;
+}
+
+.wendy-strategy-calendar-card > header > span {
+  color: var(--oz-neutral-500);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.wendy-strategy-calendar-list {
+  max-height: 520px;
+  overflow-y: auto;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 12px;
+}
+
+.wendy-strategy-calendar-list article {
+  display: grid;
+  grid-template-columns: 58px 150px 130px minmax(220px, 1fr) 54px;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 9px 12px;
+}
+
+.wendy-strategy-calendar-list article + article {
+  border-top: 1px solid var(--oz-neutral-100);
+}
+
+.wendy-strategy-calendar-list article:hover {
+  background: var(--oz-neutral-50);
+}
+
+.wendy-strategy-calendar-list time {
+  color: var(--oz-neutral-500);
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.wendy-strategy-calendar-platform {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--oz-neutral-700);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.wendy-strategy-calendar-platform img {
+  width: 17px;
+  height: 17px;
+}
+
+.wendy-strategy-calendar-list article > div {
+  min-width: 0;
+}
+
+.wendy-strategy-calendar-list strong,
+.wendy-strategy-calendar-list small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wendy-strategy-calendar-list strong {
+  color: var(--oz-neutral-800);
+  font-size: 11px;
+  line-height: 17px;
+}
+
+.wendy-strategy-calendar-list small {
+  color: var(--oz-neutral-400);
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.wendy-strategy-format {
+  color: var(--oz-neutral-600);
+  background: var(--oz-neutral-100);
+}
+
+.wendy-strategy-sticky-actions {
+  position: fixed;
+  left: 240px;
+  right: 0;
+  bottom: 0;
+  z-index: 12;
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px max(32px, calc((100vw - 240px - 1240px) / 2));
+  border-top: 1px solid var(--oz-neutral-200);
+  background: var(--oz-white-95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 -8px 24px var(--oz-black-5);
+}
+
+.sidebar.collapsed + .lily-workspace .wendy-strategy-sticky-actions {
+  left: 64px;
+}
+
+.wendy-strategy-sticky-actions div strong,
+.wendy-strategy-sticky-actions div span {
+  display: block;
+}
+
+.wendy-strategy-sticky-actions div strong {
+  color: var(--oz-neutral-900);
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.wendy-strategy-sticky-actions div span {
+  color: var(--oz-neutral-500);
+  font-size: 11px;
+  line-height: 17px;
+}
+
+.wendy-strategy-sample-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  align-items: start;
+  gap: 18px;
+}
+
+.wendy-strategy-sample-preview,
+.wendy-strategy-sample-editor {
+  padding: 18px;
+}
+
+.wendy-strategy-sample-preview > header {
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--oz-neutral-100);
+}
+
+.wendy-strategy-sample-preview > header span,
+.wendy-strategy-sample-preview > header strong {
+  display: block;
+}
+
+.wendy-strategy-sample-preview > header div > span {
+  color: var(--oz-neutral-400);
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.wendy-strategy-sample-preview > header strong {
+  margin-top: 1px;
+  color: var(--oz-neutral-800);
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.wendy-strategy-sample-preview #wendyStrategySamplePreview {
+  width: min(560px, 100%);
+  margin: 0 auto;
+}
+
+.wendy-strategy-sample-editor {
+  position: sticky;
+  top: 64px;
+}
+
+.wendy-strategy-sample-editor label {
+  display: block;
+  margin: 18px 0 12px;
+}
+
+.wendy-strategy-sample-editor label > span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--oz-neutral-700);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.wendy-strategy-sample-editor textarea {
+  width: 100%;
+  min-height: 170px;
+  padding: 11px;
+  resize: vertical;
+  border: 1px solid var(--oz-neutral-200);
+  border-radius: 11px;
+  outline: 0;
+  color: var(--oz-neutral-700);
+  background: var(--oz-neutral-50);
+  font: inherit;
+  font-size: 12px;
+  line-height: 19px;
+}
+
+.wendy-strategy-sample-editor textarea:focus {
+  border-color: var(--oz-violet-400);
+  box-shadow: 0 0 0 3px var(--oz-violet-500-16);
+}
+
+.wendy-strategy-sample-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 12px 0;
+}
+
+.wendy-strategy-sample-rules p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px;
+  border-radius: 9px;
+  color: var(--oz-neutral-500);
+  background: var(--oz-neutral-50);
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.wendy-strategy-sample-rules svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--oz-violet-600);
+}
+
+.wendy-strategy-sample-rules strong {
+  color: var(--oz-neutral-700);
+}
+
+.wendy-strategy-sample-editor > .wendy-strategy-primary {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 4px;
+}
+
+.wendy-strategy-sample-editor > small {
+  display: block;
+  margin-top: 8px;
+  color: var(--oz-neutral-400);
+  font-size: 10px;
+  line-height: 15px;
+  text-align: center;
+}
+
+.wendy-strategy-short-preview {
+  position: relative;
+  width: min(360px, 100%);
+  aspect-ratio: 9 / 16;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--oz-neutral-950);
+}
+
+.wendy-strategy-short-preview > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.wendy-strategy-short-preview > div {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 72px 16px 16px;
+  color: var(--oz-white);
+  background: linear-gradient(transparent, rgb(0 0 0 / .82));
+}
+
+.wendy-strategy-short-preview > div span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.wendy-strategy-short-preview > div img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+}
+
+.wendy-strategy-short-preview p {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.wendy-strategy-complete-card {
+  max-width: 760px;
+  margin: 54px auto 0;
+  padding: 48px;
+  text-align: center;
+}
+
+.wendy-strategy-complete-icon {
+  width: 66px;
+  height: 66px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  border-radius: 22px;
+  color: var(--oz-white);
+  background: linear-gradient(135deg, var(--oz-violet-500), var(--oz-indigo-600));
+  box-shadow: 0 12px 28px var(--oz-violet-500-16);
+}
+
+.wendy-strategy-complete-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.wendy-strategy-complete-card h2 {
+  font-size: 28px;
+  line-height: 36px;
+}
+
+.wendy-strategy-complete-card > p {
+  max-width: 520px;
+  margin: 8px auto 0;
+}
+
+.wendy-strategy-complete-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 28px 0 22px;
+}
+
+.wendy-strategy-complete-metrics article {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 15px;
+  border: 1px solid var(--oz-violet-100);
+  border-radius: 12px;
+  background: var(--oz-violet-50);
+}
+
+.wendy-strategy-complete-metrics svg {
+  width: 18px;
+  height: 18px;
+  margin-bottom: 3px;
+  color: var(--oz-violet-600);
+}
+
+.wendy-strategy-complete-metrics strong {
+  color: var(--oz-violet-900);
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.wendy-strategy-complete-metrics span {
+  color: var(--oz-violet-600);
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.wendy-strategy-complete-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: var(--oz-neutral-400);
+}
+
+.wendy-strategy-complete-flow span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--oz-green-700);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.wendy-strategy-complete-flow svg {
+  width: 14px;
+  height: 14px;
+}
+
+.wendy-strategy-complete-card > .wendy-strategy-primary {
+  min-height: 44px;
+  padding-inline: 22px;
+}
+
+@media (max-width: 1080px) {
+  .wendy-strategy-layout,
+  .wendy-strategy-sample-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wendy-strategy-brief,
+  .wendy-strategy-sample-editor {
+    position: static;
+  }
+
+  .wendy-strategy-brief {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 14px 18px;
+  }
+
+  .wendy-strategy-brief > header {
+    grid-column: 1 / -1;
+  }
+
+  .wendy-strategy-brief dl {
+    grid-row: span 2;
+  }
+
+  .wendy-strategy-estimate {
+    margin: 0;
+  }
+}
+
+@media (max-width: 820px) {
+  .wendy-strategy-shell {
+    width: min(100% - 32px, 1240px);
+    margin-top: 22px;
+  }
+
+  .wendy-strategy-progress {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 0;
+  }
+
+  .wendy-strategy-progress li:nth-child(2)::after {
+    display: none;
+  }
+
+  .wendy-strategy-review-grid,
+  .wendy-strategy-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wendy-strategy-calendar-list article {
+    grid-template-columns: 56px 132px 120px minmax(200px, 1fr) 52px;
+  }
+
+  .wendy-strategy-calendar-list {
+    overflow-x: auto;
+  }
+
+  .wendy-strategy-calendar-list article {
+    min-width: 760px;
+  }
+
+  .wendy-strategy-sticky-actions {
+    left: 64px;
+    padding-inline: 20px;
+  }
+
+  .wendy-plan-overview {
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+  }
+
+  .wendy-plan-overview-progress {
+    grid-column: 2 / 3;
+  }
+}
+
+@media (max-width: 620px) {
+  .wendy-strategy-shell {
+    width: calc(100% - 24px);
+    margin-top: 16px;
+  }
+
+  .wendy-strategy-progress {
+    grid-template-columns: 1fr;
+  }
+
+  .wendy-strategy-progress li::after {
+    display: none;
+  }
+
+  .wendy-strategy-progress li:not(.active):not(.done) {
+    display: none;
+  }
+
+  .wendy-strategy-conversation,
+  .wendy-strategy-card,
+  .wendy-strategy-sample-preview,
+  .wendy-strategy-sample-editor {
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .wendy-strategy-section-heading,
+  .wendy-strategy-page-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .wendy-strategy-section-heading h2,
+  .wendy-strategy-page-heading h2 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .wendy-strategy-status {
+    align-self: flex-start;
+  }
+
+  .wendy-strategy-review-grid,
+  .wendy-strategy-stats,
+  .wendy-strategy-complete-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .wendy-strategy-dimension-progress {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .wendy-strategy-quick-group {
+    min-height: 184px;
+    padding: 16px;
+  }
+
+  .wendy-strategy-dimension-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .wendy-strategy-dimension-actions > span {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .wendy-strategy-dimension-actions button {
+    width: 100%;
+  }
+
+  .wendy-strategy-dimension-actions .wendy-strategy-dimension-next {
+    grid-column: 2;
+  }
+
+  #wendyStrategyDimensionPrevious[hidden] + span + .wendy-strategy-dimension-next {
+    grid-column: 1 / -1;
+  }
+
+  .wendy-strategy-brief {
+    display: block;
+    padding: 14px;
+  }
+
+  .wendy-strategy-brief dl {
+    margin-block: 8px;
+  }
+
+  .wendy-strategy-estimate {
+    margin: 12px 0;
+  }
+
+  .wendy-strategy-composer > div,
+  .wendy-strategy-sticky-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .wendy-strategy-composer button,
+  .wendy-strategy-sticky-actions .wendy-strategy-primary,
+  .wendy-strategy-page-heading .wendy-strategy-secondary {
+    width: 100%;
+  }
+
+  .wendy-strategy-sticky-actions {
+    left: 0;
+    min-height: 0;
+    padding: 10px 12px;
+  }
+
+  .wendy-strategy-sticky-actions div {
+    display: none;
+  }
+
+  .wendy-strategy-calendar-card {
+    margin-bottom: 68px;
+  }
+
+  .wendy-strategy-complete-card {
+    margin-top: 24px;
+    padding: 28px 16px;
+    border-radius: 14px;
+  }
+
+  .wendy-strategy-complete-card h2 {
+    font-size: 23px;
+    line-height: 31px;
+  }
+
+  .wendy-strategy-complete-flow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .wendy-strategy-complete-flow > svg {
+    align-self: center;
+    transform: rotate(90deg);
+  }
+
+  .wendy-plan-overview {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .wendy-plan-overview-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .wendy-plan-overview-progress,
+  .wendy-plan-overview > button {
+    grid-column: 1 / -1;
+  }
+
+  .wendy-plan-overview > button {
+    width: 100%;
   }
 }

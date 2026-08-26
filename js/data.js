@@ -158,59 +158,179 @@ const dashboardMetrics = {
 
 const leads = [
   {
+    id: 'sustainable-power-solutions',
     company: 'Sustainable Power Solutions',
     country: '加拿大',
     type: '买家业务',
     contacts: '32 人',
     owner: '卢卓辰',
-    site: 'http://www.narang.com',
+    site: 'https://sustainablepowersolutions.ca',
     score: '10.0',
     products: ['Forklift', 'Scissor Lift', 'Electric Scissor Lift', 'Rough Terrain Scissor Lift', 'Indoor Scissor Lift', 'Outdoor Scissor Lift', '+12'],
-    custom: ['新能源']
+    custom: ['新能源', '高匹配'],
+    stage: 1,
+    createdAt: '2026-05-14 03:12:10',
+    facebook: 'https://www.facebook.com/sustainablepowersolutions',
+    address: '1725 Courtneypark Drive East, Mississauga, ON',
+    identity: '仓储设备集成商 / 经销商',
+    industry: 'Material Handling / Warehouse Equipment',
+    businessArea: '物料搬运与仓储自动化',
+    companyType: 'private enterprise',
+    hardwareAdvantages: '电动叉车与剪叉式升降平台产品组合完整，支持室内外多工况选型与能源系统配套。',
+    softwareAdvantages: '可结合设备管理与能源监控方案，为客户提供设备状态、维保与能耗数据支持。',
+    recommendedScore: 100,
+    description: 'Sustainable Power Solutions 为加拿大制造与仓储客户提供电动物料搬运设备、剪叉式升降平台及配套能源解决方案，业务覆盖设备选型、交付与售后服务。',
+    advantages: ['本地服务网络', '新能源设备组合', '完整交付能力', '多场景产品覆盖'],
+    sellingPoints: '覆盖室内外不同工况，可提供从设备选型、能源方案到售后维护的一体化服务；电动产品线与我方新能源产品高度匹配。',
+    timeline: '创建原始线索，完成公开信息与主营产品初步核验。',
+    contactList: [
+      { name: 'Michael Chen', role: '采购与供应链负责人', email: 'michael.chen@sps.ca', phone: '+1 905 555 0186' },
+      { name: 'Emma Wilson', role: '业务发展经理', email: 'emma.wilson@sps.ca', phone: '+1 905 555 0142' }
+    ],
+    materials: [
+      { name: '企业信息核验报告.pdf', meta: '2.4 MB · 2026-05-14' },
+      { name: '主营产品与应用场景.xlsx', meta: '680 KB · 2026-05-14' }
+    ],
+    notes: ['客户正在扩充电动仓储设备产品线，可优先从锂电池配套方案切入。']
   },
   {
-    company: 'Sustainable Power Solutions',
-    country: '加拿大',
-    type: '买家业务',
-    contacts: '32 人',
-    owner: '卢卓辰',
-    site: 'http://www.narang.com',
-    score: '10.0',
-    products: ['Forklift', 'Scissor Lift', 'Electric Scissor Lift', 'Rough Terrain Scissor Lift', 'Indoor Scissor Lift', 'Outdoor Scissor Lift', '+12'],
-    custom: ['新能源']
+    id: 'atlas-material-handling',
+    company: 'Atlas Material Handling',
+    country: '美国',
+    type: '设备经销商',
+    contacts: '18 人',
+    owner: 'Elsa',
+    site: 'https://www.atlasmaterialhandling.com',
+    score: '9.6',
+    products: ['Forklift', 'Warehouse Solutions', 'Automation', 'Parts & Service'],
+    custom: ['北美', '重点跟进'],
+    stage: 2,
+    createdAt: '2026-05-12 15:48:26',
+    facebook: 'https://www.facebook.com/atlasmaterialhandling',
+    address: '11411 Addison Avenue, Franklin Park, IL',
+    identity: '物料搬运设备经销商',
+    industry: 'Industrial Equipment / Material Handling',
+    businessArea: '仓储设备销售、租赁与维保',
+    companyType: 'private enterprise',
+    hardwareAdvantages: '叉车、仓储系统和自动化设备覆盖全面，并拥有稳定的本地备件与现场服务能力。',
+    softwareAdvantages: '具备仓储方案规划和设备全生命周期服务能力，可支持自动化项目的持续优化。',
+    recommendedScore: 96,
+    description: 'Atlas Material Handling 面向美国中西部制造业与物流客户提供叉车、仓储系统、自动化设备和全生命周期维保服务。',
+    advantages: ['成熟经销网络', '售后能力完善', '自动化业务增长', '客户覆盖广'],
+    sellingPoints: '拥有稳定的工业客户群和现场服务团队，适合联合推广新能源叉车及配套电池系统。',
+    timeline: '已完成首次邮件触达，对方查看了产品手册与服务网络说明。',
+    contactList: [
+      { name: 'Daniel Brooks', role: 'Category Manager', email: 'daniel.brooks@atlasmh.com', phone: '+1 847 555 0124' }
+    ],
+    materials: [
+      { name: '北美经销商合作方案.pdf', meta: '3.1 MB · 2026-05-13' },
+      { name: '触达邮件记录.eml', meta: '96 KB · 2026-05-15' }
+    ],
+    notes: ['对本地备件供应与售后响应时效较敏感，下次沟通需强调服务承诺。']
   },
   {
-    company: 'Sustainable Power Solutions',
-    country: '加拿大',
-    type: '买家业务',
-    contacts: '32 人',
-    owner: '卢卓辰',
-    site: 'http://www.narang.com',
-    score: '10.0',
-    products: ['Forklift', 'Scissor Lift', 'Electric Scissor Lift', 'Rough Terrain Scissor Lift', 'Indoor Scissor Lift', 'Outdoor Scissor Lift', '+12'],
-    custom: ['新能源']
+    id: 'nordlift-automation',
+    company: 'NordLift Automation GmbH',
+    country: '德国',
+    type: '系统集成商',
+    contacts: '12 人',
+    owner: 'Cathy',
+    site: 'https://www.nordlift-automation.de',
+    score: '9.4',
+    products: ['AGV', 'Pallet Shuttle', 'Warehouse Automation', 'Safety Systems'],
+    custom: ['欧洲', '自动化'],
+    stage: 1,
+    createdAt: '2026-05-11 09:26:44',
+    facebook: 'https://www.facebook.com/nordliftautomation',
+    address: 'Industriestraße 24, 70565 Stuttgart, Germany',
+    identity: '仓储自动化系统集成商',
+    industry: 'Logistics Automation / Intralogistics',
+    businessArea: '智能仓储与内部物流',
+    companyType: 'limited company',
+    hardwareAdvantages: 'AGV、托盘输送和安全控制硬件集成经验丰富，适配制造与配送中心复杂工况。',
+    softwareAdvantages: '拥有仓储自动化控制与系统集成能力，支持柔性配置、联合验证和快速部署。',
+    recommendedScore: 94,
+    description: 'NordLift Automation 专注于制造工厂和配送中心的内部物流自动化，提供 AGV、托盘输送和安全控制系统集成。',
+    advantages: ['工程集成能力', '欧洲项目经验', '安全标准完备', '柔性配置'],
+    sellingPoints: '对高可靠电源与紧凑型驱动系统有持续需求，技术团队具备联合验证和快速落地能力。',
+    timeline: '完成企业背调，确认其正在扩充新能源 AGV 解决方案供应商名单。',
+    contactList: [
+      { name: 'Lukas Weber', role: 'Head of Engineering', email: 'l.weber@nordlift.de', phone: '+49 711 555 0178' }
+    ],
+    materials: [
+      { name: '德国市场企业背调.pdf', meta: '1.8 MB · 2026-05-11' }
+    ],
+    notes: ['优先发送技术参数和欧洲认证资料，避免首轮沟通过多介绍营销信息。']
   },
   {
-    company: 'Sustainable Power Solutions',
-    country: '加拿大',
-    type: '买家业务',
-    contacts: '32 人',
-    owner: '卢卓辰',
-    site: 'http://www.narang.com',
-    score: '10.0',
-    products: ['Forklift', 'Scissor Lift', 'Electric Scissor Lift', 'Rough Terrain Scissor Lift', 'Indoor Scissor Lift', 'Outdoor Scissor Lift', '+12'],
-    custom: ['新能源']
+    id: 'gulf-industrial-equipment',
+    company: 'Gulf Industrial Equipment LLC',
+    country: '阿联酋',
+    type: '区域分销商',
+    contacts: '27 人',
+    owner: '王羽凡',
+    site: 'https://www.gulfindustrialequipment.ae',
+    score: '9.1',
+    products: ['Reach Truck', 'Forklift', 'Dock Equipment', 'Spare Parts'],
+    custom: ['中东', '已询盘'],
+    stage: 3,
+    createdAt: '2026-05-08 11:06:18',
+    facebook: 'https://www.facebook.com/gulfindustrialequipment',
+    address: 'Dubai Industrial City, Dubai, UAE',
+    identity: '工业设备进口商 / 分销商',
+    industry: 'Material Handling / Industrial Distribution',
+    businessArea: '中东工业设备分销',
+    companyType: 'limited liability company',
+    hardwareAdvantages: '具备装卸设备、叉车和备件的本地库存，可满足高温工况与快速交付需求。',
+    softwareAdvantages: '区域项目响应与售后协同流程成熟，可支持设备台账、维保与备件管理。',
+    recommendedScore: 91,
+    description: 'Gulf Industrial Equipment 在海湾地区分销仓储搬运设备、装卸平台和备件，并为大型物流园区提供现场维保。',
+    advantages: ['区域渠道成熟', '备件仓储能力', '项目响应快', '本地化服务'],
+    sellingPoints: '具备迪拜本地库存与售后团队，近期询问高温工况下的电池稳定性和交付周期。',
+    timeline: '客户提交产品询盘，正在确认 24 台电动叉车的配置与交付窗口。',
+    contactList: [
+      { name: 'Omar Al Mansoori', role: 'Procurement Director', email: 'omar@gie.ae', phone: '+971 4 555 0193' },
+      { name: 'Sara Khan', role: 'Product Manager', email: 'sara.khan@gie.ae', phone: '+971 4 555 0148' }
+    ],
+    materials: [
+      { name: '24台电动叉车询盘.pdf', meta: '740 KB · 2026-05-16' },
+      { name: '高温工况产品参数.pdf', meta: '4.2 MB · 2026-05-16' }
+    ],
+    notes: ['询盘明确，需在 48 小时内回复高温测试数据与最早交付时间。']
   },
   {
-    company: 'Sustainable Power Solutions',
-    country: '加拿大',
-    type: '买家业务',
-    contacts: '32 人',
+    id: 'mechnova-logistics',
+    company: 'MechNova Logistics Pvt. Ltd',
+    country: '印度',
+    type: '物流服务商',
+    contacts: '21 人',
     owner: '卢卓辰',
-    site: 'http://www.narang.com',
-    score: '10.0',
-    products: ['Forklift', 'Scissor Lift', 'Electric Scissor Lift', 'Outdoor Scissor Lift', '+12'],
-    custom: ['新能源']
+    site: 'https://www.mechnovalogistics.in',
+    score: '8.9',
+    products: ['Warehouse Operations', 'Fleet Management', '3PL', 'Cold Chain'],
+    custom: ['南亚', '新线索'],
+    stage: 0,
+    createdAt: '2026-05-06 18:20:09',
+    facebook: 'https://www.facebook.com/mechnovalogistics',
+    address: 'Plot 48, Chakan Industrial Area, Pune, India',
+    identity: '第三方物流与仓储运营商',
+    industry: 'Logistics / Warehousing',
+    businessArea: '仓储运营与车队管理',
+    companyType: 'private limited company',
+    hardwareAdvantages: '仓储与车队运营场景丰富，具备规模化导入电动搬运设备和充电设施的条件。',
+    softwareAdvantages: '数字化运营意愿强，已有车队管理与仓储运营基础，便于接入设备和能源数据。',
+    recommendedScore: 89,
+    description: 'MechNova Logistics 为汽车零部件、消费品与冷链客户提供仓储运营、车队管理和第三方物流服务。',
+    advantages: ['仓网扩张快', '运营场景丰富', '车队规模稳定', '数字化意愿强'],
+    sellingPoints: '正在新建两座区域仓库，可能需要电动搬运设备及充电基础设施整体方案。',
+    timeline: '新增原始客户，等待完成采购角色与新仓项目时间表核验。',
+    contactList: [
+      { name: 'Aarav Mehta', role: 'Operations Director', email: 'aarav.mehta@mechnova.in', phone: '+91 20 5550 1820' }
+    ],
+    materials: [
+      { name: '公开信息快照.pdf', meta: '1.1 MB · 2026-05-06' }
+    ],
+    notes: ['尚未完成关键采购人验证，先补充新仓项目和设备保有量信息。']
   }
 ];
 
@@ -1081,4 +1201,169 @@ const wendyProductCatalogSource = [ {
     "technicalSpecification" : null,
     "sortOrder" : 0
   } ]
-} ]
+} ];
+
+const inquiryDemoConversations = [
+  {
+    id: 'chris-email',
+    name: 'Chris Walker',
+    firstName: 'Chris',
+    avatar: 'C',
+    avatarTone: 'indigo',
+    company: 'Shanghai Wei Yuan Energy',
+    role: 'Procurement Manager',
+    channel: 'email',
+    channelLabel: '邮件',
+    channelAccount: 'sales@ontoz.ai',
+    identity: 'chris@weiyuan-energy.com',
+    subject: 'Re: Lithium battery pack catalog and MOQ',
+    time: '14:36',
+    unread: 2,
+    replyState: '待回复',
+    lastPreview: 'Could you also share the latest catalog and lead time?',
+    messages: [
+      {
+        id: 'chris-1',
+        direction: 'inbound',
+        date: '昨天',
+        time: '16:42',
+        text: 'Hi John,\n\nWe are sourcing lithium battery packs for a new warehouse automation project. Could you share your MOQ and available certifications?\n\nBest,\nChris'
+      },
+      {
+        id: 'chris-2',
+        direction: 'outbound',
+        date: '昨天',
+        time: '17:08',
+        text: 'Hi Chris,\n\nThanks for reaching out. Our standard MOQ is 50 units, and the battery packs are CE and UN38.3 certified. I will send you the full specification sheet shortly.\n\nBest regards,\nJohn'
+      },
+      {
+        id: 'chris-3',
+        direction: 'inbound',
+        date: '今天',
+        time: '14:36',
+        text: 'Thanks, John. Could you also share the latest catalog and the estimated lead time for 200 units?',
+        attachments: [
+          { id: 'chris-file-1', name: 'Battery_Requirement_List.xlsx', size: '128 KB', type: 'XLSX' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'mia-whatsapp',
+    name: 'Mia Thompson',
+    firstName: 'Mia',
+    avatar: 'M',
+    avatarTone: 'green',
+    company: 'Northstar Handling Ltd.',
+    role: 'Operations Director',
+    channel: 'whatsapp',
+    channelLabel: 'WhatsApp',
+    channelAccount: '+86 138 0000 2188',
+    identity: '+44 7700 900 215',
+    time: '12:18',
+    unread: 1,
+    replyState: '待回复',
+    lastPreview: 'Can you share a quotation for 3T electric pallet trucks?',
+    messages: [
+      {
+        id: 'mia-1',
+        direction: 'inbound',
+        date: '今天',
+        time: '11:52',
+        text: 'Hi John, this is Mia from Northstar Handling. We found your pallet trucks on LinkedIn.'
+      },
+      {
+        id: 'mia-2',
+        direction: 'outbound',
+        date: '今天',
+        time: '12:03',
+        text: 'Hi Mia, great to hear from you. Which load capacity are you looking for?'
+      },
+      {
+        id: 'mia-3',
+        direction: 'inbound',
+        date: '今天',
+        time: '12:18',
+        text: 'We need 20 units of the 3T electric model for our Birmingham warehouse. Can you share a quotation and delivery estimate?'
+      }
+    ]
+  },
+  {
+    id: 'ava-linkedin',
+    name: 'Ava Martinez',
+    firstName: 'Ava',
+    avatar: 'A',
+    avatarTone: 'blue',
+    company: 'LogiCore Solutions',
+    role: 'Supply Chain Lead',
+    channel: 'linkedin',
+    channelLabel: 'LinkedIn',
+    channelAccount: 'John Smith',
+    identity: 'linkedin.com/in/ava-martinez',
+    time: '昨天',
+    unread: 2,
+    replyState: '待回复',
+    lastPreview: 'Do you have a distributor program for Mexico?',
+    messages: [
+      {
+        id: 'ava-1',
+        direction: 'inbound',
+        date: '昨天',
+        time: '09:24',
+        text: 'Hi John, I saw your recent post about the new pallet truck range. The reinforced frame looks interesting.'
+      },
+      {
+        id: 'ava-2',
+        direction: 'inbound',
+        date: '昨天',
+        time: '09:26',
+        text: 'Do you have a distributor program for Mexico? We currently serve industrial customers in Monterrey and Guadalajara.'
+      }
+    ]
+  },
+  {
+    id: 'oliver-email',
+    name: 'Oliver Klein',
+    firstName: 'Oliver',
+    avatar: 'O',
+    avatarTone: 'amber',
+    company: 'Klein Industriebedarf GmbH',
+    role: 'Managing Director',
+    channel: 'email',
+    channelLabel: '邮件',
+    channelAccount: 'sales@ontoz.ai',
+    identity: 'oliver@klein-industrie.de',
+    subject: 'CE documents for webbing slings',
+    time: '周五',
+    unread: 0,
+    replyState: '已回复',
+    lastPreview: 'Thank you. We will review the documents internally.',
+    messages: [
+      {
+        id: 'oliver-1',
+        direction: 'inbound',
+        date: '周五',
+        time: '10:12',
+        text: 'Dear John, could you provide the CE documents and test report for your 5T webbing slings?'
+      },
+      {
+        id: 'oliver-2',
+        direction: 'outbound',
+        date: '周五',
+        time: '10:48',
+        text: 'Dear Oliver,\n\nPlease find the requested CE certificate and test report attached. Let me know if your quality team needs any additional documentation.\n\nBest regards,\nJohn',
+        attachments: [
+          { id: 'oliver-file-1', name: 'CE_Certificate_Webbing_Sling.pdf', size: '1.8 MB', type: 'PDF' },
+          { id: 'oliver-file-2', name: '5T_Test_Report.pdf', size: '2.4 MB', type: 'PDF' }
+        ]
+      },
+      {
+        id: 'oliver-3',
+        direction: 'inbound',
+        date: '周五',
+        time: '11:06',
+        text: 'Thank you. We will review the documents internally.'
+      }
+    ]
+  }
+];

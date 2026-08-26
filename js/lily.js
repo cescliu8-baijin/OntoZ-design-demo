@@ -259,11 +259,11 @@ function renderLeads() {
   const list = document.querySelector('#leadList');
   if (!list || list.dataset.rendered) return;
   list.innerHTML = leads.map(lead => `
-    <article class="lead-card">
+    <article class="lead-card" data-customer-id="${escapeHTML(lead.id)}">
       <div class="lead-info">
         <div class="lead-title-row">
           <span class="fake-check" aria-hidden="true"></span>
-          <strong>${escapeHTML(lead.company)}</strong>
+          <button class="lead-open-detail" type="button" aria-label="查看 ${escapeHTML(lead.company)} 客户详情">${escapeHTML(lead.company)}</button>
           <span class="tag sky">新能源设备制造商</span>
           <span class="tag purple"><i data-lucide="gem"></i>${escapeHTML(lead.score)}</span>
         </div>
@@ -292,6 +292,309 @@ function renderLeads() {
   `).join('');
   list.dataset.rendered = 'true';
 }
+
+const customerDetailDrawer = document.querySelector('#customerDetailDrawer');
+const customerDetailPanel = customerDetailDrawer?.querySelector('.customer-detail-panel');
+const customerDetailBody = document.querySelector('#customerDetailBody');
+const customerDetailTitle = document.querySelector('#customer-detail-title');
+const customerDetailStages = [
+  { label: '背调', icon: 'book-open-check' },
+  { label: '线索', icon: 'folder-search-2' },
+  { label: '触达', icon: 'workflow' },
+  { label: '询盘', icon: 'message-circle-more' },
+  { label: '报价', icon: 'circle-dollar-sign' },
+  { label: '成交', icon: 'file-check-2' }
+];
+let activeCustomerDetail = null;
+let activeCustomerDetailTab = 'cultivation';
+let customerDetailLastFocus = null;
+let customerDetailCloseTimer = 0;
+
+function renderCustomerDetailStages(customer) {
+  return customerDetailStages.map((stage, index) => {
+    const stateClass = index < customer.stage ? 'is-complete' : index === customer.stage ? 'is-current' : '';
+    const current = index === customer.stage ? ' aria-current="step"' : '';
+    return `
+      <li class="${stateClass}"${current}>
+        <span class="customer-stage-icon">${renderIcon(stage.icon)}</span>
+        <span>${escapeHTML(stage.label)}</span>
+      </li>
+    `;
+  }).join('');
+}
+
+function renderCustomerCultivation(customer) {
+  const stage = customerDetailStages[customer.stage] || customerDetailStages[0];
+  return `
+    <div class="customer-cultivation-status">
+      <span>${renderIcon('circle-check')}</span>
+      <strong>进入${escapeHTML(stage.label)}阶段</strong>
+      <time datetime="${escapeHTML(customer.createdAt.replace(' ', 'T'))}">${escapeHTML(customer.createdAt)}</time>
+    </div>
+    <article class="customer-timeline-card">
+      <time datetime="${escapeHTML(customer.createdAt.replace(' ', 'T'))}">${escapeHTML(customer.createdAt)}</time>
+      ${escapeHTML(customer.timeline)}
+    </article>
+  `;
+}
+
+function renderCustomerContacts(customer) {
+  if (!customer.contactList?.length) return '<div class="customer-tab-empty">暂未补全联系人</div>';
+  return `
+    <div class="customer-contact-list">
+      ${customer.contactList.map(contact => `
+        <article class="customer-contact-card">
+          <header><strong>${escapeHTML(contact.name)}</strong><span>${escapeHTML(contact.role)}</span></header>
+          <div class="customer-contact-meta">
+            <span>${renderIcon('mail')}${escapeHTML(contact.email)}</span>
+            <span>${renderIcon('phone')}${escapeHTML(contact.phone)}</span>
+          </div>
+        </article>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderCustomerMaterials(customer) {
+  if (!customer.materials?.length) return '<div class="customer-tab-empty">暂无客户资料</div>';
+  return `
+    <div class="customer-material-list">
+      ${customer.materials.map(material => `
+        <article class="customer-material-card">
+          <span class="customer-material-icon">${renderIcon('file-text')}</span>
+          <p><strong>${escapeHTML(material.name)}</strong><small>${escapeHTML(material.meta)}</small></p>
+          <button type="button" data-customer-material="${escapeHTML(material.name)}" aria-label="查看 ${escapeHTML(material.name)}">${renderIcon('external-link')}</button>
+        </article>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderCustomerNotes(customer) {
+  if (!customer.notes?.length) return '<div class="customer-tab-empty">暂无备注</div>';
+  return `<div class="customer-note-list">${customer.notes.map(note => `<article class="customer-note-card">${escapeHTML(note)}</article>`).join('')}</div>`;
+}
+
+function renderCustomerTabContent(customer, tab) {
+  if (tab === 'contacts') return renderCustomerContacts(customer);
+  if (tab === 'materials') return renderCustomerMaterials(customer);
+  if (tab === 'notes') return renderCustomerNotes(customer);
+  return renderCustomerCultivation(customer);
+}
+
+function renderCustomerCompanyDetail(customer) {
+  const currentStage = customerDetailStages[customer.stage] || customerDetailStages[0];
+  const renderCompanyChips = (items, variant = '') => `
+    <div class="customer-company-chip-list">${items.map(item => `<span class="customer-company-chip ${variant}">${escapeHTML(item)}</span>`).join('')}</div>
+  `;
+  return `
+    <header><h3>公司详情</h3></header>
+    <section class="customer-company-section">
+      <button class="customer-company-section-toggle" type="button" aria-expanded="true" aria-controls="customerCompanyBasic" data-customer-company-section="basic">
+        ${renderIcon('chevron-down')}<span>基础信息</span>
+      </button>
+      <div class="customer-company-section-content" id="customerCompanyBasic">
+        <dl class="customer-company-fields">
+          <dt>公司名称</dt><dd>${escapeHTML(customer.company)}</dd>
+          <dt>Facebook地址</dt><dd><a href="${escapeHTML(customer.facebook)}" target="_blank" rel="noreferrer">${escapeHTML(customer.facebook)}</a></dd>
+          <dt>国家地区</dt><dd>${escapeHTML(customer.country)}</dd>
+          <dt>公司简介</dt><dd>${escapeHTML(customer.description)}</dd>
+          <dt>公司地址</dt><dd>${escapeHTML(customer.address)}</dd>
+          <dt>官网地址</dt><dd><a href="${escapeHTML(customer.site)}" target="_blank" rel="noreferrer">${escapeHTML(customer.site)}</a></dd>
+          <dt>身份</dt><dd>${escapeHTML(customer.identity)}</dd>
+          <dt>行业</dt><dd>${escapeHTML(customer.industry)}</dd>
+          <dt>业务领域</dt><dd>${escapeHTML(customer.businessArea)}</dd>
+          <dt>产品优势</dt><dd><div class="customer-advantage-list">${customer.advantages.map(item => `<span>${escapeHTML(item)}</span>`).join('')}</div></dd>
+          <dt>产品卖点</dt><dd>${escapeHTML(customer.sellingPoints)}</dd>
+          <dt>公司类型</dt><dd>${escapeHTML(customer.companyType)}</dd>
+          <dt>硬件优势</dt><dd>${escapeHTML(customer.hardwareAdvantages)}</dd>
+          <dt>软件优势</dt><dd>${escapeHTML(customer.softwareAdvantages)}</dd>
+          <dt>推荐分数</dt><dd>${escapeHTML(String(customer.recommendedScore))}</dd>
+          <dt>创建时间</dt><dd><time datetime="${escapeHTML(customer.createdAt.replace(' ', 'T'))}">${escapeHTML(customer.createdAt)}</time></dd>
+          <dt>主营产品</dt><dd>${renderCompanyChips(customer.products, 'product')}</dd>
+        </dl>
+      </div>
+    </section>
+    <section class="customer-company-section crm">
+      <button class="customer-company-section-toggle" type="button" aria-expanded="true" aria-controls="customerCompanyCrm" data-customer-company-section="crm">
+        ${renderIcon('chevron-down')}<span>CRM信息</span>
+      </button>
+      <div class="customer-company-section-content" id="customerCompanyCrm">
+        <dl class="customer-company-fields">
+          <dt>当前阶段</dt><dd>${escapeHTML(currentStage.label)}</dd>
+          <dt>自定义标签</dt><dd>${renderCompanyChips(customer.custom, 'custom')}</dd>
+          <dt>归属人</dt><dd>${escapeHTML(customer.owner)}</dd>
+        </dl>
+      </div>
+    </section>
+  `;
+}
+
+function renderCustomerDetail(customer) {
+  customerDetailTitle.textContent = customer.company;
+  customerDetailBody.innerHTML = `
+    <section class="customer-detail-overview" aria-label="客户概要">
+      <div class="customer-detail-overview-row">
+        <span>官网地址</span>
+        <div class="customer-detail-link-row">
+          <a href="${escapeHTML(customer.site)}" target="_blank" rel="noreferrer">${escapeHTML(customer.site)}</a>
+          <button class="customer-copy-link" type="button" data-copy-customer-site aria-label="复制官网地址">${renderIcon('copy')}</button>
+        </div>
+      </div>
+      <div class="customer-detail-overview-row">
+        <span>主营产品</span>
+        <div class="customer-detail-chip-list">${customer.products.map(product => `<span class="customer-detail-chip">${escapeHTML(product)}</span>`).join('')}</div>
+      </div>
+      <div class="customer-detail-overview-row">
+        <span>自定义标签</span>
+        <div class="customer-detail-chip-list">${customer.custom.map(tag => `<span class="customer-detail-chip custom">${escapeHTML(tag)}</span>`).join('')}</div>
+      </div>
+    </section>
+    <div class="customer-detail-stage-scroll" aria-label="客户阶段">
+      <ol class="customer-detail-stages">${renderCustomerDetailStages(customer)}</ol>
+    </div>
+    <div class="customer-detail-workbench">
+      <section class="customer-detail-activity" aria-label="客户跟进信息">
+        <nav class="customer-detail-tabs" role="tablist" aria-label="客户信息分类">
+          <button class="active" type="button" role="tab" aria-selected="true" aria-controls="customerDetailTabPanel" data-customer-detail-tab="cultivation">客户养成</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="customerDetailTabPanel" data-customer-detail-tab="contacts">联系人</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="customerDetailTabPanel" data-customer-detail-tab="materials">资料管理</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="customerDetailTabPanel" data-customer-detail-tab="notes">备注</button>
+        </nav>
+        <div class="customer-detail-tab-panel" id="customerDetailTabPanel" role="tabpanel" tabindex="0">${renderCustomerTabContent(customer, 'cultivation')}</div>
+      </section>
+      <aside class="customer-company-detail" aria-label="公司详情">${renderCustomerCompanyDetail(customer)}</aside>
+    </div>
+  `;
+  activeCustomerDetailTab = 'cultivation';
+  refreshIcons();
+}
+
+function openCustomerDetail(customer, opener) {
+  if (!customerDetailDrawer || !customerDetailPanel || !customerDetailBody) return;
+  window.clearTimeout(customerDetailCloseTimer);
+  activeCustomerDetail = customer;
+  customerDetailLastFocus = opener || document.activeElement;
+  renderCustomerDetail(customer);
+  customerDetailDrawer.hidden = false;
+  customerDetailDrawer.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+  customerDetailBody.scrollTop = 0;
+  window.requestAnimationFrame(() => {
+    customerDetailDrawer.classList.add('open');
+    customerDetailPanel.focus({ preventScroll: true });
+  });
+}
+
+function closeCustomerDetail({ restoreFocus = true } = {}) {
+  if (!customerDetailDrawer || customerDetailDrawer.hidden) return;
+  customerDetailDrawer.classList.remove('open');
+  customerDetailDrawer.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+  customerDetailCloseTimer = window.setTimeout(() => {
+    customerDetailDrawer.hidden = true;
+    activeCustomerDetail = null;
+  }, 220);
+  if (restoreFocus && customerDetailLastFocus instanceof HTMLElement) customerDetailLastFocus.focus({ preventScroll: true });
+}
+
+function selectCustomerDetailTab(tab, focusTab = false) {
+  if (!activeCustomerDetail || !customerDetailBody) return;
+  activeCustomerDetailTab = tab;
+  const buttons = customerDetailBody.querySelectorAll('[data-customer-detail-tab]');
+  buttons.forEach(button => {
+    const active = button.dataset.customerDetailTab === tab;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-selected', String(active));
+    button.tabIndex = active ? 0 : -1;
+    if (active && focusTab) button.focus();
+  });
+  const panel = document.querySelector('#customerDetailTabPanel');
+  panel.innerHTML = renderCustomerTabContent(activeCustomerDetail, activeCustomerDetailTab);
+  refreshIcons();
+}
+
+document.querySelector('#leadList')?.addEventListener('click', event => {
+  const actionButton = event.target.closest('.lead-actions button');
+  if (actionButton) {
+    showToast(actionButton.getAttribute('aria-label') === '收藏' ? '已收藏该客户' : '已撤回该客户');
+    return;
+  }
+  const card = event.target.closest('.lead-card');
+  if (!card || event.target.closest('.fake-check')) return;
+  const customer = leads.find(lead => lead.id === card.dataset.customerId);
+  if (customer) openCustomerDetail(customer, event.target.closest('button') || card.querySelector('.lead-open-detail'));
+});
+
+document.querySelector('#closeCustomerDetail')?.addEventListener('click', () => closeCustomerDetail());
+customerDetailDrawer?.addEventListener('click', event => {
+  if (event.target.closest('[data-close-customer-detail]')) {
+    closeCustomerDetail();
+    return;
+  }
+  const tabButton = event.target.closest('[data-customer-detail-tab]');
+  if (tabButton) {
+    selectCustomerDetailTab(tabButton.dataset.customerDetailTab);
+    return;
+  }
+  const companySectionButton = event.target.closest('[data-customer-company-section]');
+  if (companySectionButton) {
+    const expanded = companySectionButton.getAttribute('aria-expanded') === 'true';
+    const content = customerDetailBody.querySelector(`#${companySectionButton.getAttribute('aria-controls')}`);
+    companySectionButton.setAttribute('aria-expanded', String(!expanded));
+    if (content) content.hidden = expanded;
+    return;
+  }
+  const materialButton = event.target.closest('[data-customer-material]');
+  if (materialButton) {
+    showToast(`正在打开「${materialButton.dataset.customerMaterial}」`);
+    return;
+  }
+  if (event.target.closest('[data-copy-customer-site]') && activeCustomerDetail) {
+    if (!navigator.clipboard) {
+      showToast('当前浏览器不支持自动复制，请手动复制官网地址');
+      return;
+    }
+    navigator.clipboard.writeText(activeCustomerDetail.site)
+      .then(() => showToast('官网地址已复制'))
+      .catch(() => showToast('复制失败，请手动复制官网地址'));
+  }
+});
+
+customerDetailDrawer?.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    closeCustomerDetail();
+    return;
+  }
+  if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+    const currentTab = event.target.closest('[data-customer-detail-tab]');
+    if (!currentTab) return;
+    const tabs = Array.from(customerDetailBody.querySelectorAll('[data-customer-detail-tab]'));
+    const direction = event.key === 'ArrowRight' ? 1 : -1;
+    const nextIndex = (tabs.indexOf(currentTab) + direction + tabs.length) % tabs.length;
+    event.preventDefault();
+    selectCustomerDetailTab(tabs[nextIndex].dataset.customerDetailTab, true);
+    return;
+  }
+  if (event.key !== 'Tab') return;
+  const focusable = Array.from(customerDetailDrawer.querySelectorAll('a[href], button:not([disabled]), [tabindex="0"]'))
+    .filter(element => element.offsetParent !== null);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+});
+
+window.addEventListener('hashchange', () => {
+  if (window.location.hash.replace(/^#/, '') !== 'customers') closeCustomerDetail({ restoreFocus: false });
+});
 
 function revealScannedHome() {
   lilyState.customerPoolScanned = true;
@@ -336,15 +639,410 @@ document.querySelectorAll('.compact-tabs').forEach(tabGroup => {
     });
   });
 });
-document.querySelectorAll('.inquiry-item').forEach(item => {
-  item.addEventListener('click', () => {
-    document.querySelectorAll('.inquiry-item').forEach(row => row.classList.toggle('active', row === item));
-    const name = item.querySelector('strong').textContent;
-    document.querySelector('.inquiry-chat h2').textContent = name;
-    document.querySelector('.inquiry-chat .avatar').textContent = name.charAt(0);
+function initInquiryWorkspace() {
+  const inquiryPage = document.querySelector('#lilyInquiryPage');
+  if (!inquiryPage || !Array.isArray(inquiryDemoConversations) || !inquiryDemoConversations.length) return;
+
+  const channelMeta = {
+    email: { label: '邮件', icon: 'mail' },
+    whatsapp: { label: 'WhatsApp', icon: 'message-circle' },
+    linkedin: { label: 'LinkedIn', icon: 'briefcase-business' }
+  };
+  const inquiryState = {
+    selectedId: inquiryDemoConversations[0].id,
+    statusFilter: 'all',
+    channelFilter: 'all',
+    search: '',
+    drafts: Object.fromEntries(inquiryDemoConversations.map(conversation => [conversation.id, ''])),
+    attachments: Object.fromEntries(inquiryDemoConversations.map(conversation => [conversation.id, []])),
+    aiTone: 'professional',
+    aiOriginal: '',
+    aiResult: '',
+    aiTimer: 0
+  };
+  const elements = {
+    listCount: document.querySelector('#inquiryListCount'),
+    search: document.querySelector('#inquirySearchInput'),
+    list: document.querySelector('#inquiryConversationList'),
+    empty: document.querySelector('#inquiryEmpty'),
+    mobileBack: document.querySelector('#inquiryMobileBack'),
+    chatAvatar: document.querySelector('#inquiryChatAvatar'),
+    chatName: document.querySelector('#inquiryChatName'),
+    chatIdentity: document.querySelector('#inquiryChatIdentity'),
+    chatChannel: document.querySelector('#inquiryChatChannel'),
+    threadContext: document.querySelector('#inquiryThreadContext'),
+    threadSubject: document.querySelector('#inquiryThreadSubject'),
+    thread: document.querySelector('#inquiryChatThread'),
+    replyContext: document.querySelector('#inquiryReplyContext'),
+    replyInput: document.querySelector('#inquiryReplyInput'),
+    characterCount: document.querySelector('#inquiryCharacterCount'),
+    attachmentList: document.querySelector('#inquiryAttachmentList'),
+    attachButton: document.querySelector('#inquiryAttachButton'),
+    fileInput: document.querySelector('#inquiryFileInput'),
+    sendButton: document.querySelector('#inquirySendReply'),
+    aiTrigger: document.querySelector('#inquiryAiTrigger'),
+    aiPanel: document.querySelector('#inquiryAiPanel'),
+    aiClose: document.querySelector('#inquiryAiClose'),
+    aiLoading: document.querySelector('#inquiryAiLoading'),
+    aiText: document.querySelector('#inquiryAiText'),
+    aiActions: document.querySelector('#inquiryAiActions'),
+    aiKeep: document.querySelector('#inquiryAiKeep'),
+    aiRegenerate: document.querySelector('#inquiryAiRegenerate'),
+    aiApply: document.querySelector('#inquiryAiApply')
+  };
+
+  function getActiveConversation() {
+    return inquiryDemoConversations.find(conversation => conversation.id === inquiryState.selectedId)
+      || inquiryDemoConversations[0];
+  }
+
+  function getChannelMeta(channel) {
+    return channelMeta[channel] || channelMeta.email;
+  }
+
+  function renderChannelIcon(channel) {
+    return renderIcon(getChannelMeta(channel).icon);
+  }
+
+  function getFilteredConversations() {
+    const query = inquiryState.search.trim().toLowerCase();
+    return inquiryDemoConversations.filter(conversation => {
+      const matchesStatus = inquiryState.statusFilter === 'all' || conversation.unread > 0;
+      const matchesChannel = inquiryState.channelFilter === 'all' || conversation.channel === inquiryState.channelFilter;
+      const searchable = `${conversation.name} ${conversation.company} ${conversation.identity} ${conversation.lastPreview}`.toLowerCase();
+      return matchesStatus && matchesChannel && (!query || searchable.includes(query));
+    });
+  }
+
+  function renderConversationList() {
+    const filtered = getFilteredConversations();
+    elements.listCount.textContent = `${filtered.length} 个会话`;
+    elements.list.hidden = filtered.length === 0;
+    elements.empty.hidden = filtered.length !== 0;
+    elements.list.innerHTML = filtered.map(conversation => `
+      <button class="inquiry-item ${conversation.id === inquiryState.selectedId ? 'active' : ''}" data-inquiry-id="${escapeHTML(conversation.id)}" type="button" role="option" aria-selected="${String(conversation.id === inquiryState.selectedId)}">
+        <span class="inquiry-avatar-wrap">
+          <span class="inquiry-avatar" data-tone="${escapeHTML(conversation.avatarTone)}">${escapeHTML(conversation.avatar)}</span>
+          <span class="inquiry-channel-mark ${escapeHTML(conversation.channel)}" aria-label="${escapeHTML(conversation.channelLabel)}">${renderChannelIcon(conversation.channel)}</span>
+        </span>
+        <span class="inquiry-item-copy">
+          <strong class="inquiry-item-name">${escapeHTML(conversation.name)}</strong>
+          <span class="inquiry-item-company">${escapeHTML(conversation.company)}</span>
+          <span class="inquiry-item-preview">${escapeHTML(conversation.lastPreview)}</span>
+        </span>
+        <span class="inquiry-item-meta">
+          <time>${escapeHTML(conversation.time)}</time>
+          ${conversation.unread > 0
+            ? `<span class="inquiry-unread-count" aria-label="${conversation.unread} 条未读">${conversation.unread}</span>`
+            : '<i class="inquiry-replied-icon" data-lucide="check-check" aria-label="已回复"></i>'}
+        </span>
+      </button>
+    `).join('');
+    refreshIcons();
+  }
+
+  function renderMessageAttachments(attachments = []) {
+    if (!attachments.length) return '';
+    return `
+      <div class="chat-message-files">
+        ${attachments.map(attachment => `
+          <div class="chat-file-card">
+            <span>${renderIcon('file-text')}</span>
+            <p><strong>${escapeHTML(attachment.name)}</strong><small>${escapeHTML(attachment.type)} · ${escapeHTML(attachment.size)}</small></p>
+            <button data-inquiry-file="${escapeHTML(attachment.id)}" type="button">查看</button>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  window.scrollInquiryToLatest = () => {
+    window.setTimeout(() => {
+      elements.thread.scrollTo({ top: elements.thread.scrollHeight, behavior: 'auto' });
+    }, 0);
+  };
+
+  function renderMessages(conversation) {
+    let activeDate = '';
+    elements.thread.innerHTML = conversation.messages.map(message => {
+      const dateSeparator = message.date !== activeDate
+        ? `<div class="chat-date-separator"><span>${escapeHTML(message.date)}</span></div>`
+        : '';
+      activeDate = message.date;
+      const sent = message.direction === 'outbound';
+      const messageText = message.text
+        ? `<p>${escapeHTML(message.text).replace(/\n/g, '<br>')}</p>`
+        : '';
+      return `
+        ${dateSeparator}
+        <div class="chat-row ${sent ? 'sent' : ''}">
+          ${sent ? '' : `<span class="inquiry-avatar" data-tone="${escapeHTML(conversation.avatarTone)}">${escapeHTML(conversation.avatar)}</span>`}
+          <div class="chat-message-stack">
+            <div class="chat-bubble">${messageText}${renderMessageAttachments(message.attachments)}</div>
+            <span class="chat-message-meta">${sent ? 'John' : escapeHTML(conversation.firstName)} · ${escapeHTML(message.time)}${sent ? ' · 已发送' : ''}</span>
+          </div>
+          ${sent ? '<span class="inquiry-avatar" data-tone="self">J</span>' : ''}
+        </div>
+      `;
+    }).join('');
+    refreshIcons();
+    window.scrollInquiryToLatest();
+  }
+
+  function renderPendingAttachments() {
+    const attachments = inquiryState.attachments[inquiryState.selectedId] || [];
+    elements.attachmentList.hidden = attachments.length === 0;
+    elements.attachmentList.innerHTML = attachments.map(attachment => `
+      <span class="inquiry-attachment-chip">
+        ${renderIcon('file')}<span>${escapeHTML(attachment.name)} · ${escapeHTML(attachment.size)}</span>
+        <button data-remove-inquiry-attachment="${escapeHTML(attachment.id)}" type="button" aria-label="移除 ${escapeHTML(attachment.name)}">${renderIcon('x')}</button>
+      </span>
+    `).join('');
+    refreshIcons();
+  }
+
+  function updateComposerState() {
+    const draft = elements.replyInput.value;
+    const attachmentCount = (inquiryState.attachments[inquiryState.selectedId] || []).length;
+    elements.characterCount.textContent = `${draft.length} / 3000`;
+    elements.sendButton.disabled = !draft.trim() && attachmentCount === 0;
+    elements.aiTrigger.disabled = !draft.trim();
+  }
+
+  function closeInquiryAiPanel() {
+    window.clearTimeout(inquiryState.aiTimer);
+    inquiryState.aiTimer = 0;
+    elements.aiPanel.hidden = true;
+  }
+
+  function renderActiveConversation() {
+    const conversation = getActiveConversation();
+    const channel = getChannelMeta(conversation.channel);
+    elements.chatAvatar.textContent = conversation.avatar;
+    elements.chatAvatar.dataset.tone = conversation.avatarTone;
+    elements.chatName.textContent = conversation.name;
+    elements.chatIdentity.textContent = `${conversation.company} · ${conversation.role}`;
+    elements.chatChannel.className = `inquiry-channel-pill ${conversation.channel}`;
+    elements.chatChannel.innerHTML = `${renderChannelIcon(conversation.channel)}${escapeHTML(channel.label)}`;
+    elements.threadContext.hidden = !conversation.subject;
+    elements.threadSubject.textContent = conversation.subject || '';
+    elements.replyContext.textContent = `通过 ${channel.label} · ${conversation.channelAccount} 回复 ${conversation.firstName}`;
+    elements.replyInput.value = inquiryState.drafts[conversation.id] || '';
+    elements.replyInput.placeholder = `回复 ${conversation.firstName}…`;
+    renderMessages(conversation);
+    renderPendingAttachments();
+    updateComposerState();
+    refreshIcons();
+  }
+
+  function selectInquiryConversation(id) {
+    const conversation = inquiryDemoConversations.find(item => item.id === id);
+    if (!conversation) return;
+    closeInquiryAiPanel();
+    inquiryState.selectedId = id;
+    conversation.unread = 0;
+    inquiryPage.classList.add('mobile-chat-open');
+    renderConversationList();
+    renderActiveConversation();
+  }
+
+  function formatFileSize(bytes) {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
+  function normalizeReplyDraft(value, chinese) {
+    const normalized = value.trim().replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n');
+    if (!normalized) return '';
+    if (/[。！？.!?]$/.test(normalized)) return normalized;
+    return `${normalized}${chinese ? '。' : '.'}`;
+  }
+
+  function createPolishedReply(original, tone, conversation) {
+    const chinese = /[\u3400-\u9fff]/.test(original);
+    const body = normalizeReplyDraft(original, chinese);
+    if (tone === 'concise') return body;
+    if (chinese) {
+      const greeting = `您好，${conversation.firstName}：`;
+      const signoff = tone === 'friendly' ? '期待您的回复！\n\nJohn' : '如需任何补充信息，请随时告诉我。\n\n此致\nJohn';
+      return `${greeting}\n\n${body}\n\n${signoff}`;
+    }
+    const hasGreeting = /^(hi|hello|dear)\b/i.test(body);
+    const hasSignoff = /(best regards|kind regards|regards|best,)\s*/i.test(body);
+    const greeting = hasGreeting ? '' : `Hi ${conversation.firstName},\n\n`;
+    const friendlyLead = tone === 'friendly' && !/^(thanks|thank you)/i.test(body) ? 'Thanks for reaching out. ' : '';
+    const signoff = hasSignoff ? '' : tone === 'friendly' ? '\n\nBest,\nJohn' : '\n\nBest regards,\nJohn';
+    return `${greeting}${friendlyLead}${body}${signoff}`;
+  }
+
+  function runInquiryAiPolish() {
+    const original = elements.replyInput.value.trim();
+    if (!original) return;
+    const conversation = getActiveConversation();
+    inquiryState.aiOriginal = original;
+    inquiryState.aiResult = '';
+    elements.aiPanel.hidden = false;
+    elements.aiLoading.hidden = false;
+    elements.aiText.hidden = true;
+    elements.aiActions.hidden = true;
+    window.clearTimeout(inquiryState.aiTimer);
+    inquiryState.aiTimer = window.setTimeout(() => {
+      if (conversation.id !== inquiryState.selectedId) return;
+      inquiryState.aiResult = createPolishedReply(inquiryState.aiOriginal, inquiryState.aiTone, conversation);
+      elements.aiText.textContent = inquiryState.aiResult;
+      elements.aiLoading.hidden = true;
+      elements.aiText.hidden = false;
+      elements.aiActions.hidden = false;
+      inquiryState.aiTimer = 0;
+    }, 650);
+  }
+
+  function sendInquiryReply() {
+    const conversation = getActiveConversation();
+    const text = elements.replyInput.value.trim();
+    const attachments = inquiryState.attachments[conversation.id] || [];
+    if (!text && !attachments.length) return;
+    const now = new Date();
+    const time = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false });
+    conversation.messages.push({
+      id: `reply-${Date.now()}`,
+      direction: 'outbound',
+      date: '今天',
+      time,
+      text,
+      attachments: attachments.map(attachment => ({ ...attachment }))
+    });
+    conversation.time = time;
+    conversation.unread = 0;
+    conversation.replyState = '已回复';
+    conversation.lastPreview = text.replace(/\s+/g, ' ').trim() || `发送了 ${attachments.length} 个附件`;
+    inquiryState.drafts[conversation.id] = '';
+    inquiryState.attachments[conversation.id] = [];
+    closeInquiryAiPanel();
+    renderConversationList();
+    renderActiveConversation();
+    showToast(`已通过${conversation.channelLabel}回复 ${conversation.firstName}`);
+  }
+
+  elements.list.addEventListener('click', event => {
+    const item = event.target.closest('[data-inquiry-id]');
+    if (item) selectInquiryConversation(item.dataset.inquiryId);
   });
-});
-document.querySelectorAll('.template-card button, .new-template, .lily-task-card footer button, .reply-box button').forEach(button => {
+
+  elements.thread.addEventListener('click', event => {
+    const fileButton = event.target.closest('[data-inquiry-file]');
+    if (fileButton) showToast('已打开附件预览');
+  });
+
+  elements.search.addEventListener('input', event => {
+    inquiryState.search = event.target.value;
+    renderConversationList();
+  });
+
+  document.querySelectorAll('[data-inquiry-status]').forEach(button => {
+    button.addEventListener('click', () => {
+      inquiryState.statusFilter = button.dataset.inquiryStatus;
+      document.querySelectorAll('[data-inquiry-status]').forEach(item => {
+        const active = item === button;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-selected', String(active));
+      });
+      renderConversationList();
+    });
+  });
+
+  document.querySelectorAll('[data-inquiry-channel]').forEach(button => {
+    button.addEventListener('click', () => {
+      inquiryState.channelFilter = button.dataset.inquiryChannel;
+      document.querySelectorAll('[data-inquiry-channel]').forEach(item => {
+        const active = item === button;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      renderConversationList();
+    });
+  });
+
+  elements.replyInput.addEventListener('input', () => {
+    inquiryState.drafts[inquiryState.selectedId] = elements.replyInput.value;
+    if (!elements.aiPanel.hidden && elements.replyInput.value.trim() !== inquiryState.aiOriginal) closeInquiryAiPanel();
+    updateComposerState();
+  });
+
+  elements.replyInput.addEventListener('keydown', event => {
+    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+      sendInquiryReply();
+    }
+  });
+
+  elements.attachButton.addEventListener('click', () => elements.fileInput.click());
+  elements.fileInput.addEventListener('change', () => {
+    const current = inquiryState.attachments[inquiryState.selectedId] || [];
+    const additions = Array.from(elements.fileInput.files || []).map((file, index) => ({
+      id: `local-${Date.now()}-${index}`,
+      name: file.name,
+      size: formatFileSize(file.size),
+      type: file.name.includes('.') ? file.name.split('.').pop().toUpperCase() : 'FILE'
+    }));
+    inquiryState.attachments[inquiryState.selectedId] = [...current, ...additions];
+    elements.fileInput.value = '';
+    renderPendingAttachments();
+    updateComposerState();
+    if (additions.length) showToast(`已添加 ${additions.length} 个附件`);
+  });
+
+  elements.attachmentList.addEventListener('click', event => {
+    const removeButton = event.target.closest('[data-remove-inquiry-attachment]');
+    if (!removeButton) return;
+    inquiryState.attachments[inquiryState.selectedId] = (inquiryState.attachments[inquiryState.selectedId] || [])
+      .filter(attachment => attachment.id !== removeButton.dataset.removeInquiryAttachment);
+    renderPendingAttachments();
+    updateComposerState();
+  });
+
+  elements.sendButton.addEventListener('click', sendInquiryReply);
+  elements.aiTrigger.addEventListener('click', runInquiryAiPolish);
+  elements.aiClose.addEventListener('click', closeInquiryAiPanel);
+  elements.aiKeep.addEventListener('click', () => {
+    closeInquiryAiPanel();
+    elements.replyInput.focus();
+  });
+  elements.aiRegenerate.addEventListener('click', runInquiryAiPolish);
+  elements.aiApply.addEventListener('click', () => {
+    if (!inquiryState.aiResult) return;
+    elements.replyInput.value = inquiryState.aiResult;
+    inquiryState.drafts[inquiryState.selectedId] = inquiryState.aiResult;
+    closeInquiryAiPanel();
+    updateComposerState();
+    elements.replyInput.focus();
+    showToast('已用润色结果替换草稿');
+  });
+
+  document.querySelectorAll('[data-inquiry-tone]').forEach(button => {
+    button.addEventListener('click', () => {
+      inquiryState.aiTone = button.dataset.inquiryTone;
+      document.querySelectorAll('[data-inquiry-tone]').forEach(item => {
+        const active = item === button;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-checked', String(active));
+      });
+      runInquiryAiPolish();
+    });
+  });
+
+  elements.mobileBack.addEventListener('click', () => {
+    inquiryPage.classList.remove('mobile-chat-open');
+  });
+
+  renderConversationList();
+  renderActiveConversation();
+}
+
+initInquiryWorkspace();
+
+document.querySelectorAll('.template-card button, .new-template, .lily-task-card footer button').forEach(button => {
   button.addEventListener('click', () => {
     const label = button.textContent.trim() || button.getAttribute('aria-label') || '操作';
     showToast(`已触发「${label}」`);
