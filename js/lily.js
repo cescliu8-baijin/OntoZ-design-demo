@@ -658,7 +658,8 @@ function initInquiryWorkspace() {
     aiTone: 'professional',
     aiOriginal: '',
     aiResult: '',
-    aiTimer: 0
+    aiTimer: 0,
+    companyPanelOpen: true
   };
   const elements = {
     listCount: document.querySelector('#inquiryListCount'),
@@ -670,6 +671,11 @@ function initInquiryWorkspace() {
     chatName: document.querySelector('#inquiryChatName'),
     chatIdentity: document.querySelector('#inquiryChatIdentity'),
     chatChannel: document.querySelector('#inquiryChatChannel'),
+    companyToggle: document.querySelector('#inquiryCompanyToggle'),
+    companyPanel: document.querySelector('#inquiryCompanyPanel'),
+    companyBody: document.querySelector('#inquiryCompanyBody'),
+    companyClose: document.querySelector('#inquiryCompanyClose'),
+    companyMobileBack: document.querySelector('#inquiryCompanyMobileBack'),
     threadContext: document.querySelector('#inquiryThreadContext'),
     threadSubject: document.querySelector('#inquiryThreadSubject'),
     thread: document.querySelector('#inquiryChatThread'),
@@ -702,6 +708,106 @@ function initInquiryWorkspace() {
 
   function renderChannelIcon(channel) {
     return renderIcon(getChannelMeta(channel).icon);
+  }
+
+  function getActiveCompanyProfile(conversation = getActiveConversation()) {
+    return inquiryCompanyProfiles[conversation.id];
+  }
+
+  function renderInquiryCompanyChips(items = [], variant = '') {
+    return `<div class="inquiry-company-chips">${items.map(item => `<span class="${variant}">${escapeHTML(item)}</span>`).join('')}</div>`;
+  }
+
+  function renderInquiryCompanyProfile(conversation) {
+    const company = getActiveCompanyProfile(conversation);
+    if (!company) return;
+    const currentStage = customerDetailStages[company.stage] || customerDetailStages[0];
+    const contact = company.contactList?.[0];
+    const siteLabel = company.site.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    elements.companyBody.innerHTML = `
+      <section class="inquiry-company-hero">
+        <span class="inquiry-company-mark">${renderIcon('building-2')}</span>
+        <div>
+          <h3>${escapeHTML(company.company)}</h3>
+          <a href="${escapeHTML(company.site)}" target="_blank" rel="noreferrer">${escapeHTML(siteLabel)}${renderIcon('external-link')}</a>
+        </div>
+        <span class="inquiry-company-score">${renderIcon('sparkles')} ${escapeHTML(String(company.recommendedScore))}</span>
+      </section>
+
+      <div class="inquiry-company-status">
+        <span>${renderIcon(currentStage.icon)}${escapeHTML(currentStage.label)}阶段</span>
+        <span>${renderIcon('map-pin')}${escapeHTML(company.country)}</span>
+      </div>
+
+      <section class="inquiry-company-intent">
+        <span>${renderIcon('message-circle-more')}</span>
+        <div><small>本次询盘重点</small><p>${escapeHTML(company.sellingPoints)}</p></div>
+      </section>
+
+      <details class="inquiry-company-section" open>
+        <summary>${renderIcon('chevron-down')}<span>基础信息</span></summary>
+        <dl class="inquiry-company-fields">
+          <dt>公司名称</dt><dd>${escapeHTML(company.company)}</dd>
+          <dt>国家地区</dt><dd>${escapeHTML(company.country)}</dd>
+          <dt>公司地址</dt><dd>${escapeHTML(company.address)}</dd>
+          <dt>公司身份</dt><dd>${escapeHTML(company.identity)}</dd>
+          <dt>行业</dt><dd>${escapeHTML(company.industry)}</dd>
+          <dt>公司类型</dt><dd>${escapeHTML(company.companyType)}</dd>
+          <dt>官网地址</dt><dd><a href="${escapeHTML(company.site)}" target="_blank" rel="noreferrer">${escapeHTML(siteLabel)}</a></dd>
+          <dt>Facebook</dt><dd><a href="${escapeHTML(company.facebook)}" target="_blank" rel="noreferrer">查看主页</a></dd>
+          <dt>创建时间</dt><dd><time datetime="${escapeHTML(company.createdAt.replace(' ', 'T'))}">${escapeHTML(company.createdAt)}</time></dd>
+        </dl>
+      </details>
+
+      <details class="inquiry-company-section" open>
+        <summary>${renderIcon('chevron-down')}<span>业务信息</span></summary>
+        <div class="inquiry-company-copy-block">
+          <small>公司简介</small><p>${escapeHTML(company.description)}</p>
+          <small>业务领域</small><p>${escapeHTML(company.businessArea)}</p>
+          <small>主营产品</small>${renderInquiryCompanyChips(company.products, 'product')}
+          <small>产品优势</small>${renderInquiryCompanyChips(company.advantages)}
+          <small>硬件优势</small><p>${escapeHTML(company.hardwareAdvantages)}</p>
+          <small>软件优势</small><p>${escapeHTML(company.softwareAdvantages)}</p>
+        </div>
+      </details>
+
+      <details class="inquiry-company-section" open>
+        <summary>${renderIcon('chevron-down')}<span>CRM 信息</span></summary>
+        <dl class="inquiry-company-fields compact">
+          <dt>当前阶段</dt><dd><span class="inquiry-company-stage">${escapeHTML(currentStage.label)}</span></dd>
+          <dt>自定义标签</dt><dd>${renderInquiryCompanyChips(company.custom, 'custom')}</dd>
+          <dt>归属人</dt><dd>${escapeHTML(company.owner)}</dd>
+          <dt>推荐分数</dt><dd>${escapeHTML(String(company.recommendedScore))}</dd>
+        </dl>
+      </details>
+
+      ${contact ? `
+        <details class="inquiry-company-section" open>
+          <summary>${renderIcon('chevron-down')}<span>主要联系人</span></summary>
+          <article class="inquiry-company-contact">
+            <span class="inquiry-avatar" data-tone="${escapeHTML(conversation.avatarTone)}">${escapeHTML(conversation.avatar)}</span>
+            <div><strong>${escapeHTML(contact.name)}</strong><small>${escapeHTML(contact.role)}</small></div>
+            <p>${renderIcon('mail')}<a href="mailto:${escapeHTML(contact.email)}">${escapeHTML(contact.email)}</a></p>
+            <p>${renderIcon('phone')}<a href="tel:${escapeHTML(contact.phone.replace(/\s/g, ''))}">${escapeHTML(contact.phone)}</a></p>
+          </article>
+        </details>
+      ` : ''}
+    `;
+    elements.companyBody.scrollTop = 0;
+    refreshIcons();
+  }
+
+  const companyPanelBreakpoint = window.matchMedia('(max-width: 1280px)');
+  const mobileCompanyBreakpoint = window.matchMedia('(max-width: 720px)');
+
+  function setInquiryCompanyPanelOpen(open, { focus = false } = {}) {
+    inquiryState.companyPanelOpen = open;
+    inquiryPage.classList.toggle('company-panel-open', open);
+    inquiryPage.classList.toggle('company-panel-collapsed', !open);
+    inquiryPage.classList.toggle('mobile-company-open', open && mobileCompanyBreakpoint.matches);
+    elements.companyToggle.setAttribute('aria-expanded', String(open));
+    elements.companyToggle.classList.toggle('active', open);
+    if (focus) (open ? elements.companyClose : elements.companyToggle).focus({ preventScroll: true });
   }
 
   function getFilteredConversations() {
@@ -830,6 +936,7 @@ function initInquiryWorkspace() {
     elements.replyInput.value = inquiryState.drafts[conversation.id] || '';
     elements.replyInput.placeholder = `回复 ${conversation.firstName}…`;
     renderMessages(conversation);
+    renderInquiryCompanyProfile(conversation);
     renderPendingAttachments();
     updateComposerState();
     refreshIcons();
@@ -842,6 +949,7 @@ function initInquiryWorkspace() {
     inquiryState.selectedId = id;
     conversation.unread = 0;
     inquiryPage.classList.add('mobile-chat-open');
+    if (mobileCompanyBreakpoint.matches) setInquiryCompanyPanelOpen(false);
     renderConversationList();
     renderActiveConversation();
   }
@@ -1003,6 +1111,9 @@ function initInquiryWorkspace() {
   });
 
   elements.sendButton.addEventListener('click', sendInquiryReply);
+  elements.companyToggle.addEventListener('click', () => setInquiryCompanyPanelOpen(!inquiryState.companyPanelOpen, { focus: true }));
+  elements.companyClose.addEventListener('click', () => setInquiryCompanyPanelOpen(false, { focus: true }));
+  elements.companyMobileBack.addEventListener('click', () => setInquiryCompanyPanelOpen(false, { focus: true }));
   elements.aiTrigger.addEventListener('click', runInquiryAiPolish);
   elements.aiClose.addEventListener('click', closeInquiryAiPanel);
   elements.aiKeep.addEventListener('click', () => {
@@ -1034,8 +1145,17 @@ function initInquiryWorkspace() {
 
   elements.mobileBack.addEventListener('click', () => {
     inquiryPage.classList.remove('mobile-chat-open');
+    setInquiryCompanyPanelOpen(false);
   });
 
+  companyPanelBreakpoint.addEventListener('change', event => {
+    setInquiryCompanyPanelOpen(!event.matches);
+  });
+  mobileCompanyBreakpoint.addEventListener('change', event => {
+    inquiryPage.classList.toggle('mobile-company-open', inquiryState.companyPanelOpen && event.matches);
+  });
+
+  setInquiryCompanyPanelOpen(!companyPanelBreakpoint.matches);
   renderConversationList();
   renderActiveConversation();
 }

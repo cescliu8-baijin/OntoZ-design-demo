@@ -1367,3 +1367,106 @@ const inquiryDemoConversations = [
     ]
   }
 ];
+
+const inquiryCompanyProfiles = {
+  'chris-email': {
+    company: 'Shanghai Wei Yuan Energy',
+    country: '中国 · 上海',
+    site: 'https://www.weiyuan-energy.com',
+    facebook: 'https://www.facebook.com/weiyuanenergy',
+    address: '上海市嘉定区安亭工业园区',
+    identity: '锂电池系统制造商',
+    industry: 'Industrial Battery / Energy Storage',
+    businessArea: '工业锂电池包、仓储设备动力系统',
+    companyType: 'private enterprise',
+    hardwareAdvantages: '具备电芯选型、BMS 集成、结构设计与成组测试能力，可适配叉车、AGV 和仓储自动化设备。',
+    softwareAdvantages: '支持远程电池状态监控、循环寿命分析与设备侧通信协议适配。',
+    recommendedScore: 96,
+    description: '面向仓储物流与工业自动化客户提供锂电池包及能源管理方案，产品覆盖叉车、AGV 与移动机器人应用。',
+    advantages: ['UN38.3 认证', 'BMS 自研', '柔性定制', '批量交付'],
+    sellingPoints: '采购需求明确，正在评估 200 套仓储自动化项目用锂电池包，重点关注认证、MOQ 与交期。',
+    products: ['Lithium Battery Pack', 'BMS', 'AGV Battery', 'Forklift Battery'],
+    custom: ['高匹配', '询盘中', '新能源'],
+    stage: 3,
+    owner: 'John',
+    createdAt: '2026-08-18 10:24:12',
+    contactList: [
+      { name: 'Chris Walker', role: 'Procurement Manager', email: 'chris@weiyuan-energy.com', phone: '+86 21 6888 2026' }
+    ]
+  },
+  'mia-whatsapp': {
+    company: 'Northstar Handling Ltd.',
+    country: '英国 · Birmingham',
+    site: 'https://www.northstarhandling.co.uk',
+    facebook: 'https://www.facebook.com/northstarhandling',
+    address: 'Aston Industrial Estate, Birmingham, United Kingdom',
+    identity: '物料搬运设备经销商',
+    industry: 'Material Handling / Warehouse Equipment',
+    businessArea: '叉车、托盘搬运车销售与仓储设备维保',
+    companyType: 'limited company',
+    hardwareAdvantages: '拥有伯明翰本地仓储与售后团队，覆盖电动托盘车、叉车和常用备件。',
+    softwareAdvantages: '具备客户设备台账、维保排期与仓库运营数据管理能力。',
+    recommendedScore: 94,
+    description: '英国中部物料搬运设备经销商，为制造业和第三方物流客户提供设备采购、租赁与维保服务。',
+    advantages: ['本地售后', '经销网络', '备件库存', '仓储客户资源'],
+    sellingPoints: '正在为伯明翰仓库采购 20 台 3T 电动托盘车，询价与交付时间均已明确。',
+    products: ['Electric Pallet Truck', 'Forklift', 'Spare Parts', 'Maintenance'],
+    custom: ['英国', '重点跟进', '批量采购'],
+    stage: 3,
+    owner: 'John',
+    createdAt: '2026-08-20 16:08:35',
+    contactList: [
+      { name: 'Mia Thompson', role: 'Operations Director', email: 'mia@northstarhandling.co.uk', phone: '+44 7700 900 215' }
+    ]
+  },
+  'ava-linkedin': {
+    company: 'LogiCore Solutions',
+    country: '墨西哥 · Monterrey',
+    site: 'https://www.logicore.mx',
+    facebook: 'https://www.facebook.com/logicoresolutions',
+    address: 'Parque Industrial Milenium, Apodaca, Nuevo León, Mexico',
+    identity: '工业设备渠道商 / 方案服务商',
+    industry: 'Industrial Distribution / Intralogistics',
+    businessArea: '墨西哥工业设备分销与仓储物流方案',
+    companyType: 'private company',
+    hardwareAdvantages: '覆盖蒙特雷与瓜达拉哈拉工业客户，拥有仓储设备展示、交付和本地备件能力。',
+    softwareAdvantages: '提供仓库布局咨询、设备选型和售后工单协同。',
+    recommendedScore: 92,
+    description: '为墨西哥制造企业提供物料搬运设备、仓储优化和本地售后服务，正在扩充新能源设备品牌组合。',
+    advantages: ['区域渠道', '工业客户覆盖', '本地交付', '售后服务'],
+    sellingPoints: '主动询问墨西哥经销商合作计划，具备两座重点工业城市的客户与服务网络。',
+    products: ['Pallet Truck', 'Forklift', 'Warehouse Racking', 'Safety Equipment'],
+    custom: ['墨西哥', '渠道合作', 'LinkedIn'],
+    stage: 3,
+    owner: 'John',
+    createdAt: '2026-08-21 09:42:08',
+    contactList: [
+      { name: 'Ava Martinez', role: 'Supply Chain Lead', email: 'ava.martinez@logicore.mx', phone: '+52 81 5555 0196' }
+    ]
+  },
+  'oliver-email': {
+    company: 'Klein Industriebedarf GmbH',
+    country: '德国 · Nordrhein-Westfalen',
+    site: 'https://www.klein-industrie.de',
+    facebook: 'https://www.facebook.com/kleinindustriebedarf',
+    address: 'Industriestraße 18, 40231 Düsseldorf, Germany',
+    identity: '工业吊装用品进口商 / 经销商',
+    industry: 'Industrial Supplies / Lifting Equipment',
+    businessArea: '吊装带、索具与工业安全用品分销',
+    companyType: 'limited company',
+    hardwareAdvantages: '在德国拥有工业用品仓库和质量验收团队，具备吊装产品批量采购与本地分销能力。',
+    softwareAdvantages: '采用数字化商品目录和批次追溯流程管理认证文件与客户交付。',
+    recommendedScore: 89,
+    description: '德国工业用品经销商，服务机械制造、设备安装和物流企业，重点采购符合欧洲标准的吊装与安全产品。',
+    advantages: ['质量团队', '欧洲渠道', '批次追溯', '工业客户'],
+    sellingPoints: '已索取 5T 吊装带 CE 证书和测试报告，当前由内部质量团队审核。',
+    products: ['Webbing Sling', 'Round Sling', 'Cargo Lashing', 'Lifting Hardware'],
+    custom: ['德国', '认证审核', '已回复'],
+    stage: 3,
+    owner: 'John',
+    createdAt: '2026-08-16 14:18:52',
+    contactList: [
+      { name: 'Oliver Klein', role: 'Managing Director', email: 'oliver@klein-industrie.de', phone: '+49 211 555 0184' }
+    ]
+  }
+};
