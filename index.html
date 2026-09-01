@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no" />
     <title>OntoZ · 专业建站 Lucas</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=customer-detail-3" />
+    <link rel="stylesheet" href="styles.css?v=agent-hero-type-3" />
     <link rel="stylesheet" href="lucide-icons.css" />
   </head>
   <body>
@@ -67,8 +67,8 @@
         <section class="hero" aria-labelledby="page-title">
           <div class="hero-copy">
             <p class="date">2026年6月23日 星期二</p>
-            <h1 id="page-title">今天，从这些商机开始</h1>
-            <p class="intro">基于你的客户、市场与行业动态，已为你筛选出优先行动建议。</p>
+            <h1 class="agent-hero-title" id="page-title">今天，从这些商机开始</h1>
+            <p class="intro agent-hero-subtitle">基于你的客户、市场与行业动态，已为你筛选出优先行动建议。</p>
           </div>
 
           <div class="hero-side">
@@ -412,6 +412,9 @@
                   <p id="inquiryChatIdentity"></p>
                 </div>
                 <span class="inquiry-channel-pill" id="inquiryChatChannel"></span>
+                <button class="inquiry-company-toggle" id="inquiryCompanyToggle" type="button" aria-label="查看公司资料" aria-controls="inquiryCompanyPanel" aria-expanded="true">
+                  <i data-lucide="building-2"></i><span>公司资料</span>
+                </button>
               </header>
 
               <div class="inquiry-thread-context" id="inquiryThreadContext" hidden>
@@ -459,6 +462,19 @@
                 </div>
               </footer>
             </article>
+
+            <aside class="inquiry-company-panel" id="inquiryCompanyPanel" aria-labelledby="inquiryCompanyPanelTitle">
+              <header class="inquiry-company-header">
+                <button class="inquiry-company-mobile-back" id="inquiryCompanyMobileBack" type="button" aria-label="返回会话"><i data-lucide="arrow-left"></i></button>
+                <span class="inquiry-company-header-icon"><i data-lucide="building-2"></i></span>
+                <div>
+                  <h2 id="inquiryCompanyPanelTitle">公司资料</h2>
+                  <p>来自客户池的企业信息</p>
+                </div>
+                <button class="inquiry-company-close" id="inquiryCompanyClose" type="button" aria-label="收起公司资料"><i data-lucide="chevron-right"></i></button>
+              </header>
+              <div class="inquiry-company-body" id="inquiryCompanyBody"></div>
+            </aside>
           </div>
         </section>
 
@@ -517,8 +533,8 @@
           <header class="john-hero">
             <div class="john-hero-copy">
               <p class="john-kicker">24/7 投流 John</p>
-              <h1 id="john-title">John 让投流增长保持在线</h1>
-              <p>实时分析广告、国家、渠道、人群和关键词表现，帮你发现预算机会、异常波动和下一步优化动作。</p>
+              <h1 class="agent-hero-title" id="john-title"><span class="agent-hero-title-en" lang="en">John</span> 让投流增长保持在线</h1>
+              <p class="agent-hero-subtitle">实时分析广告、国家、渠道、人群和关键词表现，帮你发现预算机会、异常波动和下一步优化动作。</p>
             </div>
             <div class="john-entry-actions" aria-label="John 功能入口">
               <button class="john-entry-primary" type="button" data-john-create-flow data-john-flow-mode="existing">
@@ -888,8 +904,8 @@
           <header class="wendy-hero">
             <div class="wendy-hero-copy">
               <p class="wendy-kicker">2026年6月23日 星期二</p>
-              <h1 id="wendy-title">Wendy 帮你持续运营海外社媒</h1>
-              <p>先规划一整个运营周期，再一次性生成多平台、多内容形式的发布计划。</p>
+              <h1 class="agent-hero-title" id="wendy-title"><span class="agent-hero-title-en" lang="en">Wendy</span> 帮你持续运营海外社媒</h1>
+              <p class="agent-hero-subtitle">先规划一整个运营周期，再一次性生成多平台、多内容形式的发布计划。</p>
               <div class="wendy-hero-actions" aria-label="Wendy快捷操作">
                 <button class="wendy-primary wendy-ai-generate-button" data-wendy-strategy-create type="button"><i data-lucide="calendar-range"></i>制定运营策略</button>
                 <button class="wendy-secondary wendy-quick-publish-button" data-wendy-open-publisher type="button"><i data-lucide="send"></i>快速发布</button>
@@ -1528,8 +1544,8 @@
           <header class="lucas-hero">
             <div class="lucas-hero-copy">
               <p class="lucas-kicker">智能体 / 专业建站 Lucas <span>资料待补充</span></p>
-              <h1 id="lucas-title">把企业故事和产品实力，做成一座会获客的网站</h1>
-              <p>Lucas 会先补齐企业信息、产品服务、案例信任与视觉素材，再生成更可信、更能转化的专业网站。</p>
+              <h1 class="agent-hero-title" id="lucas-title">把企业故事和产品实力，做成一座会获客的网站</h1>
+              <p class="agent-hero-subtitle"><span lang="en">Lucas</span> 会先补齐企业信息、产品服务、案例信任与视觉素材，再生成更可信、更能转化的专业网站。</p>
               <div class="lucas-hero-actions">
                 <button class="lucas-primary" id="lucasUploadHero" type="button"><i data-lucide="image-plus"></i>补充素材</button>
                 <button class="lucas-secondary" id="lucasOpenKnowledge" type="button"><i data-lucide="database"></i>查看企业知识库</button>
@@ -2221,69 +2237,388 @@
           </section>
         </section>
 
-        <section class="agent-page zoe-page" id="zoePage" aria-labelledby="zoe-title" hidden>
-          <article class="agent-flow-card">
-            <header><span></span><h1 id="zoe-title">找客户</h1><div><button type="button" aria-label="查看任务"><i data-lucide="clipboard-list"></i></button><button type="button" aria-label="重新生成"><i data-lucide="rotate-cw"></i></button></div></header>
-            <div class="agent-flow-body">
-              <ol class="step-anchor"><li class="active">选择公司产品线</li><li>确认买家画像</li><li>分配标注负责人</li><li>确认目标国家</li><li>确认触达设置</li></ol>
-              <div class="flow-content">
-                <section class="form-bubble">
-                  <label>公司产品线<input value="锂电池" aria-label="公司产品线" /></label>
-                  <button type="button">确认</button>
-                </section>
+        <section class="zoe-page-v2" id="zoePage" aria-labelledby="zoe-title" hidden>
+          <div class="zoe-overview" data-zoe-screen="overview">
+            <header class="zoe-hero-card">
+              <div class="zoe-hero-copy">
+                <p class="zoe-eyebrow"><i data-lucide="sparkles"></i>智能体 / 搜索开发 Zoe</p>
+                <h1 class="agent-hero-title" id="zoe-title">让高质量客户持续进入客户池</h1>
+                <p class="agent-hero-subtitle"><span lang="en">Zoe</span> 基于企业本体自动规划买家、搜索公开商业信号并过滤结果；只有判断边界需要你确认。</p>
+                <div class="zoe-hero-actions">
+                  <button class="zoe-primary-action" type="button" data-zoe-new-task><i data-lucide="plus"></i>创建获客任务</button>
+                  <a class="zoe-secondary-action" href="#customers"><i data-lucide="contact-round"></i>查看客户池</a>
+                </div>
               </div>
+              <aside class="zoe-autopilot-status" aria-label="Zoe 运行状态">
+                <span><i></i>Zoe 自主运行中</span>
+                <strong>3 个任务</strong>
+                <p>正在覆盖 23 个国家和地区</p>
+                <small>刚刚完成一次策略更新</small>
+              </aside>
+            </header>
+
+            <section class="zoe-metrics" aria-label="Zoe 今日获客结果">
+              <article><span>全网搜索发现</span><strong id="zoeDiscoveryCount">86,420</strong><small><i data-lucide="trending-up"></i>今日新增 12,486 条</small></article>
+              <article><span>高质量线索</span><strong id="zoeLeadCount">4,682</strong><small><i data-lucide="circle-check-big"></i>今日新增 386 条</small></article>
+              <article><span>平均匹配率</span><strong>67.4%</strong><small><i data-lucide="arrow-up-right"></i>较上轮提升 4.8%</small></article>
+              <article><span>等待人工判断</span><strong id="zoeReviewCount">9</strong><small><i data-lucide="clock-3"></i>不处理也不影响运行</small></article>
+            </section>
+
+            <div class="zoe-dashboard-grid">
+              <section class="zoe-surface zoe-engine-card" aria-labelledby="zoe-engine-title">
+                <header class="zoe-section-heading">
+                  <div><span>自主获客链路</span><h2 id="zoe-engine-title">Zoe 正在如何找到客户</h2></div>
+                  <span class="zoe-live-pill"><i></i>实时运行</span>
+                </header>
+
+                <ol class="zoe-stage-tabs" role="tablist" aria-label="获客链路阶段">
+                  <li><button class="active" type="button" role="tab" aria-selected="true" data-zoe-stage="0"><i data-lucide="waypoints"></i><span>01</span><strong>买家开发策略</strong><small>明确要找谁</small></button></li>
+                  <li><button type="button" role="tab" aria-selected="false" data-zoe-stage="1"><i data-lucide="search"></i><span>02</span><strong>全网实时搜索</strong><small>捕捉公开信号</small></button></li>
+                  <li><button type="button" role="tab" aria-selected="false" data-zoe-stage="2"><i data-lucide="list-filter"></i><span>03</span><strong>精准线索匹配</strong><small>过滤无效结果</small></button></li>
+                  <li><button type="button" role="tab" aria-selected="false" data-zoe-stage="3"><i data-lucide="refresh-cw"></i><span>04</span><strong>自主策略迭代</strong><small>吸收反馈更新</small></button></li>
+                </ol>
+
+                <article class="zoe-stage-detail" aria-live="polite">
+                  <div class="zoe-stage-icon" id="zoeStageIcon"><i data-lucide="waypoints"></i></div>
+                  <div class="zoe-stage-copy">
+                    <span id="zoeStageKicker">BUYER DEVELOPMENT STRATEGY</span>
+                    <h3 id="zoeStageTitle">正在形成买家开发策略</h3>
+                    <p id="zoeStageBody">结合企业产品、历史高质量客户与市场机会，生成本轮买家方向、搜索词和排除边界。</p>
+                    <div class="zoe-stage-tags" id="zoeStageTags"><span>高端酒店采购</span><span>北美市场</span><span>商业照明升级</span></div>
+                  </div>
+                  <div class="zoe-stage-outcome">
+                    <span>本轮结果</span>
+                    <strong id="zoeStageMetric">3 个买家方向</strong>
+                    <button type="button" data-zoe-open-stage>查看执行详情<i data-lucide="arrow-right"></i></button>
+                  </div>
+                </article>
+              </section>
+
+              <section class="zoe-surface zoe-task-panel" aria-labelledby="zoe-task-title">
+                <header class="zoe-section-heading">
+                  <div><span>自动任务</span><h2 id="zoe-task-title">任务进度</h2></div>
+                  <button class="zoe-icon-button" type="button" data-zoe-new-task aria-label="创建新任务"><i data-lucide="plus"></i></button>
+                </header>
+                <div class="zoe-task-tabs" role="tablist" aria-label="切换正在运行的获客任务">
+                  <button class="active" type="button" role="tab" aria-selected="true" data-zoe-task="0">北美酒店</button>
+                  <button type="button" role="tab" aria-selected="false" data-zoe-task="1">欧洲经销</button>
+                  <button type="button" role="tab" aria-selected="false" data-zoe-task="2">东南亚工程</button>
+                </div>
+                <article class="zoe-task-current" aria-live="polite">
+                  <span>当前任务</span>
+                  <h3 id="zoeTaskName">北美高端酒店买家发现</h3>
+                  <p id="zoeTaskScope">美国 · 加拿大 · 酒店业主与设计采购方</p>
+                  <div class="zoe-task-kpis"><div><span>今日已分析</span><strong id="zoeTaskAnalyzed">12,486</strong></div><div><span>今日已找到</span><strong id="zoeTaskFound">386</strong></div><div><span>累计线索</span><strong id="zoeTaskTotal">3,428</strong></div></div>
+                  <div class="zoe-task-stage-row"><span><i class="zoe-task-pulse"></i>当前环节</span><strong id="zoeTaskStage">搜索规划器</strong><small id="zoeTaskStageMeta">正在生成定制化搜索式</small></div>
+                  <div class="zoe-progress-track" aria-label="任务执行进度"><i id="zoeTaskProgress"></i></div>
+                  <footer><span>已持续 <b id="zoeTaskDuration">02:18:34</b></span><button type="button" data-zoe-task-detail>查看任务详情<i data-lucide="arrow-right"></i></button></footer>
+                </article>
+              </section>
             </div>
-          </article>
-          <aside class="assistant-pane">
-            <header><h2>Zoe助手</h2><button type="button" aria-label="收起 Zoe 助手"><i data-lucide="panel-right-close"></i></button></header>
-            <div class="assistant-note">
-              <i data-lucide="circle-check-big"></i>
-              <div><strong>产品线信息</strong><p>好的，我来初始化公司的产品线信息<br><br>我注意到查询到 6 个产品线，接下来让我逐一分析它们的特性<br><br>了解这些产品线后，我将为您构建一个清晰的产品战略<br><br>最后，整理出每条产品线的优势和市场定位</p></div>
+
+            <div class="zoe-bottom-grid">
+              <section class="zoe-surface zoe-supervision" aria-labelledby="zoe-supervision-title">
+                <header class="zoe-section-heading">
+                  <div><span>人类校准</span><h2 id="zoe-supervision-title">只在边界模糊时请你判断</h2></div>
+                  <span class="zoe-soft-pill">已学习 <b id="zoeLearningCount">128</b> 次</span>
+                </header>
+                <p class="zoe-section-intro">你的选择会进入企业本体，相似公司会自动沿用；不处理也不会阻塞任务。</p>
+                <div class="zoe-persona-tabs" role="tablist" aria-label="切换需要校准的买家方向">
+                  <button class="active" type="button" role="tab" aria-selected="true" data-zoe-persona="0">高端酒店采购</button>
+                  <button type="button" role="tab" aria-selected="false" data-zoe-persona="1">区域渠道商</button>
+                  <button type="button" role="tab" aria-selected="false" data-zoe-persona="2">设计与工程方</button>
+                </div>
+                <div class="zoe-review-list" id="zoeReviewList" aria-live="polite"></div>
+              </section>
+
+              <aside class="zoe-surface zoe-signal-feed" aria-labelledby="zoe-feed-title">
+                <header class="zoe-section-heading"><div><span>实时发现</span><h2 id="zoe-feed-title">刚进入线索池</h2></div><a href="#customers">查看全部</a></header>
+                <div class="zoe-feed-list">
+                  <article><i data-lucide="building-2"></i><div><strong>Oceanview Hospitality</strong><p>新增 2027 海滨酒店改造项目页</p><span>匹配度 94% · 2 分钟前</span></div></article>
+                  <article><i data-lucide="briefcase-business"></i><div><strong>NordLicht Partner GmbH</strong><p>新增商业照明渠道合作负责人</p><span>匹配度 89% · 8 分钟前</span></div></article>
+                  <article><i data-lucide="factory"></i><div><strong>Meridian Buildworks</strong><p>公开招标文件出现照明升级需求</p><span>匹配度 86% · 12 分钟前</span></div></article>
+                </div>
+                <div class="zoe-feed-summary"><i data-lucide="shield-check"></i><div><strong>结果已完成去重与验证</strong><p>与客户池中 69,881 家公司实时比对</p></div></div>
+              </aside>
             </div>
-          </aside>
+          </div>
+
+          <div class="zoe-create" data-zoe-screen="create" hidden>
+            <header class="zoe-create-header">
+              <button type="button" data-zoe-create-back><i data-lucide="arrow-left"></i>返回获客总览</button>
+              <div><span>创建获客任务</span><h1>确认 5 个关键选择，其余交给 Zoe</h1><p>企业信息和历史经验已自动带入，你不需要从空白开始配置。</p></div>
+              <span class="zoe-create-status"><i></i>企业本体已同步</span>
+            </header>
+
+            <div class="zoe-create-layout">
+              <aside class="zoe-create-steps" aria-label="创建任务进度">
+                <ol>
+                  <li class="active" data-zoe-create-marker="0"><span>1</span><div><strong>这次推动什么</strong><small>选择业务方向</small></div></li>
+                  <li data-zoe-create-marker="1"><span>2</span><div><strong>想卖给谁</strong><small>确认买家画像</small></div></li>
+                  <li data-zoe-create-marker="2"><span>3</span><div><strong>先去哪里找</strong><small>安排优先市场</small></div></li>
+                  <li data-zoe-create-marker="3"><span>4</span><div><strong>何时请你判断</strong><small>约定接手边界</small></div></li>
+                  <li data-zoe-create-marker="4"><span>5</span><div><strong>发现后怎么做</strong><small>启动自动任务</small></div></li>
+                </ol>
+                <p><i data-lucide="timer"></i><span><strong>预计 2 分钟完成</strong><small>每一步都有 Zoe 推荐</small></span></p>
+              </aside>
+
+              <section class="zoe-create-main">
+                <article class="zoe-create-card" id="zoeCreateCard">
+                  <div class="zoe-create-agent"><span>Z</span><div><small>Zoe 已结合企业本体推荐</small><h2 id="zoeCreateQuestion">这次最想优先推动哪一类业务？</h2><p id="zoeCreateDescription">建议先从历史询盘质量最高、交付能力最成熟的方向开始。</p></div></div>
+                  <div class="zoe-create-options" id="zoeCreateOptions" role="radiogroup" aria-label="选择业务方向"></div>
+                  <footer><button type="button" data-zoe-create-previous disabled><i data-lucide="arrow-left"></i>上一步</button><span id="zoeCreateProgressText">第 1 步，共 5 步</span><button class="primary" type="button" data-zoe-create-next>确认这个方向<i data-lucide="arrow-right"></i></button></footer>
+                </article>
+
+                <section class="zoe-create-success" id="zoeCreateSuccess" hidden>
+                  <span><i data-lucide="circle-check-big"></i></span>
+                  <small>任务已启动</small>
+                  <h2>北美高端酒店买家发现</h2>
+                  <p>Zoe 已开始规划搜索词并扫描公开商业信号，结果会持续进入客户池。</p>
+                  <div><button class="zoe-primary-action" type="button" data-zoe-success-overview>查看任务进度</button><a class="zoe-secondary-action" href="#customers">前往客户池</a></div>
+                </section>
+              </section>
+
+              <aside class="zoe-create-summary" aria-labelledby="zoe-create-summary-title">
+                <span>任务预览</span>
+                <h2 id="zoe-create-summary-title">买家开发策略</h2>
+                <dl>
+                  <div><dt>业务方向</dt><dd id="zoeSummaryBusiness">商用照明整体方案</dd></div>
+                  <div><dt>买家画像</dt><dd id="zoeSummaryPersona">高端酒店业主与采购团队</dd></div>
+                  <div><dt>优先市场</dt><dd id="zoeSummaryMarket">美国与加拿大</dd></div>
+                  <div><dt>人工判断</dt><dd id="zoeSummaryBoundary">仅边界模糊时</dd></div>
+                  <div><dt>发现后动作</dt><dd id="zoeSummaryAction">进入客户池并通知</dd></div>
+                </dl>
+                <div class="zoe-create-pulse"><i data-lucide="sparkles"></i><p><strong>Zoe 正在形成策略</strong><span id="zoeCreateAssistantText">已带入企业认知和历史高质量客户特征</span></p></div>
+              </aside>
+            </div>
+          </div>
+
+          <section class="zoe-stage-dialog" id="zoeStageDialog" role="dialog" aria-modal="true" aria-labelledby="zoe-stage-dialog-title" aria-hidden="true" hidden>
+            <button class="zoe-dialog-backdrop" type="button" data-zoe-close-stage aria-label="关闭执行详情"></button>
+            <article class="zoe-dialog-panel" tabindex="-1">
+              <header><div><span id="zoeStageDialogKicker">BUYER DEVELOPMENT STRATEGY</span><h2 id="zoe-stage-dialog-title">买家开发策略详情</h2><p id="zoeStageDialogIntro">本轮策略如何形成，以及哪些判断已被自动带入。</p></div><button type="button" data-zoe-close-stage aria-label="关闭执行详情"><i data-lucide="x"></i></button></header>
+              <div class="zoe-dialog-content" id="zoeStageDialogContent"></div>
+              <footer><span><i></i>Zoe 将持续按当前策略运行</span><button type="button" data-zoe-close-stage>完成</button></footer>
+            </article>
+          </section>
         </section>
 
-        <section class="agent-page leo-page" id="leoPage" aria-labelledby="leo-title" hidden>
-          <article class="agent-flow-card">
-            <header><span></span><h1 id="leo-title">展会营销创建</h1><div><button type="button" aria-label="重新生成"><i data-lucide="rotate-cw"></i></button></div></header>
-            <div class="agent-flow-body">
-              <ol class="step-anchor"><li class="active">搜索展会</li><li>展会信息</li><li>展会营销策略</li><li>拓展新客户</li><li>营销信模板</li></ol>
-              <div class="flow-content">
-                <p class="question-bubble">请告诉我展会名称</p>
-                <section class="form-bubble">
-                  <label>展会名称<input value="拉斯维加斯消费电子展" aria-label="展会名称" /></label>
-                  <div class="inline-actions"><button class="confirm-light" type="button"><i data-lucide="circle-check-big"></i>确认</button><button type="button"><i data-lucide="rotate-cw"></i>重试</button></div>
+        <section class="agent-page leo-page leo-exhibition-page" id="leoPage" aria-labelledby="leo-title" hidden>
+          <article class="agent-flow-card zoe-flow-card">
+            <header>
+              <span></span>
+              <h1 id="leo-title">展会营销获客</h1>
+              <div>
+                <button type="button" data-zoe-reset aria-label="重新开始展会营销流程"><i data-lucide="rotate-cw"></i></button>
+              </div>
+            </header>
+
+            <div class="zoe-flow-body">
+              <nav class="zoe-step-nav" aria-label="展会营销创建步骤">
+                <ol>
+                  <li class="active" data-zoe-nav-step="0"><button type="button">搜索展会</button></li>
+                  <li data-zoe-nav-step="1"><button type="button">展会信息</button></li>
+                  <li data-zoe-nav-step="2"><button type="button">客户画像</button></li>
+                  <li data-zoe-nav-step="3"><button type="button">营销国家</button></li>
+                  <li data-zoe-nav-step="5"><button type="button">营销模板</button></li>
+                  <li data-zoe-nav-step="6"><button type="button">下达任务</button></li>
+                </ol>
+              </nav>
+
+              <div class="zoe-conversation" aria-live="polite">
+                <section class="zoe-flow-step" data-zoe-step="0">
+                  <p class="zoe-question">请告诉我你准备参加的展会名称</p>
+                  <article class="zoe-answer-card">
+                    <label class="zoe-field">
+                      <span>展会名称</span>
+                      <input id="zoeExhibitionSearch" type="text" value="拉斯维加斯消费电子展 CES 2027" autocomplete="off" />
+                    </label>
+                    <div class="zoe-card-actions">
+                      <span class="zoe-confirmed-label"><i data-lucide="circle-check-big"></i>已确认</span>
+                      <button class="zoe-edit-button" type="button" data-zoe-edit="0"><i data-lucide="pencil"></i>修改</button>
+                      <button class="zoe-primary-button" type="button" data-zoe-confirm="0">确认展会</button>
+                    </div>
+                  </article>
                 </section>
-                <p class="question-bubble wide">已为您搜索到拉斯维加斯消费电子展展位信息</p>
-                <section class="form-bubble">
-                  <label>展会名称<input value="拉斯维加斯消费电子展" aria-label="展会名称" /></label>
-                  <label>展会国家<input value="美国" aria-label="展会国家" /></label>
-                  <label>展会城市<input value="拉斯维加斯" aria-label="展会城市" /></label>
-                  <button type="button">确认</button>
+
+                <section class="zoe-flow-step" data-zoe-step="1" hidden>
+                  <p class="zoe-question">我找到了匹配度最高的展会，请确认信息</p>
+                  <article class="zoe-answer-card">
+                    <div class="zoe-card-heading">
+                      <div><span class="zoe-kicker">Leo 已完成检索</span><h2>展会基础信息</h2></div>
+                      <span class="zoe-match-badge">匹配度 98%</span>
+                    </div>
+                    <div class="zoe-field-grid">
+                      <label class="zoe-field zoe-field-wide"><span>展会名称</span><input id="zoeExhibitionName" value="CES 2027 · 拉斯维加斯消费电子展" /></label>
+                      <label class="zoe-field"><span>展会国家</span><input value="美国" /></label>
+                      <label class="zoe-field"><span>展会城市</span><input value="拉斯维加斯" /></label>
+                      <label class="zoe-field"><span>开始日期</span><input type="date" value="2027-01-06" /></label>
+                      <label class="zoe-field"><span>结束日期</span><input type="date" value="2027-01-09" /></label>
+                      <label class="zoe-field zoe-field-wide"><span>官网</span><input value="https://www.ces.tech" /></label>
+                      <label class="zoe-field zoe-field-wide"><span>展会简介</span><textarea rows="3">全球最具影响力的科技盛会之一，聚集消费电子、AI、智能家居与创新技术领域的决策者和合作伙伴。</textarea></label>
+                    </div>
+                    <div class="zoe-card-actions">
+                      <span class="zoe-confirmed-label"><i data-lucide="circle-check-big"></i>已确认</span>
+                      <button class="zoe-edit-button" type="button" data-zoe-edit="1"><i data-lucide="pencil"></i>修改</button>
+                      <button class="zoe-primary-button" type="button" data-zoe-confirm="1">确认信息</button>
+                    </div>
+                  </article>
+                </section>
+
+                <section class="zoe-flow-step" data-zoe-step="2" hidden>
+                  <p class="zoe-question">结合你的产品与参展目标，我整理了优先客户画像</p>
+                  <article class="zoe-answer-card">
+                    <div class="zoe-card-heading">
+                      <div><span class="zoe-kicker">推荐画像</span><h2>本次展会重点客户</h2></div>
+                      <button class="zoe-ghost-button" type="button" data-add-tag="profiles"><i data-lucide="plus"></i>添加画像</button>
+                    </div>
+                    <div class="zoe-chip-list" id="zoeProfileTags" data-tag-list="profiles">
+                      <span class="zoe-chip">消费电子品牌商<button type="button" aria-label="移除消费电子品牌商"><i data-lucide="x"></i></button></span>
+                      <span class="zoe-chip">智能家居集成商<button type="button" aria-label="移除智能家居集成商"><i data-lucide="x"></i></button></span>
+                      <span class="zoe-chip">渠道分销商<button type="button" aria-label="移除渠道分销商"><i data-lucide="x"></i></button></span>
+                      <span class="zoe-chip">零售采购负责人<button type="button" aria-label="移除零售采购负责人"><i data-lucide="x"></i></button></span>
+                      <span class="zoe-chip">产品与创新负责人<button type="button" aria-label="移除产品与创新负责人"><i data-lucide="x"></i></button></span>
+                    </div>
+                    <label class="zoe-field zoe-field-spaced"><span>补充画像要求</span><textarea rows="2" placeholder="例如：优先寻找正在扩展北美渠道的企业">优先匹配近 12 个月有新品发布、渠道扩张或供应商更换信号的企业</textarea></label>
+                    <div class="zoe-card-actions">
+                      <span class="zoe-confirmed-label"><i data-lucide="circle-check-big"></i>已确认</span>
+                      <button class="zoe-edit-button" type="button" data-zoe-edit="2"><i data-lucide="pencil"></i>修改</button>
+                      <button class="zoe-primary-button" type="button" data-zoe-confirm="2">确认客户画像</button>
+                    </div>
+                  </article>
+                </section>
+
+                <section class="zoe-flow-step" data-zoe-step="3" hidden>
+                  <p class="zoe-question">建议优先覆盖以下国家和地区，你可以随时调整</p>
+                  <article class="zoe-answer-card">
+                    <div class="zoe-card-heading">
+                      <div><span class="zoe-kicker">营销范围</span><h2>目标国家与客户规模</h2></div>
+                      <button class="zoe-ghost-button" type="button" data-add-tag="countries"><i data-lucide="plus"></i>添加国家</button>
+                    </div>
+                    <div class="zoe-chip-list" id="zoeCountryTags" data-tag-list="countries">
+                      <span class="zoe-chip zoe-chip-country">美国<button type="button" aria-label="移除美国"><i data-lucide="x"></i></button></span>
+                      <span class="zoe-chip zoe-chip-country">加拿大<button type="button" aria-label="移除加拿大"><i data-lucide="x"></i></button></span>
+                      <span class="zoe-chip zoe-chip-country">墨西哥<button type="button" aria-label="移除墨西哥"><i data-lucide="x"></i></button></span>
+                      <span class="zoe-chip zoe-chip-country">德国<button type="button" aria-label="移除德国"><i data-lucide="x"></i></button></span>
+                      <span class="zoe-chip zoe-chip-country">英国<button type="button" aria-label="移除英国"><i data-lucide="x"></i></button></span>
+                    </div>
+                    <div class="zoe-field-grid zoe-field-grid-compact">
+                      <label class="zoe-field"><span>计划覆盖客户</span><input id="zoeTargetCount" type="number" min="50" max="3000" step="50" value="800" /></label>
+                      <label class="zoe-field"><span>优先级</span><select><option>高匹配客户优先</option><option>新客户优先</option><option>均匀分配</option></select></label>
+                    </div>
+                    <div class="zoe-card-actions">
+                      <span class="zoe-confirmed-label"><i data-lucide="circle-check-big"></i>已确认</span>
+                      <button class="zoe-edit-button" type="button" data-zoe-edit="3"><i data-lucide="pencil"></i>修改</button>
+                      <button class="zoe-primary-button" type="button" data-zoe-confirm="3">确认营销国家</button>
+                    </div>
+                  </article>
+                </section>
+
+                <section class="zoe-flow-step" data-zoe-step="4" hidden>
+                  <p class="zoe-question">为补足目标客户数量，请选择 Leo 的获客方式</p>
+                  <article class="zoe-answer-card">
+                    <div class="zoe-card-heading"><div><span class="zoe-kicker">获客策略</span><h2>补足潜在客户</h2></div></div>
+                    <div class="zoe-choice-grid" role="radiogroup" aria-label="选择获客方式">
+                      <button class="active" type="button" role="radio" aria-checked="true" data-zoe-source="auto"><i data-lucide="sparkles"></i><strong>Leo 自动拓客</strong><span>从全网寻找符合画像的新客户</span></button>
+                      <button type="button" role="radio" aria-checked="false" data-zoe-source="import"><i data-lucide="file-up"></i><strong>导入名单</strong><span>上传 Excel / CSV 客户名单</span></button>
+                    </div>
+                    <label class="zoe-upload" id="zoeImportField" hidden>
+                      <i data-lucide="upload-cloud"></i>
+                      <strong>拖拽或点击上传客户文件</strong>
+                      <span>支持 .xlsx、.xls、.csv，单个文件不超过 15MB</span>
+                      <input type="file" accept=".xlsx,.xls,.csv" />
+                    </label>
+                    <fieldset class="zoe-channel-fieldset">
+                      <legend>自动触达方式</legend>
+                      <label><input type="checkbox" checked /><span><i data-lucide="mail"></i>邮件</span></label>
+                      <label><input type="checkbox" checked /><span><img src="assets/LinkedIn.svg" alt="" />LinkedIn</span></label>
+                      <label><input type="checkbox" /><span><i data-lucide="phone"></i>电话任务</span></label>
+                    </fieldset>
+                    <div class="zoe-card-actions">
+                      <span class="zoe-confirmed-label"><i data-lucide="circle-check-big"></i>已确认</span>
+                      <button class="zoe-edit-button" type="button" data-zoe-edit="4"><i data-lucide="pencil"></i>修改</button>
+                      <button class="zoe-primary-button" type="button" data-zoe-confirm="4"><i data-lucide="wand-sparkles"></i>生成营销模板</button>
+                    </div>
+                  </article>
+                </section>
+
+                <section class="zoe-flow-step" data-zoe-step="5" hidden>
+                  <p class="zoe-question">营销模板已生成。确认内容后，我会自动配置发送任务</p>
+                  <article class="zoe-answer-card zoe-template-card">
+                    <div class="zoe-card-heading">
+                      <div><span class="zoe-kicker">AI 营销模板</span><h2>CES 2027 展前邀约 · 首封邮件</h2></div>
+                      <button class="zoe-ghost-button" type="button" data-zoe-regenerate><i data-lucide="rotate-cw"></i>重新生成</button>
+                    </div>
+                    <label class="zoe-field"><span>邮件主题</span><input id="zoeTemplateSubject" value="CES 2027 | 预约 15 分钟，交流智能硬件渠道合作机会" /></label>
+                    <label class="zoe-field zoe-field-spaced"><span>邮件正文</span><textarea id="zoeTemplateBody" rows="10">Hi {{firstName}},
+
+I’m John from OntoZ. We’ll be attending CES 2027 in Las Vegas and would love to connect with teams expanding their smart hardware portfolio in North America.
+
+Based on {{companyName}}’s recent product and channel activity, I believe there may be a strong fit with our supply and go-to-market capabilities.
+
+Would you be open to a 15-minute conversation during the show? I’m happy to work around your schedule.
+
+Best,
+John</textarea></label>
+                    <div class="zoe-card-actions">
+                      <span class="zoe-confirmed-label"><i data-lucide="circle-check-big"></i>已确认</span>
+                      <button class="zoe-edit-button" type="button" data-zoe-edit="5"><i data-lucide="pencil"></i>修改</button>
+                      <button class="zoe-primary-button" type="button" data-zoe-confirm="5">确认营销模板</button>
+                    </div>
+                  </article>
+                </section>
+
+                <section class="zoe-flow-step" data-zoe-step="6" hidden>
+                  <p class="zoe-question">最后确认发送账号与任务范围</p>
+                  <article class="zoe-answer-card zoe-task-card">
+                    <div class="zoe-field-grid zoe-field-grid-compact">
+                      <label class="zoe-field"><span>发件邮箱</span><select id="zoeSender"><option>john@ontoz.ai</option><option>sales@ontoz.ai</option></select></label>
+                      <label class="zoe-field"><span>开始时间</span><input type="datetime-local" value="2026-11-16T09:30" /></label>
+                    </div>
+                    <section class="zoe-task-summary" aria-labelledby="zoe-task-summary-title">
+                      <div class="zoe-card-heading"><div><span class="zoe-kicker">任务预览</span><h2 id="zoe-task-summary-title">CES 2027 展会营销任务</h2></div><span class="zoe-status-badge">待下达</span></div>
+                      <dl>
+                        <div><dt>展会</dt><dd>CES 2027 · 拉斯维加斯</dd></div>
+                        <div><dt>营销国家</dt><dd id="zoeSummaryCountries">美国、加拿大、墨西哥等 5 个国家</dd></div>
+                        <div><dt>预计覆盖</dt><dd><strong id="zoeSummaryCount">800</strong> 家公司</dd></div>
+                      </dl>
+                      <div class="zoe-volume-grid">
+                        <div><span>客户池已有</span><strong>200</strong></div>
+                        <div><span>本次导入</span><strong>0</strong></div>
+                        <div><span>Leo 新拓</span><strong id="zoeNewCount">600</strong></div>
+                      </div>
+                    </section>
+                    <button class="zoe-launch-button" type="button" data-zoe-launch><i data-lucide="send"></i>确认并下达任务</button>
+                  </article>
+                </section>
+
+                <section class="zoe-success-card" id="zoeSuccessCard" hidden>
+                  <img src="assets/zoe-assistant-avatar.png" alt="Leo AI 助理" />
+                  <i data-lucide="circle-check-big" aria-hidden="true"></i>
+                  <h2>展会营销任务已下达</h2>
+                  <p>Leo 将持续拓展并筛选客户，营销进展会同步到客户池与任务管理。</p>
+                  <div><a href="#lily/tasks">查看任务进度</a><button type="button" data-zoe-continue>继续创建任务</button></div>
                 </section>
               </div>
             </div>
           </article>
-          <aside class="assistant-pane">
-            <header><h2>Zoe助手</h2><button type="button" aria-label="收起 Zoe 助手"><i data-lucide="panel-right-close"></i></button></header>
-            <div class="assistant-note">
-              <i data-lucide="circle-check-big"></i>
-              <div><strong>展会信息</strong><p>嗯，用户想了解拉斯维加斯消费电子展的展会信息，这是一个典型的信息收集类问题。<br><br>我计划从展会基本信息、核心亮点以及中国企业参与情况几个方面来组织回答。<br><br>信息比较充足，我准备用表格先呈现核心信息概览，然后分两大亮点详细展开。</p></div>
-            </div>
-          </aside>
+
         </section>
+
       </main>
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"><i data-lucide="circle-check" aria-hidden="true"></i><span></span></div>
     <script src="assets/lucide.min.js"></script>
-    <script src="js/data.js?v=customer-detail-3"></script>
+    <script src="js/data.js?v=inquiry-company-detail-1"></script>
     <script src="js/shared.js?v=professional-static-4"></script>
-    <script src="js/lily.js?v=customer-detail-3"></script>
+    <script src="js/lily.js?v=inquiry-company-detail-2"></script>
     <script src="js/route.js?v=inquiry-main-flow-2"></script>
     <script src="js/ontology.js?v=buyer-strategy-1"></script>
     <script src="js/ontology-strategy.js?v=buyer-strategy-1"></script>
     <script src="js/keyword-validation.js?v=keyword-validation-history-1"></script>
+    <script src="js/zoe.js?v=acquisition-center-1"></script>
+    <script src="js/leo.js?v=exhibition-marketing-4"></script>
     <script src="js/wendy.js?v=professional-static-14"></script>
     <script src="js/john.js?v=john-create-flow-23"></script>
     <script src="js/lucas.js?v=professional-static-4"></script>

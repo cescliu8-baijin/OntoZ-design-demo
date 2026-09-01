@@ -1,6 +1,6 @@
 @import url("./css/base.css?v=professional-static-4");
 @import url("./css/lily-home.css?v=professional-static-4");
-@import url("./css/lily-secondary.css?v=inquiry-main-flow-4");
+@import url("./css/lily-secondary.css?v=inquiry-company-detail-2");
 @import url("./css/wendy.css?v=professional-static-14");
 @import url("./css/lucas.css?v=professional-static-4");
 @import url("./css/john.css?v=john-create-flow-26");
@@ -8,7 +8,36 @@
 @import url("./css/lily-agent.css?v=professional-static-4");
 @import url("./css/sequence-modal.css?v=professional-static-4");
 @import url("./css/lily-dashboard.css?v=professional-static-4");
-@import url("./css/responsive.css?v=customer-detail-3");
+@import url("./css/responsive.css?v=inquiry-company-detail-2");
 @import url("./css/ontology.css?v=enterprise-ontology-1");
 @import url("./css/ontology-strategy.css?v=buyer-strategy-1");
 @import url("./css/keyword-validation.css?v=keyword-validation-history-3");
+@import url("./css/leo.css?v=exhibition-marketing-5");
+@import url("./css/zoe.css?v=acquisition-center-2");
+
+/* Shared responsive typography for agent overview heroes. */
+h1.agent-hero-title {
+  margin: 0;
+  font-family: "Songti SC", SongtiSC, STSong, serif;
+  font-size: 48px;
+  line-height: 56px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.agent-hero-title-en {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+}
+
+p.agent-hero-subtitle.agent-hero-subtitle {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+@media (max-width: 560px) {
+  h1.agent-hero-title {
+    font-size: 34px;
+    line-height: 42px;
+  }
+}

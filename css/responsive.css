@@ -16,6 +16,20 @@
   .assistant-pane { min-height: 0; }
 }
 
+@media (max-width: 1280px) {
+  .inquiry-workbench { grid-template-columns: 300px minmax(0, 1fr); }
+  .inquiry-page.company-panel-collapsed .inquiry-workbench { grid-template-columns: 300px minmax(0, 1fr); }
+  .inquiry-company-panel {
+    position: absolute;
+    inset: 0 0 0 auto;
+    z-index: 6;
+    width: min(360px, calc(100% - 24px));
+    display: none;
+    box-shadow: -16px 0 38px var(--oz-slate-900-14);
+  }
+  .inquiry-page.company-panel-open .inquiry-company-panel { display: flex; }
+}
+
 @media (max-width: 1180px) {
   .customer-detail-panel { width: calc(100vw - 56px); }
 }
@@ -123,6 +137,7 @@
   .lucas-preview-card { grid-column: span 2; }
   .inquiry-page { padding: 16px; }
   .inquiry-workbench { grid-template-columns: 276px minmax(0, 1fr); }
+  .inquiry-page.company-panel-collapsed .inquiry-workbench { grid-template-columns: 276px minmax(0, 1fr); }
   .chat-message-stack { max-width: 84%; }
   .chat-file-card { width: 100%; min-width: 0; }
   .template-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
@@ -150,12 +165,27 @@
   }
 
   .inquiry-workbench { grid-template-columns: 1fr; gap: 0; }
+  .inquiry-page.company-panel-collapsed .inquiry-workbench { grid-template-columns: 1fr; }
   .inquiry-chat { display: none; }
   .inquiry-page.mobile-chat-open .inquiry-list { display: none; }
   .inquiry-page.mobile-chat-open .inquiry-chat { display: flex; }
+  .inquiry-page.mobile-company-open .inquiry-list,
+  .inquiry-page.mobile-company-open .inquiry-chat { display: none; }
+  .inquiry-page.mobile-company-open .inquiry-company-panel { display: flex; }
   .inquiry-mobile-back { display: grid; }
+  .inquiry-company-panel {
+    position: static;
+    inset: auto;
+    width: auto;
+    height: 100%;
+    grid-column: 1;
+    box-shadow: none;
+  }
+  .inquiry-company-mobile-back { display: grid; }
+  .inquiry-company-close { display: none; }
   .inquiry-list,
-  .inquiry-chat { border-radius: 12px; }
+  .inquiry-chat,
+  .inquiry-company-panel { border-radius: 12px; }
   .chat-message-stack { max-width: 82%; }
 }
 
@@ -326,12 +356,16 @@
     padding: 0;
   }
   .inquiry-list,
-  .inquiry-chat { border-width: 1px 0 0; border-radius: 0; box-shadow: none; }
+  .inquiry-chat,
+  .inquiry-company-panel { border-width: 1px 0 0; border-radius: 0; box-shadow: none; }
   .inquiry-list-header { padding: 12px; }
   .inquiry-item { min-height: 78px; }
   .inquiry-chat-header { min-height: 62px; padding: 10px 12px; }
   .inquiry-chat-header > .inquiry-avatar { width: 36px; height: 36px; }
   .inquiry-channel-pill { padding-inline: 7px; }
+  .inquiry-company-toggle { width: 34px; padding: 0; }
+  .inquiry-company-toggle span { display: none; }
+  .inquiry-company-header { min-height: 62px; padding: 10px 12px; }
   .chat-thread { padding: 16px 12px 20px; }
   .chat-row { gap: 6px; }
   .chat-row > .inquiry-avatar { display: none; }
