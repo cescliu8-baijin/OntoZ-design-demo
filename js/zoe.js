@@ -90,9 +90,9 @@
   ];
 
   const taskData = [
-    { name: '北美高端酒店买家发现', scope: '美国 · 加拿大 · 酒店业主与设计采购方', analyzed: 12486, found: 386, total: 3428, seconds: 8314, stage: 0 },
-    { name: '欧洲商业照明经销商拓展', scope: '德国 · 法国 · 荷兰 · 区域渠道与工程分销商', analyzed: 8684, found: 214, total: 1986, seconds: 5708, stage: 3 },
-    { name: '东南亚工程采购机会识别', scope: '新加坡 · 马来西亚 · 泰国 · 设计与工程采购方', analyzed: 6321, found: 147, total: 1264, seconds: 3895, stage: 5 }
+    { short: '北美酒店', name: '北美高端酒店买家发现', scope: '美国 · 加拿大 · 酒店业主与设计采购方', analyzed: 12486, found: 386, total: 3428, seconds: 8314, stage: 0 },
+    { short: '欧洲经销', name: '欧洲商业照明经销商拓展', scope: '德国 · 法国 · 荷兰 · 区域渠道与工程分销商', analyzed: 8684, found: 214, total: 1986, seconds: 5708, stage: 3 },
+    { short: '东南亚工程', name: '东南亚工程采购机会识别', scope: '新加坡 · 马来西亚 · 泰国 · 设计与工程采购方', analyzed: 6321, found: 147, total: 1264, seconds: 3895, stage: 5 }
   ];
 
   const personaCompanies = [
@@ -120,6 +120,30 @@
       { name: 'CivicWorks Asia', signal: '新增商业地产采购岗位', business: '东南亚商业工程服务', match: '项目采购 · 泰国' },
       { name: 'LumenPlan Studio', signal: '近期发布大型度假村案例', business: '专业照明设计顾问', match: '照明顾问 · 澳大利亚' }
     ]
+  ];
+
+  const reviewQueueData = [
+    { name: 'Aurora Hospitality Group', region: '美国 · 高端酒店采购', score: 96, signal: '近 12 个月新增 3 个酒店翻新计划', business: '精品酒店、度假村与公共空间运营', match: '高端酒店业主与采购团队', support: ['官网披露 2027 翻新计划', '新增区域采购负责人'], risk: '未找到明确的照明供应商合作记录' },
+    { name: 'Nordlicht Distribution', region: '德国 · 区域渠道商', score: 93, signal: '新增建筑照明品牌合作页面', business: 'DACH 区工程照明分销与项目服务', match: '工程照明渠道伙伴', support: ['覆盖德国与奥地利项目渠道', '近期扩充酒店工程团队'], risk: '自有品牌占比较高，代理意愿待确认' },
+    { name: 'Meridian Buildworks', region: '新加坡 · 工程采购', score: 89, signal: '公开招标文件出现酒店照明升级需求', business: '酒店与商业空间总承包', match: '酒店设计与工程伙伴', support: ['在建项目与产品能力高度重合', '具备项目选型与采购职责'], risk: '采购决策可能由业主方最终确认' },
+    { name: 'Atelier Northfield', region: '英国 · 设计顾问', score: 87, signal: '新增三个国际酒店灯光设计案例', business: '酒店室内、灯光与材料设计顾问', match: '酒店设计与工程伙伴', support: ['参与照明选型与供应商推荐', '项目集中在高端酒店市场'], risk: '通常不是合同直接签署方' }
+  ];
+
+  const strategyData = {
+    optimized: [
+      { title: '增加北美酒店翻新搜索资源', meta: '资源占比 +12% · 已执行 18 分钟' },
+      { title: '补充两条非商业项目排除条件', meta: '误匹配预计减少 7% · 已执行 42 分钟' }
+    ],
+    risky: [
+      { id: 'expand-design-studios', title: '扩大到酒店设计工作室', description: '预计增加约 680 家候选，但部分公司不具备直接采购权。', impact: '搜索范围 +16%', status: 'pending' },
+      { id: 'reduce-low-yield-market', title: '降低法国市场搜索配额', description: '最近三批通过率低于 9%，降低后可能错过少量新建项目。', impact: '资源占比 -8%', status: 'pending' }
+    ]
+  };
+
+  const leadData = [
+    { id: 'oceanview', name: 'Oceanview Hospitality', signal: '新增 2027 海滨酒店改造项目页', score: 94, market: '美国', reason: '酒店翻新 · 采购团队扩张', added: false },
+    { id: 'nordlicht', name: 'NordLicht Partner GmbH', signal: '新增商业照明渠道合作负责人', score: 89, market: '德国', reason: '区域经销 · 新品牌合作', added: false },
+    { id: 'meridian', name: 'Meridian Buildworks', signal: '公开招标文件出现照明升级需求', score: 86, market: '新加坡', reason: '工程采购 · 明确项目需求', added: false }
   ];
 
   const createSteps = [
@@ -209,20 +233,19 @@
     stageDialogTitle: page.querySelector('#zoe-stage-dialog-title'),
     stageDialogIntro: page.querySelector('#zoeStageDialogIntro'),
     stageDialogContent: page.querySelector('#zoeStageDialogContent'),
-    reviewList: page.querySelector('#zoeReviewList'),
     reviewCount: page.querySelector('#zoeReviewCount'),
-    learningCount: page.querySelector('#zoeLearningCount'),
+    strategyCount: page.querySelector('#zoeStrategyCount'),
     discoveryCount: page.querySelector('#zoeDiscoveryCount'),
     leadCount: page.querySelector('#zoeLeadCount'),
-    taskName: page.querySelector('#zoeTaskName'),
-    taskScope: page.querySelector('#zoeTaskScope'),
-    taskAnalyzed: page.querySelector('#zoeTaskAnalyzed'),
-    taskFound: page.querySelector('#zoeTaskFound'),
-    taskTotal: page.querySelector('#zoeTaskTotal'),
-    taskStage: page.querySelector('#zoeTaskStage'),
-    taskStageMeta: page.querySelector('#zoeTaskStageMeta'),
-    taskProgress: page.querySelector('#zoeTaskProgress'),
-    taskDuration: page.querySelector('#zoeTaskDuration'),
+    workbench: page.querySelector('.zoe-workbench'),
+    chat: page.querySelector('#zoeAgentChat'),
+    chatStream: page.querySelector('#zoeChatStream'),
+    chatComposer: page.querySelector('#zoeChatComposer'),
+    chatInput: page.querySelector('#zoeChatInput'),
+    chatRailBadge: page.querySelector('#zoeChatRailBadge'),
+    chatMobileBadge: page.querySelector('#zoeChatMobileBadge'),
+    chatMobileTrigger: page.querySelector('[data-zoe-chat-mobile-toggle]'),
+    chatContextButton: page.querySelector('.zoe-chat-context button'),
     createCard: page.querySelector('#zoeCreateCard'),
     createSuccess: page.querySelector('#zoeCreateSuccess'),
     createQuestion: page.querySelector('#zoeCreateQuestion'),
@@ -238,13 +261,17 @@
     stageIndex: 0,
     taskIndex: 0,
     taskStageTick: 0,
-    personaIndex: 0,
-    reviewQueues: personaCompanies.map(items => [...items]),
-    reviewCount: 9,
-    learningCount: 128,
+    reviewCursor: 0,
+    reviewCount: reviewQueueData.length,
     createStep: 0,
     createChoices: createSteps.map(step => step.options.findIndex(option => option[2])),
-    lastDialogFocus: null
+    lastDialogFocus: null,
+    messageId: 0,
+    routeActive: false,
+    unreadCount: 0,
+    chatCollapsed: false,
+    mobileChatOpen: false,
+    conditionalPushed: { review: false, strategy: false, leads: false }
   };
 
   function formatNumber(value) {
@@ -318,64 +345,284 @@
     state.lastDialogFocus?.focus?.();
   }
 
-  function renderTask(index) {
-    const task = taskData[index];
-    if (!task) return;
-    state.taskIndex = index;
-    page.querySelectorAll('[data-zoe-task]').forEach(button => {
-      const selected = Number(button.dataset.zoeTask) === index;
-      button.classList.toggle('active', selected);
-      button.setAttribute('aria-selected', String(selected));
-      button.tabIndex = selected ? 0 : -1;
+  function currentTaskStage(task) {
+    const index = (task.stage + state.taskStageTick) % taskStages.length;
+    return { index, copy: taskStages[index], progress: Math.round(((index + 1) / taskStages.length) * 100) };
+  }
+
+  function scrollChatToLatest() {
+    window.requestAnimationFrame(() => {
+      elements.chatStream.scrollTo({ top: elements.chatStream.scrollHeight, behavior: 'smooth' });
     });
-    const stageIndex = (task.stage + state.taskStageTick) % taskStages.length;
-    const stage = taskStages[stageIndex];
-    elements.taskName.textContent = task.name;
-    elements.taskScope.textContent = task.scope;
-    elements.taskAnalyzed.textContent = formatNumber(task.analyzed);
-    elements.taskFound.textContent = formatNumber(task.found);
-    elements.taskTotal.textContent = formatNumber(task.total);
-    elements.taskStage.textContent = stage[0];
-    elements.taskStageMeta.textContent = stage[1];
-    elements.taskProgress.style.width = `${((stageIndex + 1) / taskStages.length) * 100}%`;
-    elements.taskDuration.textContent = formatDuration(task.seconds);
   }
 
-  function renderReviews() {
-    const visibleCompanies = state.reviewQueues[state.personaIndex].slice(0, 3);
-    elements.reviewList.innerHTML = visibleCompanies.map((company, index) => `
-      <article class="zoe-review-card" data-zoe-review-card="${index}">
-        <header><strong>${escapeHTML(company.name)}</strong><span>需要判断</span></header>
-        <p>${escapeHTML(company.signal)}；主营 ${escapeHTML(company.business)}。</p>
-        <div class="zoe-review-meta"><span>${escapeHTML(company.match)}</span></div>
-        <div class="zoe-review-actions" role="group" aria-label="判断 ${escapeHTML(company.name)}">
-          <button type="button" data-zoe-review-answer="target" data-zoe-review-index="${index}">目标客户</button>
-          <button type="button" data-zoe-review-answer="not-target" data-zoe-review-index="${index}">不是目标</button>
-          <button type="button" data-zoe-review-answer="unsure" data-zoe-review-index="${index}" aria-label="暂时不确定">不确定</button>
-        </div>
-      </article>
-    `).join('');
+  function updateChatBadges() {
+    const label = state.unreadCount > 9 ? '9+' : String(state.unreadCount);
+    [elements.chatRailBadge, elements.chatMobileBadge].forEach(badge => {
+      if (!badge) return;
+      badge.textContent = label;
+      badge.hidden = state.unreadCount === 0;
+    });
   }
 
-  function resolveReview(index, answer) {
-    const queue = state.reviewQueues[state.personaIndex];
-    const card = elements.reviewList.querySelector(`[data-zoe-review-card="${index}"]`);
-    const company = queue[index];
-    if (!card || !company) return;
-    card.classList.add('resolving');
-    card.querySelectorAll('button').forEach(button => { button.disabled = true; });
-    window.setTimeout(() => {
-      const [resolved] = queue.splice(index, 1);
-      queue.push(resolved);
-      state.reviewCount = Math.max(0, state.reviewCount - 1);
-      state.learningCount += 1;
-      elements.reviewCount.textContent = String(state.reviewCount);
-      elements.learningCount.textContent = String(state.learningCount);
-      renderReviews();
+  function markChatRead() {
+    state.unreadCount = 0;
+    updateChatBadges();
+  }
+
+  function noteIncomingMessage() {
+    const mobileClosed = window.matchMedia('(max-width: 820px)').matches && !state.mobileChatOpen;
+    if (state.chatCollapsed || mobileClosed) {
+      state.unreadCount += 1;
+      updateChatBadges();
+    }
+  }
+
+  function appendAgentText(text, tone = '') {
+    const message = document.createElement('article');
+    message.className = `zoe-chat-message zoe-chat-message-agent${tone ? ` is-${tone}` : ''}`;
+    message.innerHTML = `<div><p>${escapeHTML(text)}</p><time>刚刚</time></div>`;
+    elements.chatStream.append(message);
+    noteIncomingMessage();
+    scrollChatToLatest();
+    return message;
+  }
+
+  function appendUserMessage(text) {
+    const message = document.createElement('article');
+    message.className = 'zoe-chat-message zoe-chat-message-user';
+    message.innerHTML = `<div><p>${escapeHTML(text)}</p><time>刚刚</time></div>`;
+    elements.chatStream.append(message);
+    scrollChatToLatest();
+  }
+
+  function createCardMessage(type, intro) {
+    const message = document.createElement('article');
+    const cardId = `zoe-chat-card-${++state.messageId}`;
+    message.className = 'zoe-chat-message zoe-chat-message-agent zoe-chat-message-with-card';
+    message.innerHTML = `
+      <div>
+        <p>${escapeHTML(intro)}</p>
+        <section class="zoe-chat-card zoe-chat-card-${type}" id="${cardId}" data-zoe-card-type="${type}"></section>
+        <time>刚刚</time>
+      </div>
+    `;
+    elements.chatStream.append(message);
+    noteIncomingMessage();
+    return message.querySelector('.zoe-chat-card');
+  }
+
+  function renderTaskCard(card, index = Number(card.dataset.taskIndex || state.taskIndex), { syncState = true } = {}) {
+    const safeIndex = (index + taskData.length) % taskData.length;
+    const task = taskData[safeIndex];
+    const stage = currentTaskStage(task);
+    if (syncState) state.taskIndex = safeIndex;
+    card.dataset.taskIndex = String(safeIndex);
+    if (syncState) elements.chatContextButton.firstChild.textContent = task.name;
+    card.innerHTML = `
+      <header class="zoe-chat-card-header">
+        <span><i data-lucide="activity"></i></span>
+        <div><small>任务进度 · ${safeIndex + 1}/${taskData.length}</small><h3>${escapeHTML(task.name)}</h3></div>
+        <b>运行中</b>
+      </header>
+      <p class="zoe-chat-card-subtitle">${escapeHTML(task.scope)}</p>
+      <div class="zoe-chat-task-switcher" role="group" aria-label="切换任务">
+        <button type="button" data-zoe-chat-task-prev aria-label="上一个任务"><i data-lucide="chevron-left"></i></button>
+        <strong>${escapeHTML(task.short)}</strong>
+        <button type="button" data-zoe-chat-task-next aria-label="下一个任务"><i data-lucide="chevron-right"></i></button>
+      </div>
+      <div class="zoe-chat-kpis">
+        <div><span>今日分析</span><strong>${formatNumber(task.analyzed)}</strong></div>
+        <div><span>今日找到</span><strong>${formatNumber(task.found)}</strong></div>
+        <div><span>累计线索</span><strong>${formatNumber(task.total)}</strong></div>
+      </div>
+      <div class="zoe-chat-progress-copy"><span><i></i>${escapeHTML(stage.copy[0])}</span><b>${stage.progress}%</b></div>
+      <div class="zoe-chat-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${stage.progress}"><i style="width:${stage.progress}%"></i></div>
+      <div class="zoe-chat-task-meta"><span>${escapeHTML(stage.copy[1])}</span><span>已持续 ${formatDuration(task.seconds)}</span></div>
+      <footer><button type="button" data-zoe-chat-task-log>展开实时数据<i data-lucide="arrow-up-right"></i></button></footer>
+    `;
+    refreshIcons();
+  }
+
+  function renderReviewCard(card) {
+    const company = reviewQueueData[state.reviewCursor];
+    if (!company) {
+      card.classList.add('is-complete');
+      card.innerHTML = `<div class="zoe-chat-card-empty"><i data-lucide="circle-check-big"></i><strong>本轮客户已全部判断</strong><p>Zoe 已记录你的选择，并开始更新相似客户的判断边界。</p><button type="button" data-zoe-chat-card="leads">查看最新线索</button></div>`;
       refreshIcons();
-    }, 180);
-    const answerCopy = answer === 'target' ? '已记住这类目标客户' : answer === 'not-target' ? '已更新排除边界' : '已保留为待观察客户';
-    showToast(`${company.name}：${answerCopy}`);
+      return;
+    }
+    card.classList.remove('is-complete');
+    card.dataset.reviewIndex = String(state.reviewCursor);
+    card.innerHTML = `
+      <header class="zoe-chat-card-header">
+        <span><i data-lucide="scan-search"></i></span>
+        <div><small>画像精准度判断 · ${state.reviewCursor + 1}/${reviewQueueData.length}</small><h3>${escapeHTML(company.name)}</h3></div>
+        <b>${company.score} 分</b>
+      </header>
+      <p class="zoe-chat-card-subtitle">${escapeHTML(company.region)} · ${escapeHTML(company.business)}</p>
+      <div class="zoe-chat-evidence is-positive"><span>支持判断</span><strong>${escapeHTML(company.support[0])}</strong><small>${escapeHTML(company.support[1])}</small></div>
+      <div class="zoe-chat-evidence is-risk"><span>反向证据</span><strong>${escapeHTML(company.risk)}</strong></div>
+      <p class="zoe-chat-match-reason"><b>匹配画像：</b>${escapeHTML(company.match)} · ${escapeHTML(company.signal)}</p>
+      <div class="zoe-chat-card-actions" role="group" aria-label="判断 ${escapeHTML(company.name)}">
+        <button class="is-primary" type="button" data-zoe-chat-review="target">目标客户</button>
+        <button type="button" data-zoe-chat-review="not-target">不是目标</button>
+        <button type="button" data-zoe-chat-review="unsure">不确定</button>
+      </div>
+    `;
+    refreshIcons();
+  }
+
+  function renderStrategyCard(card) {
+    const pending = strategyData.risky.filter(item => item.status === 'pending');
+    card.innerHTML = `
+      <header class="zoe-chat-card-header">
+        <span><i data-lucide="sparkles"></i></span>
+        <div><small>策略优化</small><h3>本轮策略调整</h3></div>
+        <b>${pending.length} 项待确认</b>
+      </header>
+      <section class="zoe-chat-strategy-group">
+        <h4><i data-lucide="circle-check"></i>已经为您优化</h4>
+        ${strategyData.optimized.map(item => `<article><strong>${escapeHTML(item.title)}</strong><span>${escapeHTML(item.meta)}</span></article>`).join('')}
+      </section>
+      <section class="zoe-chat-strategy-group is-risk">
+        <h4><i data-lucide="shield-alert"></i>有风险，需要您确认</h4>
+        ${pending.length ? pending.map(item => `
+          <article data-strategy-id="${item.id}"><strong>${escapeHTML(item.title)}</strong><p>${escapeHTML(item.description)}</p><span>${escapeHTML(item.impact)}</span>
+            <div class="zoe-chat-card-actions"><button class="is-primary" type="button" data-zoe-chat-strategy="approve">批准</button><button type="button" data-zoe-chat-strategy="ignore">忽略</button></div>
+          </article>
+        `).join('') : '<div class="zoe-chat-inline-success"><i data-lucide="circle-check-big"></i>风险策略已全部处理</div>'}
+      </section>
+    `;
+    elements.strategyCount.textContent = String(pending.length);
+    refreshIcons();
+  }
+
+  function renderLeadsCard(card) {
+    card.innerHTML = `
+      <header class="zoe-chat-card-header">
+        <span><i data-lucide="building-2"></i></span>
+        <div><small>线索发现</small><h3>刚发现 3 家高价值客户</h3></div>
+        <b>已验证</b>
+      </header>
+      <div class="zoe-chat-lead-list">
+        ${leadData.map(lead => `
+          <article data-lead-id="${lead.id}">
+            <div><strong>${escapeHTML(lead.name)}</strong><span>${escapeHTML(lead.market)} · 匹配度 ${lead.score}%</span></div>
+            <p>${escapeHTML(lead.signal)}</p><small>${escapeHTML(lead.reason)}</small>
+            <button type="button" data-zoe-chat-lead-add ${lead.added ? 'disabled' : ''}>${lead.added ? '已加入客户池' : '加入客户池'}</button>
+          </article>
+        `).join('')}
+      </div>
+      <footer><a href="#customers">查看全部线索<i data-lucide="arrow-right"></i></a></footer>
+    `;
+    refreshIcons();
+  }
+
+  function pushChatCard(type, { source = 'quick' } = {}) {
+    const introByType = {
+      task: source === 'entry' ? '欢迎回来，先同步你最近活跃任务的进度。' : '这是当前任务的最新进度，你可以直接在卡片内切换任务。',
+      review: source === 'condition' ? '我发现了一家处于新业务边界的高分客户，需要你校准一次。' : '这里还有客户等待画像判断，完成后会自动切换下一位。',
+      strategy: source === 'condition' ? '本轮产生了需要确认的策略变化，低风险优化已先执行。' : '这是本轮已完成和待确认的策略调整。',
+      leads: source === 'condition' ? '新一批结果完成去重与验证，发现 3 家高价值客户。' : '这是最近发现的高价值线索，可以直接加入客户池。'
+    };
+    const card = createCardMessage(type, introByType[type] || '这是最新业务状态。');
+    if (type === 'task') renderTaskCard(card);
+    if (type === 'review') renderReviewCard(card);
+    if (type === 'strategy') renderStrategyCard(card);
+    if (type === 'leads') renderLeadsCard(card);
+    scrollChatToLatest();
+    return card;
+  }
+
+  function resolveReview(card, answer) {
+    const company = reviewQueueData[state.reviewCursor];
+    if (!company || Number(card.dataset.reviewIndex) !== state.reviewCursor) return;
+    card.classList.add('is-busy');
+    card.querySelectorAll('button').forEach(button => { button.disabled = true; });
+    const answerCopy = answer === 'target' ? '已确认为目标客户，并同步强化相似企业的正向特征。' : answer === 'not-target' ? '已加入排除边界，相似企业会降低匹配权重。' : '已保留为待观察客户，不影响当前任务继续运行。';
+    window.setTimeout(() => {
+      state.reviewCursor += 1;
+      state.reviewCount = Math.max(0, reviewQueueData.length - state.reviewCursor);
+      elements.reviewCount.textContent = String(state.reviewCount);
+      renderReviewCard(card);
+      appendAgentText(`${company.name}：${answerCopy}`, 'success');
+      showToast(`${company.name}：判断已记录`);
+    }, 260);
+  }
+
+  function resolveStrategy(card, itemId, action) {
+    const item = strategyData.risky.find(strategy => strategy.id === itemId);
+    if (!item || item.status !== 'pending') return;
+    item.status = action === 'approve' ? 'approved' : 'ignored';
+    if (action === 'approve') {
+      strategyData.optimized.unshift({ title: item.title, meta: `${item.impact} · 刚刚批准` });
+    }
+    renderStrategyCard(card);
+    const message = action === 'approve' ? `已批准“${item.title}”，Zoe 将从下一批任务开始执行。` : `已忽略“${item.title}”，当前策略保持不变。`;
+    appendAgentText(message, 'success');
+    showToast(message);
+  }
+
+  function addLeadToPool(card, leadId) {
+    const lead = leadData.find(item => item.id === leadId);
+    if (!lead || lead.added) return;
+    lead.added = true;
+    lead.total = Number(elements.leadCount.textContent.replace(/,/g, '')) + 1;
+    elements.leadCount.textContent = formatNumber(lead.total);
+    renderLeadsCard(card);
+    appendAgentText(`${lead.name} 已加入高质量客户池，完整来源与匹配依据已保留。`, 'success');
+    showToast(`${lead.name} 已加入客户池`);
+  }
+
+  function setChatCollapsed(collapsed) {
+    state.chatCollapsed = Boolean(collapsed);
+    elements.workbench.classList.toggle('is-chat-collapsed', state.chatCollapsed);
+    elements.chat.setAttribute('aria-expanded', String(!state.chatCollapsed));
+    try { window.localStorage.setItem('zoe-chat-collapsed', String(state.chatCollapsed)); } catch (_) {}
+    if (!state.chatCollapsed) {
+      markChatRead();
+      window.setTimeout(() => elements.chatInput.focus(), 0);
+    }
+  }
+
+  function setMobileChatOpen(open) {
+    state.mobileChatOpen = Boolean(open);
+    elements.chat.classList.toggle('is-mobile-open', state.mobileChatOpen);
+    elements.chatMobileTrigger.setAttribute('aria-expanded', String(state.mobileChatOpen));
+    document.body.classList.toggle('zoe-mobile-chat-open', state.mobileChatOpen);
+    if (state.mobileChatOpen) {
+      markChatRead();
+      window.setTimeout(() => elements.chatInput.focus(), 0);
+    }
+  }
+
+  function scheduleConditionalMockCards() {
+    [
+      { type: 'review', delay: 12000 },
+      { type: 'strategy', delay: 22000 },
+      { type: 'leads', delay: 32000 }
+    ].forEach(event => {
+      window.setTimeout(() => {
+        if (!state.routeActive || state.conditionalPushed[event.type]) return;
+        state.conditionalPushed[event.type] = true;
+        pushChatCard(event.type, { source: 'condition' });
+      }, event.delay);
+    });
+  }
+
+  function syncZoeRouteEntry() {
+    const active = window.location.hash.replace(/^#/, '') === 'zoe';
+    if (active && !state.routeActive) {
+      state.routeActive = true;
+      window.setTimeout(() => pushChatCard('task', { source: 'entry' }), 80);
+      scheduleConditionalMockCards();
+      return;
+    }
+    if (!active) {
+      state.routeActive = false;
+      if (state.mobileChatOpen) setMobileChatOpen(false);
+    }
   }
 
   function updateSummary(stepIndex) {
@@ -415,9 +662,7 @@
     elements.createCard.hidden = false;
     elements.createSuccess.hidden = true;
     window.scrollTo({ top: 0, behavior: 'auto' });
-    if (focusTask) {
-      window.setTimeout(() => page.querySelector('.zoe-task-panel')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
-    }
+    if (focusTask) window.setTimeout(() => pushChatCard('task'), 80);
   }
 
   function showCreate() {
@@ -438,7 +683,6 @@
     taskData[0].found += 1;
     taskData[0].stage = 0;
     state.taskStageTick = 0;
-    renderTask(0);
     showToast('获客任务已启动，Zoe 正在规划搜索策略');
     refreshIcons();
   }
@@ -459,32 +703,54 @@
 
   page.addEventListener('click', event => {
     const stageButton = event.target.closest('[data-zoe-stage]');
-    if (stageButton) renderStage(Number(stageButton.dataset.zoeStage));
-
-    const taskButton = event.target.closest('[data-zoe-task]');
-    if (taskButton) renderTask(Number(taskButton.dataset.zoeTask));
-
-    const personaButton = event.target.closest('[data-zoe-persona]');
-    if (personaButton) {
-      state.personaIndex = Number(personaButton.dataset.zoePersona);
-      page.querySelectorAll('[data-zoe-persona]').forEach(button => {
-        const selected = button === personaButton;
-        button.classList.toggle('active', selected);
-        button.setAttribute('aria-selected', String(selected));
-        button.tabIndex = selected ? 0 : -1;
-      });
-      renderReviews();
+    if (stageButton) {
+      const stageIndex = Number(stageButton.dataset.zoeStage);
+      renderStage(stageIndex);
+      openStageDialog(stageIndex);
     }
 
-    const reviewButton = event.target.closest('[data-zoe-review-answer]');
-    if (reviewButton) resolveReview(Number(reviewButton.dataset.zoeReviewIndex), reviewButton.dataset.zoeReviewAnswer);
+    const quickCardButton = event.target.closest('[data-zoe-chat-card]');
+    if (quickCardButton) pushChatCard(quickCardButton.dataset.zoeChatCard);
+
+    const taskPrevious = event.target.closest('[data-zoe-chat-task-prev]');
+    const taskNext = event.target.closest('[data-zoe-chat-task-next]');
+    if (taskPrevious || taskNext) {
+      const card = event.target.closest('[data-zoe-card-type="task"]');
+      const currentIndex = Number(card?.dataset.taskIndex || 0);
+      if (card) renderTaskCard(card, currentIndex + (taskNext ? 1 : -1));
+    }
+
+    const reviewButton = event.target.closest('[data-zoe-chat-review]');
+    if (reviewButton) {
+      const card = event.target.closest('[data-zoe-card-type="review"]');
+      if (card) resolveReview(card, reviewButton.dataset.zoeChatReview);
+    }
+
+    const strategyButton = event.target.closest('[data-zoe-chat-strategy]');
+    if (strategyButton) {
+      const card = event.target.closest('[data-zoe-card-type="strategy"]');
+      const strategy = strategyButton.closest('[data-strategy-id]');
+      if (card && strategy) resolveStrategy(card, strategy.dataset.strategyId, strategyButton.dataset.zoeChatStrategy);
+    }
+
+
+    const leadButton = event.target.closest('[data-zoe-chat-lead-add]');
+    if (leadButton) {
+      const card = event.target.closest('[data-zoe-card-type="leads"]');
+      const lead = leadButton.closest('[data-lead-id]');
+      if (card && lead) addLeadToPool(card, lead.dataset.leadId);
+    }
 
     if (event.target.closest('[data-zoe-open-stage]')) openStageDialog();
     if (event.target.closest('[data-zoe-task-detail]')) openStageDialog(1);
+    if (event.target.closest('[data-zoe-chat-task-log]')) openStageDialog(1);
     if (event.target.closest('[data-zoe-close-stage]')) closeStageDialog();
     if (event.target.closest('[data-zoe-new-task]')) showCreate();
     if (event.target.closest('[data-zoe-create-back]')) showOverview();
     if (event.target.closest('[data-zoe-success-overview]')) showOverview({ focusTask: true });
+    if (event.target.closest('[data-zoe-chat-collapse]')) setChatCollapsed(true);
+    if (event.target.closest('[data-zoe-chat-expand]')) setChatCollapsed(false);
+    if (event.target.closest('[data-zoe-chat-mobile-toggle]')) setMobileChatOpen(!state.mobileChatOpen);
 
     const createChoice = event.target.closest('[data-zoe-create-choice]');
     if (createChoice) {
@@ -506,7 +772,31 @@
     }
   });
 
+  elements.chatComposer.addEventListener('submit', event => {
+    event.preventDefault();
+    const message = elements.chatInput.value.trim();
+    if (!message) return;
+    appendUserMessage(message);
+    elements.chatInput.value = '';
+    window.setTimeout(() => {
+      if (/欧洲|经销/.test(message)) state.taskIndex = 1;
+      else if (/东南亚|工程/.test(message)) state.taskIndex = 2;
+      else if (/北美|酒店/.test(message)) state.taskIndex = 0;
+
+      if (/任务|进度|运行/.test(message)) pushChatCard('task');
+      else if (/画像|判断|精准|校准/.test(message)) pushChatCard('review');
+      else if (/策略|优化|风险/.test(message)) pushChatCard('strategy');
+      else if (/线索|客户|发现/.test(message)) pushChatCard('leads');
+      else appendAgentText('收到。我可以继续查看任务进度、判断客户画像、确认策略优化，或整理最新线索。');
+    }, 180);
+  });
+
   document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && state.mobileChatOpen) {
+      setMobileChatOpen(false);
+      elements.chatMobileTrigger.focus();
+      return;
+    }
     if (elements.stageDialog.hidden) return;
     if (event.key === 'Escape') {
       closeStageDialog();
@@ -527,21 +817,16 @@
   });
 
   bindRovingTabs('[data-zoe-stage]', renderStage);
-  bindRovingTabs('[data-zoe-task]', renderTask);
-  bindRovingTabs('[data-zoe-persona]', index => {
-    page.querySelector(`[data-zoe-persona="${index}"]`)?.click();
-  });
 
   window.setInterval(() => {
     if (document.hidden) return;
     state.taskStageTick = (state.taskStageTick + 1) % taskStages.length;
-    renderTask(state.taskIndex);
+    page.querySelectorAll('[data-zoe-card-type="task"]').forEach(card => renderTaskCard(card, Number(card.dataset.taskIndex || 0), { syncState: false }));
   }, 3000);
 
   window.setInterval(() => {
     if (document.hidden) return;
     taskData.forEach(task => { task.seconds += 1; });
-    elements.taskDuration.textContent = formatDuration(taskData[state.taskIndex].seconds);
   }, 1000);
 
   window.setInterval(() => {
@@ -554,11 +839,17 @@
     if (Number(elements.discoveryCount.textContent.replace(/,/g, '')) % 4 === 0) {
       elements.leadCount.textContent = formatNumber(Number(elements.leadCount.textContent.replace(/,/g, '')) + 1);
     }
-    renderTask(state.taskIndex);
   }, 4200);
 
   renderStage(0);
-  renderTask(0);
-  renderReviews();
   renderCreateStep();
+  elements.reviewCount.textContent = String(state.reviewCount);
+  elements.strategyCount.textContent = String(strategyData.risky.filter(item => item.status === 'pending').length);
+  try {
+    state.chatCollapsed = window.localStorage.getItem('zoe-chat-collapsed') === 'true';
+  } catch (_) {}
+  setChatCollapsed(state.chatCollapsed);
+  updateChatBadges();
+  syncZoeRouteEntry();
+  window.addEventListener('hashchange', syncZoeRouteEntry);
 })();

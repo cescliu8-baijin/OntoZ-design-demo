@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lily v23 layout comparison</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { width: 1280px; height: 720px; margin: 0; overflow: hidden; background: #111827; }
+      main { display: grid; grid-template-columns: 640px 640px; align-items: center; width: 1280px; height: 720px; }
+      figure { position: relative; width: 640px; height: 400px; margin: 0; overflow: hidden; }
+      img { width: 640px; height: 400px; display: block; object-fit: contain; }
+      figcaption { position: absolute; top: 14px; left: 50%; padding: 7px 12px; border-radius: 8px; color: #fff; background: rgb(17 24 39 / .82); font: 600 14px/20px system-ui, sans-serif; transform: translateX(-50%); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <figure><img src="reference-normalized.png" alt="布局参考图" /><figcaption>参考布局</figcaption></figure>
+      <figure><img src="desktop.png" alt="Lily v23 实现" /><figcaption>OntoZ 实现</figcaption></figure>
+    </main>
+  </body>
+</html>

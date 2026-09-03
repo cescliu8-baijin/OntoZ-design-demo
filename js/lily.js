@@ -39,6 +39,21 @@ const lilyHomeStrategies = [
   }
 ];
 
+// Strategy state is shared by both tabs; applied records come from existing tasks.
+lilyHomeStrategies.forEach(item => { item.status = 'pending'; item.sourceId = item.id; });
+document.querySelectorAll('#lilyTasksPage .lily-task-card').forEach((card, index) => {
+  card.dataset.homeStrategyId = `existing-task-${index}`;
+  lilyHomeStrategies.push({
+    id: `existing-task-${index}`,
+    title: card.querySelector('h2').textContent,
+    type: '已应用',
+    description: '策略已创建触达任务，Lily 正在持续推进客户沟通。',
+    companies: Number(card.querySelectorAll('.task-stat-row strong')[2].textContent),
+    contacts: Number(card.querySelectorAll('.task-stat-row strong')[3].textContent),
+    status: 'applied'
+  });
+});
+const lilyStrategySeeds = lilyHomeStrategies.filter(item => item.status === 'pending').map(item => ({ ...item }));
 let lilyStrategyRefreshCount = 0;
 
 const lilyFlowStatuses = [
@@ -89,7 +104,6 @@ function startLilyFlowStatusCycle() {
   window.clearInterval(lilyFlowStatusTimer);
   const statuses = lilyFlowGenerating ? lilyFlowStatuses.slice(0, 7) : lilyFlowStatuses;
   lilyFlowStatusTimer = window.setInterval(() => {
-    if (document.querySelector('.lily-runtime')?.classList.contains('is-paused')) return;
     lilyFlowStatusIndex = (lilyFlowStatusIndex + 1) % statuses.length;
     setLilyFlowStatus(statuses[lilyFlowStatusIndex], { mode: lilyFlowGenerating ? 'Lily 正在生成策略' : 'Lily 实时工作' });
   }, 3000);
@@ -115,6 +129,7 @@ function setLilyFlowGenerating(generating) {
 
 const lilyState = {
   currentScene: 'news',
+  currentStrategyStatus: 'pending',
   homeOpportunityPrompt: '',
   scanStarted: false,
   customerPoolScanned: false,
@@ -133,32 +148,55 @@ const lilyState = {
 
 function renderStrategies(scene) {
   lilyState.currentScene = scene;
-  grid.innerHTML = lilyHomeStrategies.map((item, index) => `
-    <article class="strategy-card${lilyStrategyRefreshCount ? ' is-fresh' : ''}" data-strategy-id="${escapeHTML(item.id)}">
+  const status = lilyState.currentStrategyStatus;
+  document.querySelectorAll('[data-strategy-status]').forEach(tab => {
+    const selected = tab.dataset.strategyStatus === status;
+    tab.setAttribute('aria-selected', String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    tab.querySelector('[data-strategy-count]').textContent =
+      `(${lilyHomeStrategies.filter(item => item.status === tab.dataset.strategyStatus).length})`;
+  });
+  grid.setAttribute('aria-labelledby', status === 'pending' ? 'lilyPendingTab' : 'lilyAppliedTab');
+  const strategies = lilyHomeStrategies.filter(item => item.status === status);
+  grid.innerHTML = strategies.length ? strategies.map(item => `
+    <article class="strategy-card${item.status === 'applied' ? ' is-applied' : ''}" data-strategy-id="${escapeHTML(item.id)}">
       <div class="card-top">
-        <span class="strategy-type"><i data-lucide="sparkles"></i>${escapeHTML(item.type)}</span>
-        <time>${escapeHTML(item.generatedAt)}</time>
+        <span class="strategy-type"><i data-lucide="${item.status === 'applied' ? 'circle-check' : 'trending-up'}"></i>${escapeHTML(item.type)}</span>
       </div>
       <h3>${escapeHTML(item.title)}</h3>
       <p>${escapeHTML(item.description)}</p>
-      <div class="lily-strategy-meta">
-        <span><i data-lucide="building-2"></i>${item.companies} 家企业</span>
-        <span><i data-lucide="users-round"></i>${item.contacts} 位联系人</span>
-      </div>
       <footer>
-        <span>${escapeHTML(item.action)}</span>
-        <button class="use-strategy" data-index="${index}" type="button">应用策略 <i data-lucide="arrow-right"></i></button>
+        <span>${item.companies ? `包含 ${item.companies} 家客户` : `覆盖 ${item.contacts} 位联系人`}</span>
+        <button class="use-strategy" data-strategy-id="${escapeHTML(item.id)}" type="button">${item.status === 'applied' ? '查看任务' : '应用策略'}<i data-lucide="arrow-right"></i></button>
       </footer>
     </article>
-  `).join('');
+  `).join('') : `<div class="lily-strategy-empty"><i data-lucide="circle-check"></i><strong>${status === 'pending' ? '待决策策略已处理完毕' : '还没有已应用策略'}</strong><p>${status === 'pending' ? '在下方告诉 Lily 新的触达方向，继续生成策略。' : '确认发布触达任务后，策略会展示在这里。'}</p></div>`;
   refreshIcons();
 }
+
+function selectLilyStrategyStatus(status) {
+  lilyState.currentStrategyStatus = status;
+  renderStrategies(lilyState.currentScene);
+  grid.scrollTop = 0;
+}
+
+document.querySelectorAll('[data-strategy-status]').forEach(tab => {
+  tab.addEventListener('click', () => selectLilyStrategyStatus(tab.dataset.strategyStatus));
+  tab.addEventListener('keydown', event => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const status = event.key === 'Home' ? 'pending' : event.key === 'End' ? 'applied'
+      : tab.dataset.strategyStatus === 'pending' ? 'applied' : 'pending';
+    selectLilyStrategyStatus(status);
+    document.querySelector(`[data-strategy-status="${status}"]`).focus();
+  });
+});
 
 function updateOpportunityComposerState() {
   const hasValue = Boolean(input.value.trim());
   composer.classList.toggle('has-value', hasValue);
-  sendButton.disabled = false;
-  sendButton.setAttribute('aria-disabled', 'false');
+  sendButton.disabled = lilyFlowGenerating;
+  sendButton.setAttribute('aria-disabled', String(lilyFlowGenerating));
 }
 
 document.querySelectorAll('.scene-tab').forEach(tab => {
@@ -176,24 +214,24 @@ document.querySelectorAll('.scene-tab').forEach(tab => {
 grid.addEventListener('click', event => {
   const useButton = event.target.closest('.use-strategy');
   if (!useButton) return;
-  const strategy = lilyHomeStrategies[Number(useButton.dataset.index)];
+  const strategy = lilyHomeStrategies.find(item => item.id === useButton.dataset.strategyId);
+  if (!strategy) return;
+  if (strategy.status === 'applied') {
+    window.location.hash = 'lily/tasks';
+    window.requestAnimationFrame(() => {
+      document.querySelectorAll('#lilyTasksPage .lily-task-card').forEach(card => {
+        const selected = card.dataset.homeStrategyId === strategy.id;
+        card.classList.toggle('lily-task-selected', selected);
+        if (selected) {
+          card.tabIndex = -1;
+          card.focus({ preventScroll: true });
+          card.scrollIntoView({ block: 'center' });
+        }
+      });
+    });
+    return;
+  }
   openMarketingDrawer(strategy.id, strategy.title);
-});
-
-document.querySelector('#nextStrategies').addEventListener('click', event => {
-  const button = event.currentTarget;
-  button.classList.add('loading');
-  button.innerHTML = '<i data-lucide="loader-circle"></i>';
-  refreshIcons();
-  window.setTimeout(() => {
-    lilyStrategyRefreshCount += 1;
-    lilyHomeStrategies.push(lilyHomeStrategies.shift());
-    lilyHomeStrategies.forEach(item => { item.generatedAt = '刚刚更新'; });
-    renderStrategies(lilyState.currentScene);
-    button.classList.remove('loading');
-    button.innerHTML = '<i data-lucide="refresh-cw"></i>';
-    refreshIcons();
-  }, 650);
 });
 
 const scanCustomerPool = document.querySelector('#scanCustomerPool');
@@ -216,6 +254,7 @@ if (scanCustomerPool) {
 input.addEventListener('input', updateOpportunityComposerState);
 
 sendButton.addEventListener('click', () => {
+  if (lilyFlowGenerating) return;
   const prompt = input.value.trim() || '请根据现有客户池、实时商业信号和企业本体，自主生成本轮最值得执行的触达策略。';
   const customPrompt = input.value.trim();
   if (lilyState.awaitingAdjustPrompt) {
@@ -229,27 +268,34 @@ sendButton.addEventListener('click', () => {
   sendButton.disabled = true;
   sendButton.innerHTML = '<i data-lucide="loader-circle"></i>Lily 正在生成';
   setLilyFlowGenerating(true);
-  if (hint) hint.textContent = '你仍可以查看下方原推荐策略';
+  if (hint) hint.textContent = '生成中，仍可查看上方策略';
   refreshIcons();
   window.setTimeout(() => {
     lilyStrategyRefreshCount += 1;
-    lilyHomeStrategies.forEach((item, index) => {
-      item.generatedAt = '刚刚生成';
-      if (index === 0 && customPrompt) {
-        item.title = `围绕“${customPrompt.slice(0, 18)}${customPrompt.length > 18 ? '…' : ''}”筛选高匹配买家`;
-        item.description = 'Lily 已按你的新想法重新扫描客户池，优先选择业务、地区与当前时机同时匹配的客户。';
-      }
-    });
-    renderStrategies(lilyState.currentScene);
-    sendButton.disabled = false;
-    sendButton.innerHTML = '<i data-lucide="plus"></i>生成新策略';
+    const generated = lilyStrategySeeds.map((seed, index) => ({
+      ...seed,
+      id: `${seed.id}-generation-${lilyStrategyRefreshCount}`,
+      status: 'pending',
+      generatedAt: '刚刚生成',
+      title: index === 0 && customPrompt
+        ? `围绕“${customPrompt.slice(0, 18)}${customPrompt.length > 18 ? '…' : ''}”筛选高匹配买家`
+        : seed.title,
+      description: index === 0 && customPrompt
+        ? 'Lily 已按你的新想法重新扫描客户池，优先选择业务、地区与当前时机同时匹配的客户。'
+        : seed.description
+    }));
+    lilyHomeStrategies.unshift(...generated);
+    selectLilyStrategyStatus('pending');
+    document.querySelector('#lilyTodayStrategies').textContent = `+${12 + lilyStrategyRefreshCount * 3}`;
+    document.querySelector('#lilyTotalStrategies').textContent = String(168 + lilyStrategyRefreshCount * 3);
+    sendButton.innerHTML = '生成策略<i data-lucide="send"></i>';
     setLilyFlowGenerating(false);
     window.clearInterval(lilyFlowStatusTimer);
     lilyLiveFlow?.classList.remove('stage-execute');
     lilyLiveFlow?.classList.add('stage-result');
     setLilyFlowStatus({
       message: '最新触达策略已生成',
-      detail: '已更新右侧推荐策略，可逐条应用或批量发布',
+      detail: '新策略已加入待决策列表，可逐条确认应用',
       route: 'strategy'
     }, { mode: 'Lily 实时工作' });
     if (hint) hint.textContent = '已结合你的方向完成更新';
@@ -727,7 +773,7 @@ function revealScannedHome() {
   lilyState.customerPoolScanned = true;
   lilyHome.classList.add('scanned');
   myStrategyPanel.hidden = false;
-  strategyTitle.textContent = '推荐策略';
+  strategyTitle.textContent = '已生成策略';
   refreshIcons();
 }
 
@@ -1820,11 +1866,12 @@ function renderSequenceSettings() {
 }
 
 function openMarketingDrawer(strategyId, displayTitle = '') {
-  const strategy = generatedStrategies.find(item => item.id === strategyId) || generatedStrategies[0];
+  const homeStrategy = lilyHomeStrategies.find(item => item.id === strategyId);
+  const strategy = generatedStrategies.find(item => item.id === (homeStrategy?.sourceId || strategyId)) || generatedStrategies[0];
   const strategyTitle = displayTitle || strategy.title;
   const plan = marketingPlans[strategy.marketingPlanId] || marketingPlans['sleeping-high-value'];
   lilyState.currentMarketingPlan = plan;
-  lilyState.currentMarketingStrategyId = strategy.id;
+  lilyState.currentMarketingStrategyId = homeStrategy?.id || strategy.id;
   lilyState.currentMarketingStrategyTitle = strategyTitle;
   lilyState.sequenceStepCount = 3;
   lilyState.sequenceDelayDays = { 2: 3, 3: 3, 4: 7, 5: 10 };
@@ -1887,7 +1934,20 @@ confirmMarketingButton.addEventListener('click', () => {
     deliveryEnd.focus();
     return;
   }
-  showToast(`已发布 ${lilyState.sequenceStepCount} 轮触达任务`);
+  const homeStrategy = lilyHomeStrategies.find(item => item.id === lilyState.currentMarketingStrategyId);
+  if (homeStrategy && homeStrategy.status === 'pending') {
+    homeStrategy.status = 'applied';
+    const card = document.createElement('article');
+    card.className = 'lily-task-card';
+    card.dataset.secondaryTaskStatus = 'running';
+    card.dataset.homeStrategyId = homeStrategy.id;
+    card.innerHTML = `<header><h2>${escapeHTML(homeStrategy.title)}</h2><span class="task-badge running">策略触达</span></header>
+      <div class="task-stat-row"><div><strong>0</strong><span>持续天数</span></div><div><strong>John Smith</strong><span>发起人</span></div><div><strong>0</strong><span>已触达公司</span></div><div><strong>0</strong><span>已触达联系人</span></div></div>
+      <footer><span>触达客群</span><b>${homeStrategy.companies} 家客户 · ${homeStrategy.contacts} 位联系人</b><span>触达计划</span><b>${lilyState.sequenceStepCount} 轮邮件</b></footer>`;
+    document.querySelector('#lilyTasksPage .lily-task-list').prepend(card);
+    renderStrategies(lilyState.currentScene);
+  }
+  showToast(`已发布 ${lilyState.sequenceStepCount} 轮触达任务，策略已移至已应用`);
   closeMarketingDrawer();
 });
 
@@ -1973,31 +2033,6 @@ document.querySelectorAll('.task-detail').forEach(button => {
   });
 });
 
-document.querySelector('#focusLilyComposer')?.addEventListener('click', () => {
-  input.focus();
-  composer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-});
-
-document.querySelector('#pauseLilyRuntime')?.addEventListener('click', event => {
-  const button = event.currentTarget;
-  const runtime = button.closest('.lily-runtime');
-  const paused = runtime.classList.toggle('is-paused');
-  button.setAttribute('aria-pressed', String(paused));
-  button.setAttribute('aria-label', paused ? '继续自主执行' : '暂停自主执行');
-  button.innerHTML = `<i data-lucide="${paused ? 'play' : 'pause'}"></i>`;
-  if (paused && typeof lilyLiveSvg?.pauseAnimations === 'function') lilyLiveSvg.pauseAnimations();
-  if (!paused && typeof lilyLiveSvg?.unpauseAnimations === 'function') lilyLiveSvg.unpauseAnimations();
-  setLilyFlowStatus(paused ? {
-    message: 'Lily 已暂停自主执行',
-    detail: '新的触达动作不会发送，已完成的数据仍会保留',
-    route: null
-  } : lilyFlowStatuses[lilyFlowStatusIndex < 0 ? 7 : lilyFlowStatusIndex], {
-    mode: paused ? 'Lily 已暂停' : lilyFlowGenerating ? 'Lily 正在生成策略' : 'Lily 实时工作'
-  });
-  refreshIcons();
-  showToast(paused ? 'Lily 已暂停，可随时继续' : 'Lily 已继续自主执行');
-});
-
 document.querySelectorAll('[data-flow-node]').forEach(button => {
   button.addEventListener('click', () => {
     document.querySelectorAll('[data-flow-node]').forEach(item => item.classList.toggle('active', item === button));
@@ -2010,19 +2045,10 @@ document.querySelectorAll('[data-flow-node]').forEach(button => {
           ? '已捕捉欧洲采购季、新品发布与展会窗口'
           : label === '企业本体'
             ? '正在调取历史策略表现、产品卖点与行业经验'
-            : `${label}节点运行正常，点击智能体日志查看完整过程`,
+            : `${label}节点运行正常，Lily 正在持续推进触达`,
       route: button.dataset.flowRoute
     }, { mode: lilyFlowGenerating ? 'Lily 正在生成策略' : 'Lily 实时工作' });
   });
 });
 
 startLilyFlowStatusCycle();
-
-document.querySelector('#batchApplyStrategies')?.addEventListener('click', () => {
-  const strategy = lilyHomeStrategies[0];
-  openMarketingDrawer(strategy.id, `批量应用本轮 ${lilyHomeStrategies.length} 个推荐策略`);
-});
-
-document.querySelector('#reapplyTopStrategy')?.addEventListener('click', () => {
-  openMarketingDrawer('new-product-launch', '用具体工艺问题打开采购对话');
-});

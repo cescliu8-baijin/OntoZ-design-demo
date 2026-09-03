@@ -9,7 +9,7 @@
     <meta name="format-detection" content="telephone=no" />
     <title>OntoZ · 专业建站 Lucas</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=lily-v23-1" />
+    <link rel="stylesheet" href="styles.css?v=lily-home-figma-935-1" />
     <link rel="stylesheet" href="lucide-icons.css" />
   </head>
   <body>
@@ -66,42 +66,41 @@
         <div class="lily-home lily-v23" id="lilyHome">
           <header class="lily-v23-header" aria-labelledby="page-title">
             <div>
-              <p class="lily-v23-kicker"><i data-lucide="sparkles" aria-hidden="true"></i>触达转化智能体</p>
-              <h1 class="agent-hero-title" id="page-title">触达转化 Lily</h1>
-              <p class="agent-hero-subtitle">Lily 会自己理解客户、制定策略、生成内容并持续执行，把高质量线索一步步转化为真实询盘。</p>
-              <div class="lily-v23-header-actions">
-                <button class="lily-v23-primary" id="focusLilyComposer" type="button"><i data-lucide="wand-sparkles"></i>创建触达策略</button>
-                <button class="lily-v23-secondary" data-lily-page="lily/tasks" type="button"><i data-lucide="list-checks"></i>查看全部任务</button>
-              </div>
+              <h1 class="agent-hero-title" id="page-title">今天，从这些商机开始</h1>
+              <p class="agent-hero-subtitle">Lily 会自己理解客户、制定策略、生成内容并持续执行，把高质量线索一步步转化为真实询盘</p>
             </div>
-            <button class="lily-console-card" id="openDashboard" type="button">
+            <div class="lily-console-card">
               <span class="lily-console-icon"><i data-lucide="gauge"></i></span>
-              <span><small>管理台</small><strong>今日触达概览</strong><b>3 个任务正在自主执行</b></span>
-              <i data-lucide="arrow-up-right" aria-hidden="true"></i>
-            </button>
+              <span><strong>Lily正在自主工作</strong><small>3个任务正在自主执行</small></span>
+              <button data-lily-page="lily/templates" type="button"><i data-lucide="library"></i>触达策略库</button>
+            </div>
           </header>
 
           <div class="lily-v23-body">
             <div class="lily-v23-main">
-              <section class="lily-metrics" aria-labelledby="lily-metrics-title">
-                <header class="lily-section-heading">
-                  <div><p>核心数据</p><h2 id="lily-metrics-title">今天的触达结果</h2></div>
-                  <span><i></i>实时更新</span>
-                </header>
-                <div class="lily-metric-grid">
-                  <article><span class="blue"><i data-lucide="building-2"></i></span><div><small>已触达企业</small><strong>1,286</strong><p>今日 <b>+34</b></p></div></article>
-                  <article><span class="green"><i data-lucide="users-round"></i></span><div><small>关键联系人</small><strong>1,742</strong><p>今日 <b>+46</b></p></div></article>
-                  <article><span class="cyan"><i data-lucide="mail-check"></i></span><div><small>客户已读</small><strong>2,187</strong><p>已读率 <b>44.3%</b></p></div></article>
-                  <article><span class="violet"><i data-lucide="message-circle-reply"></i></span><div><small>收到询盘</small><strong>43</strong><p>今日 <b>+3</b></p></div></article>
+              <section class="lily-metrics" aria-label="策略与执行摘要">
+                <div class="lily-strategy-totals">
+                  <h2>已生成策略</h2>
+                  <p><strong id="lilyTodayStrategies">+12</strong><span>今日</span></p>
+                  <p><b id="lilyTotalStrategies">168</b><span>累计</span></p>
+                </div>
+                <div class="lily-execution-summary">
+                  <h2>今日执行中</h2>
+                  <button data-lily-page="lily/tasks" type="button">欧洲装饰照明制造商｜定制玻璃工艺首轮触达</button>
+                  <ul>
+                    <li>09-02 10:42，向 Lumina GmbH 的 Anna Müller 发送邮件</li>
+                    <li>09-02 10:31，向 Nordic Light A/S 的 Mark Jensen 发送 WhatsApp 消息</li>
+                    <li>09-02 10:18，向 Atelier Lume 的 Sophie Laurent 发送邮件</li>
+                  </ul>
+                  <p>已送达 23 封邮件 · 8 条 WhatsApp 消息</p>
+                </div>
+                <div class="lily-reach-totals">
+                  <p><strong>13</strong><span>已触达企业</span></p>
+                  <p><strong>17</strong><span>已触达联系人</span></p>
                 </div>
               </section>
 
-              <section class="lily-runtime" aria-labelledby="lily-runtime-title">
-                <header class="lily-section-heading">
-                  <div><p>Agent 运行视图</p><h2 id="lily-runtime-title">Lily 正在自主推进触达</h2></div>
-                  <button class="lily-icon-button" id="pauseLilyRuntime" type="button" aria-label="暂停自主执行" aria-pressed="false"><i data-lucide="pause"></i></button>
-                </header>
-
+              <section class="lily-runtime" aria-label="Agent 运行视图">
                 <div class="lily-flow lily-live-canvas stage-execute is-normal" id="lilyLiveFlow" aria-label="Lily 实时工作流图谱">
                   <div class="lily-live-grid" aria-hidden="true"></div>
                   <svg class="lily-live-svg" id="lilyLiveSvg" viewBox="0 0 960 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="客户池、实时商业信号和企业本体持续汇入 Lily，并转化为策略、内容与触达动作">
@@ -162,46 +161,31 @@
                     <strong>Lily 正在自主执行触达任务</strong>
                     <small>欧洲装饰照明制造商 · 第 2 轮 · 今日已送达 31 位联系人</small>
                   </div>
-                  <button class="lily-live-log" data-lily-page="lily/tasks" type="button">智能体日志 <i data-lucide="arrow-right"></i></button>
                 </div>
               </section>
             </div>
 
-            <aside class="lily-copilot" aria-labelledby="lily-copilot-title">
-              <header>
-                <div><p>Agent 和人协作工作区</p><h2 id="lily-copilot-title">和 Lily 一起制定策略</h2></div>
-                <span class="lily-online"><i></i>自主工作中</span>
-              </header>
-
-              <section class="composer lily-strategy-composer" aria-label="让 Lily 生成触达策略">
-                <div class="lily-composer-title"><span><i data-lucide="sparkles"></i></span><div><strong>让 Lily 生成触达策略</strong><small>告诉我想优先推进的市场、产品或客群。</small></div></div>
-                <textarea id="opportunityInput" rows="4" maxlength="500" aria-label="描述你的触达方向" placeholder="例如：重点触达英国舞台灯光制造商，强调小批量定制和 7 天打样……"></textarea>
-                <div class="composer-actions">
-                  <span id="lilyPromptHint">也可以留空，让 Lily 自主判断</span>
-                  <button class="send-button" id="sendButton" type="button"><i data-lucide="plus"></i>生成新策略</button>
-                </div>
-              </section>
-
-              <nav class="lily-entry-grid" aria-label="Lily 工作入口">
-                <button data-lily-page="lily/templates" type="button"><span><i data-lucide="library"></i></span><strong>内容策略库</strong><small>8 个可复用策略</small><i data-lucide="chevron-right"></i></button>
-                <button data-lily-page="lily/tasks" type="button"><span><i data-lucide="radio"></i></span><strong>触达任务</strong><small>3 个正在执行</small><i data-lucide="chevron-right"></i></button>
-              </nav>
-
+            <aside class="lily-copilot" aria-labelledby="strategy-title">
               <section class="strategy-panel" aria-labelledby="strategy-title">
                 <header class="strategy-header">
-                  <div><p>推荐策略</p><h2 id="strategy-title">优先采用这些策略</h2></div>
-                  <div class="lily-strategy-header-actions">
-                    <button id="nextStrategies" type="button" aria-label="换一批策略"><i data-lucide="refresh-cw"></i></button>
-                    <button id="batchApplyStrategies" type="button"><i data-lucide="check-check"></i>批量应用</button>
+                  <h2 id="strategy-title">已生成策略</h2>
+                  <div class="lily-strategy-tabs" role="tablist" aria-label="策略状态">
+                    <button id="lilyPendingTab" type="button" role="tab" data-strategy-status="pending" aria-selected="true" aria-controls="strategyGrid">待决策<span data-strategy-count="pending"></span></button>
+                    <button id="lilyAppliedTab" type="button" role="tab" data-strategy-status="applied" aria-selected="false" aria-controls="strategyGrid" tabindex="-1">已应用<span data-strategy-count="applied"></span></button>
                   </div>
                 </header>
-                <div class="strategy-grid" id="strategyGrid" aria-live="polite"></div>
+                <div class="strategy-grid" id="strategyGrid" role="tabpanel" aria-labelledby="lilyPendingTab" tabindex="0" aria-live="polite"></div>
               </section>
-
-              <section class="lily-performance" aria-label="历史高表现策略">
-                <span><i data-lucide="trending-up"></i></span>
-                <div><small>Lily 发现这条已执行策略效果突出</small><strong>用具体工艺问题打开采购对话</strong><b>询盘率 5.8% · 覆盖 22 家企业</b></div>
-                <button id="reapplyTopStrategy" type="button">再次应用 <i data-lucide="arrow-right"></i></button>
+              <section class="lily-composer-shell" aria-label="让 Lily 生成触达策略">
+                <img class="lily-composer-mascot" src="assets/lily-composer-mascot.png" alt="" />
+                <p class="lily-composer-quota">每日限免 1 次</p>
+                <div class="composer lily-strategy-composer">
+                  <textarea id="opportunityInput" rows="2" maxlength="500" aria-label="描述你的触达方向" placeholder="例如：重点触达英国舞台灯光制造商"></textarea>
+                  <div class="composer-actions">
+                    <span id="lilyPromptHint" role="status"></span>
+                    <button class="send-button" id="sendButton" type="button">生成策略<i data-lucide="send"></i></button>
+                  </div>
+                </div>
               </section>
             </aside>
           </div>
@@ -2733,7 +2717,7 @@ John</textarea></label>
     <script src="assets/lucide.min.js"></script>
     <script src="js/data.js?v=inquiry-company-detail-1"></script>
     <script src="js/shared.js?v=professional-static-4"></script>
-    <script src="js/lily.js?v=lily-v23-1"></script>
+    <script src="js/lily.js?v=lily-home-figma-935-1"></script>
     <script src="js/route.js?v=inquiry-main-flow-2"></script>
     <script src="js/ontology.js?v=buyer-strategy-1"></script>
     <script src="js/ontology-strategy.js?v=buyer-strategy-1"></script>
