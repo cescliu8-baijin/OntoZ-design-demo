@@ -17,7 +17,8 @@
   gap: 8px;
   margin-bottom: 18px;
   color: var(--oz-slate-400);
-  font-size: 12px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .buyer-strategy-breadcrumb a {
@@ -48,27 +49,27 @@
 .buyer-strategy-eyebrow {
   margin: 0 0 7px !important;
   color: var(--oz-indigo-600) !important;
-  font-size: 12px !important;
-  line-height: 18px !important;
-  font-weight: 650;
-  letter-spacing: .06em;
+  font-size: var(--oz-text-xs) !important;
+  line-height: var(--oz-leading-xs) !important;
+  font-weight: var(--oz-weight-bold);
+  letter-spacing: var(--oz-tracking-wider);
 }
 
 .buyer-strategy-header h1 {
   margin: 0;
   color: var(--oz-slate-900);
-  font-size: 30px;
-  line-height: 40px;
-  font-weight: 680;
-  letter-spacing: -.025em;
+  font-size: var(--oz-text-3xl);
+  line-height: var(--oz-leading-3xl);
+  font-weight: var(--oz-weight-bold);
+  letter-spacing: var(--oz-tracking-tight);
 }
 
 .buyer-strategy-header p {
   max-width: 760px;
   margin: 7px 0 0;
   color: var(--oz-slate-500);
-  font-size: 14px;
-  line-height: 23px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .buyer-strategy-meta {
@@ -86,7 +87,8 @@
   border-radius: 999px;
   color: var(--oz-slate-500);
   background: var(--oz-white-80);
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .buyer-strategy-meta svg {
@@ -112,7 +114,7 @@
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--oz-white);
-  box-shadow: 0 4px 14px var(--oz-slate-900-4);
+  box-shadow: var(--oz-shadow-md);
 }
 
 .buyer-strategy-overview article::before {
@@ -126,25 +128,25 @@
 .buyer-strategy-overview span {
   align-self: end;
   color: var(--oz-slate-400);
-  font-size: 11px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .buyer-strategy-overview strong {
   grid-row: span 2;
   align-self: center;
   color: var(--oz-slate-900);
-  font-size: 26px;
-  line-height: 32px;
-  font-weight: 680;
+  font-size: var(--oz-text-2xl);
+  line-height: var(--oz-leading-2xl);
+  font-weight: var(--oz-weight-bold);
 }
 
 .buyer-strategy-overview p {
   margin: 0;
   color: var(--oz-slate-700);
-  font-size: 13px;
-  line-height: 19px;
-  font-weight: 550;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-semibold);
 }
 
 .buyer-graph-card {
@@ -152,7 +154,7 @@
   border-radius: 18px;
   overflow: hidden;
   background: var(--oz-white);
-  box-shadow: 0 10px 30px var(--oz-slate-900-6);
+  box-shadow: var(--oz-shadow-lg);
 }
 
 .buyer-graph-toolbar {
@@ -167,16 +169,16 @@
 .buyer-graph-toolbar h2 {
   margin: 0;
   color: var(--oz-slate-900);
-  font-size: 18px;
-  line-height: 26px;
-  font-weight: 650;
+  font-size: var(--oz-text-lg);
+  line-height: var(--oz-leading-lg);
+  font-weight: var(--oz-weight-bold);
 }
 
 .buyer-graph-toolbar p {
   margin: 3px 0 0;
   color: var(--oz-slate-400);
-  font-size: 12px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .buyer-graph-filters {
@@ -197,15 +199,16 @@
   border-radius: 8px;
   color: var(--oz-slate-500);
   background: transparent;
-  font-size: 12px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   white-space: nowrap;
 }
 
 .buyer-graph-filters button.active {
   color: var(--oz-slate-800);
   background: var(--oz-white);
-  box-shadow: 0 1px 3px var(--oz-slate-900-14);
-  font-weight: 600;
+  box-shadow: var(--oz-shadow-sm);
+  font-weight: var(--oz-weight-semibold);
 }
 
 .filter-dot {
@@ -241,7 +244,7 @@
   border-radius: 10px;
   color: var(--oz-indigo-600);
   background: var(--oz-white);
-  box-shadow: 0 2px 7px var(--oz-indigo-500-12);
+  box-shadow: var(--oz-shadow-focus);
 }
 
 .buyer-graph-focus-icon svg {
@@ -252,24 +255,24 @@
 .buyer-graph-focus p {
   margin: 0;
   color: var(--oz-indigo-600);
-  font-size: 10px;
-  line-height: 15px;
-  font-weight: 650;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-bold);
 }
 
 .buyer-graph-focus h3 {
   margin: 1px 0 2px;
   color: var(--oz-slate-900);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 650;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-bold);
 }
 
 .buyer-graph-focus div > span {
   display: block;
   color: var(--oz-slate-500);
-  font-size: 12px;
-  line-height: 19px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .buyer-graph-swipe-hint {
@@ -278,7 +281,8 @@
   gap: 6px;
   margin: 12px 22px 0;
   color: var(--oz-slate-400);
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .buyer-graph-swipe-hint svg {
@@ -342,21 +346,22 @@
   grid-row: span 2;
   align-self: center;
   color: var(--oz-indigo-500);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-bold);
 }
 
 .buyer-graph-levels strong {
   color: var(--oz-slate-800);
-  font-size: 12px;
-  line-height: 17px;
-  font-weight: 650;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-bold);
 }
 
 .buyer-graph-levels small {
   color: var(--oz-slate-400);
-  font-size: 9px;
-  line-height: 14px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .buyer-graph-lanes {
@@ -415,13 +420,13 @@
   color: var(--oz-slate-700);
   background: var(--oz-white);
   text-align: left;
-  box-shadow: 0 3px 9px var(--oz-slate-900-6);
+  box-shadow: var(--oz-shadow-md);
   transition: border-color .16s ease, box-shadow .16s ease, opacity .16s ease, transform .16s ease;
 }
 
 .buyer-graph-node:hover {
   border-color: var(--oz-indigo-300);
-  box-shadow: 0 7px 16px var(--oz-indigo-500-10);
+  box-shadow: var(--oz-shadow-md);
   transform: translateY(-1px);
 }
 
@@ -432,7 +437,7 @@
 
 .buyer-graph-node.selected {
   border-color: var(--oz-indigo-500);
-  box-shadow: 0 0 0 3px var(--oz-indigo-500-12), 0 7px 16px var(--oz-indigo-500-10);
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .profile-node {
@@ -465,16 +470,16 @@
 
 .profile-node strong {
   color: var(--oz-slate-900);
-  font-size: 13px;
-  line-height: 20px;
-  font-weight: 650;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-bold);
 }
 
 .profile-node small {
   overflow: hidden;
   color: var(--oz-slate-400);
-  font-size: 10px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -488,9 +493,9 @@
 .node-label {
   margin-bottom: 1px;
   color: var(--oz-slate-400);
-  font-size: 9px;
-  line-height: 14px;
-  font-weight: 650;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-bold);
 }
 
 .keyword-chip {
@@ -502,8 +507,8 @@
   border-radius: 6px;
   color: var(--oz-indigo-700);
   background: var(--oz-indigo-50);
-  font-size: 9px;
-  line-height: 14px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -542,9 +547,9 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 9px;
-  line-height: 14px;
-  font-weight: 650;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-bold);
 }
 
 .include-node .node-relation-label {
@@ -571,9 +576,9 @@
   border-radius: 5px;
   color: var(--oz-slate-600);
   background: var(--oz-slate-100);
-  font-size: 9px;
-  line-height: 14px;
-  font-weight: 520;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-medium);
 }
 
 .buyer-graph-canvas[data-filter="include"] .exclude-node,
@@ -609,8 +614,8 @@
   }
 
   .buyer-strategy-header h1 {
-    font-size: 27px;
-    line-height: 36px;
+    font-size: var(--oz-text-3xl);
+    line-height: var(--oz-leading-3xl);
   }
 
   .buyer-strategy-meta {
@@ -660,7 +665,8 @@
   }
 
   .buyer-strategy-overview strong {
-    font-size: 23px;
+    font-size: var(--oz-text-2xl);
+    line-height: var(--oz-leading-2xl);
   }
 
   .buyer-graph-focus {

@@ -819,12 +819,15 @@ function initInquiryWorkspace() {
   const channelMeta = {
     email: { label: '邮件', icon: 'mail' },
     whatsapp: { label: 'WhatsApp', icon: 'message-circle' },
-    linkedin: { label: 'LinkedIn', icon: 'briefcase-business' }
+    'whatsapp-business': { label: 'WhatsApp 企业号', icon: 'badge-check' }
   };
   const inquiryState = {
     selectedId: inquiryDemoConversations[0].id,
     statusFilter: 'all',
-    channelFilter: 'all',
+    channelFilter: 'email',
+    accountId: 'mail-sales',
+    lastAccounts: {},
+    lastConversations: {},
     search: '',
     drafts: Object.fromEntries(inquiryDemoConversations.map(conversation => [conversation.id, ''])),
     attachments: Object.fromEntries(inquiryDemoConversations.map(conversation => [conversation.id, []])),
@@ -871,8 +874,7 @@ function initInquiryWorkspace() {
   };
 
   function getActiveConversation() {
-    return inquiryDemoConversations.find(conversation => conversation.id === inquiryState.selectedId)
-      || inquiryDemoConversations[0];
+    return inquiryDemoConversations.find(conversation => conversation.id === inquiryState.selectedId && conversation.accountId === inquiryState.accountId);
   }
 
   function getChannelMeta(channel) {
@@ -884,7 +886,7 @@ function initInquiryWorkspace() {
   }
 
   function getActiveCompanyProfile(conversation = getActiveConversation()) {
-    return inquiryCompanyProfiles[conversation.id];
+    return inquiryCompanyProfiles[conversation.profileId || conversation.id];
   }
 
   function renderInquiryCompanyChips(items = [], variant = '') {
@@ -893,7 +895,19 @@ function initInquiryWorkspace() {
 
   function renderInquiryCompanyProfile(conversation) {
     const company = getActiveCompanyProfile(conversation);
-    if (!company) return;
+    document.querySelector('#inquiryCompanyPanelTitle').textContent = conversation.isGroup ? '群组资料' : '公司资料';
+    elements.companyPanel.querySelector('.inquiry-company-header p').textContent = conversation.isGroup ? '当前账号的群组成员' : '来自客户池的企业信息';
+    elements.companyToggle.setAttribute('aria-label', conversation.isGroup ? '查看群组资料' : '查看公司资料');
+    elements.companyToggle.querySelector('span').textContent = conversation.isGroup ? '群组资料' : '公司资料';
+    if (!company || conversation.isGroup) {
+      const contacts = conversation.isGroup
+        ? inquiryContacts.filter(contact => conversation.memberIds.includes(contact.id) && contact.accountId === conversation.accountId)
+        : inquiryContacts.filter(contact => contact.id === conversation.contactId && contact.accountId === conversation.accountId);
+      elements.companyBody.innerHTML = `<section class="inquiry-simple-profile"><span class="inquiry-avatar" data-tone="green">${renderIcon(conversation.isGroup ? 'users-round' : 'building-2')}</span><h3>${escapeHTML(conversation.isGroup ? conversation.name : conversation.company)}</h3><p>${conversation.isGroup ? `${contacts.length + 1} 位成员 · 包含当前账号` : '尚未关联客户池公司资料'}</p></section>
+        ${conversation.isGroup ? `<p class="inquiry-profile-self">你 · ${escapeHTML(conversation.channelAccount)} <small>群组创建者</small></p>` : ''}
+        ${contacts.map(contact => `<article class="inquiry-profile-contact"><span class="inquiry-avatar" data-tone="${contact.tone}">${escapeHTML(contact.name[0])}</span><div><strong>${escapeHTML(contact.name)}</strong><p>${escapeHTML(contact.company)}</p><small>${escapeHTML(contact.phone)}</small></div></article>`).join('')}`;
+      return;
+    }
     const currentStage = customerDetailStages[company.stage] || customerDetailStages[0];
     const contact = company.contactList?.[0];
     const siteLabel = company.site.replace(/^https?:\/\//, '').replace(/\/$/, '');
@@ -980,20 +994,21 @@ function initInquiryWorkspace() {
     inquiryPage.classList.toggle('mobile-company-open', open && mobileCompanyBreakpoint.matches);
     elements.companyToggle.setAttribute('aria-expanded', String(open));
     elements.companyToggle.classList.toggle('active', open);
-    if (focus) (open ? elements.companyClose : elements.companyToggle).focus({ preventScroll: true });
+    if (focus) (open ? (mobileCompanyBreakpoint.matches ? elements.companyMobileBack : elements.companyClose) : elements.companyToggle).focus({ preventScroll: true });
   }
 
   function getFilteredConversations() {
     const query = inquiryState.search.trim().toLowerCase();
     return inquiryDemoConversations.filter(conversation => {
       const matchesStatus = inquiryState.statusFilter === 'all' || conversation.unread > 0;
-      const matchesChannel = inquiryState.channelFilter === 'all' || conversation.channel === inquiryState.channelFilter;
-      const searchable = `${conversation.name} ${conversation.company} ${conversation.identity} ${conversation.lastPreview}`.toLowerCase();
+      const matchesChannel = conversation.channel === inquiryState.channelFilter && conversation.accountId === inquiryState.accountId;
+      const searchable = `${conversation.name} ${conversation.company} ${conversation.identity} ${conversation.lastPreview} ${conversation.messages.map(message => message.text || '').join(' ')}`.toLowerCase();
       return matchesStatus && matchesChannel && (!query || searchable.includes(query));
     });
   }
 
   function renderConversationList() {
+    renderAccountNavigation();
     const filtered = getFilteredConversations();
     elements.listCount.textContent = `${filtered.length} 个会话`;
     elements.list.hidden = filtered.length === 0;
@@ -1021,18 +1036,13 @@ function initInquiryWorkspace() {
   }
 
   function renderMessageAttachments(attachments = []) {
-    if (!attachments.length) return '';
-    return `
-      <div class="chat-message-files">
-        ${attachments.map(attachment => `
-          <div class="chat-file-card">
-            <span>${renderIcon('file-text')}</span>
-            <p><strong>${escapeHTML(attachment.name)}</strong><small>${escapeHTML(attachment.type)} · ${escapeHTML(attachment.size)}</small></p>
-            <button data-inquiry-file="${escapeHTML(attachment.id)}" type="button">查看</button>
-          </div>
-        `).join('')}
-      </div>
-    `;
+    return attachments.length ? `<div class="chat-message-files">${attachments.map(attachment => {
+      const name = escapeHTML(attachment.name);
+      const url = attachment.url ? escapeHTML(attachment.url) : '';
+      if (attachment.kind === 'image' && url) return `<button class="inquiry-image-button" type="button" data-inquiry-file="${attachment.id}" aria-label="预览 ${name}"><img src="${url}" alt="${name}" /></button>`;
+      if (attachment.kind === 'video' && url) return `<figure class="inquiry-video"><video controls preload="metadata" playsinline src="${url}" aria-label="${name}"></video><figcaption>${name} · <a href="${url}" download="${name}">下载视频</a></figcaption></figure>`;
+      return `<div class="chat-file-card"><span>${renderIcon('file-text')}</span><p><strong>${name}</strong><small>${escapeHTML(attachment.type)} · ${escapeHTML(attachment.size)}</small></p>${url ? `<a href="${url}" download="${name}">下载</a>` : `<button data-inquiry-file="${escapeHTML(attachment.id)}" type="button">查看</button>`}</div>`;
+    }).join('')}</div>` : '';
   }
 
   window.scrollInquiryToLatest = () => {
@@ -1043,7 +1053,8 @@ function initInquiryWorkspace() {
 
   function renderMessages(conversation) {
     let activeDate = '';
-    elements.thread.innerHTML = conversation.messages.map(message => {
+    const senderName = inquiryAccounts.find(account => account.id === conversation.accountId)?.senderName || 'John';
+    elements.thread.innerHTML = conversation.messages.length ? conversation.messages.map(message => {
       const dateSeparator = message.date !== activeDate
         ? `<div class="chat-date-separator"><span>${escapeHTML(message.date)}</span></div>`
         : '';
@@ -1058,12 +1069,12 @@ function initInquiryWorkspace() {
           ${sent ? '' : `<span class="inquiry-avatar" data-tone="${escapeHTML(conversation.avatarTone)}">${escapeHTML(conversation.avatar)}</span>`}
           <div class="chat-message-stack">
             <div class="chat-bubble">${messageText}${renderMessageAttachments(message.attachments)}</div>
-            <span class="chat-message-meta">${sent ? 'John' : escapeHTML(conversation.firstName)} · ${escapeHTML(message.time)}${sent ? ' · 已发送' : ''}</span>
+            <span class="chat-message-meta">${sent ? '你' : escapeHTML(message.sender || conversation.firstName)} · ${escapeHTML(message.time)}${sent ? (message.local ? ' · 本地演示' : ' · 示例消息') : ''}</span>
           </div>
-          ${sent ? '<span class="inquiry-avatar" data-tone="self">J</span>' : ''}
+          ${sent ? `<span class="inquiry-avatar" data-tone="self">${escapeHTML(message.local ? senderName[0] : 'J')}</span>` : ''}
         </div>
       `;
-    }).join('');
+    }).join('') : '<div class="inquiry-thread-empty">发送第一条消息，开始沟通</div>';
     refreshIcons();
     window.scrollInquiryToLatest();
   }
@@ -1073,7 +1084,7 @@ function initInquiryWorkspace() {
     elements.attachmentList.hidden = attachments.length === 0;
     elements.attachmentList.innerHTML = attachments.map(attachment => `
       <span class="inquiry-attachment-chip">
-        ${renderIcon('file')}<span>${escapeHTML(attachment.name)} · ${escapeHTML(attachment.size)}</span>
+        ${attachment.kind === 'image' ? `<img src="${escapeHTML(attachment.url)}" alt="" />` : attachment.kind === 'video' ? `<video src="${escapeHTML(attachment.url)}" muted preload="metadata" aria-label="视频预览"></video>` : renderIcon('file')}<span>${escapeHTML(attachment.name)} · ${escapeHTML(attachment.size)}</span>
         <button data-remove-inquiry-attachment="${escapeHTML(attachment.id)}" type="button" aria-label="移除 ${escapeHTML(attachment.name)}">${renderIcon('x')}</button>
       </span>
     `).join('');
@@ -1084,7 +1095,7 @@ function initInquiryWorkspace() {
     const draft = elements.replyInput.value;
     const attachmentCount = (inquiryState.attachments[inquiryState.selectedId] || []).length;
     elements.characterCount.textContent = `${draft.length} / 3000`;
-    elements.sendButton.disabled = !draft.trim() && attachmentCount === 0;
+    elements.sendButton.disabled = !getActiveConversation() || (!draft.trim() && attachmentCount === 0);
     elements.aiTrigger.disabled = !draft.trim();
   }
 
@@ -1096,7 +1107,13 @@ function initInquiryWorkspace() {
 
   function renderActiveConversation() {
     const conversation = getActiveConversation();
+    document.querySelector('#inquiryChat').hidden = !conversation;
+    document.querySelector('#inquiryChatEmpty').hidden = Boolean(conversation);
+    inquiryPage.classList.toggle('inquiry-no-conversation', !conversation);
+    if (!conversation) { elements.companyBody.innerHTML = ''; return; }
     const channel = getChannelMeta(conversation.channel);
+    document.querySelector('#inquiryMediaButton').hidden = conversation.channel === 'email';
+    elements.attachButton.innerHTML = `${renderIcon('paperclip')}${conversation.channel === 'email' ? '添加附件' : '文件'}`;
     elements.chatAvatar.textContent = conversation.avatar;
     elements.chatAvatar.dataset.tone = conversation.avatarTone;
     elements.chatName.textContent = conversation.name;
@@ -1120,6 +1137,7 @@ function initInquiryWorkspace() {
     if (!conversation) return;
     closeInquiryAiPanel();
     inquiryState.selectedId = id;
+    inquiryState.lastConversations[inquiryState.accountId] = id;
     conversation.unread = 0;
     inquiryPage.classList.add('mobile-chat-open');
     if (mobileCompanyBreakpoint.matches) setInquiryCompanyPanelOpen(false);
@@ -1141,19 +1159,20 @@ function initInquiryWorkspace() {
   }
 
   function createPolishedReply(original, tone, conversation) {
+    const senderName = inquiryAccounts.find(account => account.id === conversation.accountId)?.senderName || 'John';
     const chinese = /[\u3400-\u9fff]/.test(original);
     const body = normalizeReplyDraft(original, chinese);
     if (tone === 'concise') return body;
     if (chinese) {
       const greeting = `您好，${conversation.firstName}：`;
-      const signoff = tone === 'friendly' ? '期待您的回复！\n\nJohn' : '如需任何补充信息，请随时告诉我。\n\n此致\nJohn';
+      const signoff = tone === 'friendly' ? `期待您的回复！\n\n${senderName}` : `如需任何补充信息，请随时告诉我。\n\n此致\n${senderName}`;
       return `${greeting}\n\n${body}\n\n${signoff}`;
     }
     const hasGreeting = /^(hi|hello|dear)\b/i.test(body);
     const hasSignoff = /(best regards|kind regards|regards|best,)\s*/i.test(body);
     const greeting = hasGreeting ? '' : `Hi ${conversation.firstName},\n\n`;
     const friendlyLead = tone === 'friendly' && !/^(thanks|thank you)/i.test(body) ? 'Thanks for reaching out. ' : '';
-    const signoff = hasSignoff ? '' : tone === 'friendly' ? '\n\nBest,\nJohn' : '\n\nBest regards,\nJohn';
+    const signoff = hasSignoff ? '' : tone === 'friendly' ? `\n\nBest,\n${senderName}` : `\n\nBest regards,\n${senderName}`;
     return `${greeting}${friendlyLead}${body}${signoff}`;
   }
 
@@ -1170,7 +1189,7 @@ function initInquiryWorkspace() {
     window.clearTimeout(inquiryState.aiTimer);
     inquiryState.aiTimer = window.setTimeout(() => {
       if (conversation.id !== inquiryState.selectedId) return;
-      inquiryState.aiResult = createPolishedReply(inquiryState.aiOriginal, inquiryState.aiTone, conversation);
+      inquiryState.aiResult = createPolishedReply(inquiryState.aiOriginal, inquiryState.aiTone, conversation).slice(0, 3000);
       elements.aiText.textContent = inquiryState.aiResult;
       elements.aiLoading.hidden = true;
       elements.aiText.hidden = false;
@@ -1181,13 +1200,15 @@ function initInquiryWorkspace() {
 
   function sendInquiryReply() {
     const conversation = getActiveConversation();
+    if (!conversation || conversation.accountId !== inquiryState.accountId) return;
     const text = elements.replyInput.value.trim();
     const attachments = inquiryState.attachments[conversation.id] || [];
-    if (!text && !attachments.length) return;
+    if ((!text && !attachments.length) || text.length > 3000) return;
     const now = new Date();
     const time = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false });
     conversation.messages.push({
       id: `reply-${Date.now()}`,
+      local: true,
       direction: 'outbound',
       date: '今天',
       time,
@@ -1198,12 +1219,14 @@ function initInquiryWorkspace() {
     conversation.unread = 0;
     conversation.replyState = '已回复';
     conversation.lastPreview = text.replace(/\s+/g, ' ').trim() || `发送了 ${attachments.length} 个附件`;
+    inquiryDemoConversations.splice(inquiryDemoConversations.indexOf(conversation), 1);
+    inquiryDemoConversations.unshift(conversation);
     inquiryState.drafts[conversation.id] = '';
     inquiryState.attachments[conversation.id] = [];
     closeInquiryAiPanel();
     renderConversationList();
     renderActiveConversation();
-    showToast(`已通过${conversation.channelLabel}回复 ${conversation.firstName}`);
+    showToast('已添加到本地会话，演示消息不会实际发送');
   }
 
   elements.list.addEventListener('click', event => {
@@ -1213,7 +1236,15 @@ function initInquiryWorkspace() {
 
   elements.thread.addEventListener('click', event => {
     const fileButton = event.target.closest('[data-inquiry-file]');
-    if (fileButton) showToast('已打开附件预览');
+    if (!fileButton) return;
+    const file = getActiveConversation()?.messages.flatMap(message => message.attachments || []).find(item => item.id === fileButton.dataset.inquiryFile);
+    if (!file?.url) { showToast('此为示例附件，暂无可下载的文件内容'); return; }
+    if (file.kind === 'image') {
+      document.querySelector('#inquiryMediaPreview').src = file.url;
+      document.querySelector('#inquiryMediaPreview').alt = file.name;
+      document.querySelector('#inquiryMediaTitle').textContent = file.name;
+      document.querySelector('#inquiryMediaDialog').showModal();
+    }
   });
 
   elements.search.addEventListener('input', event => {
@@ -1235,13 +1266,9 @@ function initInquiryWorkspace() {
 
   document.querySelectorAll('[data-inquiry-channel]').forEach(button => {
     button.addEventListener('click', () => {
+      inquiryState.lastAccounts[inquiryState.channelFilter] = inquiryState.accountId;
       inquiryState.channelFilter = button.dataset.inquiryChannel;
-      document.querySelectorAll('[data-inquiry-channel]').forEach(item => {
-        const active = item === button;
-        item.classList.toggle('active', active);
-        item.setAttribute('aria-pressed', String(active));
-      });
-      renderConversationList();
+      switchAccount(inquiryState.lastAccounts[inquiryState.channelFilter] || inquiryAccounts.find(account => account.channel === inquiryState.channelFilter).id);
     });
   });
 
@@ -1252,31 +1279,48 @@ function initInquiryWorkspace() {
   });
 
   elements.replyInput.addEventListener('keydown', event => {
-    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+    if (!event.isComposing && event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
       event.preventDefault();
       sendInquiryReply();
     }
   });
 
+  const objectUrls = new Set();
   elements.attachButton.addEventListener('click', () => elements.fileInput.click());
-  elements.fileInput.addEventListener('change', () => {
+  const mediaInput = document.querySelector('#inquiryMediaInput');
+  document.querySelector('#inquiryMediaButton').addEventListener('click', () => mediaInput.click());
+  function addAttachments(input, mediaOnly) {
+    if (!getActiveConversation()) { input.value = ''; return; }
     const current = inquiryState.attachments[inquiryState.selectedId] || [];
-    const additions = Array.from(elements.fileInput.files || []).map((file, index) => ({
-      id: `local-${Date.now()}-${index}`,
-      name: file.name,
-      size: formatFileSize(file.size),
-      type: file.name.includes('.') ? file.name.split('.').pop().toUpperCase() : 'FILE'
-    }));
-    inquiryState.attachments[inquiryState.selectedId] = [...current, ...additions];
-    elements.fileInput.value = '';
+    const errors = [];
+    const mediaTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'video/mp4', 'video/webm', 'video/quicktime'];
+    for (const file of input.files || []) {
+      if (!file.size || file.size > 25 * 1024 * 1024) { errors.push(`${file.name}：请选择非空且不超过 25 MB 的文件`); continue; }
+      if (mediaOnly && !mediaTypes.includes(file.type)) { errors.push(`${file.name}：不支持此媒体类型，请通过文件入口添加`); continue; }
+      if (current.length >= 10) { errors.push('每条消息最多添加 10 个附件'); break; }
+      const url = URL.createObjectURL(file);
+      objectUrls.add(url);
+      current.push({ id: `local-${crypto.randomUUID()}`, name: file.name, size: formatFileSize(file.size),
+        type: file.name.includes('.') ? file.name.split('.').pop().toUpperCase() : 'FILE',
+        kind: mediaOnly ? (file.type.startsWith('image/') ? 'image' : 'video') : 'file', url });
+    }
+    inquiryState.attachments[inquiryState.selectedId] = current;
+    input.value = '';
     renderPendingAttachments();
     updateComposerState();
-    if (additions.length) showToast(`已添加 ${additions.length} 个附件`);
+    if (errors.length) showToast(errors.join('；'), 6000);
+  }
+  elements.fileInput.addEventListener('change', () => addAttachments(elements.fileInput, false));
+  mediaInput.addEventListener('change', () => addAttachments(mediaInput, true));
+  window.addEventListener('pagehide', event => {
+    if (!event.persisted) objectUrls.forEach(url => URL.revokeObjectURL(url));
   });
 
   elements.attachmentList.addEventListener('click', event => {
     const removeButton = event.target.closest('[data-remove-inquiry-attachment]');
     if (!removeButton) return;
+    const removed = (inquiryState.attachments[inquiryState.selectedId] || []).find(item => item.id === removeButton.dataset.removeInquiryAttachment);
+    if (removed?.url) { URL.revokeObjectURL(removed.url); objectUrls.delete(removed.url); }
     inquiryState.attachments[inquiryState.selectedId] = (inquiryState.attachments[inquiryState.selectedId] || [])
       .filter(attachment => attachment.id !== removeButton.dataset.removeInquiryAttachment);
     renderPendingAttachments();
@@ -1327,6 +1371,131 @@ function initInquiryWorkspace() {
   mobileCompanyBreakpoint.addEventListener('change', event => {
     inquiryPage.classList.toggle('mobile-company-open', inquiryState.companyPanelOpen && event.matches);
   });
+
+  const accountSelect = document.querySelector('#inquiryAccountSelect');
+  function renderAccountNavigation() {
+    document.querySelectorAll('[data-inquiry-channel]').forEach(button => {
+      const active = button.dataset.inquiryChannel === inquiryState.channelFilter;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', String(active));
+      const count = inquiryDemoConversations.filter(item => item.channel === button.dataset.inquiryChannel).reduce((sum, item) => sum + item.unread, 0);
+      const badge = button.querySelector('b');
+      badge.textContent = count;
+      badge.hidden = count === 0;
+    });
+    accountSelect.innerHTML = inquiryAccounts.filter(account => account.channel === inquiryState.channelFilter).map(account => {
+      const unread = inquiryDemoConversations.filter(item => item.accountId === account.id).reduce((sum, item) => sum + item.unread, 0);
+      return `<option value="${account.id}">${escapeHTML(account.name)} · ${escapeHTML(account.address)}${unread ? ` · ${unread} 未读` : ''}</option>`;
+    }).join('');
+    accountSelect.value = inquiryState.accountId;
+    accountSelect.disabled = inquiryState.channelFilter === 'email';
+    document.querySelector('#inquiryAccountActions').hidden = inquiryState.channelFilter === 'email';
+  }
+  function switchAccount(accountId) {
+    closeInquiryAiPanel();
+    inquiryState.accountId = accountId;
+    inquiryState.lastAccounts[inquiryState.channelFilter] = accountId;
+    inquiryState.search = '';
+    elements.search.value = '';
+    inquiryState.statusFilter = 'all';
+    document.querySelectorAll('[data-inquiry-status]').forEach(button => {
+      button.classList.toggle('active', button.dataset.inquiryStatus === 'all');
+      button.setAttribute('aria-selected', String(button.dataset.inquiryStatus === 'all'));
+    });
+    const conversations = getFilteredConversations();
+    inquiryState.selectedId = conversations.find(item => item.id === inquiryState.lastConversations[accountId])?.id || conversations[0]?.id || null;
+    inquiryPage.classList.remove('mobile-chat-open');
+    setInquiryCompanyPanelOpen(!companyPanelBreakpoint.matches);
+    if (!mobileCompanyBreakpoint.matches && getActiveConversation()) getActiveConversation().unread = 0;
+    renderConversationList();
+    renderActiveConversation();
+  }
+  accountSelect.addEventListener('change', () => switchAccount(accountSelect.value));
+  const contactDialog = document.querySelector('#inquiryContactDialog');
+  const contactSearch = document.querySelector('#inquiryContactSearch');
+  const contactResults = document.querySelector('#inquiryContactResults');
+  const groupName = document.querySelector('#inquiryGroupName');
+  const groupConfirm = document.querySelector('#inquiryConfirmGroup');
+  let contactMode = 'chat';
+  let chosenContacts = new Set();
+  function updateGroupSelection() {
+    document.querySelector('#inquiryGroupSelected').textContent = `已选 ${chosenContacts.size} 人 · 至少选择 2 人`;
+    groupConfirm.disabled = chosenContacts.size < 2 || !groupName.value.trim() || groupName.value.trim().length > 60;
+  }
+  function renderContactResults() {
+    const query = contactSearch.value.trim().toLowerCase();
+    const compactQuery = query.replace(/[\s+()-]/g, '');
+    const contacts = inquiryContacts.filter(contact => contact.accountId === inquiryState.accountId &&
+      (`${contact.name} ${contact.company} ${contact.phone}`.toLowerCase().includes(query) || (compactQuery && contact.phone.replace(/[\s+()-]/g, '').includes(compactQuery))));
+    contactResults.innerHTML = contacts.length ? contacts.map(contact => `<button type="button" class="inquiry-contact-row ${chosenContacts.has(contact.id) ? 'selected' : ''}" data-contact-id="${contact.id}" ${contactMode === 'group' ? `aria-pressed="${chosenContacts.has(contact.id)}"` : ''}><span class="inquiry-avatar" data-tone="${contact.tone}">${escapeHTML(contact.name[0])}</span><span><strong>${escapeHTML(contact.name)}</strong><small>${escapeHTML(contact.company)}</small><small>${escapeHTML(contact.phone)}</small></span>${renderIcon(contactMode === 'group' ? (chosenContacts.has(contact.id) ? 'circle-check' : 'circle') : 'message-circle')}</button>`).join('') : '<p class="inquiry-contact-empty">没有找到联系人，请尝试其他姓名、公司或号码</p>';
+    refreshIcons();
+    updateGroupSelection();
+  }
+  function openContactDialog(mode) {
+    contactMode = mode;
+    chosenContacts = new Set();
+    contactSearch.value = '';
+    groupName.value = '';
+    const account = inquiryAccounts.find(item => item.id === inquiryState.accountId);
+    document.querySelector('#inquiryContactDialogTitle').textContent = mode === 'group' ? '创建群组' : '查找联系人';
+    document.querySelector('#inquiryContactAccount').textContent = `${account.name} · ${account.address}`;
+    document.querySelector('#inquiryGroupNameField').hidden = mode !== 'group';
+    document.querySelector('#inquiryGroupFooter').hidden = mode !== 'group';
+    document.querySelector('#inquiryContactHint').textContent = mode === 'group' ? '选择至少 2 位联系人，创建后你将自动加入群组' : '当前账号联系人 · 选择联系人开始聊天';
+    renderContactResults();
+    contactDialog.showModal();
+    (mode === 'group' ? groupName : contactSearch).focus();
+  }
+  function activateNewConversation(conversation) {
+    inquiryState.statusFilter = 'all';
+    inquiryState.search = '';
+    elements.search.value = '';
+    document.querySelectorAll('[data-inquiry-status]').forEach(button => {
+      button.classList.toggle('active', button.dataset.inquiryStatus === 'all');
+      button.setAttribute('aria-selected', String(button.dataset.inquiryStatus === 'all'));
+    });
+    contactDialog.close();
+    selectInquiryConversation(conversation.id);
+    elements.replyInput.focus();
+  }
+  document.querySelector('#inquiryFindContacts').addEventListener('click', () => openContactDialog('chat'));
+  document.querySelector('#inquiryCreateGroup').addEventListener('click', () => openContactDialog('group'));
+  contactDialog.querySelector('[data-inquiry-dialog-close]').addEventListener('click', () => contactDialog.close());
+  contactSearch.addEventListener('input', renderContactResults);
+  groupName.addEventListener('input', updateGroupSelection);
+  contactResults.addEventListener('click', event => {
+    const button = event.target.closest('[data-contact-id]');
+    if (!button) return;
+    const contact = inquiryContacts.find(item => item.id === button.dataset.contactId && item.accountId === inquiryState.accountId);
+    if (!contact) return;
+    if (contactMode === 'group') {
+      if (chosenContacts.has(contact.id)) chosenContacts.delete(contact.id); else chosenContacts.add(contact.id);
+      renderContactResults();
+      contactResults.querySelector(`[data-contact-id="${contact.id}"]`)?.focus();
+      return;
+    }
+    let conversation = inquiryDemoConversations.find(item => item.accountId === inquiryState.accountId && item.contactId === contact.id && !item.isGroup);
+    if (!conversation) { conversation = createInquiryContactConversation(contact); inquiryDemoConversations.unshift(conversation); }
+    activateNewConversation(conversation);
+  });
+  groupConfirm.addEventListener('click', () => {
+    const memberIds = [...chosenContacts].filter(id => inquiryContacts.some(item => item.id === id && item.accountId === inquiryState.accountId));
+    const name = groupName.value.trim();
+    if (!name || name.length > 60 || memberIds.length < 2) return;
+    const account = inquiryAccounts.find(item => item.id === inquiryState.accountId);
+    const conversation = {
+      id: `group-${crypto.randomUUID()}`, accountId: account.id, channel: account.channel,
+      channelLabel: getChannelMeta(account.channel).label, channelAccount: account.address,
+      name, firstName: name, avatar: name[0], avatarTone: 'green', company: `群组 · ${memberIds.length + 1} 位成员`,
+      role: '你创建的群组', identity: '', isGroup: true, memberIds, time: '刚刚', unread: 0,
+      lastPreview: '群组已在本地创建，开始讨论吧', messages: []
+    };
+    inquiryDemoConversations.unshift(conversation);
+    activateNewConversation(conversation);
+    showToast('群组已在本地创建，尚未同步至 WhatsApp');
+  });
+  document.querySelector('#inquiryMediaClose').addEventListener('click', () => document.querySelector('#inquiryMediaDialog').close());
+  document.querySelector('#inquiryMediaDialog').addEventListener('close', () => document.querySelector('#inquiryMediaPreview').removeAttribute('src'));
 
   setInquiryCompanyPanelOpen(!companyPanelBreakpoint.matches);
   renderConversationList();

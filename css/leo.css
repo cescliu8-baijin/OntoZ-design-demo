@@ -76,13 +76,13 @@
   border: 2px solid var(--oz-white);
   border-radius: 50%;
   background: var(--oz-neutral-300);
-  box-shadow: 0 0 0 1px var(--oz-neutral-200);
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .zoe-step-nav li.active::before,
 .zoe-step-nav li.complete::before {
   background: var(--oz-indigo-500);
-  box-shadow: 0 0 0 1px var(--oz-indigo-200);
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .zoe-step-nav button {
@@ -91,15 +91,15 @@
   color: var(--oz-neutral-400);
   background: transparent;
   font: inherit;
-  font-size: 12px;
-  line-height: 22px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-align: left;
   white-space: nowrap;
 }
 
 .zoe-step-nav li.active button {
   color: var(--foreground);
-  font-weight: 600;
+  font-weight: var(--oz-weight-semibold);
 }
 
 .zoe-step-nav li.complete button {
@@ -143,8 +143,8 @@
   border-radius: 9px 9px 9px 2px;
   color: var(--oz-neutral-800);
   background: var(--oz-neutral-100);
-  font-size: 13px;
-  line-height: 20px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-answer-card {
@@ -178,16 +178,16 @@
 .zoe-success-card h2 {
   margin: 2px 0 0;
   color: var(--foreground);
-  font-size: 14px;
-  line-height: 22px;
-  font-weight: 600;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-semibold);
 }
 
 .zoe-kicker {
   display: block;
   color: var(--oz-neutral-500);
-  font-size: 11px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-match-badge,
@@ -200,8 +200,8 @@
   border-radius: 999px;
   color: var(--oz-green-700);
   background: var(--oz-green-100);
-  font-size: 11px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-status-badge {
@@ -237,9 +237,9 @@
 .zoe-field > span,
 .zoe-channel-fieldset legend {
   color: var(--oz-neutral-600);
-  font-size: 11px;
-  line-height: 16px;
-  font-weight: 500;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-medium);
 }
 
 .zoe-field input,
@@ -254,8 +254,8 @@
   color: var(--foreground);
   background: var(--oz-white);
   font: inherit;
-  font-size: 12px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   transition: border-color .16s ease, box-shadow .16s ease;
 }
 
@@ -272,7 +272,7 @@
 .zoe-field textarea:focus,
 .zoe-field select:focus {
   border-color: var(--oz-indigo-400);
-  box-shadow: 0 0 0 3px var(--oz-indigo-100);
+  box-shadow: var(--oz-shadow-focus);
 }
 
 .zoe-flow-step.is-confirmed .zoe-field input,
@@ -303,8 +303,8 @@
   border: 0;
   border-radius: 8px;
   font: inherit;
-  font-size: 12px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-decoration: none;
 }
 
@@ -321,7 +321,7 @@
   margin-left: auto;
   color: var(--oz-white);
   background: var(--oz-indigo-600);
-  box-shadow: 0 1px 2px var(--oz-black-20);
+  box-shadow: var(--oz-shadow-xs);
 }
 
 .zoe-primary-button:hover,
@@ -339,14 +339,14 @@
 .zoe-ghost-button {
   color: var(--oz-neutral-600);
   background: var(--oz-white);
-  box-shadow: 0 0 0 1px var(--oz-neutral-200);
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .zoe-edit-button:hover,
 .zoe-ghost-button:hover {
   color: var(--oz-indigo-700);
   background: var(--oz-indigo-50);
-  box-shadow: 0 0 0 1px var(--oz-indigo-200);
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .zoe-confirmed-label {
@@ -354,7 +354,8 @@
   align-items: center;
   gap: 5px;
   color: var(--oz-green-600);
-  font-size: 12px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-confirmed-label svg {
@@ -391,8 +392,8 @@
   border-radius: 8px;
   color: var(--oz-indigo-700);
   background: var(--oz-indigo-50);
-  font-size: 11px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chip-country {
@@ -449,20 +450,20 @@
 
 .zoe-choice-grid > button strong {
   color: var(--foreground);
-  font-size: 12px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-choice-grid > button span {
-  font-size: 11px;
-  line-height: 17px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-choice-grid > button.active {
   color: var(--oz-indigo-600);
   border-color: var(--oz-indigo-400);
   background: var(--oz-indigo-50);
-  box-shadow: 0 0 0 2px var(--oz-indigo-100);
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .zoe-upload {
@@ -487,11 +488,13 @@
 
 .zoe-upload strong {
   color: var(--oz-neutral-700);
-  font-size: 12px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-upload span {
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-upload input {
@@ -536,7 +539,8 @@
   border-radius: 8px;
   color: var(--oz-neutral-500);
   background: var(--oz-white);
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-channel-fieldset input:checked + span {
@@ -572,8 +576,8 @@
   display: grid;
   grid-template-columns: 90px minmax(0, 1fr);
   gap: 12px;
-  font-size: 12px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-task-summary dt {
@@ -587,7 +591,8 @@
 
 .zoe-task-summary dd strong {
   color: var(--oz-indigo-600);
-  font-size: 20px;
+  font-size: var(--oz-text-xl);
+  line-height: var(--oz-leading-xl);
 }
 
 .zoe-volume-grid {
@@ -608,13 +613,14 @@
 
 .zoe-volume-grid span {
   color: var(--oz-neutral-500);
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-volume-grid strong {
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 600;
+  font-size: var(--oz-text-lg);
+  line-height: var(--oz-leading-lg);
+  font-weight: var(--oz-weight-semibold);
 }
 
 .zoe-launch-button {
@@ -652,8 +658,8 @@
   max-width: 420px;
   margin: 7px 0 16px;
   color: var(--oz-neutral-500);
-  font-size: 12px;
-  line-height: 19px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-success-card > div {
@@ -669,7 +675,7 @@
 .zoe-success-card button {
   color: var(--oz-neutral-700);
   background: var(--oz-white);
-  box-shadow: 0 0 0 1px var(--oz-neutral-200);
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .zoe-thinking-card {
@@ -734,9 +740,9 @@
   color: var(--oz-neutral-900);
   background: transparent;
   font: inherit;
-  font-size: 13px;
-  line-height: 20px;
-  font-weight: 600;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-semibold);
   text-align: left;
 }
 
@@ -770,8 +776,8 @@
   display: flex;
   flex-direction: column;
   padding-top: 10px;
-  font-size: 11px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-thinking-card.collapsed .zoe-thinking-stream {
@@ -782,7 +788,7 @@
   max-width: 760px;
   margin: 0;
   color: var(--oz-neutral-600);
-  letter-spacing: .01em;
+  letter-spacing: var(--oz-tracking-normal);
   opacity: 0;
   transform: translateY(4px);
   animation: zoeThinkingIn .24s ease forwards;
@@ -956,6 +962,7 @@
 
   .zoe-thinking-summary {
     align-items: flex-start;
-    font-size: 12px;
+    font-size: var(--oz-text-xs);
+    line-height: var(--oz-leading-xs);
   }
 }

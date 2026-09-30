@@ -9,8 +9,13 @@
     <meta name="format-detection" content="telephone=no" />
     <title>OntoZ · 专业建站 Lucas</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css?v=lily-home-figma-935-1" />
+    <link rel="stylesheet" href="styles.css?v=john-demo-041-lucas-benchmark-1" />
     <link rel="stylesheet" href="lucide-icons.css" />
+    <link rel="stylesheet" href="css/inquiry-messaging.css?v=foundations-2" />
+    <link rel="stylesheet" href="css/agent-shared.css?v=foundations-2" />
+    <link rel="stylesheet" href="css/wendy-home.css?v=foundations-2" />
+    <link rel="stylesheet" href="css/zoe-agent-v2.css?v=foundations-2" id="zoeAgentV2Styles" disabled />
+    <link rel="stylesheet" href="css/project-layout.css?v=john-demo-041" />
   </head>
   <body>
     <a class="skip-link" href="#mainContent">跳到主要内容</a>
@@ -62,12 +67,14 @@
         </button>
       </aside>
 
-      <main class="lily-workspace" id="mainContent" tabindex="-1">
+      <main class="app-workspace" id="mainContent" tabindex="-1">
         <div class="lily-home lily-v23" id="lilyHome">
-          <header class="lily-v23-header" aria-labelledby="page-title">
+          <div class="agent-v2" id="lilyOverview" data-agent="Lily">
+          <header class="lily-v23-header av2-header" aria-labelledby="page-title">
             <div>
-              <h1 class="agent-hero-title" id="page-title">今天，从这些商机开始</h1>
-              <p class="agent-hero-subtitle">Lily 会自己理解客户、制定策略、生成内容并持续执行，把高质量线索一步步转化为真实询盘</p>
+              <h1 class="lily-home-title" id="page-title">让高质量线索转化为真实询盘</h1>
+              <p class="lily-home-subtitle">理解客户、制定策略、生成内容并持续执行，让每一次触达更有针对性。</p>
+              <div class="av2-actions av2-page-actions"><button class="av2-primary" type="button" data-av2-compose><i data-lucide="wand-sparkles"></i>生成触达策略</button><button class="av2-secondary" type="button" data-lily-page="lily/tasks"><i data-lucide="list-todo"></i>任务管理</button></div>
             </div>
             <div class="lily-console-card">
               <span class="lily-console-icon"><i data-lucide="gauge"></i></span>
@@ -76,23 +83,13 @@
             </div>
           </header>
 
-          <div class="lily-v23-body">
-            <div class="lily-v23-main">
+          <div class="lily-v23-body av2-columns">
+            <div class="lily-v23-main av2-main">
               <section class="lily-metrics" aria-label="策略与执行摘要">
                 <div class="lily-strategy-totals">
                   <h2>已生成策略</h2>
                   <p><strong id="lilyTodayStrategies">+12</strong><span>今日</span></p>
                   <p><b id="lilyTotalStrategies">168</b><span>累计</span></p>
-                </div>
-                <div class="lily-execution-summary">
-                  <h2>今日执行中</h2>
-                  <button data-lily-page="lily/tasks" type="button">欧洲装饰照明制造商｜定制玻璃工艺首轮触达</button>
-                  <ul>
-                    <li>09-02 10:42，向 Lumina GmbH 的 Anna Müller 发送邮件</li>
-                    <li>09-02 10:31，向 Nordic Light A/S 的 Mark Jensen 发送 WhatsApp 消息</li>
-                    <li>09-02 10:18，向 Atelier Lume 的 Sophie Laurent 发送邮件</li>
-                  </ul>
-                  <p>已送达 23 封邮件 · 8 条 WhatsApp 消息</p>
                 </div>
                 <div class="lily-reach-totals">
                   <p><strong>13</strong><span>已触达企业</span></p>
@@ -103,18 +100,18 @@
               <section class="lily-runtime" aria-label="Agent 运行视图">
                 <div class="lily-flow lily-live-canvas stage-execute is-normal" id="lilyLiveFlow" aria-label="Lily 实时工作流图谱">
                   <div class="lily-live-grid" aria-hidden="true"></div>
-                  <svg class="lily-live-svg" id="lilyLiveSvg" viewBox="0 0 960 680" preserveAspectRatio="xMidYMid meet" role="img" aria-label="客户池、实时商业信号和企业本体持续汇入 Lily，并转化为策略、内容与触达动作">
+                  <svg class="lily-live-svg" id="lilyLiveSvg" viewBox="0 0 960 680" preserveAspectRatio="none" role="img" aria-label="客户池、实时商业信号和企业本体持续汇入 Lily，并转化为策略、内容与触达动作">
                     <defs>
                       <linearGradient id="lilyLiveGradient" x1="0" x2="1"><stop offset="0" stop-color="#2fbea0"></stop><stop offset=".52" stop-color="#318fda"></stop><stop offset="1" stop-color="#5472df"></stop></linearGradient>
                     </defs>
-                    <path id="lily-path-pool" class="lily-live-path" d="M220 126 C330 148 356 270 420 319"></path>
-                    <path class="lily-live-path-guide" d="M150 340 C265 340 350 340 420 340"></path>
-                    <path id="lily-path-signal" class="lily-live-path is-horizontal" d="M150 340 C265 340 350 340 420 340"></path>
-                    <path id="lily-path-ontology" class="lily-live-path" d="M220 554 C330 532 356 410 420 361"></path>
-                    <path id="lily-path-strategy" class="lily-live-path" d="M540 319 C604 270 630 148 740 126"></path>
-                    <path class="lily-live-path-guide" d="M540 340 C610 340 695 340 810 340"></path>
-                    <path id="lily-path-content" class="lily-live-path is-horizontal" d="M540 340 C610 340 695 340 810 340"></path>
-                    <path id="lily-path-execute" class="lily-live-path" d="M540 361 C604 410 630 532 740 554"></path>
+                    <path id="lily-path-pool" class="lily-live-path" d="M178 211 C310 215 350 330 480 381"></path>
+                    <path class="lily-live-path-guide" d="M130 381 C250 381 360 381 480 381"></path>
+                    <path id="lily-path-signal" class="lily-live-path is-horizontal" d="M130 381 C250 381 360 381 480 381"></path>
+                    <path id="lily-path-ontology" class="lily-live-path" d="M178 544 C310 535 350 430 480 381"></path>
+                    <path id="lily-path-strategy" class="lily-live-path" d="M480 381 C610 330 650 215 782 211"></path>
+                    <path class="lily-live-path-guide" d="M480 381 C600 381 710 381 830 381"></path>
+                    <path id="lily-path-content" class="lily-live-path is-horizontal" d="M480 381 C600 381 710 381 830 381"></path>
+                    <path id="lily-path-execute" class="lily-live-path" d="M480 381 C610 430 650 535 782 544"></path>
 
                     <g class="lily-transfer-payload tone-blue" data-payload-index="0"><rect x="-62" y="-15" width="124" height="30" rx="15"></rect><text x="0" y="4" text-anchor="middle">Lumina GmbH</text><animate class="lily-payload-opacity" attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.025;.375;.4;1" dur="16s" begin="0s" repeatCount="indefinite"></animate><animateMotion class="lily-payload-motion" dur="16s" begin="0s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.4;1" calcMode="linear"><mpath href="#lily-path-pool"></mpath></animateMotion></g>
                     <g class="lily-transfer-payload tone-green" data-payload-index="1"><rect x="-62" y="-15" width="124" height="30" rx="15"></rect><text x="0" y="4" text-anchor="middle">Nordic Light</text><animate class="lily-payload-opacity" attributeName="opacity" values="0;1;1;0;0" keyTimes="0;.025;.375;.4;1" dur="16s" begin="5.33s" repeatCount="indefinite"></animate><animateMotion class="lily-payload-motion" dur="16s" begin="5.33s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;.4;1" calcMode="linear"><mpath href="#lily-path-pool"></mpath></animateMotion></g>
@@ -163,23 +160,34 @@
                   </div>
                 </div>
               </section>
+              <div class="lily-execution-summary">
+                <h2>最近动态</h2>
+                <button data-lily-page="lily/tasks" type="button">欧洲装饰照明制造商｜定制玻璃工艺首轮触达</button>
+                <ul>
+                  <li>09-02 10:42，向 Lumina GmbH 的 Anna Müller 发送邮件</li>
+                  <li>09-02 10:31，向 Nordic Light A/S 的 Mark Jensen 发送 WhatsApp 消息</li>
+                  <li>09-02 10:18，向 Atelier Lume 的 Sophie Laurent 发送邮件</li>
+                </ul>
+                <p>已送达 23 封邮件 · 8 条 WhatsApp 消息</p>
+              </div>
             </div>
 
-            <aside class="lily-copilot" aria-labelledby="strategy-title">
+            <aside class="lily-copilot av2-collab" id="lilyCollaboration" aria-labelledby="strategy-title">
               <section class="strategy-panel" aria-labelledby="strategy-title">
                 <header class="strategy-header">
-                  <h2 id="strategy-title">已生成策略</h2>
+                  <div class="av2-collab-title"><h2 id="strategy-title">与 Lily 协作</h2><button class="av2-close" data-av2-close type="button" aria-label="关闭 Lily 协作区"><i data-lucide="x"></i></button></div>
                   <div class="lily-strategy-tabs" role="tablist" aria-label="策略状态">
-                    <button id="lilyPendingTab" type="button" role="tab" data-strategy-status="pending" aria-selected="true" aria-controls="strategyGrid">待决策<span data-strategy-count="pending"></span></button>
-                    <button id="lilyAppliedTab" type="button" role="tab" data-strategy-status="applied" aria-selected="false" aria-controls="strategyGrid" tabindex="-1">已应用<span data-strategy-count="applied"></span></button>
+                    <button id="lilyPendingTab" type="button" role="tab" data-strategy-status="pending" aria-selected="true" aria-controls="strategyGrid">待你确认<span data-strategy-count="pending"></span></button>
+                    <button id="lilyAppliedTab" type="button" role="tab" data-strategy-status="applied" aria-selected="false" aria-controls="strategyGrid" tabindex="-1">已处理<span data-strategy-count="applied"></span></button>
                   </div>
                 </header>
-                <div class="strategy-grid" id="strategyGrid" role="tabpanel" aria-labelledby="lilyPendingTab" tabindex="0" aria-live="polite"></div>
+                <div class="strategy-grid av2-stream" id="strategyGrid" role="tabpanel" aria-labelledby="lilyPendingTab" tabindex="0" aria-live="polite"></div>
               </section>
               <section class="lily-composer-shell" aria-label="让 Lily 生成触达策略">
                 <img class="lily-composer-mascot" src="assets/lily-composer-mascot.png" alt="" />
                 <p class="lily-composer-quota">每日限免 1 次</p>
-                <div class="composer lily-strategy-composer">
+                <div class="composer lily-strategy-composer av2-prompt-box">
+                  <label class="av2-input-label" for="opportunityInput">描述你的触达方向</label>
                   <textarea id="opportunityInput" rows="2" maxlength="500" aria-label="描述你的触达方向" placeholder="例如：重点触达英国舞台灯光制造商"></textarea>
                   <div class="composer-actions">
                     <span id="lilyPromptHint" role="status"></span>
@@ -188,6 +196,7 @@
                 </div>
               </section>
             </aside>
+          </div>
           </div>
 
           <section class="my-strategy-panel" id="myStrategyPanel" aria-labelledby="my-strategy-title" hidden>
@@ -460,6 +469,21 @@
         </section>
 
         <section class="lily-secondary inquiry-page" id="lilyInquiryPage" aria-label="询盘消息" hidden>
+          <header class="inquiry-channel-header">
+            <nav class="inquiry-channel-tabs" aria-label="询盘渠道">
+              <button class="active" data-inquiry-channel="email" type="button" aria-pressed="true"><i data-lucide="mail"></i><span>邮件</span><b data-channel-count="email"></b></button>
+              <button data-inquiry-channel="whatsapp" type="button" aria-pressed="false"><i data-lucide="message-circle"></i><span>WhatsApp</span><b data-channel-count="whatsapp"></b></button>
+              <button data-inquiry-channel="whatsapp-business" type="button" aria-pressed="false"><i data-lucide="badge-check"></i><span>WhatsApp 企业号</span><b data-channel-count="whatsapp-business"></b></button>
+            </nav>
+            <span class="inquiry-demo-label" title="消息和群组仅在当前页面演示，刷新后恢复示例数据">演示模式 · 消息不会实际发送</span>
+          </header>
+          <div class="inquiry-account-bar">
+            <div class="inquiry-account-control"><span class="inquiry-account-icon"><i data-lucide="user-round"></i></span><label for="inquiryAccountSelect">当前账号</label><select id="inquiryAccountSelect" aria-label="切换当前账号"></select><span class="inquiry-account-status">示例账号</span></div>
+            <div class="inquiry-account-actions" id="inquiryAccountActions" hidden>
+              <button id="inquiryFindContacts" type="button"><i data-lucide="user-round-search"></i>查找联系人</button>
+              <button id="inquiryCreateGroup" type="button"><i data-lucide="users-round"></i>创建群组</button>
+            </div>
+          </div>
           <div class="inquiry-workbench">
             <aside class="inquiry-list" aria-labelledby="inquiry-list-title">
               <header class="inquiry-list-header">
@@ -477,12 +501,7 @@
                   <i data-lucide="search" aria-hidden="true"></i>
                   <input id="inquirySearchInput" type="search" autocomplete="off" placeholder="搜索客户、公司或消息" aria-label="搜索询盘消息" />
                 </label>
-                <div class="inquiry-channel-filters" role="group" aria-label="按渠道筛选">
-                  <button class="active" data-inquiry-channel="all" type="button" aria-pressed="true">全部</button>
-                  <button data-inquiry-channel="email" type="button" aria-pressed="false"><i data-lucide="mail"></i>邮件</button>
-                  <button data-inquiry-channel="whatsapp" type="button" aria-pressed="false"><i data-lucide="message-circle"></i>WhatsApp</button>
-                  <button data-inquiry-channel="linkedin" type="button" aria-pressed="false"><i data-lucide="briefcase-business"></i>LinkedIn</button>
-                </div>
+
               </header>
               <div class="inquiry-conversation-list" id="inquiryConversationList" role="listbox" aria-label="会话列表"></div>
               <p class="inquiry-empty" id="inquiryEmpty" hidden><i data-lucide="search-x"></i><strong>没有找到会话</strong><span>试试清除搜索或切换筛选条件</span></p>
@@ -537,6 +556,8 @@
                 <div class="inquiry-composer-toolbar">
                   <div>
                     <input id="inquiryFileInput" type="file" multiple hidden />
+                    <input id="inquiryMediaInput" type="file" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/webm,video/quicktime" multiple hidden />
+                    <button id="inquiryMediaButton" type="button" hidden><i data-lucide="image-plus"></i>图片/视频</button>
                     <button id="inquiryAttachButton" type="button"><i data-lucide="paperclip"></i>添加附件</button>
                     <button class="inquiry-ai-trigger" id="inquiryAiTrigger" type="button" disabled><i data-lucide="sparkles"></i>AI 润色</button>
                   </div>
@@ -548,6 +569,7 @@
               </footer>
             </article>
 
+            <div class="inquiry-chat-empty" id="inquiryChatEmpty" hidden><i data-lucide="messages-square"></i><h2>开启一段新对话</h2><p>从左侧选择会话，或查找联系人开始沟通</p></div>
             <aside class="inquiry-company-panel" id="inquiryCompanyPanel" aria-labelledby="inquiryCompanyPanelTitle">
               <header class="inquiry-company-header">
                 <button class="inquiry-company-mobile-back" id="inquiryCompanyMobileBack" type="button" aria-label="返回会话"><i data-lucide="arrow-left"></i></button>
@@ -562,6 +584,16 @@
             </aside>
           </div>
         </section>
+
+        <dialog class="inquiry-dialog" id="inquiryContactDialog" aria-labelledby="inquiryContactDialogTitle">
+          <header><div><h2 id="inquiryContactDialogTitle">查找联系人</h2><p id="inquiryContactAccount"></p></div><button data-inquiry-dialog-close type="button" aria-label="关闭联系人窗口"><i data-lucide="x"></i></button></header>
+          <div class="inquiry-group-name" id="inquiryGroupNameField" hidden><label for="inquiryGroupName">群组名称 <small>必填 · 最多 60 字</small></label><input id="inquiryGroupName" maxlength="60" placeholder="例如：Northstar 采购项目组" autocomplete="off" /></div>
+          <label class="inquiry-search"><i data-lucide="search"></i><input id="inquiryContactSearch" type="search" placeholder="搜索姓名、公司或电话号码" aria-label="搜索联系人" /></label>
+          <p class="inquiry-contact-hint" id="inquiryContactHint">选择联系人开始聊天</p>
+          <div class="inquiry-contact-results" id="inquiryContactResults"></div>
+          <footer id="inquiryGroupFooter" hidden><span id="inquiryGroupSelected" aria-live="polite">已选 0 人 · 至少选择 2 人</span><button id="inquiryConfirmGroup" class="primary" type="button" disabled>创建群组</button></footer>
+        </dialog>
+        <dialog class="inquiry-dialog inquiry-media-dialog" id="inquiryMediaDialog" aria-labelledby="inquiryMediaTitle"><header><h2 id="inquiryMediaTitle">图片预览</h2><button id="inquiryMediaClose" type="button" aria-label="关闭图片预览"><i data-lucide="x"></i></button></header><img id="inquiryMediaPreview" alt="" /></dialog>
 
         <section class="lily-secondary templates-page" id="lilyTemplatesPage" aria-labelledby="templates-title" hidden>
           <nav class="lily-breadcrumb" aria-label="面包屑">
@@ -614,1172 +646,18 @@
           </div>
         </section>
 
-        <section class="john-page" id="johnPage" aria-labelledby="john-title" hidden>
-          <header class="john-hero">
-            <div class="john-hero-copy">
-              <p class="john-kicker">24/7 投流 John</p>
-              <h1 class="agent-hero-title" id="john-title"><span class="agent-hero-title-en" lang="en">John</span> 让投流增长保持在线</h1>
-              <p class="agent-hero-subtitle">实时分析广告、国家、渠道、人群和关键词表现，帮你发现预算机会、异常波动和下一步优化动作。</p>
-            </div>
-            <div class="john-entry-actions" aria-label="John 功能入口">
-              <button class="john-entry-primary" type="button" data-john-create-flow data-john-flow-mode="existing">
-                <i data-lucide="wand-sparkles"></i>
-                <span>新建广告</span>
-              </button>
-              <button type="button" data-john-entry="广告管理">
-                <i data-lucide="chart-no-axes-combined"></i>
-                <span>广告系列管理</span>
-              </button>
-            </div>
-          </header>
-
-          <div class="john-metric-grid" aria-label="广告核心指标">
-            <article class="john-metric-card">
-              <span>总费用</span>
-              <strong data-john-metric="cost">$4,842</strong>
-              <p><i data-lucide="album"></i><b>全部 Campaign 累计</b></p>
-            </article>
-            <article class="john-metric-card">
-              <span>总展示数</span>
-              <strong data-john-metric="impressions">37,106</strong>
-              <p><i data-lucide="eye"></i><b>Impressions 展示量</b></p>
-            </article>
-            <article class="john-metric-card">
-              <span>总点击数</span>
-              <strong data-john-metric="clicks">2,290</strong>
-              <p><i data-lucide="mouse-pointer-click"></i><b data-john-metric-detail="ctr">点击率 10.3%</b></p>
-            </article>
-            <article class="john-metric-card">
-              <span>总转化次数</span>
-              <strong data-john-metric="conversions">229</strong>
-              <p><i data-lucide="target"></i><b data-john-metric-detail="conversion-rate">转化率 5.2%</b></p>
-            </article>
-          </div>
-
-          <section class="john-card john-dashboard-table-card" aria-labelledby="john-campaign-performance-title">
-            <header>
-              <h2 id="john-campaign-performance-title">Campaign 数据明细</h2>
-              <nav class="john-table-pagination" aria-label="Campaign 数据分页">
-                <button type="button" aria-label="上一页"><i data-lucide="chevron-left"></i></button>
-                <button type="button">1</button>
-                <button class="active" type="button" aria-current="page">2</button>
-                <button type="button">3</button>
-                <span aria-hidden="true">···</span>
-                <button type="button" aria-label="下一页"><i data-lucide="chevron-right"></i></button>
-              </nav>
-            </header>
-            <div class="john-dashboard-table-wrap">
-              <table class="john-dashboard-table">
-                <colgroup><col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col /><col /></colgroup>
-                <thead><tr><th>广告系列</th><th>产品线</th><th>投放国家</th><th>广告预算</th><th>费用</th><th>展示数</th><th>点击数</th><th>点击率</th><th>点击单价</th><th>转化次数</th><th>转化率</th><th>每次转化费用</th></tr></thead>
-                <tbody id="johnDashboardCampaignRows"></tbody>
-              </table>
-            </div>
-          </section>
-
-          <section class="john-card john-performance-card" aria-labelledby="john-performance-title">
-            <header>
-              <h2 id="john-performance-title">投放效果看板</h2>
-              <div class="john-performance-controls">
-                <label class="john-metric-select">
-                  <span class="sr-only">选择投放效果指标</span>
-                  <select id="johnDashboardMetricSelect" aria-label="选择投放效果指标">
-                    <option value="impressions">展示次数</option>
-                    <option value="clicks">点击次数</option>
-                    <option value="cost">费用</option>
-                    <option value="conversions">转化次数</option>
-                  </select>
-                  <i data-lucide="chevron-down" aria-hidden="true"></i>
-                </label>
-                <div class="john-range-tabs" role="tablist" aria-label="投放效果时间范围">
-                  <button type="button" role="tab" data-john-range="7">近 7 天</button>
-                  <button class="active" type="button" role="tab" data-john-range="14">近 14 天</button>
-                  <button type="button" role="tab" data-john-range="30">近 30 天</button>
-                </div>
-              </div>
-            </header>
-            <div class="john-performance-chart" id="johnPerformanceChart" role="img" aria-label="Campaign 投放效果趋势图"></div>
-            <div class="john-performance-legend" id="johnPerformanceLegend" aria-label="Campaign 图例"></div>
-          </section>
-
-          <section class="john-card john-insight-card john-dashboard-insight" aria-labelledby="john-insight-title">
-            <header>
-              <div>
-                <h2 id="john-insight-title">John 的优化建议</h2>
-                <p>基于 Campaign 的预算、点击率和转化效率生成可执行建议。</p>
-              </div>
-            </header>
-            <div class="john-insight-list" id="johnInsightList">
-              <article data-john-suggestion="budget-us"><span class="john-insight-icon"><i data-lucide="circle-dollar-sign"></i></span><div><strong>US 预算还可上调 12%</strong><span>CPA 低于均值 $3.8，且过去 3 天转化稳定。</span></div><div class="john-insight-actions"><button type="button" data-john-suggestion-action="ignore">忽略</button><button type="button" data-john-suggestion-action="accept">采纳 <i data-lucide="arrow-right"></i></button></div></article>
-              <article data-john-suggestion="budget-us-secondary"><span class="john-insight-icon"><i data-lucide="circle-dollar-sign"></i></span><div><strong>US 预算还可上调 12%</strong><span>CPA 低于均值 $3.8，且过去 3 天转化稳定。</span></div><div class="john-insight-actions"><button type="button" data-john-suggestion-action="ignore">忽略</button><button type="button" data-john-suggestion-action="accept">采纳 <i data-lucide="arrow-right"></i></button></div></article>
-              <article data-john-suggestion="budget-us-tertiary"><span class="john-insight-icon"><i data-lucide="circle-dollar-sign"></i></span><div><strong>US 预算还可上调 12%</strong><span>CPA 低于均值 $3.8，且过去 3 天转化稳定。</span></div><div class="john-insight-actions"><button type="button" data-john-suggestion-action="ignore">忽略</button><button type="button" data-john-suggestion-action="accept">采纳 <i data-lucide="arrow-right"></i></button></div></article>
-            </div>
-          </section>
-
+        <section id="johnPage" class="jn-app" aria-label="24/7 投流 John" hidden>
+          <div id="johnApp"></div>
+          <dialog id="johnDialog" class="jn-dialog" aria-labelledby="johnDialogTitle"></dialog>
         </section>
 
-        <section class="john-manage-page john-ads-page" id="johnAdsPage" aria-labelledby="john-ads-title" hidden>
-          <header class="john-manage-hero">
-            <button class="john-back" type="button" data-john-back><i data-lucide="arrow-left"></i>返回 John</button>
-            <div class="john-manage-title-row">
-              <div>
-                <h1 id="john-ads-title">广告投放管理</h1>
-                <p>广告系列负责投放范围、预算与排期；每个广告都必须归属于一个广告系列。</p>
-              </div>
-              <div class="john-manage-actions">
-                <button class="john-create-button john-create-button-secondary" type="button" data-john-create-flow data-john-flow-mode="existing"><i data-lucide="badge-plus"></i>新建广告</button>
-                <button class="john-create-button" type="button" data-john-create-flow data-john-flow-mode="new"><i data-lucide="circle-plus"></i>新建广告系列及广告</button>
-              </div>
-            </div>
-          </header>
-
-          <nav class="john-management-tabs" aria-label="广告投放管理分类">
-            <button class="active" type="button" data-john-management-tab="campaigns" aria-selected="true"><i data-lucide="folders"></i>广告系列管理 <span id="johnCampaignTabCount">0</span></button>
-            <button type="button" data-john-management-tab="ads" aria-selected="false"><i data-lucide="rectangle-ellipsis"></i>广告管理 <span id="johnAdTabCount">0</span></button>
-          </nav>
-
-          <section data-john-management-panel="campaigns">
-            <div class="john-campaign-summary" aria-label="广告系列概览">
-              <article><span>广告系列总数</span><strong id="johnCampaignTotal">0</strong></article>
-              <article><span>投放中</span><strong id="johnCampaignEnabled">0</strong></article>
-              <article><span>待完善 / 已暂停</span><strong id="johnCampaignPaused">0</strong></article>
-            </div>
-            <div class="john-ad-products" id="johnCampaignGroups" aria-live="polite"></div>
-          </section>
-
-          <section data-john-management-panel="ads" hidden>
-            <div class="john-ad-filterbar">
-              <label><span>所属广告系列</span><select id="johnAdCampaignFilter"><option value="all">全部广告系列</option></select></label>
-              <label><span>状态</span><select id="johnAdStatusFilter"><option value="all">全部状态</option><option value="enabled">已启用</option><option value="paused">已暂停</option></select></label>
-              <p id="johnAdResultCount">共 0 个广告</p>
-            </div>
-            <div class="john-ad-products" id="johnAdList" aria-live="polite"></div>
-          </section>
+        <section class="wendy-page" id="wendyPage" aria-label="社媒运营 Wendy" hidden>
+          <div id="wendyApp" class="wd-app"></div>
         </section>
 
-        <section class="john-create-flow" id="johnCreateFlowPage" aria-labelledby="john-flow-title" hidden>
-          <header class="john-flow-topbar">
-            <button type="button" data-john-flow-exit aria-label="返回 John"><i data-lucide="arrow-left"></i><span>返回</span></button>
-            <h1 id="john-flow-title">John 正在为您创建广告</h1>
-            <button type="button" data-john-flow-reset aria-label="重新开始"><i data-lucide="refresh-cw"></i><span>重新开始</span></button>
-          </header>
-
-          <div class="john-flow-shell">
-            <main class="john-flow-thread" aria-live="polite">
-              <section class="john-flow-step" id="johnFlowCampaignStep" data-john-flow-step="campaign">
-                <article class="john-flow-card john-flow-mode-card">
-                  <header><div><h2>选择投放到哪个广告系列</h2><p>可以复用已有系列，也可以从零配置新的投放范围</p></div></header>
-                  <div class="john-flow-mode-grid" role="radiogroup" aria-label="选择广告系列来源">
-                    <button type="button" role="radio" aria-checked="false" data-john-flow-mode="existing"><span><i data-lucide="folders"></i></span><div><strong>从已有广告系列开始</strong><small>复用已有范围、预算和系列关键词</small></div><i data-lucide="check"></i></button>
-                    <button type="button" role="radio" aria-checked="false" data-john-flow-mode="new"><span><i data-lucide="folder-plus"></i></span><div><strong>新建广告系列</strong><small>配置投放范围，并让 John 生成关键词</small></div><i data-lucide="check"></i></button>
-                  </div>
-                </article>
-
-                <article class="john-flow-card john-flow-existing-card" id="johnFlowExistingPanel" hidden>
-                  <header><div><h2>选择一个广告系列</h2><p>广告将继承该系列的域名、国家、预算和关键词</p></div></header>
-                  <div class="john-flow-campaign-list" id="johnFlowCampaignList"></div>
-                  <p class="john-flow-error" id="johnFlowExistingError" role="alert" hidden></p>
-                  <footer><button class="john-flow-primary" id="johnFlowUseCampaign" type="button">使用此广告系列</button></footer>
-                </article>
-
-                <article class="john-flow-card john-flow-new-card" id="johnFlowNewPanel" hidden>
-                  <header><div><h2>设置投放信息</h2><p>John 会根据这里的业务上下文生成系列级关键词</p></div></header>
-                  <div class="john-flow-form-grid">
-                    <label class="john-flow-field"><span>广告系列名称</span><input id="johnFlowCampaignName" type="text" maxlength="80" placeholder="请输入" /></label>
-                    <label class="john-flow-field"><span>独立站域名</span><input id="johnFlowDomain" type="url" placeholder="请输入，例如：www.baixyn.com" autocomplete="url" /></label>
-                    <fieldset class="john-flow-country-field">
-                      <legend>投放国家</legend>
-                      <div class="john-flow-country-select" id="johnFlowCountrySelect">
-                        <button class="john-flow-country-trigger" id="johnFlowCountryTrigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="johnFlowCountryMenu">
-                          <span id="johnFlowCountryValue">请选择</span><i data-lucide="chevron-down"></i>
-                        </button>
-                        <div class="john-flow-country-menu" id="johnFlowCountryMenu" role="listbox" aria-label="选择投放国家" aria-multiselectable="true" hidden>
-                          <div id="johnFlowCountryGrid"></div>
-                          <footer><span id="johnFlowCountryCount">尚未选择</span><button type="button" data-john-flow-country-done>完成</button></footer>
-                        </div>
-                      </div>
-                    </fieldset>
-                    <label class="john-flow-field"><span>产品线（可选）</span><select id="johnFlowProductLine"><option value="">全部产品</option><option>Solar Energy Storage</option><option>Commercial Battery</option><option>Home Battery</option><option>OEM Services</option></select></label>
-                  </div>
-                  <p class="john-flow-error" id="johnFlowCampaignError" role="alert" hidden></p>
-                  <footer><span id="johnFlowKeywordStaleNote" hidden>投放设置已变化，需要重新生成关键词。</span><button class="john-flow-primary" id="johnFlowStartKeywords" type="button"><i data-lucide="sparkles"></i>分析网站并生成关键词</button></footer>
-                </article>
-              </section>
-
-              <section class="john-flow-step" id="johnFlowKeywordStep" data-john-flow-step="keywords" hidden>
-                <div class="john-flow-agent-line"><span><i data-lucide="sparkles"></i></span><div><strong>我来分析网站并组织系列关键词</strong><p>我会持续展示分析依据，识别 B2B 采购意图，并把低价值流量整理为否定词。</p></div></div>
-                <article class="john-flow-card john-flow-keyword-card">
-                  <header><div><h2>这是我为广告系列整理的关键词</h2><p>同一系列下的所有广告都会共享这组关键词与否定词。</p></div><button class="john-flow-secondary" id="johnFlowRegenerateKeywords" type="button"><i data-lucide="refresh-cw"></i>重新生成</button></header>
-                  <div id="johnFlowKeywordWorkspace" aria-live="polite"></div>
-                  <p class="john-flow-error" id="johnFlowKeywordError" role="alert" hidden></p>
-                  <footer><button class="john-flow-secondary" type="button" data-john-flow-back="campaign"><i data-lucide="arrow-up"></i>修改投放设置</button><button class="john-flow-primary" id="johnFlowConfirmCampaign" type="button">确认广告系列并继续<i data-lucide="arrow-right"></i></button></footer>
-                </article>
-              </section>
-
-              <section class="john-flow-step" id="johnFlowScheduleStep" data-john-flow-step="schedule" hidden>
-                <article class="john-flow-card john-flow-schedule-card">
-                  <header><div><h2>设置投放排期和预算</h2><p>设置广告投放日期、时段与每日预算，灵活控制投放节奏和成本</p></div></header>
-                  <div class="john-flow-schedule-grid">
-                    <label class="john-flow-schedule-field"><span>开始日期</span><input id="johnFlowScheduleStartDate" type="date" /></label>
-                    <label class="john-flow-schedule-field"><span>结束日期（可选）</span><input id="johnFlowScheduleEndDate" type="date" /></label>
-                    <label class="john-flow-schedule-field john-flow-schedule-budget"><span>日预算</span><span class="john-flow-money-input"><b>$</b><input id="johnFlowScheduleBudget" type="number" min="1" step="1" inputmode="decimal" aria-describedby="johnFlowScheduleBudgetHint" /></span><small id="johnFlowScheduleBudgetHint">每日广告预算，最小值为 1，单位为美元</small></label>
-                  </div>
-                  <p class="john-flow-error" id="johnFlowScheduleError" role="alert" hidden></p>
-                  <footer><button class="john-flow-primary" id="johnFlowConfirmSchedule" type="button">确认创建广告系列</button></footer>
-                </article>
-              </section>
-
-              <section class="john-flow-step" id="johnFlowAdStep" data-john-flow-step="ad" hidden>
-                <div class="john-flow-agent-line"><span><i data-lucide="badge-plus"></i></span><div><strong>广告系列已就绪，开始创建广告</strong><p id="johnFlowAdContextCopy">广告会继承已确认的系列设置和关键词。</p></div></div>
-                <div class="john-flow-ad-layout">
-                  <article class="john-flow-card john-flow-ad-card">
-                    <header><div><h2>接下来我们来创建广告</h2><p>填写广告名称后生成广告素材。</p></div></header>
-                    <div class="john-flow-parent-summary" id="johnFlowAdParentSummary"></div>
-                    <label class="john-flow-field john-flow-field-wide"><span>广告名称</span><input id="johnFlowAdName" type="text" maxlength="80" placeholder="请输入" /></label>
-                    <button class="john-flow-generate-ad" id="johnFlowGenerateAd" type="button"><i data-lucide="sparkles"></i><span>生成广告素材</span></button>
-                    <p class="john-flow-error" id="johnFlowAdError" role="alert" hidden></p>
-                  </article>
-
-                  <div class="john-flow-ad-thinking" id="johnFlowAdThinking" aria-live="polite" hidden></div>
-
-                  <section class="john-flow-ad-result" id="johnFlowAdResult" hidden>
-                    <div class="john-flow-ad-complete-note"><i data-lucide="circle-check"></i><span>John 已生成广告素材对应的标题、描述和站内链接</span><i data-lucide="chevron-right"></i></div>
-                    <div class="john-flow-ad-assets" id="johnFlowAdAssets" hidden>
-                      <section class="john-flow-asset-section"><header><div><h3>广告标题</h3><p>John 已根据您网站的卖点写好了英文标题，也可以直接修改或补充。至少保留 1 条，每条不超过 30 个英文字符</p></div></header><div id="johnFlowHeadlineFields"></div><button class="john-flow-asset-add" type="button" data-john-flow-add-asset="headline"><i data-lucide="circle-plus"></i>添加标题</button></section>
-                      <section class="john-flow-asset-section"><header><div><h3>广告描述</h3><p>描述会显示在广告标题下方，向买家进一步介绍您的产品和服务</p></div></header><div id="johnFlowDescriptionFields"></div><button class="john-flow-asset-add" type="button" data-john-flow-add-asset="description"><i data-lucide="circle-plus"></i>添加描述</button></section>
-                      <section class="john-flow-asset-section"><header><div><h3>站内链接</h3><p>添加站内链接，引导用户快速访问网站中的重要页面</p></div></header><div class="john-flow-sitelinks" id="johnFlowSitelinkFields"></div><button class="john-flow-asset-add" type="button" data-john-flow-add-sitelink><i data-lucide="circle-plus"></i>添加站内链接</button></section>
-                    </div>
-                    <footer><button class="john-flow-primary" id="johnFlowCreateAd" type="button" disabled>创建并使用广告<i data-lucide="arrow-right"></i></button></footer>
-                  </section>
-
-                  <aside class="john-flow-preview" aria-label="Google 搜索广告实时预览">
-                    <header><div><span>实时预览</span><strong>Google 搜索广告</strong></div><button id="johnFlowPreviewToggle" type="button" aria-expanded="true" aria-label="关闭广告预览"><i data-lucide="x"></i></button></header>
-                    <article>
-                      <div class="john-flow-preview-content">
-                        <div class="john-preview-brand"><span>OZ</span><div><strong id="johnFlowPreviewBrand">Your Company</strong><small id="johnFlowPreviewUrl">https://yourcompany.com</small></div><b>⋮</b></div>
-                        <p class="john-preview-sponsored">赞助商广告</p>
-                        <h3 id="johnFlowPreviewHeadline">Custom Energy Solutions | Factory Direct</h3>
-                        <p id="johnFlowPreviewDescription">Reliable OEM manufacturing, strict quality control and global delivery support.</p>
-                        <div class="john-preview-links" id="johnFlowPreviewLinks"><span>Products</span><span>Contact Us</span></div>
-                      </div>
-                      <div class="john-flow-preview-skeleton" aria-hidden="true"><span class="brand"></span><span class="url"></span><span class="headline"></span><span class="headline short"></span><span class="copy"></span><span class="copy short"></span><span class="links"></span></div>
-                    </article>
-                    <div class="john-flow-preview-note"><i data-lucide="bot"></i><p><strong>John 会持续优化</strong><span>投放后自动监测预算、搜索词、地区与转化异常，并把可执行建议送到首页。</span></p></div>
-                  </aside>
-                </div>
-              </section>
-
-              <section class="john-flow-step" id="johnFlowCompleteStep" data-john-flow-step="complete" hidden>
-                <article class="john-flow-card john-flow-success-card">
-                  <div class="john-flow-success-icon"><i data-lucide="circle-check-big"></i></div>
-                  <span class="john-flow-eyebrow">创建完成</span>
-                  <h2>广告已创建</h2>
-                  <p>John 会持续监测预算、搜索词、地区与转化异常。</p>
-                  <div class="john-flow-success-summary" id="johnFlowSuccessSummary"></div>
-                  <div class="john-flow-success-actions"><button class="john-flow-secondary" id="johnFlowGoManage" type="button"><i data-lucide="chart-no-axes-combined"></i>去广告管理</button><button class="john-flow-primary" id="johnFlowContinueAd" type="button"><i data-lucide="plus"></i>继续创建广告</button></div>
-                </article>
-              </section>
-            </main>
-          </div>
-        </section>
-
-        <dialog class="john-campaign-dialog john-campaign-setup-dialog" id="johnCampaignSetupDialog" aria-labelledby="john-campaign-setup-title">
-          <form class="john-campaign-shell" id="johnCampaignSetupForm" method="dialog" novalidate>
-            <header class="john-campaign-dialog-header">
-              <div><p>Google Search · 投放设置</p><h2 id="john-campaign-setup-title">新建广告系列</h2></div>
-              <button class="john-dialog-close" type="button" data-john-campaign-close aria-label="关闭新建广告系列"><i data-lucide="x"></i></button>
-            </header>
-            <nav class="john-wizard-steps john-campaign-steps" aria-label="新建广告系列步骤">
-              <button class="active" type="button" data-john-campaign-step="0"><span>1</span>投放范围</button>
-              <button type="button" data-john-campaign-step="1"><span>2</span>预算排期</button>
-            </nav>
-            <div class="john-campaign-setup-main">
-              <section class="john-wizard-panel active" data-john-campaign-panel="0">
-                <div class="john-wizard-heading"><span>01</span><div><h3>设置广告系列的投放范围</h3><p>广告系列统一管理网站、目标市场和产品线，子广告会自动继承这些设置。</p></div></div>
-                <label class="john-field"><span>独立站域名</span><input id="johnCampaignDomain" type="url" placeholder="www.yourcompany.com" autocomplete="url" /></label>
-                <fieldset class="john-market-field"><legend>投放国家（可多选）</legend><div class="john-country-grid" id="johnCampaignCountryGrid"></div></fieldset>
-                <label class="john-field"><span>产品线（可选）</span><select id="johnCampaignProductLine"><option value="">全部产品</option><option>Solar Energy Storage</option><option>Commercial Battery</option><option>Home Battery</option><option>OEM Services</option></select></label>
-              </section>
-              <section class="john-wizard-panel" data-john-campaign-panel="1" hidden>
-                <div class="john-wizard-heading"><span>02</span><div><h3>设置预算与排期</h3><p>创建后广告系列先保持待完善状态；添加并启用至少一个广告后才能开始投放。</p></div></div>
-                <label class="john-field"><span>广告系列名称</span><input id="johnCampaignName" type="text" maxlength="80" placeholder="例如：US Solar Storage Search Campaign" /></label>
-                <div class="john-budget-fields"><label class="john-field"><span>开始日期</span><input id="johnCampaignStartDate" type="date" /></label><label class="john-field"><span>结束日期（可选）</span><input id="johnCampaignEndDate" type="date" /></label><label class="john-field john-budget-input"><span>日预算（USD）</span><div><b>$</b><input id="johnCampaignBudget" type="number" min="1" step="1" placeholder="100" /></div></label></div>
-              </section>
-              <p class="john-wizard-error" id="johnCampaignError" role="alert" hidden></p>
-            </div>
-            <footer class="john-wizard-footer"><span id="johnCampaignProgress">第 1 步，共 2 步</span><div><button class="john-button-secondary" id="johnCampaignBack" type="button" hidden>上一步</button><button class="john-button-primary" id="johnCampaignNext" type="button">下一步</button></div></footer>
-          </form>
-        </dialog>
-
-        <dialog class="john-campaign-dialog" id="johnCampaignDialog" aria-labelledby="john-campaign-dialog-title">
-          <form class="john-campaign-shell" id="johnCampaignForm" method="dialog" novalidate>
-            <header class="john-campaign-dialog-header">
-              <div>
-                <p>Google Search · 广告素材</p>
-                <h2 id="john-campaign-dialog-title">新建广告</h2>
-              </div>
-              <button class="john-dialog-close" type="button" data-john-dialog-close aria-label="关闭新建广告"><i data-lucide="x"></i></button>
-            </header>
-
-            <nav class="john-wizard-steps john-ad-steps" aria-label="新建广告步骤">
-              <button class="active" type="button" data-john-wizard-step="0"><span>1</span>关键词</button>
-              <button type="button" data-john-wizard-step="1"><span>2</span>广告文案</button>
-              <button type="button" data-john-wizard-step="2"><span>3</span>站内链接</button>
-              <button type="button" data-john-wizard-step="3"><span>4</span>宣传信息</button>
-            </nav>
-
-            <div class="john-wizard-layout">
-              <div class="john-wizard-main">
-                <section class="john-wizard-panel active" data-john-panel="0">
-                  <div class="john-wizard-heading"><span>01</span><div><h3>为广告生成独立关键词</h3><p>选择所属广告系列并命名广告，John 会基于系列范围生成该广告专属的关键词与否定词。</p></div></div>
-                  <label class="john-field"><span>所属广告系列</span><select id="johnAdCampaignSelect"></select></label>
-                  <label class="john-field"><span>广告名称</span><input id="johnAdName" type="text" maxlength="80" placeholder="例如：核心产品采购意图广告" /></label>
-                  <div class="john-parent-scope" id="johnAdParentScope"></div>
-                  <button class="john-analyze-button" id="johnAnalyzeButton" type="button"><i data-lucide="sparkles"></i>让 John 分析网站并生成关键词</button>
-                </section>
-
-                <section class="john-wizard-panel" data-john-panel="1" hidden>
-                  <div class="john-wizard-heading"><span>02</span><div><h3>审核 John 生成的英文广告文案</h3><p>保留最适合的标题和描述，内容会同步更新到右侧广告预览。</p></div></div>
-                  <div class="john-asset-block"><header><h4>广告标题</h4><span>最多 30 个字符</span></header><div id="johnHeadlineFields"></div><button type="button" data-john-add-asset="headline"><i data-lucide="plus"></i>添加标题</button></div>
-                  <div class="john-asset-block"><header><h4>广告描述</h4><span>最多 90 个字符</span></header><div id="johnDescriptionFields"></div><button type="button" data-john-add-asset="description"><i data-lucide="plus"></i>添加描述</button></div>
-                </section>
-
-                <section class="john-wizard-panel" data-john-panel="2" hidden>
-                  <div class="john-wizard-heading"><span>03</span><div><h3>补充高意图站内链接</h3><p>把访客直接带到产品、案例、质量与联系页面，缩短转化路径。</p></div></div>
-                  <div class="john-sitelink-list" id="johnSitelinkFields"></div>
-                  <div class="john-sitelink-actions">
-                    <button class="john-add-row" type="button" data-john-add-sitelink><i data-lucide="plus"></i>添加站内链接</button>
-                    <span id="johnSitelinkCount" aria-live="polite">0 / 6</span>
-                  </div>
-                </section>
-
-                <section class="john-wizard-panel" data-john-panel="3" hidden>
-                  <div class="john-wizard-heading"><span>04</span><div><h3>选择宣传信息</h3><p>用短卖点强调询价速度、样品、定制与质量能力。</p></div></div>
-                  <div class="john-callout-grid" id="johnCalloutFields"></div>
-                  <div class="john-inline-add"><input id="johnCalloutInput" maxlength="25" placeholder="输入英文宣传信息" /><button type="button" data-john-add-callout>添加</button></div>
-                </section>
-
-                <p class="john-wizard-error" id="johnWizardError" role="alert" hidden></p>
-              </div>
-
-              <aside class="john-wizard-side">
-                <section class="john-keyword-workspace" id="johnKeywordWorkspace" aria-label="关键词分析与编辑" aria-live="polite"></section>
-                <section class="john-ad-preview" id="johnAdPreview" aria-label="Google 搜索广告实时预览" hidden>
-                  <header><span>实时预览</span><strong>Google 搜索广告</strong></header>
-                  <article>
-                    <div class="john-preview-brand"><span>OZ</span><div><strong id="johnPreviewBrand">Your Company</strong><small id="johnPreviewUrl">https://yourcompany.com</small></div><b>⋮</b></div>
-                    <p class="john-preview-sponsored">赞助商广告</p>
-                    <h3 id="johnPreviewHeadline">Custom Energy Solutions | Factory Direct</h3>
-                    <p id="johnPreviewDescription">Reliable OEM manufacturing, strict quality control and global delivery support.</p>
-                    <div class="john-preview-links" id="johnPreviewLinks"><span>Products</span><span>Contact Us</span></div>
-                  </article>
-                  <div class="john-preview-note"><i data-lucide="bot"></i><p><strong>John 会持续优化</strong><span>投放后自动监测预算、搜索词、地区与转化异常，并把可执行建议送到首页。</span></p></div>
-                </section>
-              </aside>
-            </div>
-
-            <footer class="john-wizard-footer">
-              <span id="johnWizardProgress">第 1 步，共 4 步</span>
-              <div><button class="john-button-secondary" id="johnWizardBack" type="button" hidden>上一步</button><button class="john-button-primary" id="johnWizardNext" type="button">下一步</button></div>
-            </footer>
-          </form>
-        </dialog>
-
-        <section class="wendy-page" id="wendyPage" aria-labelledby="wendy-title" hidden>
-          <header class="wendy-hero">
-            <div class="wendy-hero-copy">
-              <p class="wendy-kicker">2026年6月23日 星期二</p>
-              <h1 class="agent-hero-title" id="wendy-title"><span class="agent-hero-title-en" lang="en">Wendy</span> 帮你持续运营海外社媒</h1>
-              <p class="agent-hero-subtitle">先规划一整个运营周期，再一次性生成多平台、多内容形式的发布计划。</p>
-              <div class="wendy-hero-actions" aria-label="Wendy快捷操作">
-                <button class="wendy-primary wendy-ai-generate-button" data-wendy-strategy-create type="button"><i data-lucide="calendar-range"></i>制定运营策略</button>
-                <button class="wendy-secondary wendy-quick-publish-button" data-wendy-open-publisher type="button"><i data-lucide="send"></i>快速发布</button>
-              </div>
-            </div>
-            <aside class="wendy-account-summary" aria-label="社媒账号绑定状态">
-              <div>
-                <span>已绑定社媒平台</span>
-                <strong>2<small>/4</small></strong>
-                <p id="wendyHomeAccountStatus">LinkedIn、Instagram 已绑定，2 个平台未授权</p>
-              </div>
-              <button class="wendy-account-manage" data-wendy-account-manage type="button"><i data-lucide="circle-user-round"></i>账号管理</button>
-            </aside>
-          </header>
-
-          <section class="wendy-plan-overview" id="wendyPlanOverview" aria-labelledby="wendy-plan-overview-title" hidden>
-            <div class="wendy-plan-overview-icon" aria-hidden="true"><i data-lucide="calendar-check-2"></i></div>
-            <div class="wendy-plan-overview-copy">
-              <span>正在执行的周期计划</span>
-              <h2 id="wendy-plan-overview-title">NOX 海外社媒增长计划</h2>
-              <p id="wendyPlanOverviewMeta">4 周 · 4 个平台 · 20 篇帖子</p>
-            </div>
-            <div class="wendy-plan-overview-progress">
-              <span><b id="wendyPlanReadyCount">20</b> 篇草稿已准备</span>
-              <div aria-hidden="true"><i></i></div>
-            </div>
-            <button data-wendy-open-active-plan type="button">查看计划<i data-lucide="arrow-right"></i></button>
-          </section>
-
-          <section class="wendy-calendar-shell" aria-label="Wendy发布日历">
-            <div class="wendy-calendar-toolbar">
-              <div class="wendy-range-controls" aria-label="日历日期控制">
-                <button class="wendy-icon-button" type="button" aria-label="上一段时间"><i data-lucide="chevron-left"></i></button>
-                <button class="wendy-text-button" type="button">今天</button>
-                <button class="wendy-icon-button" type="button" aria-label="下一段时间"><i data-lucide="chevron-right"></i></button>
-                <strong id="wendyCalendarRange">2026年7月13日 - 19日</strong>
-              </div>
-              <div class="wendy-view-controls">
-                <div class="wendy-segmented" role="tablist" aria-label="日历视图">
-                  <button class="active" data-wendy-calendar-view="week" type="button" role="tab" aria-selected="true">周</button>
-                  <button data-wendy-calendar-view="month" type="button" role="tab" aria-selected="false">月</button>
-                  <button data-wendy-calendar-view="list" type="button" role="tab" aria-selected="false">列表</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="wendy-calendar-subbar">
-              <p id="wendyCalendarHint"><i data-lucide="sparkles"></i>本周最佳发布窗口集中在周二至周四 10:00-16:00，已自动避开内容冲突。</p>
-              <div class="wendy-calendar-state-legend" aria-label="发布状态说明">
-                <span class="published"><i data-lucide="circle-check-big"></i>过去 · 已发送</span>
-                <span class="current"><i data-lucide="radio"></i>现在 · 待检查</span>
-                <span class="scheduled"><i data-lucide="clock-3"></i>未来 · 已排期</span>
-              </div>
-            </div>
-
-            <div class="wendy-week-calendar" data-wendy-calendar-panel="week">
-              <div class="wendy-week-header" aria-hidden="true">
-                <span>时间</span>
-                <strong>周一 7/13</strong>
-                <strong class="active">周二 7/14</strong>
-                <strong>周三 7/15</strong>
-                <strong>周四 7/16</strong>
-                <strong>周五 7/17</strong>
-                <strong>周六 7/18</strong>
-                <strong>周日 7/19</strong>
-              </div>
-
-              <div class="wendy-week-body">
-                <div class="wendy-time-axis" aria-hidden="true">
-                  <span>08:00</span><span>09:00</span><span>10:00</span><span>11:00</span>
-                  <span>12:00</span><span>13:00</span><span>14:00</span><span>15:00</span>
-                  <span>16:00</span><span>17:00</span><span>18:00</span><span>19:00</span>
-                  <span>20:00</span>
-                </div>
-                <div class="wendy-day-column" data-day="2026-07-13"></div>
-                <div class="wendy-day-column" data-day="2026-07-14"></div>
-                <div class="wendy-day-column" data-day="2026-07-15"></div>
-                <div class="wendy-day-column" data-day="2026-07-16"></div>
-                <div class="wendy-day-column" data-day="2026-07-17"></div>
-                <div class="wendy-day-column" data-day="2026-07-18"></div>
-                <div class="wendy-day-column" data-day="2026-07-19"></div>
-              </div>
-            </div>
-
-            <div class="wendy-month-calendar" data-wendy-calendar-panel="month" hidden>
-              <div class="wendy-month-weekdays" aria-hidden="true">
-                <span>周一</span><span>周二</span><span>周三</span><span>周四</span><span>周五</span><span>周六</span><span>周日</span>
-              </div>
-              <div class="wendy-month-grid" id="wendyMonthGrid" aria-label="2026年7月月视图"></div>
-            </div>
-
-            <div class="wendy-status-board" data-wendy-calendar-panel="list" hidden>
-              <div class="wendy-status-list" id="wendyStatusList"></div>
-            </div>
-          </section>
-
-          <div class="wendy-publisher" id="wendyPublisher" hidden>
-            <div class="wendy-publisher-backdrop" data-wendy-close-publisher></div>
-            <form class="wendy-publisher-panel" id="wendyPublisherPanel" aria-labelledby="wendyPublisherTitle">
-              <header>
-                <div>
-                  <h2 id="wendyPublisherTitle">快速发布</h2>
-                  <span id="wendyPublisherSubtitle">选择平台、内容、素材与排期，快速发布社媒内容</span>
-                </div>
-                <button class="wendy-icon-button" data-wendy-close-publisher type="button" aria-label="关闭"><i data-lucide="x"></i></button>
-              </header>
-              <div class="wendy-publisher-mode" id="wendyPublisherMode" hidden></div>
-              <div class="wendy-sent-preview" id="wendySentPreview" hidden></div>
-              <div class="wendy-publisher-body" id="wendyPublisherBody">
-                <section class="wendy-publisher-main" aria-label="Post内容设置">
-                  <div class="wendy-publisher-block">
-                    <div class="wendy-block-heading">
-                      <div>
-                        <strong>发布平台</strong>
-                        <span>选择要同步分发的平台</span>
-                      </div>
-                      <select id="wendyPublishPlatform" aria-label="主发布平台" hidden>
-                        <option>LinkedIn</option>
-                        <option>Instagram</option>
-                      </select>
-                    </div>
-                    <div class="wendy-platform-picker" aria-label="目标平台">
-                      <button class="active" data-wendy-platform-option="LinkedIn" type="button"><img class="wendy-social-icon" data-wendy-social-icon="linkedin" src="assets/LinkedIn.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" /><span>LinkedIn</span></button>
-                      <button data-wendy-platform-option="Instagram" type="button"><img class="wendy-social-icon" data-wendy-social-icon="instagram" src="assets/Instagram.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" /><span>Instagram</span></button>
-                    </div>
-                  </div>
-
-                  <div class="wendy-publisher-block">
-                    <div class="wendy-block-heading">
-                      <div>
-                        <strong>发布文案</strong>
-                        <span>编辑平台文案，或让 Wendy 基于素材生成</span>
-                      </div>
-                    </div>
-                    <label class="wendy-field wendy-caption-field">
-                      <textarea id="wendyPublishCopy" rows="7">Built for daily warehouse use, our Manual &amp; Electric Pallet Truck range is available in 2T, 3T and 5T capacities. A one-piece hydraulic cylinder, stamped fork, reinforced steel frame and CE certification deliver dependable handling with long-term value.</textarea>
-                      <button class="wendy-ai-button" data-wendy-generate-caption type="button"><i data-lucide="wand-sparkles"></i>AI 润色</button>
-                    </label>
-                  </div>
-
-                  <div class="wendy-publisher-block">
-                    <div class="wendy-block-heading">
-                      <div>
-                        <strong>素材</strong>
-                        <span>从资料库选择或上传图片、短视频</span>
-                      </div>
-                    </div>
-                    <div class="wendy-media-grid" aria-label="Post素材">
-                      <button class="upload selected" type="button"><i data-lucide="upload"></i><span>上传或从知识库选择</span></button>
-                    </div>
-                  </div>
-                </section>
-
-                <aside class="wendy-publisher-side" aria-label="排期与预览">
-                  <section class="wendy-publisher-block">
-                    <div class="wendy-block-heading">
-                      <div>
-                        <strong>发布时间</strong>
-                        <span>设置发布身份和发布时间</span>
-                      </div>
-                    </div>
-                    <div class="wendy-schedule-tabs" role="group" aria-label="发布方式">
-                      <button class="active" data-wendy-schedule-mode="now" type="button">立即发布</button>
-                      <button data-wendy-schedule-mode="schedule" type="button">定时发布</button>
-                    </div>
-                    <div class="wendy-date-time-row" id="wendyDateTimeRow" hidden>
-                      <div class="wendy-field wendy-picker-field">
-                        <span>日期</span>
-                        <button class="wendy-schedule-picker-trigger" id="wendyDatePickerTrigger" data-wendy-schedule-picker-trigger="date" type="button" aria-expanded="false" aria-controls="wendyDatePickerPopover">
-                          <i data-lucide="calendar-days"></i>
-                          <span id="wendyDatePickerLabel">2026年7月7日</span>
-                          <i data-lucide="chevron-down"></i>
-                        </button>
-                        <div class="wendy-schedule-picker-popover wendy-date-picker-popover" id="wendyDatePickerPopover" data-wendy-schedule-picker-popover="date" hidden>
-                          <div class="wendy-picker-calendar-header">
-                            <button data-wendy-schedule-month="previous" type="button" aria-label="上个月"><i data-lucide="chevron-left"></i></button>
-                            <strong id="wendyScheduleCalendarTitle">2026年7月</strong>
-                            <button data-wendy-schedule-month="next" type="button" aria-label="下个月"><i data-lucide="chevron-right"></i></button>
-                          </div>
-                          <div class="wendy-picker-calendar-weekdays" aria-hidden="true">
-                            <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
-                          </div>
-                          <div class="wendy-picker-calendar-grid" id="wendyScheduleCalendarGrid" role="grid" aria-label="选择发布日期"></div>
-                        </div>
-                      </div>
-                      <div class="wendy-field wendy-picker-field">
-                        <span>时间</span>
-                        <button class="wendy-schedule-picker-trigger" id="wendyTimePickerTrigger" data-wendy-schedule-picker-trigger="time" type="button" aria-expanded="false" aria-controls="wendyTimePickerPopover">
-                          <i data-lucide="clock-3"></i>
-                          <span id="wendyTimePickerLabel">10:30</span>
-                          <i data-lucide="chevron-down"></i>
-                        </button>
-                        <div class="wendy-schedule-picker-popover wendy-time-picker-popover" id="wendyTimePickerPopover" data-wendy-schedule-picker-popover="time" hidden>
-                          <strong>选择时间</strong>
-                          <div class="wendy-time-select-row">
-                            <label><span>时</span><select id="wendyScheduleHour" aria-label="小时"></select></label>
-                            <label><span>分</span><select id="wendyScheduleMinute" aria-label="分钟"></select></label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <input id="wendyPublishDate" type="hidden" value="2026-07-07" />
-                    <input id="wendyPublishClock" type="hidden" value="10:30:00" />
-                    <input id="wendyPublishTime" type="hidden" value="2026-07-07T10:30:00" />
-                  </section>
-
-                  <section class="wendy-publisher-block">
-                    <div class="wendy-block-heading">
-                      <div>
-                        <strong>预览</strong>
-                        <span>当前平台发布预览</span>
-                      </div>
-                    </div>
-                    <article class="wendy-publisher-preview" id="wendyPublisherPreview" aria-live="polite"></article>
-                  </section>
-                </aside>
-              </div>
-              <footer id="wendyPublisherFooter">
-                <button class="wendy-secondary" data-wendy-close-publisher type="button">取消</button>
-                <div class="wendy-publisher-footer-actions">
-                  <button class="wendy-secondary" data-wendy-save-draft type="button"><i data-lucide="save"></i>保存草稿</button>
-                  <button class="wendy-primary" data-wendy-schedule-post type="button"><i data-lucide="send"></i>发布</button>
-                </div>
-              </footer>
-            </form>
-          </div>
-        </section>
-
-        <section class="wendy-accounts-page" id="wendyAccountsPage" aria-labelledby="wendy-accounts-title" hidden>
-          <nav class="wendy-accounts-breadcrumb" aria-label="当前位置">
-            <button class="wendy-accounts-breadcrumb-back" data-wendy-back-home type="button">社媒运营 Wendy</button>
-            <i data-lucide="slash"></i>
-            <h1 id="wendy-accounts-title">账号管理</h1>
-          </nav>
-
-          <div class="wendy-account-list" id="wendyAccountList" aria-live="polite"></div>
-        </section>
-
-        <section class="wendy-agent-page" id="wendyAgentPage" aria-labelledby="wendy-agent-title" hidden>
-          <header class="wendy-agent-topbar">
-            <button class="wendy-agent-back" id="backFromWendyAgent" type="button" aria-label="返回社媒运营 Wendy">
-              <i data-lucide="arrow-left" aria-hidden="true"></i>
-              <span>返回 Wendy</span>
-            </button>
-            <h1 id="wendy-agent-title">制定周期社媒运营策略</h1>
-            <button class="wendy-agent-panel-button" data-wendy-strategy-reset type="button" aria-label="重新制定策略">
-              <i data-lucide="refresh-cw" aria-hidden="true"></i>
-            </button>
-          </header>
-
-          <div class="wendy-strategy-shell" id="wendyStrategyShell" data-step="brief">
-            <ol class="wendy-strategy-progress" aria-label="策略制定进度">
-              <li class="active" data-wendy-strategy-progress="brief"><span>1</span><div><strong>需求沟通</strong><small>明确周期与目标</small></div></li>
-              <li data-wendy-strategy-progress="review"><span>2</span><div><strong>策略与日历</strong><small>查看整期计划</small></div></li>
-              <li data-wendy-strategy-progress="sample"><span>3</span><div><strong>确认代表样稿</strong><small>1 个平台 · 1 篇帖子</small></div></li>
-              <li data-wendy-strategy-progress="complete"><span>4</span><div><strong>推广至全计划</strong><small>批量创建草稿</small></div></li>
-            </ol>
-
-            <section class="wendy-strategy-view wendy-strategy-brief-view" data-wendy-strategy-view="brief">
-              <div class="wendy-strategy-layout">
-                <main class="wendy-strategy-conversation" aria-labelledby="wendy-strategy-conversation-title">
-                  <header class="wendy-strategy-section-heading">
-                    <div>
-                      <span class="wendy-strategy-eyebrow">策略对话</span>
-                      <h2 id="wendy-strategy-conversation-title">告诉 Wendy 这段时间想达成什么</h2>
-                      <p>可以直接输入完整需求，也可以点击快捷选项逐步调整。</p>
-                    </div>
-                    <span class="wendy-strategy-status"><i data-lucide="sparkles"></i>实时理解需求</span>
-                  </header>
-
-                  <div class="wendy-strategy-messages" id="wendyStrategyMessages" aria-live="polite"></div>
-
-                  <div class="wendy-strategy-quick-groups" aria-label="策略快捷选项">
-                    <div class="wendy-strategy-dimension-progress" aria-live="polite">
-                      <div>
-                        <span id="wendyStrategyDimensionProgress">步骤 1/6</span>
-                        <strong id="wendyStrategyDimensionTitle">运营周期</strong>
-                      </div>
-                      <span aria-hidden="true"><i id="wendyStrategyDimensionBar"></i></span>
-                    </div>
-
-                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="0">
-                      <header><span>01</span><div><strong>运营周期</strong><small>选择计划覆盖时间</small></div></header>
-                      <div class="wendy-strategy-chips">
-                        <button data-wendy-strategy-option data-group="period" data-value="one_week" type="button">未来一周</button>
-                        <button class="selected" data-wendy-strategy-option data-group="period" data-value="one_month" type="button">未来一个月</button>
-                        <button data-wendy-strategy-option data-group="period" data-value="custom" type="button">自定义 3 周</button>
-                      </div>
-                    </section>
-
-                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="1" hidden>
-                      <header><span>02</span><div><strong>营销目标</strong><small>确认本周期主目标</small></div></header>
-                      <div class="wendy-strategy-chips">
-                        <button data-wendy-strategy-option data-group="goal" data-value="awareness" type="button">提升品牌认知</button>
-                        <button data-wendy-strategy-option data-group="goal" data-value="launch" type="button">新品推广</button>
-                        <button class="selected" data-wendy-strategy-option data-group="goal" data-value="leads" type="button">获取 B2B 线索</button>
-                        <button data-wendy-strategy-option data-group="goal" data-value="education" type="button">产品教育</button>
-                      </div>
-                    </section>
-
-                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="2" hidden>
-                      <header><span>03</span><div><strong>主推产品</strong><small>引用企业知识库资料</small></div></header>
-                      <div class="wendy-strategy-chips">
-                        <button class="selected" data-wendy-strategy-option data-group="product" data-value="pallet_truck" type="button">Manual &amp; Electric Pallet Truck</button>
-                        <button data-wendy-strategy-option data-group="product" data-value="brand" type="button">NOX 企业品牌</button>
-                      </div>
-                    </section>
-
-                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="3" hidden>
-                      <header><span>04</span><div><strong>内容方向</strong><small>可选择多个方向</small></div></header>
-                      <div class="wendy-strategy-chips">
-                        <button class="selected" data-wendy-strategy-option data-group="directions" data-value="product_value" data-multi="true" type="button">产品价值</button>
-                        <button class="selected" data-wendy-strategy-option data-group="directions" data-value="use_case" data-multi="true" type="button">应用场景</button>
-                        <button data-wendy-strategy-option data-group="directions" data-value="proof" data-multi="true" type="button">客户证明</button>
-                        <button data-wendy-strategy-option data-group="directions" data-value="industry" data-multi="true" type="button">行业洞察</button>
-                      </div>
-                    </section>
-
-                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="4" hidden>
-                      <header><span>05</span><div><strong>社媒渠道</strong><small>可选择多个平台</small></div></header>
-                      <div class="wendy-strategy-chips wendy-strategy-channel-chips">
-                        <button class="selected" data-wendy-strategy-option data-group="channels" data-value="LinkedIn" data-multi="true" type="button"><img src="assets/LinkedIn.svg" alt="" />LinkedIn</button>
-                        <button class="selected" data-wendy-strategy-option data-group="channels" data-value="Instagram" data-multi="true" type="button"><img src="assets/Instagram.svg" alt="" />Instagram</button>
-                        <button class="selected" data-wendy-strategy-option data-group="channels" data-value="TikTok" data-multi="true" type="button"><img src="assets/TikTok.svg" alt="" />TikTok</button>
-                        <button data-wendy-strategy-option data-group="channels" data-value="YouTube Shorts" data-multi="true" type="button"><img src="assets/YouTube.svg" alt="" />YouTube Shorts</button>
-                      </div>
-                    </section>
-
-                    <section class="wendy-strategy-quick-group" data-wendy-strategy-dimension="5" hidden>
-                      <header><span>06</span><div><strong>发布节奏</strong><small>所有平台每周合计</small></div></header>
-                      <div class="wendy-strategy-chips">
-                        <button data-wendy-strategy-option data-group="cadence" data-value="3" type="button">每周 3 篇</button>
-                        <button class="selected" data-wendy-strategy-option data-group="cadence" data-value="5" type="button">每周 5 篇</button>
-                        <button data-wendy-strategy-option data-group="cadence" data-value="7" type="button">每周 7 篇</button>
-                      </div>
-                    </section>
-
-                    <div class="wendy-strategy-dimension-actions">
-                      <button class="wendy-strategy-dimension-back" id="wendyStrategyDimensionPrevious" type="button" hidden><i data-lucide="arrow-left"></i>上一步</button>
-                      <span id="wendyStrategyDimensionHint">选择计划覆盖时间</span>
-                      <button class="wendy-strategy-dimension-next" id="wendyStrategyDimensionNext" type="button">下一步<i data-lucide="arrow-right"></i></button>
-                    </div>
-                  </div>
-
-                  <div class="wendy-strategy-composer">
-                    <textarea id="wendyStrategyInput" rows="3" maxlength="480" placeholder="例如：下个月主推托盘搬运车，希望获取欧美仓储客户线索，每周发 5 篇，LinkedIn 偏专业、TikTok 多做场景视频。"></textarea>
-                    <div>
-                      <span>⌘ / Ctrl + Enter 发送</span>
-                      <button id="wendyStrategySend" type="button"><i data-lucide="arrow-up"></i><span>发送给 Wendy</span></button>
-                    </div>
-                  </div>
-                </main>
-
-                <aside class="wendy-strategy-brief" aria-labelledby="wendy-strategy-brief-title">
-                  <header>
-                    <div><span>结构化 Brief</span><h2 id="wendy-strategy-brief-title">本周期需求</h2></div>
-                    <span class="complete"><i data-lucide="circle-check-big"></i>6/6</span>
-                  </header>
-                  <dl id="wendyStrategyBriefSummary"></dl>
-                  <div class="wendy-strategy-estimate">
-                    <span>预计内容规模</span>
-                    <strong id="wendyStrategyEstimate">20 篇帖子</strong>
-                    <small>确认策略前不会创建帖子或扣点</small>
-                  </div>
-                  <button class="wendy-strategy-primary" id="wendyGenerateStrategy" type="button"><i data-lucide="sparkles"></i>生成整期营销策略</button>
-                </aside>
-              </div>
-            </section>
-
-            <section class="wendy-strategy-view" data-wendy-strategy-view="review" hidden>
-              <header class="wendy-strategy-page-heading">
-                <div><span class="wendy-strategy-eyebrow">整期策略 V1</span><h2>NOX 海外社媒增长计划</h2><p id="wendyStrategyReviewSubtitle">未来一个月的多平台内容日历已生成。</p></div>
-                <button class="wendy-strategy-secondary" data-wendy-strategy-back="brief" type="button"><i data-lucide="message-square-more"></i>继续调整需求</button>
-              </header>
-              <div class="wendy-strategy-stats" id="wendyStrategyStats"></div>
-              <div class="wendy-strategy-review-grid">
-                <article class="wendy-strategy-card wendy-strategy-summary-card">
-                  <span class="wendy-strategy-eyebrow">策略主线</span>
-                  <h3 id="wendyStrategyHeadline">用真实场景与专业证明推动 B2B 询盘</h3>
-                  <p id="wendyStrategyNarrative"></p>
-                  <div class="wendy-strategy-pill-list" id="wendyStrategyPillars"></div>
-                </article>
-                <article class="wendy-strategy-card">
-                  <span class="wendy-strategy-eyebrow">渠道分工</span>
-                  <div class="wendy-strategy-channel-roles" id="wendyStrategyChannelRoles"></div>
-                </article>
-              </div>
-              <article class="wendy-strategy-card wendy-strategy-calendar-card">
-                <header><div><span class="wendy-strategy-eyebrow">内容日历</span><h3>整期发布计划</h3></div><span id="wendyStrategyCalendarCount">20 篇</span></header>
-                <div class="wendy-strategy-calendar-list" id="wendyStrategyCalendarList"></div>
-              </article>
-              <footer class="wendy-strategy-sticky-actions">
-                <div><strong>下一步只需确认 1 篇代表样稿</strong><span>确认后，Wendy 会把样稿规则推广到所有渠道和帖子。</span></div>
-                <button class="wendy-strategy-primary" id="wendyConfirmStrategy" type="button">确认策略，生成代表样稿<i data-lucide="arrow-right"></i></button>
-              </footer>
-            </section>
-
-            <section class="wendy-strategy-view" data-wendy-strategy-view="sample" hidden>
-              <header class="wendy-strategy-page-heading">
-                <div><span class="wendy-strategy-eyebrow">代表样稿确认</span><h2>只确认一个平台的一篇帖子</h2><p>这篇样稿的产品事实、语气、视觉方向和 CTA 将作为整期生成基准。</p></div>
-                <button class="wendy-strategy-secondary" data-wendy-strategy-back="review" type="button"><i data-lucide="arrow-left"></i>返回策略</button>
-              </header>
-              <div class="wendy-strategy-sample-grid">
-                <section class="wendy-strategy-sample-preview">
-                  <header><div><span id="wendySamplePlatformLabel">LinkedIn</span><strong id="wendySamplePostLabel">第 1 篇 · 产品价值</strong></div><span class="wendy-strategy-representative">代表样稿</span></header>
-                  <div id="wendyStrategySamplePreview"></div>
-                </section>
-                <aside class="wendy-strategy-sample-editor">
-                  <span class="wendy-strategy-eyebrow">确认标准</span>
-                  <h3>确认一次，应用到整期</h3>
-                  <p>当前只审核这 1 篇。确认后，Wendy 按平台差异自动改写其余文案与素材规格，不再逐篇确认。</p>
-                  <label for="wendyStrategySampleCopy"><span>样稿文案</span><textarea id="wendyStrategySampleCopy" rows="9"></textarea></label>
-                  <div class="wendy-strategy-sample-rules">
-                    <p><i data-lucide="badge-check"></i><span><strong>产品事实</strong>仅引用企业知识库资料</span></p>
-                    <p><i data-lucide="swatch-book"></i><span><strong>视觉方向</strong>工业场景、真实产品、清晰信息层级</span></p>
-                    <p><i data-lucide="mouse-pointer-click"></i><span><strong>统一 CTA</strong>引导访问独立站或提交询盘</span></p>
-                  </div>
-                  <button class="wendy-strategy-primary" id="wendyApproveSample" type="button"><i data-lucide="check-check"></i>确认样稿并推广到全计划</button>
-                  <small>确认后创建全部计划草稿；本 Demo 暂不处理异常与失败分支。</small>
-                </aside>
-              </div>
-            </section>
-
-            <section class="wendy-strategy-view" data-wendy-strategy-view="complete" hidden>
-              <div class="wendy-strategy-complete-card">
-                <span class="wendy-strategy-complete-icon"><i data-lucide="party-popper"></i></span>
-                <span class="wendy-strategy-eyebrow">策略已推广</span>
-                <h2>整期多平台草稿已准备</h2>
-                <p id="wendyStrategyCompleteText">代表样稿已扩展为 20 篇帖子，覆盖 3 个社媒平台。</p>
-                <div class="wendy-strategy-complete-metrics" id="wendyStrategyCompleteMetrics"></div>
-                <div class="wendy-strategy-complete-flow" aria-label="推广完成步骤">
-                  <span class="done"><i data-lucide="check"></i>确认 1 篇样稿</span><i data-lucide="arrow-right"></i>
-                  <span class="done"><i data-lucide="check"></i>适配全部平台</span><i data-lucide="arrow-right"></i>
-                  <span class="done"><i data-lucide="check"></i>创建整期草稿</span>
-                </div>
-                <button class="wendy-strategy-primary" id="wendyFinishStrategy" type="button">返回 Wendy 查看整期计划<i data-lucide="calendar-days"></i></button>
-              </div>
-            </section>
-          </div>
-
-          <div class="wendy-agent-thread" aria-live="polite" hidden>
-            <section class="wendy-plan-step" id="wendyPlanStep" aria-labelledby="wendy-plan-platform-title">
-              <section class="wendy-plan-card">
-                <header>
-                  <div>
-                    <h2 id="wendy-plan-platform-title">选择发布平台</h2>
-                    <p>选择 LinkedIn 或 Instagram 作为主发布平台</p>
-                  </div>
-                </header>
-                <div class="wendy-plan-platform-grid" role="group" aria-label="选择发布平台">
-                  <button class="wendy-plan-option selected linkedin" data-wendy-agent-platform="LinkedIn" type="button" aria-pressed="true">
-                    <img class="wendy-social-icon" data-wendy-social-icon="linkedin" src="assets/LinkedIn.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
-                    <span>LinkedIn</span>
-                  </button>
-                  <button class="wendy-plan-option instagram" data-wendy-agent-platform="Instagram" type="button" aria-pressed="false">
-                    <img class="wendy-social-icon" data-wendy-social-icon="instagram" src="assets/Instagram.svg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
-                    <span>Instagram</span>
-                  </button>
-                </div>
-              </section>
-
-              <section class="wendy-plan-card">
-                <header>
-                  <div>
-                    <h2>设定发布目标</h2>
-                    <p>告诉Wendy你想要发关于什么内容的社媒</p>
-                  </div>
-                </header>
-                <label class="wendy-plan-goal" for="wendyPromptInput">
-                  <textarea id="wendyPromptInput" rows="4" maxlength="360" placeholder="例如：发布一条新品上市社媒，强调产品价值、应用场景和独立站访问入口。"></textarea>
-                </label>
-              </section>
-
-              <section class="wendy-plan-card">
-                <header>
-                  <div>
-                    <h2>选择商品信息</h2>
-                    <p>选择本次发布需要引用的商品和资料来源</p>
-                  </div>
-                </header>
-                <div class="wendy-product-picker" id="wendyProductPicker">
-                  <button class="wendy-product-trigger" id="wendyProductTrigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="wendyProductOptions">
-                    <span class="wendy-product-thumbnail placeholder" aria-hidden="true"><i data-lucide="package-search"></i></span>
-                    <span class="wendy-product-trigger-copy">
-                      <strong>请选择商品</strong>
-                      <small>从商品库中选择本次内容引用的产品</small>
-                    </span>
-                    <i class="wendy-product-chevron" data-lucide="chevrons-up-down" aria-hidden="true"></i>
-                  </button>
-                  <div class="wendy-product-menu" id="wendyProductMenu" hidden>
-                    <div class="wendy-product-options" id="wendyProductOptions" role="listbox" aria-label="选择商品" aria-busy="true">
-                      <div class="wendy-product-status"><i data-lucide="loader-circle" aria-hidden="true"></i><span>正在加载商品信息…</span></div>
-                    </div>
-                  </div>
-                  <input id="wendyPlanProduct" name="wendyPlanProduct" type="hidden" />
-                </div>
-              </section>
-
-              <input id="wendyImageInput" type="file" accept="image/*" aria-label="上传社媒图片素材" multiple hidden />
-              <span class="wendy-upload-status" id="wendyUploadStatus" aria-live="polite"></span>
-
-              <button class="wendy-generate-plan" id="wendyGeneratePlan" type="button">
-                <i data-lucide="send"></i>
-                <span>生成方案</span>
-              </button>
-            </section>
-
-            <section class="wendy-thinking-thread" id="wendyThinkingThread">
-              <section class="wendy-thinking-card" id="wendyThinkingCard" aria-labelledby="wendy-thinking-title">
-                <div class="wendy-thinking-rail" aria-hidden="true">
-                  <i data-lucide="circle-check-big"></i>
-                  <span></span>
-                </div>
-                <div class="wendy-thinking-content">
-                  <button class="wendy-thinking-summary" id="wendyThinkingToggle" type="button" aria-expanded="true" aria-controls="wendyThinkingSteps">
-                    <span id="wendy-thinking-title">Wendy 正在分析社媒内容诉求</span>
-                    <i data-lucide="chevron-down" aria-hidden="true"></i>
-                  </button>
-                  <div class="wendy-thinking-steps" id="wendyThinkingSteps"></div>
-                </div>
-              </section>
-
-              <section class="wendy-thinking-result" id="wendyThinkingResult" hidden>
-                <header>
-                  <div>
-                    <h2>社媒生成方案</h2>
-                    <p>以营销方案为核心，补充必要的生成设置。</p>
-                  </div>
-                </header>
-
-                <section class="wendy-inline-visual" aria-labelledby="wendy-result-visual-title">
-                  <header>
-                    <div>
-                      <span class="wendy-result-label">视觉风格</span>
-                      <h3 id="wendy-result-visual-title">选择适合 <span id="wendyVisualPlatformName">LinkedIn</span> 的画面方向</h3>
-                      <p>选择后将应用到下方营销方案的海报生成。</p>
-                    </div>
-                    <button class="wendy-visual-upload" id="wendyPlanUpload" type="button">
-                      <i data-lucide="upload"></i>
-                      <span>上传自定义参考图</span>
-                    </button>
-                  </header>
-                  <div class="wendy-visual-grid" id="wendyVisualGrid" role="group" aria-label="选择视觉方案"></div>
-                  <article class="wendy-visual-detail" id="wendyVisualDetail" aria-live="polite">
-                    <span class="wendy-visual-detail-label" id="wendyVisualDetailLabel">LinkedIn 推荐</span>
-                    <div>
-                      <strong id="wendyVisualDetailTitle">冷白商业棚拍</strong>
-                      <p id="wendyVisualDetailDescription">高端、可信且清晰的 B2B 产品摄影方向。</p>
-                    </div>
-                  </article>
-                </section>
-
-                <article class="wendy-generation-composer" aria-labelledby="wendy-marketing-title">
-                  <div class="wendy-composer-heading">
-                    <span class="wendy-result-label">营销方案</span>
-                    <label id="wendy-marketing-title" for="wendyMarketingPlan">描述要营销的产品、需要凸显的认证与核心卖点</label>
-                    <p>内容越具体，生成的海报和 Post 越贴近营销目标。</p>
-                  </div>
-
-                  <textarea id="wendyMarketingPlan" rows="7" maxlength="420" required aria-required="true" placeholder="例如：营销「Manual &amp; Electric Pallet Truck」，凸显 2T / 3T / 5T 载重、CE 认证、一体式液压缸与冲压货叉。">营销「Manual &amp; Electric Pallet Truck」，凸显 2T / 3T / 5T 载重、CE 认证、一体式液压缸与冲压货叉。</textarea>
-
-                  <p class="wendy-composer-context"><span id="wendySpecPlatform">LinkedIn</span> · <span id="wendySpecLocations">适用于 Feed、方图、链接卡</span></p>
-
-                  <footer class="wendy-composer-toolbar">
-                    <div class="wendy-composer-controls">
-                      <details class="wendy-composer-menu wendy-compact-menu" id="wendyImageRatioMenu">
-                        <summary aria-label="选择图片规格" aria-describedby="wendySpecLocations">
-                          <i data-lucide="scan" aria-hidden="true"></i>
-                          <span id="wendyImageRatioLabel">图片 4:5</span>
-                          <i data-lucide="chevron-down" aria-hidden="true"></i>
-                        </summary>
-                        <div class="wendy-composer-popover wendy-compact-popover" id="wendyImageRatioOptions" role="listbox" aria-label="图片规格选项"></div>
-                      </details>
-
-                      <details class="wendy-composer-menu wendy-compact-menu" id="wendyLanguageMenu">
-                        <summary aria-label="选择 Post 语言" aria-describedby="wendyLanguageHint">
-                          <i data-lucide="languages" aria-hidden="true"></i>
-                          <span id="wendyLanguageLabel">英语 · en</span>
-                          <i data-lucide="chevron-down" aria-hidden="true"></i>
-                        </summary>
-                        <small id="wendyLanguageHint" class="wendy-sr-only">当前使用英语（en）生成 Post 文案</small>
-                        <div class="wendy-composer-popover wendy-compact-popover wendy-language-popover" id="wendyLanguageOptions" role="listbox" aria-label="Post 语言选项"></div>
-                      </details>
-
-                      <details class="wendy-composer-menu" id="wendyPosterRequirementsMenu">
-                        <summary>
-                          <i data-lucide="list-checks" aria-hidden="true"></i>
-                          <span>海报信息</span>
-                          <small id="wendyPosterRequirementCount">5 项</small>
-                          <i data-lucide="chevron-down" aria-hidden="true"></i>
-                        </summary>
-                        <div class="wendy-composer-popover wendy-poster-popover">
-                          <header>
-                            <strong id="wendy-poster-title">海报必含信息</strong>
-                            <span>必选，至少保留 1 项</span>
-                          </header>
-                          <ul class="wendy-poster-requirements" id="wendyPosterRequirementsList" aria-labelledby="wendy-poster-title"></ul>
-                        </div>
-                      </details>
-
-                    </div>
-
-                    <div class="wendy-composer-submit-group">
-                      <button class="wendy-composer-submit" data-wendy-agent-confirm type="button" aria-label="发送">
-                        <i data-lucide="arrow-up" aria-hidden="true"></i>
-                        <span>发送</span>
-                      </button>
-                      <small>本次预计消耗 289 点</small>
-                    </div>
-                  </footer>
-                </article>
-
-                <div class="wendy-result-notes">
-                  <p id="wendyGenerationSummary"><strong>预计生成：</strong>1 张 LinkedIn 海报（4:5）和 1 套英语 Post 文案。</p>
-                  <p><strong>事实依据：</strong>产品、认证和交付信息仅从上传素材与企业知识库引用；缺失信息不会由 AI 虚构。</p>
-                </div>
-              </section>
-
-              <section class="wendy-post-previews" id="wendyPostPreviews" aria-labelledby="wendy-post-preview-title" hidden>
-                <div class="wendy-single-preview" id="wendySinglePreview"></div>
-                <section class="wendy-image-reprompt" aria-labelledby="wendy-image-reprompt-title">
-                  <label for="wendyImageReprompt" id="wendy-image-reprompt-title">对生成的图片不满意，请告诉Wendy修改建议</label>
-                  <textarea id="wendyImageReprompt" rows="2" maxlength="280" placeholder="例如：让背景更干净，产品放大一些，增加海外仓应用场景"></textarea>
-                  <button id="wendyRegenerateImage" type="button">
-                    <i data-lucide="wand-sparkles"></i>
-                    <span>AI重新生图 <strong id="wendyImageRegenerateCount">0</strong>/8</span>
-                  </button>
-                </section>
-              </section>
-            </section>
-          </div>
-
-        </section>
-
-        <section class="lucas-page" id="lucasPage" aria-labelledby="lucas-title" hidden>
-          <header class="lucas-hero">
-            <div class="lucas-hero-copy">
-              <p class="lucas-kicker">智能体 / 专业建站 Lucas <span>资料待补充</span></p>
-              <h1 class="agent-hero-title" id="lucas-title">把企业故事和产品实力，做成一座会获客的网站</h1>
-              <p class="agent-hero-subtitle"><span lang="en">Lucas</span> 会先补齐企业信息、产品服务、案例信任与视觉素材，再生成更可信、更能转化的专业网站。</p>
-              <div class="lucas-hero-actions">
-                <button class="lucas-primary" id="lucasUploadHero" type="button"><i data-lucide="image-plus"></i>补充素材</button>
-                <button class="lucas-secondary" id="lucasOpenKnowledge" type="button"><i data-lucide="database"></i>查看企业知识库</button>
-              </div>
-            </div>
-
-            <aside class="lucas-progress-card" aria-label="知识库通过状态">
-              <div>
-                <span>知识库通过模块</span>
-                <strong><b id="lucasPassedCount">0</b> / 4</strong>
-              </div>
-              <div class="lucas-progress-track" aria-hidden="true"><i id="lucasProgressBar"></i></div>
-              <p id="lucasProgressCopy">还有 4 个模块未通过，生成前建议先补齐。</p>
-            </aside>
-          </header>
-
-          <div class="lucas-layout">
-            <section class="lucas-main">
-              <section class="lucas-card lucas-missing-card" aria-labelledby="lucas-missing-title">
-                <header class="lucas-section-header">
-                  <div>
-                    <h2 id="lucas-missing-title">缺失资料</h2>
-                    <p>未通过的模块会影响网站文案准确度、案例可信度或资质引用。</p>
-                  </div>
-                  <button class="lucas-icon-button" id="lucasRefreshAudit" type="button" aria-label="重新检测"><i data-lucide="refresh-cw"></i></button>
-                </header>
-
-                <div class="lucas-check-list" id="lucasCheckList">
-                  <article data-lucas-module="企业信息">
-                    <div><i data-lucide="building-2"></i><strong>企业信息</strong><small>公司介绍、联系方式、品牌口径和企业实力。</small></div>
-                    <button type="button">未提交</button>
-                  </article>
-                  <article data-lucas-module="产品管理">
-                    <div><i data-lucide="package-search"></i><strong>产品管理</strong><small>产品目录、主推产品、应用行业和产品素材。</small></div>
-                    <button class="needed" type="button">需补充</button>
-                  </article>
-                  <article data-lucas-module="客户案例">
-                    <div><i data-lucide="badge-check"></i><strong>客户案例</strong><small>客户案例、公开权限、项目成果与使用场景。</small></div>
-                    <button type="button">未提交</button>
-                  </article>
-                  <article data-lucas-module="资质认证">
-                    <div><i data-lucide="shield-check"></i><strong>资质认证</strong><small>证书、检测报告、合规文件和授权说明。</small></div>
-                    <button type="button">未提交</button>
-                  </article>
-                </div>
-
-                <button class="lucas-upload-zone" id="lucasUploadZone" type="button">
-                  <i data-lucide="upload-cloud"></i>
-                  <span>可上传 banner、工厂、产品、案例等图片素材。图片仅作为当前 demo 的建站素材记录，不会上传到后端。</span>
-                </button>
-              </section>
-
-              <section class="lucas-card lucas-builder-card" aria-labelledby="lucas-builder-title">
-                <header class="lucas-section-header">
-                  <div>
-                    <h2 id="lucas-builder-title">Lucas 建站工作流</h2>
-                    <p>补齐资料后，Lucas 会生成站点结构、页面文案、视觉建议和可发布草稿。</p>
-                  </div>
-                  <button class="lucas-primary" id="lucasGenerateSite" type="button"><i data-lucide="wand-sparkles"></i>生成网站草稿</button>
-                </header>
-                <div class="lucas-workflow">
-                  <article><span>01</span><strong>识别企业定位</strong><p>从知识库提取主营行业、品牌优势和目标客户。</p></article>
-                  <article><span>02</span><strong>规划网站结构</strong><p>生成首页、产品页、案例页、关于我们和询盘入口。</p></article>
-                  <article><span>03</span><strong>匹配视觉素材</strong><p>把图片素材分配到 Banner、产品展示和信任背书区域。</p></article>
-                </div>
-              </section>
-            </section>
-
-            <aside class="lucas-side">
-              <section class="lucas-card lucas-package-card" aria-labelledby="lucas-package-title">
-                <header class="lucas-side-header">
-                  <h2 id="lucas-package-title">建站资料包</h2>
-                  <p>以下资料包需要逐项补齐；结构化资料在知识库中维护，图片素材可在本页补充。</p>
-                </header>
-                <div class="lucas-package-grid">
-                  <article><i data-lucide="building-2"></i><strong>企业基础资料</strong><p>公司介绍、联系方式、品牌口径和企业实力。</p></article>
-                  <article><i data-lucide="boxes"></i><strong>产品与服务资料</strong><p>产品目录、主推产品、应用行业和产品素材。</p></article>
-                  <article><i data-lucide="handshake"></i><strong>案例与信任资料</strong><p>客户案例、公开权限、资质证书和检测报告。</p></article>
-                  <article><i data-lucide="images"></i><strong>网站视觉素材</strong><p>Banner、工厂、产品、案例和团队图片。</p></article>
-                </div>
-              </section>
-
-              <section class="lucas-card lucas-assets-card" aria-labelledby="lucas-assets-title">
-                <header class="lucas-side-header compact">
-                  <h2 id="lucas-assets-title">已补充素材</h2>
-                </header>
-                <div class="lucas-asset-summary" id="lucasAssetSummary">
-                  <span>尚未补充建站素材</span>
-                  <strong><b id="lucasAssetCount">0</b> 个文件</strong>
-                </div>
-                <div class="lucas-asset-list" id="lucasAssetList" aria-live="polite"></div>
-              </section>
-
-              <section class="lucas-card lucas-preview-card" aria-labelledby="lucas-preview-title">
-                <header class="lucas-side-header compact">
-                  <h2 id="lucas-preview-title">生成预览</h2>
-                  <span id="lucasPreviewStatus">等待资料</span>
-                </header>
-                <div class="lucas-site-preview">
-                  <div class="lucas-preview-browser">
-                    <span></span><span></span><span></span>
-                  </div>
-                  <div class="lucas-preview-hero">
-                    <strong>首页 Banner</strong>
-                    <p id="lucasPreviewCopy">资料补齐后，Lucas 会在这里生成首页首屏文案和素材建议。</p>
-                  </div>
-                </div>
-              </section>
-            </aside>
-          </div>
-        </section>
-
-        <section class="lucas-material-modal" id="lucasMaterialModal" role="dialog" aria-modal="true" aria-labelledby="lucas-material-title" hidden>
-          <div class="lucas-modal-panel">
-            <header class="lucas-modal-header">
-              <div>
-                <h2 id="lucas-material-title">补充建站素材</h2>
-                <p>为专业建站补充图片素材。建议按用途标注类型，便于后续生成网站时分配到 Banner、产品展示、案例背书或企业实力区域。</p>
-              </div>
-              <button class="lucas-modal-close" id="lucasMaterialClose" type="button" aria-label="关闭补充素材弹窗"><i data-lucide="x"></i></button>
-            </header>
-
-            <div class="lucas-modal-body">
-              <div class="lucas-material-chips" role="group" aria-label="常用素材类型">
-                <button type="button" data-material-type="Banner 图">Banner 图</button>
-                <button type="button" data-material-type="工厂 / 办公实拍图">工厂 / 办公实拍图</button>
-                <button type="button" data-material-type="产品合集图">产品合集图</button>
-                <button type="button" data-material-type="案例现场图">案例现场图</button>
-                <button type="button" data-material-type="团队 / 展会图">团队 / 展会图</button>
-              </div>
-
-              <label class="lucas-material-field">
-                <span>素材类型</span>
-                <input id="lucasMaterialType" type="text" placeholder="例如：Banner 图 / 实拍图 / 产品合集图" />
-              </label>
-
-              <label class="lucas-file-drop">
-                <span>请选择图片文件。可以一次上传多张，同一批图片会使用上方填写的素材类型。</span>
-                <input id="lucasMaterialFiles" type="file" accept="image/*" multiple />
-                <strong><i data-lucide="upload-cloud"></i>选择文件</strong>
-                <small id="lucasFileSummary">未选择任何文件</small>
-              </label>
-            </div>
-
-            <footer class="lucas-modal-footer">
-              <button class="lucas-secondary" id="lucasMaterialCancel" type="button">取消</button>
-              <button class="lucas-primary" id="lucasMaterialSave" type="button">保存素材</button>
-            </footer>
-          </div>
+        <section class="lucas-app" id="lucasPage" aria-label="Lucas 建站工作台" hidden>
+          <div id="lucasApp"><p>正在载入 Lucas 建站工作台…</p></div>
+          <dialog id="lucasDialog" class="lc-dialog" aria-labelledby="lcDialogTitle"></dialog>
         </section>
 
         <section class="core-page ontology-page" id="ontologyPage" aria-labelledby="ontology-title" hidden>
@@ -2323,83 +1201,149 @@
         </section>
 
         <section class="zoe-page-v2" id="zoePage" aria-labelledby="zoe-title" hidden>
-          <div class="zoe-overview zoe-overview-orbit" data-zoe-screen="overview">
-            <header class="zoe-hero-card">
+          <div class="zoe-overview zoe-overview-orbit agent-v2" id="zoeHome" data-agent="Zoe" data-zoe-screen="overview">
+            <header class="zoe-hero-card av2-header">
               <div class="zoe-hero-copy">
-                <h1 class="agent-hero-title" id="zoe-title"><span lang="en">Zoe</span> 让高质量客户持续进入客户池</h1>
-                <p class="agent-hero-subtitle">基于企业信息、产品关键词和目标市场，生成买家画像并扩展潜在客户名单。</p>
-                <div class="zoe-hero-actions">
-                  <button class="zoe-primary-action" type="button" data-zoe-new-task><i data-lucide="wand-sparkles"></i>创建新任务</button>
+                <p class="av2-identity"><i data-lucide="user-round-search"></i>搜索开发 Zoe <span>演示数据</span></p>
+                <h1 class="zoe-home-title" id="zoe-title">让高质量客户持续进入客户池</h1>
+                <p class="zoe-home-subtitle">基于企业信息、产品关键词和目标市场，生成买家画像并扩展潜在客户名单。</p>
+                <div class="zoe-hero-actions av2-page-actions">
+                  <button class="zoe-primary-action" type="button" data-zoe-new-task><i data-lucide="wand-sparkles"></i>创建获客任务</button>
                   <button class="zoe-secondary-action" type="button" data-zoe-task-detail><i data-lucide="send"></i>查看智能体日志</button>
                 </div>
               </div>
               <aside class="zoe-autopilot-status" aria-label="Zoe 运行状态">
                 <i aria-hidden="true"></i>
-                <span><strong>Zoe 已接管</strong><small>仅在需要时请你判断</small></span>
+                <span><strong>Zoe 正在自主工作</strong><small>3个任务正在自主执行</small></span>
               </aside>
             </header>
 
-            <div class="zoe-workbench">
-              <div class="zoe-primary-column">
+            <div class="zoe-workbench av2-columns">
+              <div class="zoe-primary-column av2-main">
                 <section class="zoe-metrics" aria-label="Zoe 今日获客结果">
                   <article>
-                    <span class="zoe-metric-icon"><i data-lucide="globe-2"></i></span>
-                    <div><span>全网搜索发现</span><strong><b id="zoeDiscoveryCount">86,420</b></strong><small>今日新增 12,486 条</small></div>
+                    <span class="zoe-metric-icon"><i data-lucide="globe"></i></span>
+                    <div><span>全网搜索发现</span><strong><b id="zoeDiscoveryCount">86,420</b></strong><small>每天自动找客户</small></div>
                   </article>
                   <article>
-                    <span class="zoe-metric-icon"><i data-lucide="globe-2"></i></span>
-                    <div><span>高质量线索</span><strong><b id="zoeLeadCount">4,720</b></strong><small>今日新增 386 条</small></div>
+                    <span class="zoe-metric-icon"><i data-lucide="target"></i></span>
+                    <div><span>高质量线索</span><strong><b id="zoeLeadCount">4,720</b></strong><small>当前任务通过率 12 %</small></div>
                   </article>
                 </section>
 
-                <section class="zoe-surface zoe-engine-card zoe-orbit-engine" aria-labelledby="zoe-engine-title">
-                  <h2 class="sr-only" id="zoe-engine-title">Zoe 自动获客链路</h2>
+                <section class="zoe-surface zoe-engine-card zoe-orbit-engine" aria-label="Agent 运行视图">
                   <div class="zoe-orbit-board">
+                    <svg class="zoe-orbit-motion" viewBox="0 0 1000 760" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                      <defs>
+                        <linearGradient id="zoe-orbit-edge-gradient" x1="0" x2="1">
+                          <stop offset="0" stop-color="#745cf6" />
+                          <stop offset=".52" stop-color="#478bea" />
+                          <stop offset="1" stop-color="#0ca39b" />
+                        </linearGradient>
+                        <radialGradient id="zoe-orbit-packet-fill">
+                          <stop offset="0" stop-color="#20d4c2" />
+                          <stop offset=".48" stop-color="#447ee8" />
+                          <stop offset="1" stop-color="#7458ed" />
+                        </radialGradient>
+                        <filter id="zoe-orbit-packet-glow" x="-200%" y="-200%" width="500%" height="500%">
+                          <feGaussianBlur result="blur" stdDeviation="5" />
+                          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                        </filter>
+                        <marker id="zoe-orbit-arrow" markerHeight="7" markerWidth="7" orient="auto-start-reverse" refX="9" refY="5" viewBox="0 0 10 10">
+                          <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b65df" />
+                        </marker>
+                      </defs>
+                      <g class="zoe-orbit-edges">
+                        <path d="M 538 214 C 514 226, 520 254, 548 266" />
+                        <path d="M 572 266 C 600 254, 606 226, 582 214" />
+                        <path d="M 150 492 C 158 450, 168 420, 182 395" />
+                        <path d="M 292 330 C 350 314, 410 314, 468 330" />
+                        <path d="M 652 330 C 684 316, 706 316, 738 330" />
+                        <path d="M 850 395 C 902 525, 810 640, 652 658" />
+                        <path d="M 468 658 C 346 716, 214 696, 118 528" />
+                      </g>
+                      <g>
+                        <circle fill="url(#zoe-orbit-packet-fill)" filter="url(#zoe-orbit-packet-glow)" opacity="0" r="5.5">
+                          <animateMotion begin="0s" calcMode="linear" dur="10.4s" keyPoints="0;1;1" keyTimes="0;.15;1" path="M 150 492 C 158 450, 168 420, 182 395" repeatCount="indefinite" />
+                          <animate attributeName="opacity" begin="0s" dur="10.4s" keyTimes="0;.02;.13;.15;1" repeatCount="indefinite" values="0;1;1;0;0" />
+                          <animate attributeName="r" begin="0s" dur="10.4s" keyTimes="0;.02;.13;.15;1" repeatCount="indefinite" values="2;5.5;5.5;2;2" />
+                        </circle>
+                        <circle fill="url(#zoe-orbit-packet-fill)" filter="url(#zoe-orbit-packet-glow)" opacity="0" r="5.5">
+                          <animateMotion begin="1.6s" calcMode="linear" dur="10.4s" keyPoints="0;1;1" keyTimes="0;.15;1" path="M 292 330 C 350 314, 410 314, 468 330" repeatCount="indefinite" />
+                          <animate attributeName="opacity" begin="1.6s" dur="10.4s" keyTimes="0;.02;.13;.15;1" repeatCount="indefinite" values="0;1;1;0;0" />
+                          <animate attributeName="r" begin="1.6s" dur="10.4s" keyTimes="0;.02;.13;.15;1" repeatCount="indefinite" values="2;5.5;5.5;2;2" />
+                        </circle>
+                        <circle fill="url(#zoe-orbit-packet-fill)" filter="url(#zoe-orbit-packet-glow)" opacity="0" r="5.5">
+                          <animateMotion begin="3.2s" calcMode="linear" dur="10.4s" keyPoints="0;1;1" keyTimes="0;.15;1" path="M 652 330 C 684 316, 706 316, 738 330" repeatCount="indefinite" />
+                          <animate attributeName="opacity" begin="3.2s" dur="10.4s" keyTimes="0;.02;.13;.15;1" repeatCount="indefinite" values="0;1;1;0;0" />
+                          <animate attributeName="r" begin="3.2s" dur="10.4s" keyTimes="0;.02;.13;.15;1" repeatCount="indefinite" values="2;5.5;5.5;2;2" />
+                        </circle>
+                        <circle fill="url(#zoe-orbit-packet-fill)" filter="url(#zoe-orbit-packet-glow)" opacity="0" r="5.5">
+                          <animateMotion begin="4.8s" calcMode="linear" dur="10.4s" keyPoints="0;1;1" keyTimes="0;.15;1" path="M 850 395 C 902 525, 810 640, 652 658" repeatCount="indefinite" />
+                          <animate attributeName="opacity" begin="4.8s" dur="10.4s" keyTimes="0;.02;.13;.15;1" repeatCount="indefinite" values="0;1;1;0;0" />
+                          <animate attributeName="r" begin="4.8s" dur="10.4s" keyTimes="0;.02;.13;.15;1" repeatCount="indefinite" values="2;5.5;5.5;2;2" />
+                        </circle>
+                        <circle fill="url(#zoe-orbit-packet-fill)" filter="url(#zoe-orbit-packet-glow)" opacity="0" r="5.5">
+                          <animateMotion begin="7.2s" calcMode="linear" dur="10.4s" keyPoints="0;1;1" keyTimes="0;.15;1" path="M 468 658 C 346 716, 214 696, 118 528" repeatCount="indefinite" />
+                          <animate attributeName="opacity" begin="7.2s" dur="10.4s" keyTimes="0;.02;.13;.15;1" repeatCount="indefinite" values="0;1;1;0;0" />
+                          <animate attributeName="r" begin="7.2s" dur="10.4s" keyTimes="0;.02;.13;.15;1" repeatCount="indefinite" values="2;5.5;5.5;2;2" />
+                        </circle>
+                      </g>
+                    </svg>
+                    <div class="zoe-orbit-activity" aria-hidden="true">
+                      <i class="zoe-orbit-stage-pulse is-strategy"></i>
+                      <i class="zoe-orbit-stage-pulse is-search"></i>
+                      <i class="zoe-orbit-stage-pulse is-screening"></i>
+                      <i class="zoe-orbit-stage-pulse is-iteration"></i>
+                      <i class="zoe-orbit-ontology-pulse"></i>
+                      <i class="zoe-orbit-source-pulse"></i>
+                    </div>
                     <div class="zoe-orbit-glow" aria-hidden="true"></div>
                     <div class="zoe-orbit-loop zoe-orbit-loop-outer" aria-hidden="true"></div>
                     <div class="zoe-orbit-loop zoe-orbit-loop-inner" aria-hidden="true"></div>
 
                     <article class="zoe-keyword-pulse" aria-label="当前买家搜索任务">
-                      <strong>High Temperature Equipment...</strong>
-                      <span><i></i>累计找到客户</span>
-                      <b>通过率 待统计</b>
+                      <strong>Solar Power System Man...</strong>
+                      <span><i></i><em>716</em> 累计找到客户</span>
+                      <b>通过率 <em>38.11</em></b>
                     </article>
 
                     <section class="zoe-source-orchestrator" aria-label="全网搜索编排状态">
                       <div class="zoe-source-map" aria-hidden="true">
-                        <span class="zoe-source-core">ZOE<small>GLOBAL SEARCH</small></span>
-                        <i class="source-one" data-lucide="search"></i>
-                        <i class="source-two" data-lucide="briefcase-business"></i>
-                        <i class="source-three" data-lucide="messages-square"></i>
-                        <i class="source-four" data-lucide="newspaper"></i>
-                        <i class="source-five" data-lucide="globe-2"></i>
+                        <span class="zoe-source-core">ZOE<small>PUBLIC WEB</small></span>
+                        <span class="zoe-source-node source-one"><i data-lucide="search"></i><small>Yandex</small></span>
+                        <span class="zoe-source-node source-two"><img src="assets/Facebook.svg" alt="" /><small>Facebook</small></span>
+                        <span class="zoe-source-node source-three"><img src="assets/X.svg" alt="" /><small>X</small></span>
+                        <span class="zoe-source-node source-four"><i data-lucide="message-circle"></i><small>Twitter</small></span>
+                        <span class="zoe-source-node source-five"><img src="assets/LinkedIn.svg" alt="" /><small>LinkedIn</small></span>
+                        <span class="zoe-source-node source-six"><i data-lucide="search"></i><small>Google</small></span>
                       </div>
                       <article class="zoe-search-monitor">
                         <header><i></i><strong>ZOE 全网规划搜索中</strong></header>
-                        <div><span class="zoe-search-brand"><i data-lucide="scan-search"></i></span><b>多源商业信号</b></div>
-                        <p>已检索完整全网买家发现</p>
-                        <strong><b>42</b> 条</strong>
+                        <div><span class="zoe-search-brand"><i data-lucide="search"></i></span><b>Yandex</b></div>
+                        <p>已免费为您全网搜索发现</p>
+                        <strong><b>14,990</b> 条</strong>
                       </article>
                     </section>
 
                     <article class="zoe-realtime-push" aria-label="实时线索推送">
                       <header><strong>实时判断</strong><i></i></header>
-                      <div><span><i data-lucide="handshake"></i></span><p><strong>Aurora Hospitality</strong><small>美国 · 高端酒店采购</small><b>匹配画像且出现翻新信号</b></p><em>高匹配</em></div>
-                      <small>进入高质量线索池</small>
+                      <div><span><i data-lucide="trash-2"></i></span><p><strong>SYSLINK TECH...</strong><small>印度　http://www.sysl...</small><b>产品信息不明确或不匹配，建议过滤</b></p><em>已解除</em></div>
+                      <small>本条不会进入客户池</small>
                     </article>
 
-                    <div class="zoe-ontology-node" aria-label="企业本体持续提供业务理解">
+                    <section class="zoe-ontology-node" aria-label="企业本体持续提供业务理解">
                       <span><i data-lucide="brain-circuit"></i></span>
                       <small>ENTERPRISE ONTOLOGY</small>
                       <strong>企业本体</strong>
                       <p>持续学习并提供业务理解</p>
-                    </div>
+                    </section>
 
                     <ol class="zoe-stage-tabs zoe-orbit-stages" role="tablist" aria-label="获客链路阶段">
-                      <li><button class="active" type="button" role="tab" aria-selected="true" data-zoe-stage="0"><i class="zoe-stage-card-icon" data-lucide="brain-circuit"></i><span>01 · STRATEGY</span><strong>买家开发策略</strong><small>自动运行中</small></button></li>
-                      <li><button type="button" role="tab" aria-selected="false" data-zoe-stage="1"><i class="zoe-stage-card-icon" data-lucide="radar"></i><span>02 · SEARCH</span><strong>全网实时搜索</strong><small>自动运行中</small></button></li>
-                      <li><button type="button" role="tab" aria-selected="false" data-zoe-stage="2"><i class="zoe-stage-card-icon" data-lucide="scan-search"></i><span>03 · SCREENING</span><strong>AI 高潜力买家筛选</strong><small>自动运行中</small></button></li>
-                      <li><button type="button" role="tab" aria-selected="false" data-zoe-stage="3"><i class="zoe-stage-card-icon" data-lucide="refresh-cw"></i><span>04 · ITERATION</span><strong>自主策略迭代</strong><small>自动运行中</small></button></li>
+                      <li><section class="zoe-stage-node"><button class="active" type="button" role="tab" aria-selected="true" data-zoe-stage="0"><i class="zoe-stage-card-icon" data-lucide="brain-circuit"></i><span>01 · STRATEGY</span><strong>买家开发策略</strong><small>自动运行中</small></button></section></li>
+                      <li><section class="zoe-stage-node"><button type="button" role="tab" aria-selected="false" data-zoe-stage="1"><i class="zoe-stage-card-icon" data-lucide="radar"></i><span>02 · SEARCH</span><strong>全网实时搜索</strong><small>自动运行中</small></button></section></li>
+                      <li><section class="zoe-stage-node"><button type="button" role="tab" aria-selected="false" data-zoe-stage="2"><i class="zoe-stage-card-icon" data-lucide="scan-search"></i><span>03 · SCREENING</span><strong>AI 高潜力买家筛选</strong><small>自动运行中</small></button></section></li>
+                      <li><section class="zoe-stage-node"><button type="button" role="tab" aria-selected="false" data-zoe-stage="3"><i class="zoe-stage-card-icon" data-lucide="refresh-cw"></i><span>04 · ITERATION</span><strong>自主策略迭代</strong><small>自动运行中</small></button></section></li>
                     </ol>
 
                     <article class="zoe-stage-detail" aria-live="polite" hidden>
@@ -2412,35 +1356,28 @@
 
               </div>
 
-              <aside class="zoe-agent-chat" id="zoeAgentChat" aria-label="与 Zoe 协作">
+              <aside class="zoe-agent-chat zoe-copilot av2-collab" id="zoeAgentChat" aria-label="Zoe Copilot">
                 <div class="zoe-chat-rail">
                   <button type="button" data-zoe-chat-expand aria-label="展开 Zoe 协作侧栏"><i data-lucide="message-square-more"></i><span id="zoeChatRailBadge">1</span></button>
                 </div>
                 <section class="zoe-chat-shell">
                   <header class="zoe-chat-header">
-                    <div class="zoe-chat-agent"><span><strong>Zoe 协作助手</strong><small><i></i>正在为你持续获客</small></span></div>
-                    <button type="button" data-zoe-chat-collapse aria-label="收起 Zoe 协作侧栏"><i data-lucide="panel-right-close"></i></button>
+                    <h2>与 Zoe 协作</h2>
+                    <button type="button" data-zoe-chat-collapse data-av2-close aria-label="收起 Zoe Copilot"><i data-lucide="panel-right-close"></i></button>
                   </header>
 
-                  <div class="zoe-chat-context"><span>当前上下文</span><button type="button" data-zoe-chat-card="task">北美高端酒店买家发现<i data-lucide="chevron-down"></i></button></div>
+                  <div class="zoe-chat-context" hidden><span>当前上下文</span><button type="button" data-zoe-chat-card="task">北美高端酒店买家发现<i data-lucide="chevron-down"></i></button></div>
+
+                  <div class="zoe-chat-stream av2-stream" id="zoeChatStream" role="log" aria-live="polite" aria-relevant="additions text"></div>
 
                   <nav class="zoe-chat-quick-actions" aria-label="快速查看业务卡片">
-                    <button type="button" data-zoe-chat-card="task"><i data-lucide="activity"></i><span>任务进度</span></button>
-                    <button type="button" data-zoe-chat-card="review"><i data-lucide="scan-search"></i><span>画像判断</span><b id="zoeReviewCount">9</b></button>
-                    <button type="button" data-zoe-chat-card="strategy"><i data-lucide="sparkles"></i><span>策略优化</span><b id="zoeStrategyCount">2</b></button>
-                    <button type="button" data-zoe-chat-card="leads"><i data-lucide="building-2"></i><span>线索发现</span><b>3</b></button>
+                    <button type="button" data-zoe-chat-card="task"><i data-lucide="clipboard-list"></i><span>查看任务</span></button>
+                    <button type="button" data-zoe-chat-card="review"><i data-lucide="clipboard-list"></i><span>客户画像</span><b id="zoeReviewCount" hidden>4</b></button>
+                    <button type="button" data-zoe-chat-card="strategy"><i data-lucide="clipboard-list"></i><span>策略画像</span><b id="zoeStrategyCount" hidden>2</b></button>
+                    <img src="assets/zoe-copilot-mascot.png" alt="" />
                   </nav>
-
-                  <div class="zoe-chat-stream" id="zoeChatStream" role="log" aria-live="polite" aria-relevant="additions text">
-                    <article class="zoe-chat-message zoe-chat-message-agent">
-                      <div><p>欢迎回来。我会在这里同步需要你了解或确认的获客动态，也可以直接告诉我你想查看什么。</p><time>刚刚</time></div>
-                    </article>
-                  </div>
-
                   <form class="zoe-chat-composer" id="zoeChatComposer">
-                    <label for="zoeChatInput">和 Zoe 说点什么</label>
-                    <div><input id="zoeChatInput" type="text" autocomplete="off" placeholder="例如：切换到欧洲经销任务" /><button type="submit" aria-label="发送消息"><i data-lucide="arrow-up"></i></button></div>
-                    <small>Zoe 可能会出错，关键决策请以业务数据为准。</small>
+                    <div class="av2-prompt-box"><label for="zoeChatInput">和 Zoe 说点什么</label><input id="zoeChatInput" type="text" autocomplete="off" placeholder="例如：我要开发英国的客户" /><footer><button type="submit" aria-label="发送消息" aria-disabled="true" disabled><span>发送</span><i data-lucide="send"></i></button></footer></div>
                   </form>
                 </section>
               </aside>
@@ -2714,19 +1651,29 @@ John</textarea></label>
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"><i data-lucide="circle-check" aria-hidden="true"></i><span></span></div>
+    <template id="lucasSiteDocument"><!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Lucas · Website Preview</title><link rel="icon" href="/assets/favicon.svg"><link rel="stylesheet" href="/css/lucas-site.css"></head><body><div id="siteRoot"></div><script src="/js/lucas-site.js?v=published-inquiry-1"></script></body></html></template>
     <script src="assets/lucide.min.js"></script>
     <script src="js/data.js?v=inquiry-company-detail-1"></script>
     <script src="js/shared.js?v=professional-static-4"></script>
-    <script src="js/lily.js?v=lily-home-figma-935-1"></script>
-    <script src="js/route.js?v=inquiry-main-flow-2"></script>
-    <script src="js/ontology.js?v=buyer-strategy-1"></script>
+    <script src="js/inquiry-data.js?v=inquiry-channels-1"></script>
+    <script src="js/lily.js?v=inquiry-channels-1"></script>
+    <script src="js/route.js?v=john-demo-041"></script>
+    <script src="js/ontology.js?v=lucas-mock-1"></script>
     <script src="js/ontology-strategy.js?v=buyer-strategy-1"></script>
     <script src="js/keyword-validation.js?v=keyword-validation-history-1"></script>
-    <script src="js/zoe.js?v=zoe-chat-no-avatar-1"></script>
+    <script src="js/zoe.js?v=agent-responsive-v83"></script>
     <script src="js/leo.js?v=exhibition-marketing-4"></script>
-    <script src="js/wendy.js?v=professional-static-14"></script>
-    <script src="js/john.js?v=john-create-flow-23"></script>
-    <script src="js/lucas.js?v=professional-static-4"></script>
-    <script src="js/main.js?v=john-create-flow-2"></script>
+    <script src="assets/gsap.min.js"></script>
+    <script src="js/agent-home-layout.js?v=foundations-2"></script>
+    <script src="js/wendy.js?v=wendy-home-v85"></script>
+    <script src="js/john-data.js?v=demo-041"></script>
+    <script src="js/john.js?v=demo-041-nav-2"></script>
+    <script src="js/lucas-site.js?v=published-inquiry-1"></script>
+    <script src="js/lucas-reference.js?v=dashboard-mock-1"></script>
+    <script src="js/lucas-flow.js?v=headerless-1"></script>
+    <script src="js/lucas-carousel.js?v=autoplay-2"></script>
+    <script src="js/lucas-benchmark.js?v=benchmark-1"></script>
+    <script src="js/lucas.js?v=benchmark-1"></script>
+    <script src="js/main.js?v=john-demo-041"></script>
   </body>
 </html>

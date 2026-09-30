@@ -1,3 +1,4 @@
+/* Canonical Zoe stylesheet. Keep every page rule on a zoe-* selector or under .zoe-page-v2. */
 .zoe-page-v2 {
   min-height: 100vh;
   padding: 24px;
@@ -29,7 +30,7 @@ body.zoe-dialog-open {
   border: 1px solid var(--oz-slate-200);
   border-radius: 16px;
   background: var(--oz-white);
-  box-shadow: 0 1px 2px var(--oz-slate-900-4);
+  box-shadow: var(--oz-shadow-xs);
 }
 
 .zoe-hero-card {
@@ -51,9 +52,10 @@ body.zoe-dialog-open {
   gap: 7px;
   margin: 0 0 12px;
   color: var(--oz-indigo-600);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .06em;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-semibold);
+  letter-spacing: var(--oz-tracking-wider);
 }
 
 .zoe-eyebrow svg {
@@ -61,21 +63,21 @@ body.zoe-dialog-open {
   height: 16px;
 }
 
-.zoe-hero-copy h1,
+.zoe-home-title,
 .zoe-create-header h1 {
   margin: 0;
   font-size: clamp(28px, 3vw, 42px);
   line-height: 1.18;
-  letter-spacing: -.035em;
+  letter-spacing: var(--oz-tracking-tight);
 }
 
-.zoe-hero-copy > p:not(.zoe-eyebrow),
+.zoe-home-subtitle,
 .zoe-create-header > div > p {
   max-width: 680px;
   margin: 14px 0 0;
   color: var(--oz-slate-600);
-  font-size: 15px;
-  line-height: 24px;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
 }
 
 .zoe-hero-actions {
@@ -94,8 +96,9 @@ body.zoe-dialog-open {
   gap: 8px;
   padding: 0 16px;
   border-radius: 9px;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-semibold);
   text-decoration: none;
 }
 
@@ -103,7 +106,7 @@ body.zoe-dialog-open {
   border: 1px solid var(--oz-indigo-600);
   color: var(--oz-white);
   background: var(--oz-indigo-600);
-  box-shadow: 0 6px 16px var(--oz-indigo-500-18);
+  box-shadow: var(--oz-shadow-md);
 }
 
 .zoe-primary-action:hover {
@@ -135,7 +138,7 @@ body.zoe-dialog-open {
   border: 1px solid var(--oz-indigo-200);
   border-radius: 14px;
   background: var(--oz-white-82);
-  box-shadow: 0 12px 32px var(--oz-indigo-500-8);
+  box-shadow: var(--oz-shadow-xl);
 }
 
 .zoe-autopilot-status > span,
@@ -145,8 +148,9 @@ body.zoe-dialog-open {
   align-items: center;
   gap: 7px;
   color: var(--oz-emerald-700);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-semibold);
 }
 
 .zoe-autopilot-status > span i,
@@ -157,14 +161,14 @@ body.zoe-dialog-open {
   height: 8px;
   border-radius: 50%;
   background: var(--oz-emerald-500);
-  box-shadow: 0 0 0 4px var(--oz-emerald-100);
+  box-shadow: var(--oz-shadow-xl);
 }
 
 .zoe-autopilot-status > strong {
   display: block;
   margin: 20px 0 4px;
-  font-size: 32px;
-  line-height: 40px;
+  font-size: var(--oz-text-lg);
+  line-height: var(--oz-leading-lg);
   letter-spacing: -.03em;
 }
 
@@ -173,8 +177,8 @@ body.zoe-dialog-open {
   display: block;
   margin: 0;
   color: var(--oz-slate-600);
-  font-size: 12px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-autopilot-status small {
@@ -203,7 +207,8 @@ body.zoe-dialog-open {
 .zoe-task-current > span,
 .zoe-create-summary > span {
   color: var(--oz-slate-500);
-  font-size: 12px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-metrics strong {
@@ -220,7 +225,8 @@ body.zoe-dialog-open {
   gap: 5px;
   overflow: hidden;
   color: var(--oz-slate-500);
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -263,18 +269,19 @@ body.zoe-dialog-open {
 .zoe-dialog-panel header span,
 .zoe-create-header > div > span {
   color: var(--oz-indigo-600);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .09em;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-bold);
+  letter-spacing: var(--oz-tracking-widest);
   text-transform: uppercase;
 }
 
 .zoe-section-heading h2,
 .zoe-create-summary h2 {
   margin: 3px 0 0;
-  font-size: 17px;
-  line-height: 24px;
-  font-weight: 650;
+  font-size: var(--oz-text-lg);
+  line-height: var(--oz-leading-lg);
+  font-weight: var(--oz-weight-bold);
 }
 
 .zoe-live-pill,
@@ -287,7 +294,8 @@ body.zoe-dialog-open {
 .zoe-soft-pill {
   color: var(--oz-slate-600);
   background: var(--oz-slate-100);
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   white-space: nowrap;
 }
 
@@ -363,7 +371,7 @@ body.zoe-dialog-open {
   border-color: var(--oz-indigo-400);
   color: var(--oz-indigo-700);
   background: var(--oz-indigo-50);
-  box-shadow: inset 0 0 0 1px var(--oz-indigo-100);
+  box-shadow: var(--oz-shadow-inner);
 }
 
 .zoe-stage-tabs button > svg {
@@ -377,20 +385,21 @@ body.zoe-dialog-open {
   top: 13px;
   right: 13px;
   color: var(--oz-slate-400);
-  font-size: 10px;
-  letter-spacing: .08em;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  letter-spacing: var(--oz-tracking-widest);
 }
 
 .zoe-stage-tabs button strong {
   color: var(--oz-slate-900);
-  font-size: 13px;
-  line-height: 19px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-stage-tabs button small {
   color: var(--oz-slate-500);
-  font-size: 11px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-stage-detail {
@@ -413,7 +422,7 @@ body.zoe-dialog-open {
   border-radius: 13px;
   color: var(--oz-indigo-600);
   background: var(--oz-white);
-  box-shadow: 0 5px 16px var(--oz-indigo-500-12);
+  box-shadow: var(--oz-shadow-md);
 }
 
 .zoe-stage-icon svg {
@@ -423,16 +432,16 @@ body.zoe-dialog-open {
 
 .zoe-stage-copy h3 {
   margin: 5px 0 6px;
-  font-size: 16px;
-  line-height: 23px;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
 }
 
 .zoe-stage-copy p {
   max-width: 620px;
   margin: 0;
   color: var(--oz-slate-600);
-  font-size: 12px;
-  line-height: 19px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-stage-tags {
@@ -447,7 +456,8 @@ body.zoe-dialog-open {
   border-radius: 6px;
   color: var(--oz-slate-600);
   background: var(--oz-white);
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-stage-outcome {
@@ -458,13 +468,15 @@ body.zoe-dialog-open {
 
 .zoe-stage-outcome > span {
   color: var(--oz-slate-500);
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-stage-outcome strong {
   display: block;
   margin: 5px 0 12px;
-  font-size: 16px;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
 }
 
 .zoe-stage-outcome button,
@@ -478,8 +490,9 @@ body.zoe-dialog-open {
   border: 0;
   color: var(--oz-indigo-600);
   background: transparent;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-semibold);
   text-decoration: none;
 }
 
@@ -515,7 +528,8 @@ body.zoe-dialog-open {
   border-radius: 7px;
   color: var(--oz-slate-500);
   background: transparent;
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -524,7 +538,7 @@ body.zoe-dialog-open {
 .zoe-persona-tabs button.active {
   color: var(--oz-slate-900);
   background: var(--oz-white);
-  box-shadow: 0 1px 3px var(--oz-slate-900-8);
+  box-shadow: var(--oz-shadow-sm);
 }
 
 .zoe-task-current {
@@ -537,15 +551,15 @@ body.zoe-dialog-open {
 
 .zoe-task-current h3 {
   margin: 5px 0 4px;
-  font-size: 15px;
-  line-height: 22px;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
 }
 
 .zoe-task-current > p {
   margin: 0;
   color: var(--oz-slate-500);
-  font-size: 11px;
-  line-height: 17px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-task-kpis {
@@ -566,7 +580,8 @@ body.zoe-dialog-open {
 .zoe-task-stage-row span,
 .zoe-task-stage-row small {
   color: var(--oz-slate-500);
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-task-kpis strong {
@@ -596,7 +611,8 @@ body.zoe-dialog-open {
 }
 
 .zoe-task-stage-row strong {
-  font-size: 12px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-task-pulse {
@@ -604,7 +620,7 @@ body.zoe-dialog-open {
   height: 6px;
   border-radius: 50%;
   background: var(--oz-indigo-500);
-  box-shadow: 0 0 0 3px var(--oz-indigo-100);
+  box-shadow: var(--oz-shadow-2xs);
   animation: zoePulse 1.8s ease-in-out infinite;
 }
 
@@ -631,14 +647,15 @@ body.zoe-dialog-open {
   justify-content: space-between;
   gap: 12px;
   color: var(--oz-slate-500);
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-section-intro {
   margin: 10px 0 0;
   color: var(--oz-slate-500);
-  font-size: 12px;
-  line-height: 19px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-review-list {
@@ -675,8 +692,8 @@ body.zoe-dialog-open {
 
 .zoe-review-card header strong {
   overflow: hidden;
-  font-size: 12px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -687,15 +704,16 @@ body.zoe-dialog-open {
   border-radius: 5px;
   color: var(--oz-amber-700);
   background: var(--oz-amber-50);
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-review-card p {
   min-height: 38px;
   margin: 9px 0;
   color: var(--oz-slate-600);
-  font-size: 10px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-review-meta {
@@ -710,7 +728,8 @@ body.zoe-dialog-open {
   border-radius: 5px;
   color: var(--oz-slate-600);
   background: var(--oz-slate-100);
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-review-actions {
@@ -726,7 +745,8 @@ body.zoe-dialog-open {
   border-radius: 6px;
   color: var(--oz-slate-600);
   background: var(--oz-white);
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-review-actions button:first-child:hover {
@@ -772,18 +792,21 @@ body.zoe-dialog-open {
 }
 
 .zoe-feed-list strong {
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-feed-list p {
   margin: 3px 0;
   color: var(--oz-slate-600);
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-feed-list span {
   color: var(--oz-slate-400);
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-feed-summary {
@@ -804,13 +827,15 @@ body.zoe-dialog-open {
 
 .zoe-feed-summary strong {
   display: block;
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-feed-summary p {
   margin: 3px 0 0;
   color: var(--oz-emerald-700);
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-header {
@@ -834,7 +859,8 @@ body.zoe-dialog-open {
   border: 0;
   color: var(--oz-slate-600);
   background: transparent;
-  font-size: 12px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-header > button svg {
@@ -849,7 +875,8 @@ body.zoe-dialog-open {
 
 .zoe-create-header > div > p {
   margin-top: 8px;
-  font-size: 13px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-create-status {
@@ -917,18 +944,21 @@ body.zoe-dialog-open {
   border: 1px solid var(--oz-slate-200);
   border-radius: 50%;
   background: var(--oz-white);
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-steps li strong,
 .zoe-create-steps li small {
   display: block;
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-steps li small {
   margin-top: 2px;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-steps li.active,
@@ -940,7 +970,7 @@ body.zoe-dialog-open {
   border-color: var(--oz-indigo-600);
   color: var(--oz-white);
   background: var(--oz-indigo-600);
-  box-shadow: 0 0 0 4px var(--oz-indigo-100);
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .zoe-create-steps li.complete > span {
@@ -968,13 +998,15 @@ body.zoe-dialog-open {
 .zoe-create-steps > p strong,
 .zoe-create-steps > p small {
   display: block;
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-steps > p small {
   margin-top: 2px;
   color: var(--oz-slate-500);
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-main {
@@ -1004,27 +1036,29 @@ body.zoe-dialog-open {
   border-radius: 10px;
   color: var(--oz-white);
   background: var(--oz-indigo-600);
-  font-size: 13px;
-  font-weight: 700;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-bold);
 }
 
 .zoe-create-agent small {
   color: var(--oz-indigo-600);
-  font-size: 10px;
-  font-weight: 600;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-semibold);
 }
 
 .zoe-create-agent h2 {
   margin: 4px 0 5px;
-  font-size: 18px;
-  line-height: 25px;
+  font-size: var(--oz-text-lg);
+  line-height: var(--oz-leading-lg);
 }
 
 .zoe-create-agent p {
   margin: 0;
   color: var(--oz-slate-600);
-  font-size: 11px;
-  line-height: 17px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-options {
@@ -1057,7 +1091,7 @@ body.zoe-dialog-open {
 .zoe-create-option.active {
   border-color: var(--oz-indigo-500);
   background: var(--oz-indigo-50);
-  box-shadow: inset 0 0 0 1px var(--oz-indigo-100);
+  box-shadow: var(--oz-shadow-inner);
 }
 
 .zoe-create-option > i {
@@ -1079,14 +1113,15 @@ body.zoe-dialog-open {
 }
 
 .zoe-create-option strong {
-  font-size: 12px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-option span {
   grid-column: 2;
   color: var(--oz-slate-500);
-  font-size: 10px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-option small {
@@ -1097,7 +1132,8 @@ body.zoe-dialog-open {
   border-radius: 5px;
   color: var(--oz-indigo-700);
   background: var(--oz-indigo-100);
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-card > footer {
@@ -1121,7 +1157,8 @@ body.zoe-dialog-open {
   border-radius: 8px;
   color: var(--oz-slate-600);
   background: var(--oz-white);
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-card > footer button:disabled {
@@ -1141,7 +1178,8 @@ body.zoe-dialog-open {
 
 .zoe-create-card > footer > span {
   color: var(--oz-slate-400);
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-summary {
@@ -1159,14 +1197,15 @@ body.zoe-dialog-open {
 
 .zoe-create-summary dt {
   color: var(--oz-slate-400);
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-summary dd {
   margin: 4px 0 0;
   color: var(--oz-slate-700);
-  font-size: 11px;
-  line-height: 17px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-pulse {
@@ -1191,14 +1230,15 @@ body.zoe-dialog-open {
 .zoe-create-pulse strong,
 .zoe-create-pulse span {
   display: block;
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-pulse span {
   margin-top: 3px;
   color: var(--oz-slate-500);
-  font-size: 9px;
-  line-height: 15px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-success {
@@ -1229,22 +1269,24 @@ body.zoe-dialog-open {
 
 .zoe-create-success > small {
   color: var(--oz-emerald-700);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .08em;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-bold);
+  letter-spacing: var(--oz-tracking-widest);
 }
 
 .zoe-create-success h2 {
   margin: 8px 0;
-  font-size: 24px;
+  font-size: var(--oz-text-2xl);
+  line-height: var(--oz-leading-2xl);
 }
 
 .zoe-create-success > p {
   max-width: 440px;
   margin: 0;
   color: var(--oz-slate-500);
-  font-size: 12px;
-  line-height: 19px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-create-success > div {
@@ -1278,7 +1320,7 @@ body.zoe-dialog-open {
   border: 0;
   border-left: 1px solid var(--oz-slate-200);
   background: var(--oz-slate-50);
-  box-shadow: -18px 0 44px var(--oz-slate-900-14);
+  box-shadow: var(--oz-shadow-xl);
 }
 
 .zoe-dialog-panel > header,
@@ -1294,13 +1336,15 @@ body.zoe-dialog-open {
 
 .zoe-dialog-panel header h2 {
   margin: 4px 0;
-  font-size: 21px;
+  font-size: var(--oz-text-xl);
+  line-height: var(--oz-leading-xl);
 }
 
 .zoe-dialog-panel header p {
   margin: 0;
   color: var(--oz-slate-500);
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-dialog-panel header button {
@@ -1359,18 +1403,21 @@ body.zoe-dialog-open {
 
 .zoe-detail-hero strong {
   display: block;
-  font-size: 13px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-detail-hero p {
   margin: 4px 0 0;
   color: var(--oz-slate-500);
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-detail-hero > b {
   color: var(--oz-indigo-700);
-  font-size: 16px;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
 }
 
 .zoe-detail-grid {
@@ -1383,14 +1430,15 @@ body.zoe-dialog-open {
 .zoe-detail-block h3,
 .zoe-detail-pipeline h3 {
   margin: 0 0 10px;
-  font-size: 13px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-detail-block p,
 .zoe-detail-block li {
   color: var(--oz-slate-600);
-  font-size: 10px;
-  line-height: 17px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-detail-block ul {
@@ -1419,7 +1467,8 @@ body.zoe-dialog-open {
   color: var(--oz-slate-700);
   text-align: center;
   background: var(--oz-slate-100);
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-dialog-panel > footer {
@@ -1432,7 +1481,8 @@ body.zoe-dialog-open {
   align-items: center;
   gap: 8px;
   color: var(--oz-slate-500);
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-dialog-panel > footer > button {
@@ -1442,7 +1492,8 @@ body.zoe-dialog-open {
   border-radius: 8px;
   color: var(--oz-white);
   background: var(--oz-indigo-600);
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-page-v2 button:focus-visible,
@@ -1452,7 +1503,7 @@ body.zoe-dialog-open {
 }
 
 @keyframes zoePulse {
-  50% { box-shadow: 0 0 0 6px var(--oz-indigo-500-12); }
+  50% { box-shadow: var(--oz-shadow-2xs); }
 }
 
 @media (max-width: 1180px) {
@@ -1598,8 +1649,9 @@ body.zoe-dialog-open {
     padding: 8px 0 16px;
   }
 
-  .zoe-hero-copy h1 {
-    font-size: 27px;
+  .zoe-home-title {
+    font-size: var(--oz-text-3xl);
+    line-height: var(--oz-leading-3xl);
   }
 
   .zoe-hero-actions,
@@ -1714,20 +1766,21 @@ body.zoe-dialog-open {
   }
 }
 
-/* Zoe acquisition center — reference-led overview layout. */
+/* Current overview presentation shared by the orbital homepage components. */
 .zoe-page-v2 {
-  padding: 28px 34px 44px;
-  background: #f7f7fd;
+  padding: 24px 40px;
+  background: #f8f7ff;
 }
 
 .zoe-overview {
-  width: min(1600px, 100%);
+  width: 100%;
+  max-width: none;
 }
 
 .zoe-overview .zoe-surface {
   border-color: #dfe3ef;
   border-radius: 14px;
-  box-shadow: 0 1px 2px rgb(31 35 48 / 4%);
+  box-shadow: var(--oz-shadow-xs);
 }
 
 .zoe-overview .zoe-hero-card {
@@ -1740,24 +1793,25 @@ body.zoe-dialog-open {
   max-width: 790px;
 }
 
-.zoe-overview .zoe-hero-copy h1 {
+.zoe-overview .zoe-home-title {
+  font-family: var(--oz-font-family-sans);
   font-size: clamp(42px, 4vw, 60px);
   line-height: 1.08;
-  font-weight: 700;
-  letter-spacing: -.015em;
+  font-weight: var(--oz-weight-bold);
+  letter-spacing: var(--oz-tracking-tight);
 }
 
-.zoe-overview .zoe-hero-copy h1 [lang="en"] {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 500;
+.zoe-overview .zoe-home-title [lang="en"] {
+  font-family: var(--oz-font-family-sans);
+  font-weight: var(--oz-weight-medium);
 }
 
-.zoe-overview .zoe-hero-copy > p:not(.zoe-eyebrow) {
+.zoe-overview .zoe-home-subtitle {
   max-width: 760px;
   margin-top: 14px;
   color: #838795;
-  font-size: 14px;
-  line-height: 22px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-overview .zoe-hero-actions {
@@ -1769,18 +1823,31 @@ body.zoe-dialog-open {
   min-height: 42px;
   padding: 0 17px;
   border-radius: 22px;
-  font-size: 13px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-overview .zoe-primary-action {
   border-color: #a948f5;
   background: #a948f5;
-  box-shadow: 0 8px 18px rgb(169 72 245 / 18%);
+  box-shadow: var(--oz-shadow-lg);
 }
 
 .zoe-overview .zoe-primary-action:hover {
   border-color: #9638df;
   background: #9638df;
+}
+
+.zoe-overview-orbit [data-zoe-new-task] {
+  border-color: transparent;
+  background: radial-gradient(ellipse 50% 100% at 50% 0%, #6366f1 0%, #865ef4 50%, #a855f7 100%);
+  box-shadow: var(--oz-shadow-xs);
+}
+
+.zoe-overview-orbit [data-zoe-new-task]:hover {
+  border-color: transparent;
+  background: radial-gradient(ellipse 50% 100% at 50% 0%, #6366f1 0%, #865ef4 50%, #a855f7 100%);
+  filter: brightness(.96);
 }
 
 .zoe-overview .zoe-secondary-action {
@@ -1800,7 +1867,7 @@ body.zoe-dialog-open {
   border-color: #bfe8e4;
   border-radius: 13px;
   background: #effbf9;
-  box-shadow: none;
+  box-shadow: var(--oz-shadow-none);
 }
 
 .zoe-overview .zoe-autopilot-status > i {
@@ -1822,8 +1889,8 @@ body.zoe-dialog-open {
 }
 
 .zoe-overview .zoe-autopilot-status strong {
-  font-size: 12px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview .zoe-autopilot-status small {
@@ -1831,14 +1898,14 @@ body.zoe-dialog-open {
   padding: 0;
   border: 0;
   color: #678984;
-  font-size: 9px;
-  line-height: 14px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-workbench {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(340px, .92fr);
-  align-items: start;
+  align-items: stretch;
   gap: 16px;
   padding: 16px;
   background: rgb(255 255 255 / 74%);
@@ -1867,7 +1934,7 @@ body.zoe-dialog-open {
   padding: 14px 18px;
   border-color: #dfe3ef;
   border-radius: 14px;
-  box-shadow: 0 3px 8px rgb(31 35 48 / 5%);
+  box-shadow: var(--oz-shadow-sm);
 }
 
 .zoe-overview .zoe-metric-icon {
@@ -1889,7 +1956,8 @@ body.zoe-dialog-open {
 .zoe-overview .zoe-metrics article > div > span {
   display: block;
   color: #697083;
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview .zoe-metrics strong {
@@ -1907,7 +1975,8 @@ body.zoe-dialog-open {
 
 .zoe-overview .zoe-metrics small {
   color: #9297a6;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview .zoe-surface {
@@ -1921,16 +1990,16 @@ body.zoe-dialog-open {
 .zoe-overview .zoe-section-heading h2 {
   margin: 0;
   color: #171b2c;
-  font-size: 16px;
-  line-height: 23px;
-  font-weight: 700;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
+  font-weight: var(--oz-weight-bold);
 }
 
 .zoe-overview .zoe-section-heading p {
   margin: 3px 0 0;
   color: #858b9a;
-  font-size: 10px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview .zoe-live-pill {
@@ -1940,12 +2009,13 @@ body.zoe-dialog-open {
   border-radius: 10px;
   color: #5e55bc;
   background: #faf9ff;
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview .zoe-live-pill i {
   background: #6558da;
-  box-shadow: 0 0 0 3px #e7e4ff;
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .zoe-overview .zoe-engine-card {
@@ -1972,7 +2042,7 @@ body.zoe-dialog-open {
   border-radius: 13px;
   color: #31374d;
   background: #fff;
-  box-shadow: 0 4px 10px rgb(31 35 48 / 4%);
+  box-shadow: var(--oz-shadow-md);
 }
 
 .zoe-overview .zoe-stage-tabs li:nth-child(even) button {
@@ -1988,20 +2058,21 @@ body.zoe-dialog-open {
   border-color: #938af3;
   color: #272d40;
   background: #f6f4ff;
-  box-shadow: 0 8px 18px rgb(100 88 218 / 10%);
+  box-shadow: var(--oz-shadow-lg);
 }
 
 .zoe-overview .zoe-stage-tabs button > span {
   position: static;
   color: #4d546b;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: .04em;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-bold);
+  letter-spacing: var(--oz-tracking-wider);
 }
 
 .zoe-overview .zoe-stage-tabs button strong {
-  font-size: 12px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview .zoe-stage-tabs button small {
@@ -2009,7 +2080,8 @@ body.zoe-dialog-open {
   align-items: center;
   gap: 4px;
   color: #72788a;
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview .zoe-stage-tabs button small svg {
@@ -2032,22 +2104,24 @@ body.zoe-dialog-open {
   border: 1px solid #e7e4fb;
   border-radius: 11px;
   color: #6558da;
-  box-shadow: none;
+  box-shadow: var(--oz-shadow-none);
 }
 
 .zoe-overview .zoe-stage-copy > span {
   color: #6558da;
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview .zoe-stage-copy h3 {
   margin: 4px 0;
-  font-size: 14px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-overview .zoe-stage-copy p {
-  font-size: 10px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview .zoe-stage-tags {
@@ -2059,7 +2133,8 @@ body.zoe-dialog-open {
 }
 
 .zoe-overview .zoe-stage-outcome strong {
-  font-size: 14px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-overview .zoe-optimization {
@@ -2091,8 +2166,8 @@ body.zoe-dialog-open {
 
 .zoe-optimization dt,
 .zoe-optimization dd {
-  font-size: 9px;
-  line-height: 14px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-optimization dt {
@@ -2102,20 +2177,20 @@ body.zoe-dialog-open {
 .zoe-optimization dd {
   margin: 0;
   color: #55567d;
-  font-weight: 600;
+  font-weight: var(--oz-weight-semibold);
   text-align: right;
 }
 
 .zoe-optimization > p {
   margin: 0;
   color: #9398a7;
-  font-size: 9px;
-  line-height: 15px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview .zoe-task-panel {
   border-color: #e0d6f8;
-  box-shadow: 0 0 0 5px rgb(244 239 255 / 66%);
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .zoe-overview .zoe-task-tabs,
@@ -2132,7 +2207,8 @@ body.zoe-dialog-open {
 
 .zoe-overview .zoe-task-current h3 {
   margin-top: 4px;
-  font-size: 14px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-overview .zoe-task-kpis {
@@ -2221,7 +2297,7 @@ body.zoe-dialog-open {
 
 @media (max-width: 820px) {
   .zoe-page-v2 {
-    padding: 20px;
+    padding: 24px 20px;
   }
 
   .zoe-overview .zoe-stage-tabs {
@@ -2255,7 +2331,7 @@ body.zoe-dialog-open {
 
 @media (max-width: 560px) {
   .zoe-page-v2 {
-    padding: 16px 12px 28px;
+    padding: 24px 12px;
   }
 
   .zoe-overview .zoe-hero-card {
@@ -2264,9 +2340,9 @@ body.zoe-dialog-open {
     padding: 8px 4px 20px;
   }
 
-  .zoe-overview .zoe-hero-copy h1 {
-    font-size: 36px;
-    line-height: 42px;
+  .zoe-overview .zoe-home-title {
+    font-size: var(--oz-text-4xl);
+    line-height: var(--oz-leading-4xl);
   }
 
   .zoe-overview .zoe-autopilot-status {
@@ -2314,7 +2390,7 @@ body.zoe-dialog-open {
   }
 }
 
-/* Zoe collaborative agent sidebar — MVP. */
+/* Current Zoe collaboration sidebar. */
 .zoe-overview .zoe-workbench {
   grid-template-columns: minmax(0, 1fr) 420px;
   transition: grid-template-columns 180ms ease;
@@ -2335,7 +2411,7 @@ body.zoe-dialog-open {
   overflow: hidden;
   color: #171b2c;
   background: #fff;
-  box-shadow: 0 12px 36px rgb(31 35 48 / 8%);
+  box-shadow: var(--oz-shadow-xl);
 }
 
 .zoe-chat-shell {
@@ -2398,7 +2474,8 @@ body.zoe-dialog-open {
   border-radius: 999px;
   color: #fff;
   background: #7657e8;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-header {
@@ -2426,14 +2503,14 @@ body.zoe-dialog-open {
 }
 
 .zoe-chat-agent strong {
-  font-size: 13px;
-  line-height: 19px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-chat-agent small {
   color: #838998;
-  font-size: 10px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-agent small i,
@@ -2444,7 +2521,7 @@ body.zoe-dialog-open {
   margin-right: 5px;
   border-radius: 50%;
   background: #25af9f;
-  box-shadow: 0 0 0 3px #dcf8f3;
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .zoe-chat-header > button {
@@ -2481,7 +2558,8 @@ body.zoe-dialog-open {
 .zoe-chat-context > span {
   flex: none;
   color: #969bab;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-context button {
@@ -2494,8 +2572,9 @@ body.zoe-dialog-open {
   border: 0;
   color: #4d5263;
   background: transparent;
-  font-size: 10px;
-  font-weight: 600;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-semibold);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -2526,7 +2605,8 @@ body.zoe-dialog-open {
   border-radius: 10px;
   color: #62687b;
   background: #fff;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-quick-actions button:hover,
@@ -2553,7 +2633,8 @@ body.zoe-dialog-open {
   border-radius: 999px;
   color: #6255bb;
   background: #eeecff;
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-stream {
@@ -2590,8 +2671,8 @@ body.zoe-dialog-open {
   border-radius: 5px 13px 13px;
   color: #3d4252;
   background: #fff;
-  font-size: 11px;
-  line-height: 17px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-message.is-success > div > p {
@@ -2604,7 +2685,8 @@ body.zoe-dialog-open {
   display: block;
   margin-top: 5px;
   color: #a0a4b1;
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-message-user {
@@ -2633,7 +2715,7 @@ body.zoe-dialog-open {
   border-radius: 13px;
   overflow: hidden;
   background: #fff;
-  box-shadow: 0 5px 16px rgb(31 35 48 / 6%);
+  box-shadow: var(--oz-shadow-md);
 }
 
 .zoe-chat-card > *:not(header) {
@@ -2673,15 +2755,16 @@ body.zoe-dialog-open {
 
 .zoe-chat-card-header small {
   color: #8d92a1;
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-card-header h3 {
   overflow: hidden;
   margin: 2px 0 0;
   color: #202536;
-  font-size: 11px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -2691,15 +2774,16 @@ body.zoe-dialog-open {
   border-radius: 6px;
   color: #248d80;
   background: #eaf9f5;
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   white-space: nowrap;
 }
 
 .zoe-chat-card-subtitle {
   margin-top: 10px !important;
   color: #868b99;
-  font-size: 9px;
-  line-height: 14px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-task-switcher {
@@ -2731,7 +2815,8 @@ body.zoe-dialog-open {
 .zoe-chat-task-switcher strong {
   overflow: hidden;
   color: #414656;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2759,7 +2844,8 @@ body.zoe-dialog-open {
 
 .zoe-chat-kpis span {
   color: #9296a4;
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-kpis strong {
@@ -2776,7 +2862,8 @@ body.zoe-dialog-open {
   gap: 8px;
   margin-top: 10px;
   color: #656a7a;
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-progress-copy b {
@@ -2820,8 +2907,9 @@ body.zoe-dialog-open {
   border: 0;
   color: #5651a7;
   background: transparent;
-  font-size: 9px;
-  font-weight: 600;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-semibold);
   text-decoration: none;
 }
 
@@ -2848,7 +2936,8 @@ body.zoe-dialog-open {
 .zoe-chat-evidence span,
 .zoe-chat-evidence small {
   color: #7f918d;
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-evidence.is-risk span {
@@ -2857,8 +2946,8 @@ body.zoe-dialog-open {
 
 .zoe-chat-evidence strong {
   color: #2b5f59;
-  font-size: 9px;
-  line-height: 14px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-evidence.is-risk strong {
@@ -2868,8 +2957,8 @@ body.zoe-dialog-open {
 .zoe-chat-match-reason {
   margin-top: 8px !important;
   color: #717686;
-  font-size: 8px;
-  line-height: 13px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-card-actions {
@@ -2887,8 +2976,9 @@ body.zoe-dialog-open {
   border-radius: 8px;
   color: #5f6474;
   background: #fff;
-  font-size: 9px;
-  font-weight: 600;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-semibold);
 }
 
 .zoe-chat-card-actions button:hover:not(:disabled) {
@@ -2923,14 +3013,15 @@ body.zoe-dialog-open {
 }
 
 .zoe-chat-card-empty strong {
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-card-empty p {
   max-width: 240px;
   color: #7c8190;
-  font-size: 9px;
-  line-height: 14px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-card-empty button {
@@ -2940,7 +3031,8 @@ body.zoe-dialog-open {
   border-radius: 8px;
   color: #fff;
   background: #6554ce;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-strategy-group {
@@ -2953,7 +3045,8 @@ body.zoe-dialog-open {
   gap: 5px;
   margin: 0 0 7px;
   color: #34877c;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-strategy-group h4 svg {
@@ -2983,15 +3076,15 @@ body.zoe-dialog-open {
 
 .zoe-chat-strategy-group article strong {
   color: #35403f;
-  font-size: 9px;
-  line-height: 14px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-strategy-group article p,
 .zoe-chat-strategy-group article span {
   color: #818692;
-  font-size: 8px;
-  line-height: 13px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-strategy-group .zoe-chat-card-actions {
@@ -3006,7 +3099,8 @@ body.zoe-dialog-open {
   border-radius: 8px;
   color: #317f75;
   background: #eff9f6;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-inline-success svg {
@@ -3038,7 +3132,8 @@ body.zoe-dialog-open {
 .zoe-chat-lead-list strong {
   overflow: hidden;
   color: #353a4b;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -3046,14 +3141,15 @@ body.zoe-dialog-open {
 .zoe-chat-lead-list span,
 .zoe-chat-lead-list small {
   color: #898e9c;
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-lead-list p {
   margin: 3px 0 !important;
   color: #5f6575;
-  font-size: 8px;
-  line-height: 13px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-lead-list button {
@@ -3067,7 +3163,8 @@ body.zoe-dialog-open {
   border-radius: 7px;
   color: #5b4fc0;
   background: #f8f7ff;
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-lead-list button:disabled {
@@ -3106,7 +3203,8 @@ body.zoe-dialog-open {
   outline: 0;
   color: #303545;
   background: transparent;
-  font-size: 10px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-chat-composer input::placeholder {
@@ -3134,7 +3232,8 @@ body.zoe-dialog-open {
   display: block;
   margin-top: 6px;
   color: #a1a4af;
-  font-size: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-align: center;
 }
 
@@ -3164,7 +3263,7 @@ body.zoe-mobile-chat-open {
     border-radius: 16px 0 0;
     transform: translateX(105%);
     transition: transform 180ms ease;
-    box-shadow: -18px 0 50px rgb(31 35 48 / 16%);
+    box-shadow: var(--oz-shadow-2xl);
   }
 
   .zoe-agent-chat.is-mobile-open {
@@ -3197,9 +3296,10 @@ body.zoe-mobile-chat-open {
     border-radius: 24px;
     color: #3c3a64;
     background: #fff;
-    box-shadow: 0 10px 28px rgb(31 35 48 / 18%);
-    font-size: 11px;
-    font-weight: 700;
+    box-shadow: var(--oz-shadow-lg);
+    font-size: var(--oz-text-xs);
+    line-height: var(--oz-leading-xs);
+    font-weight: var(--oz-weight-bold);
   }
 
   .zoe-chat-mobile-trigger > svg {
@@ -3289,99 +3389,194 @@ body.zoe-mobile-chat-open {
   }
 }
 
-/* Zoe home — orbital acquisition system, matched to the supplied visual reference. */
+/* Current Zoe orbital homepage layout. */
 .zoe-overview-orbit .zoe-hero-card {
-  min-height: 214px;
-  padding: 10px 0 32px;
+  min-height: 124px;
+  gap: 0;
+  padding: 0;
 }
 
 .zoe-overview-orbit .zoe-hero-copy {
-  max-width: 1040px;
+  width: min(720px, calc(100% - 400px));
+  max-width: 720px;
 }
 
-.zoe-overview-orbit .zoe-hero-copy h1 {
-  max-width: 1040px;
-  font-size: clamp(46px, 4.15vw, 72px);
-  line-height: 1.08;
-  letter-spacing: -.025em;
+.zoe-overview-orbit .zoe-home-title {
+  max-width: 720px;
+  font-size: var(--oz-text-5xl);
+  line-height: var(--oz-leading-5xl);
+  letter-spacing: var(--oz-tracking-normal);
 }
 
-.zoe-overview-orbit .zoe-hero-copy > p:not(.zoe-eyebrow) {
-  margin-top: 12px;
-  font-size: 15px;
-  line-height: 24px;
+.zoe-overview-orbit .zoe-home-subtitle {
+  margin-top: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview-orbit .zoe-hero-actions {
-  margin-top: 16px;
+  margin-top: 8px;
+}
+
+.zoe-overview-orbit .zoe-primary-action,
+.zoe-overview-orbit .zoe-secondary-action {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-overview-orbit .zoe-autopilot-status {
+  width: 158px;
+  min-height: 36px;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 9px;
+  margin: 16px 24px 0 auto;
+  padding: 0 18px;
+  border-color: #b8e3df;
+  border-radius: 18px;
+  background: #effbf9;
+}
+
+.zoe-overview-orbit .zoe-autopilot-status > i {
+  width: 20px;
+  height: 20px;
+  border-color: #6fd1ca;
+}
+
+.zoe-overview-orbit .zoe-autopilot-status strong {
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  white-space: nowrap;
+}
+
+.zoe-overview-orbit .zoe-autopilot-status small {
+  display: none;
 }
 
 .zoe-overview-orbit .zoe-workbench {
-  gap: 18px;
-  padding: 20px;
-  border: 1px solid #d8deeb;
-  border-radius: 22px;
-  background: rgb(255 255 255 / 70%);
-  box-shadow: 0 2px 3px rgb(41 47 66 / 5%);
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 400px);
+  gap: 24px;
+  margin-top: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: var(--oz-shadow-none);
+}
+
+.zoe-overview-orbit .zoe-agent-chat {
+  top: 24px;
+  height: auto;
+  min-height: 708px;
+  align-self: stretch;
+  border: 0;
+  border-radius: 16px;
+  box-shadow: var(--oz-shadow-sm);
+}
+
+.zoe-overview-orbit .zoe-chat-header {
+  min-height: 56px;
+  padding: 10px 12px;
+}
+
+.zoe-overview-orbit .zoe-chat-stream {
+  background: #fff;
+}
+
+.zoe-overview-orbit .zoe-chat-composer {
+  padding: 10px 12px 12px;
 }
 
 .zoe-overview-orbit .zoe-primary-column {
-  gap: 18px;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid #e4e7f1;
+  border-radius: 18px;
+  background: #fbfdff;
+  box-shadow: var(--oz-shadow-sm);
 }
 
 .zoe-overview-orbit .zoe-metrics {
-  gap: 18px;
+  gap: 0;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e7eaf2;
+  background: linear-gradient(110deg, #fff 0%, #f3f6ff 58%, #eefaf9 100%);
+}
+
+@media (max-width: 1380px) and (min-width: 1181px) {
+  .zoe-overview-orbit .zoe-home-title {
+    font-size: var(--oz-text-4xl);
+    line-height: var(--oz-leading-4xl);
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 561px) {
+  .zoe-overview-orbit .zoe-home-title {
+    font-size: var(--oz-text-4xl);
+    line-height: var(--oz-leading-4xl);
+  }
 }
 
 .zoe-overview-orbit .zoe-metrics article {
-  min-height: 116px;
-  grid-template-columns: 52px minmax(0, 1fr);
-  gap: 18px;
-  padding: 22px 28px;
-  border-color: transparent;
-  border-radius: 22px;
-  background: linear-gradient(135deg, #fff 0%, #f7f9fd 100%);
-  box-shadow: 0 8px 18px rgb(31 39 62 / 8%), 0 1px 1px rgb(31 39 62 / 7%);
+  min-height: 88px;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+  padding: 16px 20px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: var(--oz-shadow-none);
+}
+
+.zoe-overview-orbit .zoe-metrics article + article {
+  border-left: 1px solid #dfe4ef;
 }
 
 .zoe-overview-orbit .zoe-metric-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 15px;
-  background: #d9f8f8;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  color: #009cad;
+  background: #e4fbfb;
 }
 
 .zoe-overview-orbit .zoe-metric-icon svg {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
 }
 
 .zoe-overview-orbit .zoe-metrics article > div > span {
-  font-size: 13px;
-  line-height: 19px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview-orbit .zoe-metrics strong {
-  margin: 1px 0 2px;
-  font-size: 28px;
-  line-height: 32px;
+  margin: 0;
+  font-size: 22px;
+  line-height: 26px;
 }
 
 .zoe-overview-orbit .zoe-metrics small {
-  font-size: 11px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-overview-orbit .zoe-orbit-engine {
-  min-height: 730px;
+  min-height: 0;
+  aspect-ratio: 696 / 604;
   padding: 0;
-  border-radius: 22px;
+  border: 0;
+  border-radius: 0;
   overflow: hidden;
   background: #fbfdff;
 }
 
 .zoe-orbit-board {
   position: relative;
-  min-height: 730px;
+  min-height: 0;
+  height: 100%;
   isolation: isolate;
   overflow: hidden;
   background: #fbfdff url("../assets/zoe-orbit-canvas-v1.png") center / 100% 100% no-repeat;
@@ -3398,7 +3593,7 @@ body.zoe-mobile-chat-open {
 .zoe-orbit-stages button {
   border: 1px solid #dde2ef;
   background: rgb(255 255 255 / 92%);
-  box-shadow: 0 8px 22px rgb(48 56 82 / 8%);
+  box-shadow: var(--oz-shadow-lg);
   backdrop-filter: blur(10px);
 }
 
@@ -3422,8 +3617,8 @@ body.zoe-mobile-chat-open {
 .zoe-keyword-pulse > strong {
   overflow: hidden;
   color: #3c4257;
-  font-size: 12px;
-  line-height: 18px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -3434,7 +3629,8 @@ body.zoe-mobile-chat-open {
   gap: 6px;
   margin-top: 12px;
   color: #777e91;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-keyword-pulse span i {
@@ -3449,7 +3645,8 @@ body.zoe-mobile-chat-open {
   right: 16px;
   bottom: 17px;
   color: #6558dd;
-  font-size: 13px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-source-orchestrator {
@@ -3488,9 +3685,10 @@ body.zoe-mobile-chat-open {
   border-radius: 50%;
   color: #5f55cf;
   background: #fff;
-  box-shadow: 0 5px 15px rgb(89 75 219 / 12%);
-  font-size: 12px;
-  font-weight: 800;
+  box-shadow: var(--oz-shadow-md);
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-extrabold);
   text-align: center;
 }
 
@@ -3498,8 +3696,9 @@ body.zoe-mobile-chat-open {
   display: block;
   margin-top: 2px;
   color: #989cad;
-  font-size: 5px;
-  font-weight: 700;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-bold);
 }
 
 .zoe-source-map > svg {
@@ -3512,7 +3711,7 @@ body.zoe-mobile-chat-open {
   border-radius: 8px;
   color: #6559df;
   background: #fff;
-  box-shadow: 0 3px 10px rgb(45 54 79 / 8%);
+  box-shadow: var(--oz-shadow-md);
 }
 
 .zoe-source-map .source-one { top: 2%; left: 48%; color: #f05b3d; }
@@ -3534,7 +3733,8 @@ body.zoe-mobile-chat-open {
   align-items: center;
   gap: 6px;
   color: #268d86;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   white-space: nowrap;
 }
 
@@ -3543,7 +3743,7 @@ body.zoe-mobile-chat-open {
   height: 6px;
   border-radius: 50%;
   background: #28b0a6;
-  box-shadow: 0 0 0 3px #dbf7f4;
+  box-shadow: var(--oz-shadow-2xs);
 }
 
 .zoe-search-monitor > div {
@@ -3565,14 +3765,14 @@ body.zoe-mobile-chat-open {
   border-radius: 9px;
   color: #19202b;
   background: #fff;
-  box-shadow: 0 3px 8px rgb(35 44 64 / 8%);
+  box-shadow: var(--oz-shadow-sm);
 }
 
 .zoe-search-brand svg { width: 17px; height: 17px; }
-.zoe-search-monitor > div > b { overflow: hidden; color: #555d70; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
-.zoe-search-monitor p { margin: 9px 0 2px; color: #848b9d; font-size: 8px; line-height: 13px; }
-.zoe-search-monitor > strong { color: #768093; font-size: 8px; }
-.zoe-search-monitor > strong b { color: #249a90; font-size: 17px; }
+.zoe-search-monitor > div > b { overflow: hidden; color: #555d70; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); text-overflow: ellipsis; white-space: nowrap; }
+.zoe-search-monitor p { margin: 9px 0 2px; color: #848b9d; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
+.zoe-search-monitor > strong { color: #768093; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
+.zoe-search-monitor > strong b { color: #249a90; font-size: var(--oz-text-lg); line-height: var(--oz-leading-lg); }
 
 .zoe-realtime-push {
   position: absolute;
@@ -3594,7 +3794,8 @@ body.zoe-mobile-chat-open {
   padding-bottom: 8px;
   border-bottom: 1px solid #bee3df;
   color: #636a7e;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 .zoe-realtime-push header i {
@@ -3613,7 +3814,7 @@ body.zoe-mobile-chat-open {
   padding: 8px;
   border-radius: 12px;
   background: #fff;
-  box-shadow: 0 4px 12px rgb(49 61 82 / 6%);
+  box-shadow: var(--oz-shadow-md);
 }
 
 .zoe-realtime-push > div > span {
@@ -3631,11 +3832,11 @@ body.zoe-mobile-chat-open {
 .zoe-realtime-push p strong,
 .zoe-realtime-push p small,
 .zoe-realtime-push p b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.zoe-realtime-push p strong { color: #3e4557; font-size: 8px; }
-.zoe-realtime-push p small { margin: 2px 0; color: #969aaa; font-size: 7px; }
-.zoe-realtime-push p b { color: #697083; font-size: 7px; }
-.zoe-realtime-push em { padding: 5px; border-radius: 6px; color: #238b80; background: #e1f8f4; font-size: 7px; font-style: normal; white-space: nowrap; }
-.zoe-realtime-push > small { display: block; margin-top: 8px; color: #959aaa; font-size: 7px; text-align: right; }
+.zoe-realtime-push p strong { color: #3e4557; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
+.zoe-realtime-push p small { margin: 2px 0; color: #969aaa; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
+.zoe-realtime-push p b { color: #697083; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
+.zoe-realtime-push em { padding: 5px; border-radius: 6px; color: #238b80; background: #e1f8f4; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); font-style: normal; white-space: nowrap; }
+.zoe-realtime-push > small { display: block; margin-top: 8px; color: #959aaa; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); text-align: right; }
 
 .zoe-ontology-node {
   position: absolute;
@@ -3657,16 +3858,16 @@ body.zoe-mobile-chat-open {
   border-radius: 50%;
   color: #6555db;
   background: radial-gradient(circle, #fff 0 30%, #eef4ff 31% 48%, rgb(255 255 255 / 70%) 49%);
-  box-shadow: 0 0 0 12px rgb(106 86 224 / 6%), inset 0 0 20px rgb(77 147 201 / 14%);
+  box-shadow: var(--oz-shadow-inner);
 }
 
 .zoe-ontology-node svg { width: 25px; height: 25px; }
 .zoe-ontology-node small,
 .zoe-ontology-node strong,
 .zoe-ontology-node p { display: block; }
-.zoe-ontology-node small { color: #6157ba; font-size: 7px; letter-spacing: .08em; }
-.zoe-ontology-node strong { margin-top: 6px; color: #283044; font-size: 13px; }
-.zoe-ontology-node p { margin: 4px 0 0; color: #7d8495; font-size: 9px; line-height: 14px; }
+.zoe-ontology-node small { color: #6157ba; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); letter-spacing: var(--oz-tracking-widest); }
+.zoe-ontology-node strong { margin-top: 6px; color: #283044; font-size: var(--oz-text-sm); line-height: var(--oz-leading-sm); }
+.zoe-ontology-node p { margin: 4px 0 0; color: #7d8495; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
 
 .zoe-overview-orbit .zoe-orbit-stages {
   position: static;
@@ -3705,7 +3906,7 @@ body.zoe-mobile-chat-open {
   transform: translateY(-2px);
   border-color: #8c82ef;
   background: linear-gradient(145deg, #fff 44%, #ebe7ff 100%);
-  box-shadow: 0 14px 28px rgb(80 65 198 / 14%);
+  box-shadow: var(--oz-shadow-lg);
 }
 
 .zoe-overview-orbit .zoe-orbit-stages button::after {
@@ -3714,7 +3915,8 @@ body.zoe-mobile-chat-open {
   bottom: 13px;
   color: #8d91a0;
   content: "↗";
-  font-size: 12px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   opacity: 0;
   transition: opacity 150ms ease;
 }
@@ -3742,23 +3944,33 @@ body.zoe-mobile-chat-open {
 
 .zoe-overview-orbit .zoe-orbit-stages button > span {
   color: #6558d8;
-  font-size: 8px;
-  letter-spacing: .08em;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  letter-spacing: var(--oz-tracking-widest);
 }
 
 .zoe-overview-orbit .zoe-orbit-stages button strong {
   max-width: 160px;
   color: #252b3d;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .zoe-overview-orbit .zoe-orbit-stages button small {
   color: #8a90a0;
-  font-size: 9px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 @media (max-width: 1320px) {
+  .zoe-overview-orbit .zoe-hero-copy {
+    width: calc(100% - 182px);
+  }
+
+  .zoe-overview-orbit .zoe-autopilot-status {
+    margin-right: 0;
+  }
+
   .zoe-overview-orbit .zoe-workbench,
   .zoe-overview-orbit .zoe-workbench.is-chat-collapsed {
     grid-template-columns: 1fr;
@@ -3776,7 +3988,7 @@ body.zoe-mobile-chat-open {
     border-radius: 16px 0 0;
     transform: translateX(105%);
     transition: transform 180ms ease;
-    box-shadow: -18px 0 50px rgb(31 35 48 / 16%);
+    box-shadow: var(--oz-shadow-2xl);
   }
 
   .zoe-overview-orbit .zoe-agent-chat.is-mobile-open { transform: translateX(0); }
@@ -3797,18 +4009,27 @@ body.zoe-mobile-chat-open {
     right: 0;
   }
 
-  .zoe-overview-orbit .zoe-hero-copy { padding-top: 72px; }
-  .zoe-overview-orbit .zoe-hero-copy h1 { font-size: clamp(42px, 8vw, 62px); }
+  .zoe-overview-orbit .zoe-hero-copy {
+    width: 100%;
+    padding-top: 72px;
+  }
+}
+
+@media (max-width: 860px) {
+  .zoe-overview-orbit .zoe-home-title {
+    font-size: var(--oz-text-4xl);
+    line-height: var(--oz-leading-4xl);
+  }
 }
 
 @media (max-width: 720px) {
   .zoe-overview-orbit .zoe-autopilot-status { display: none; }
   .zoe-overview-orbit .zoe-hero-copy { padding-top: 14px; }
-  .zoe-overview-orbit .zoe-hero-copy h1 { font-size: 38px; line-height: 1.16; }
-  .zoe-overview-orbit .zoe-hero-copy > p:not(.zoe-eyebrow) { font-size: 13px; line-height: 20px; }
+  .zoe-overview-orbit .zoe-home-subtitle { line-height: var(--oz-leading-5); }
   .zoe-overview-orbit .zoe-workbench { padding: 10px; border-radius: 16px; }
-  .zoe-overview-orbit .zoe-metrics { grid-template-columns: 1fr; gap: 10px; }
-  .zoe-overview-orbit .zoe-metrics article { min-height: 94px; padding: 17px 18px; border-radius: 16px; }
+  .zoe-overview-orbit .zoe-metrics { grid-template-columns: 1fr; gap: 0; padding: 8px 14px; }
+  .zoe-overview-orbit .zoe-metrics article { min-height: 94px; padding: 17px 18px; border-radius: 0; }
+  .zoe-overview-orbit .zoe-metrics article + article { border-top: 1px solid #dfe4ef; border-left: 0; }
   .zoe-overview-orbit .zoe-metrics strong { font-size: 25px; }
 
   .zoe-overview-orbit .zoe-orbit-engine,
@@ -3847,17 +4068,1485 @@ body.zoe-mobile-chat-open {
   .zoe-ontology-node p { align-self: start; }
   .zoe-overview-orbit .zoe-orbit-stages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .zoe-overview-orbit .zoe-orbit-stages button { min-height: 154px; padding: 15px; }
-  .zoe-overview-orbit .zoe-orbit-stages button strong { font-size: 13px; }
+  .zoe-overview-orbit .zoe-orbit-stages button strong { font-size: var(--oz-text-sm); line-height: var(--oz-leading-sm); }
+}
+
+@media (max-width: 560px) {
+  .zoe-overview-orbit .zoe-home-title {
+    font-size: var(--oz-text-3xl);
+    line-height: var(--oz-leading-3xl);
+  }
 }
 
 @media (max-width: 430px) {
   .zoe-overview-orbit .zoe-autopilot-status { width: 176px; }
-  .zoe-overview-orbit .zoe-hero-copy h1 { font-size: 34px; }
   .zoe-overview-orbit .zoe-hero-actions { display: grid; grid-template-columns: 1fr 1fr; }
   .zoe-overview-orbit .zoe-primary-action,
-  .zoe-overview-orbit .zoe-secondary-action { min-width: 0; padding: 0 10px; font-size: 11px; }
+  .zoe-overview-orbit .zoe-secondary-action { min-width: 0; padding: 0 10px; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
   .zoe-source-orchestrator { grid-template-columns: 1fr; }
   .zoe-source-map { height: 142px; }
   .zoe-overview-orbit .zoe-orbit-stages button { min-height: 148px; }
   .zoe-overview-orbit .zoe-agent-chat { width: 100%; border-radius: 0; }
+}
+
+/* Figma node 499:5388 — Zoe overview and Copilot. */
+.zoe-overview-orbit .zoe-autopilot-status {
+  width: 222px;
+  min-height: 76px;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 8px;
+  margin: 0 0 0 auto;
+  padding: 16px 24px;
+  border: 0;
+  border-radius: 12px;
+  background: rgb(0 0 0 / 4%);
+}
+
+.zoe-overview-orbit .zoe-autopilot-status > i {
+  width: 36px;
+  height: 36px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 10px;
+  background: #eef2ff;
+}
+
+.zoe-overview-orbit .zoe-autopilot-status > i::before {
+  display: block;
+  width: 17px;
+  height: 11px;
+  border: 2px solid #6366f1;
+  border-bottom: 0;
+  border-radius: 14px 14px 0 0;
+  content: "";
+}
+
+.zoe-overview-orbit .zoe-autopilot-status > i::after {
+  position: absolute;
+  top: 17px;
+  left: 17px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #6366f1;
+  content: "";
+}
+
+.zoe-overview-orbit .zoe-autopilot-status > span {
+  color: #0a0a0a;
+}
+
+.zoe-overview-orbit .zoe-autopilot-status strong {
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+}
+
+.zoe-overview-orbit .zoe-autopilot-status small {
+  display: block;
+  color: #0a0a0a;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-orbit-motion,
+.zoe-orbit-activity {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.zoe-orbit-stage-pulse,
+.zoe-orbit-ontology-pulse,
+.zoe-orbit-source-pulse {
+  position: absolute;
+  display: block;
+  animation-play-state: paused;
+}
+
+.zoe-orbit-stage-pulse {
+  width: 20%;
+  height: 19%;
+  border: 1px solid rgb(102 88 225 / 0%);
+  border-radius: 20px;
+  opacity: 0;
+  animation: zoeOrbitStagePulse 10.4s cubic-bezier(.2, .82, .24, 1) infinite;
+}
+
+.zoe-orbit-stage-pulse.is-strategy { top: 35%; left: 10.2%; animation-delay: 0s; }
+.zoe-orbit-stage-pulse.is-search { top: 35%; left: 45.8%; animation-delay: 1.6s; }
+.zoe-orbit-stage-pulse.is-screening { top: 35%; left: 72.4%; animation-delay: 3.2s; }
+.zoe-orbit-stage-pulse.is-iteration { top: 77.8%; left: 45.8%; animation-delay: 4.8s; }
+
+.zoe-orbit-ontology-pulse {
+  top: 57.2%;
+  left: 2.9%;
+  width: 14.4%;
+  aspect-ratio: 1;
+  border: 1px solid rgb(77 139 232 / 38%);
+  border-radius: 50%;
+  opacity: 0;
+  animation: zoeOrbitOntologyPulse 10.4s ease-out 7.2s infinite;
+}
+
+.zoe-orbit-source-pulse {
+  top: 5.2%;
+  left: 35.2%;
+  width: 18%;
+  height: 19%;
+  border: 1px solid rgb(103 88 220 / 26%);
+  border-radius: 50%;
+  opacity: .3;
+  animation: zoeOrbitSourcePulse 4.8s ease-in-out infinite;
+}
+
+.zoe-orbit-board.is-motion-active .zoe-orbit-stage-pulse,
+.zoe-orbit-board.is-motion-active .zoe-orbit-ontology-pulse,
+.zoe-orbit-board.is-motion-active .zoe-orbit-source-pulse {
+  animation-play-state: running;
+}
+
+@keyframes zoeOrbitStagePulse {
+  0%, 1% {
+    border-color: rgb(102 88 225 / 0%);
+    box-shadow: var(--oz-shadow-2xs);
+    opacity: 0;
+  }
+  3.5% {
+    border-color: rgb(102 88 225 / 54%);
+    box-shadow: var(--oz-shadow-2xs);
+    opacity: 1;
+  }
+  14% {
+    border-color: rgb(36 166 159 / 24%);
+    box-shadow: var(--oz-shadow-2xs);
+    opacity: .42;
+  }
+  16%, 100% {
+    border-color: rgb(102 88 225 / 0%);
+    box-shadow: var(--oz-shadow-none);
+    opacity: 0;
+  }
+}
+
+@keyframes zoeOrbitOntologyPulse {
+  0%, 2% { opacity: 0; transform: scale(.82); }
+  5% { opacity: .78; transform: scale(1); box-shadow: var(--oz-shadow-2xs); }
+  14% { opacity: 0; transform: scale(1.2); box-shadow: var(--oz-shadow-2xs); }
+  16%, 100% { opacity: 0; transform: scale(1.2); }
+}
+
+@keyframes zoeOrbitSourcePulse {
+  0%, 100% { opacity: .2; transform: scale(.94) rotate(-2deg); }
+  50% { opacity: .6; transform: scale(1.06) rotate(2deg); box-shadow: var(--oz-shadow-lg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zoe-orbit-motion,
+  .zoe-orbit-activity { display: none; }
+}
+
+.zoe-overview-orbit .zoe-keyword-pulse,
+.zoe-overview-orbit .zoe-source-orchestrator,
+.zoe-overview-orbit .zoe-realtime-push,
+.zoe-overview-orbit .zoe-ontology-node {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.zoe-overview-orbit .zoe-orbit-stages li {
+  z-index: 6;
+  width: 20%;
+}
+
+.zoe-overview-orbit .zoe-orbit-stages li:nth-child(1) { top: 35%; left: 11%; }
+.zoe-overview-orbit .zoe-orbit-stages li:nth-child(2) { top: 35%; left: 46%; }
+.zoe-overview-orbit .zoe-orbit-stages li:nth-child(3) { top: 35%; right: 9%; }
+.zoe-overview-orbit .zoe-orbit-stages li:nth-child(4) { top: 76%; left: 46%; }
+
+.zoe-overview-orbit .zoe-orbit-stages button {
+  min-height: 128px;
+  opacity: 0;
+}
+
+.zoe-overview-orbit .zoe-orbit-stages button:focus-visible {
+  opacity: .92;
+}
+
+.zoe-overview-orbit .zoe-agent-chat {
+  height: auto;
+  min-height: 708px;
+  align-self: stretch;
+}
+
+.zoe-copilot .zoe-chat-header {
+  min-height: 48px;
+  padding: 0 12px;
+  border-bottom: 0;
+}
+
+.zoe-copilot .zoe-chat-header h2 {
+  margin: 0;
+  color: #0a0a0a;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
+}
+
+.zoe-copilot .zoe-chat-header > button {
+  display: none;
+}
+
+.zoe-copilot .zoe-chat-stream {
+  flex: 1 1 0;
+  min-height: 0;
+  gap: 8px;
+  overflow-y: auto;
+  padding: 20px 12px 8px;
+  background: #fff;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.zoe-copilot.zoe-agent-chat {
+  height: calc(100dvh - 224px);
+  min-height: 708px;
+  max-height: none;
+  overflow: hidden;
+}
+
+.zoe-copilot .zoe-chat-shell {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.zoe-copilot .zoe-chat-header,
+.zoe-copilot .zoe-chat-context,
+.zoe-copilot .zoe-chat-quick-actions,
+.zoe-copilot .zoe-chat-composer {
+  position: relative;
+  z-index: 3;
+  flex: 0 0 auto;
+  background: #fff;
+}
+
+.zoe-copilot-optimization {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  border: 1px solid #dfe2ee;
+  border-radius: 16px;
+  overflow: hidden;
+  color: #141a2b;
+  background: #fff;
+  box-shadow: var(--oz-shadow-none);
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot-optimization h3,
+.zoe-copilot-optimization h4,
+.zoe-copilot-optimization p {
+  margin: 0;
+}
+
+.zoe-copilot-optimization-header {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-bottom: 1px solid #e8e9f1;
+  background: #fbfbfe;
+}
+
+.zoe-copilot-optimization-header > span {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: #6554ce;
+  background: #eeecff;
+}
+
+.zoe-copilot-optimization-header > span svg {
+  width: 22px;
+  height: 22px;
+}
+
+.zoe-copilot-optimization-header small,
+.zoe-copilot-optimization-header h3 {
+  display: block;
+}
+
+.zoe-copilot-optimization-header small {
+  color: #858a99;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot-optimization-header h3 {
+  margin-top: 2px;
+  color: #1f2535;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+}
+
+.zoe-copilot-optimization-header > b {
+  padding: 6px 8px;
+  border-radius: 9px;
+  color: #168b7f;
+  background: #eaf9f5;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  white-space: nowrap;
+}
+
+.zoe-copilot-optimization-group {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+
+.zoe-copilot-optimization-group + .zoe-copilot-optimization-group {
+  padding-top: 2px;
+}
+
+.zoe-copilot-optimization-group h4 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #258b81;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot-optimization-group h4 svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.zoe-copilot-optimization-group > article {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  border: 1px solid #cfe8e4;
+  border-radius: 10px;
+  background: #f3faf9;
+}
+
+.zoe-copilot-optimization-group > article strong {
+  color: #35403f;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot-optimization-group > article p,
+.zoe-copilot-optimization-group > article > span {
+  color: #7d8392;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot-optimization-group.is-risk h4 {
+  color: #ad6d2c;
+}
+
+.zoe-copilot-optimization-group.is-risk > article {
+  border-color: #efcfaa;
+  background: #fff9f1;
+}
+
+.zoe-copilot-optimization-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.zoe-copilot-optimization .zoe-copilot-optimization-actions button {
+  width: 100%;
+  min-height: 34px;
+  margin: 0;
+  padding: 0 10px;
+  border: 1px solid #dfe2ee;
+  border-radius: 9px;
+  color: #5f6472;
+  background: #fff;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-semibold);
+  text-align: center;
+}
+
+.zoe-copilot-optimization .zoe-copilot-optimization-actions button.is-primary {
+  border-color: #6554ce;
+  color: #fff;
+  background: #6554ce;
+}
+
+.zoe-chat-card-task {
+  overflow: hidden;
+  border-color: #eef0f6;
+  box-shadow: var(--oz-shadow-sm);
+}
+
+.zoe-copilot-task-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+}
+
+.zoe-copilot-task-header h3,
+.zoe-copilot-task-header small {
+  display: block;
+}
+
+.zoe-copilot-task-header h3 {
+  margin: 0;
+  color: #141a2b;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+}
+
+.zoe-copilot-task-header small {
+  margin-top: 3px;
+  color: #737373;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot-task-header > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #737373;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  white-space: nowrap;
+}
+
+.zoe-copilot-task-header > span i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: var(--oz-shadow-2xs);
+}
+
+.zoe-copilot-task-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px;
+  gap: 14px;
+  align-items: center;
+  margin: 0 12px !important;
+  padding: 10px 0 12px;
+  border-top: 1px solid #f0f0f5;
+}
+
+.zoe-copilot-task-kpis {
+  display: grid;
+  gap: 6px;
+}
+
+.zoe-copilot-task-kpis p {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 7px 8px;
+  border-radius: 8px;
+  background: #faf9ff;
+}
+
+.zoe-copilot-task-kpis span {
+  color: #6366f1;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot-task-kpis strong {
+  color: #334155;
+  font-size: 12px;
+}
+
+.zoe-copilot-task-kpis strong small {
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-normal);
+}
+
+.zoe-copilot-task-ring {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(#6366f1 var(--progress), #e8e7ff 0);
+}
+
+.zoe-copilot-task-ring::before {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fff;
+  content: "";
+}
+
+.zoe-copilot-task-ring span {
+  z-index: 1;
+  color: #737373;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  text-align: center;
+}
+
+.zoe-copilot-task-ring strong {
+  color: #475569;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-chat-card-task > footer {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 !important;
+  padding: 0 12px 10px;
+}
+
+.zoe-chat-card-task > footer button {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border: 0;
+  color: #52525b;
+  background: transparent;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-chat-card-task > footer svg {
+  width: 12px;
+  height: 12px;
+}
+
+.zoe-copilot-review {
+  position: relative;
+  z-index: 2;
+  min-height: 228px;
+  padding: 12px;
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+  background: #f8fafc;
+  box-shadow: var(--oz-shadow-sm);
+}
+
+.zoe-chat-card.zoe-copilot-review {
+  margin-top: 18px;
+  overflow: visible;
+}
+
+.zoe-chat-card.zoe-copilot-review > * {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.zoe-copilot-stack,
+.zoe-copilot-stack::before {
+  position: absolute;
+  z-index: -1;
+  right: 7px;
+  left: 7px;
+  height: 18px;
+  border: 1px solid #d8e7e5;
+  border-radius: 12px 12px 0 0;
+  background: #f9fcfc;
+  content: "";
+}
+
+.zoe-copilot-stack { top: -11px; }
+.zoe-copilot-stack::before { top: -9px; right: 7px; left: 7px; }
+
+.zoe-copilot-review header,
+.zoe-copilot-review-meta,
+.zoe-copilot-review > p,
+.zoe-copilot-products,
+.zoe-copilot-review-actions {
+  display: flex;
+  align-items: center;
+}
+
+.zoe-copilot-review header,
+.zoe-copilot-review-meta {
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.zoe-copilot-review header h3,
+.zoe-copilot-feedback h3 {
+  margin: 0;
+  color: #0a0a0a;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-semibold);
+}
+
+.zoe-copilot-review header > span {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.zoe-copilot-review header svg,
+.zoe-copilot-review > p svg,
+.zoe-copilot-review > a svg,
+.zoe-copilot-review-actions svg,
+.zoe-copilot-move > svg,
+.zoe-chat-quick-actions svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.zoe-copilot-review-meta {
+  margin-top: 8px;
+}
+
+.zoe-copilot-review-meta strong {
+  padding: 2px 8px;
+  border-radius: 8px;
+  color: #008a7c;
+  background: #ecfdf5;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-medium);
+}
+
+.zoe-copilot-review-meta span,
+.zoe-copilot-review > p,
+.zoe-copilot-products,
+.zoe-copilot-review > a {
+  color: #0a0a0a;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot-review-meta span,
+.zoe-copilot-review > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.zoe-copilot-review > p {
+  gap: 5px;
+  margin: 10px 0 8px;
+}
+
+.zoe-copilot-review > a {
+  color: #6366f1;
+  text-decoration: none;
+}
+
+.zoe-copilot-products {
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.zoe-copilot-products b {
+  margin-right: 6px;
+  font-weight: var(--oz-weight-semibold);
+}
+
+.zoe-copilot-products span {
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: #e0e7ff;
+}
+
+.zoe-copilot-review-actions {
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.zoe-copilot-review-actions button {
+  height: 36px;
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  color: #696867;
+  background: #f5f5f5;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+}
+
+.zoe-copilot-review-actions button.is-primary {
+  border-color: #6366f1;
+  color: #fafafa;
+  background: #6366f1;
+}
+
+.zoe-copilot-note {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 0 14px 14px;
+  color: #0a0a0a;
+  background: rgb(255 255 255 / 80%);
+  box-shadow: var(--oz-shadow-sm);
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot-move {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.zoe-copilot-move span { color: #737373; }
+.zoe-copilot-move a { color: #6366f1; text-decoration: none; }
+.zoe-copilot-move svg { margin-left: 4px; color: #6366f1; }
+
+.zoe-copilot-feedback {
+  display: grid;
+  gap: 10px;
+  padding: 16px 12px;
+  border-radius: 0 14px 14px;
+  background: rgb(255 255 255 / 80%);
+  box-shadow: var(--oz-shadow-sm);
+}
+
+.zoe-copilot-feedback-card {
+  display: grid;
+  gap: 10px;
+  padding: 16px 12px;
+  border: 0;
+  border-radius: 0 14px 14px;
+  overflow: visible;
+  background: rgb(255 255 255 / 80%);
+  box-shadow: var(--oz-shadow-sm);
+}
+
+.zoe-copilot-feedback-card > * {
+  margin: 0 !important;
+}
+
+.zoe-copilot-feedback-card h3 {
+  color: #141a2b;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
+}
+
+.zoe-copilot-feedback-options {
+  display: grid;
+  gap: 8px;
+}
+
+.zoe-copilot-feedback-card button {
+  min-height: 40px;
+  padding: 6px 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  color: #0a0a0a;
+  background: #fff;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot-feedback-card button[aria-pressed="true"] {
+  border-color: #c7d2fe;
+  background: #c7d2fe;
+}
+
+.zoe-copilot-feedback-card footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.zoe-copilot-feedback-card footer button {
+  min-height: 36px;
+}
+
+.zoe-copilot-feedback-card footer button:last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-color: #6366f1;
+  color: #fff;
+  background: #6366f1;
+}
+
+.zoe-copilot-feedback-card footer button:disabled {
+  border-color: #e5e5e5;
+  color: #a1a1aa;
+  background: #f5f5f5;
+}
+
+.zoe-copilot-feedback-card footer svg {
+  width: 14px;
+  height: 14px;
+}
+
+.zoe-copilot-feedback > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.zoe-copilot-feedback button {
+  min-height: 40px;
+  padding: 6px 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  color: #0a0a0a;
+  background: #fff;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot-feedback button[aria-pressed="true"] {
+  border-color: #818cf8;
+  color: #4f46e5;
+  background: #eef2ff;
+}
+
+.zoe-copilot-feedback footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.zoe-copilot-feedback footer button {
+  min-height: 36px;
+}
+
+.zoe-copilot-feedback footer button:last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-color: #f5f5f5;
+  color: #737373;
+  background: #f5f5f5;
+}
+
+.zoe-copilot .zoe-chat-quick-actions {
+  position: relative;
+  display: flex;
+  grid-template-columns: none;
+  gap: 8px;
+  margin-bottom: 4px;
+  padding: 4px 14px 0;
+  overflow: visible;
+  border: 0;
+}
+
+.zoe-copilot .zoe-chat-quick-actions button {
+  width: auto;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  align-content: center;
+  justify-items: initial;
+  gap: 4px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 16px;
+  color: #0a0a0a;
+  background: linear-gradient(110deg, #fff, #e0e8ff);
+  box-shadow: var(--oz-shadow-xs);
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-copilot .zoe-chat-quick-actions > img {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: -4px;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.zoe-copilot .zoe-chat-composer {
+  padding: 0 12px 12px;
+  border: 0;
+}
+
+.zoe-copilot .zoe-chat-composer > div {
+  min-height: 96px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  padding: 14px 10px 10px 14px;
+  border-color: #e5e5e5;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: var(--oz-shadow-sm);
+}
+
+.zoe-copilot .zoe-chat-composer input {
+  align-self: start;
+  padding: 2px 0;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+}
+
+.zoe-copilot .zoe-chat-composer button {
+  width: auto;
+  height: 32px;
+  display: inline-flex;
+  gap: 4px;
+  padding: 0 10px;
+  color: #6366f1;
+  background: #eef2ff;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+}
+
+.zoe-copilot .zoe-chat-composer button:disabled {
+  color: #a1a1aa;
+  background: #f4f4f5;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.zoe-copilot .zoe-chat-composer button svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 1320px) {
+  .zoe-copilot .zoe-chat-header > button {
+    display: grid;
+  }
+
+  .zoe-overview-orbit .zoe-agent-chat,
+  .zoe-copilot.zoe-agent-chat {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .zoe-orbit-motion,
+  .zoe-orbit-activity { display: none; }
+
+  .zoe-overview-orbit .zoe-keyword-pulse,
+  .zoe-overview-orbit .zoe-source-orchestrator,
+  .zoe-overview-orbit .zoe-realtime-push,
+  .zoe-overview-orbit .zoe-ontology-node,
+  .zoe-overview-orbit .zoe-orbit-stages button {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 430px) {
+  .zoe-copilot-feedback > div { grid-template-columns: 1fr; gap: 8px; }
+  .zoe-copilot .zoe-chat-quick-actions { gap: 5px; padding-inline: 8px; }
+  .zoe-copilot .zoe-chat-quick-actions button { padding-inline: 8px; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
+  .zoe-copilot .zoe-chat-composer input { font-size: var(--oz-text-sm); line-height: var(--oz-leading-sm); }
+}
+
+@media (max-width: 560px) {
+  .zoe-page-v2,
+  .zoe-overview-orbit,
+  .zoe-overview-orbit .zoe-hero-card,
+  .zoe-overview-orbit .zoe-hero-copy,
+  .zoe-overview-orbit .zoe-workbench,
+  .zoe-overview-orbit .zoe-primary-column,
+  .zoe-overview-orbit .zoe-orbit-engine,
+  .zoe-overview-orbit .zoe-orbit-board,
+  .zoe-overview-orbit .zoe-source-orchestrator {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .zoe-page-v2 {
+    overflow-x: clip;
+  }
+
+  .zoe-overview-orbit .zoe-home-title {
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .zoe-overview-orbit .zoe-workbench {
+    width: 100%;
+  }
+
+  .zoe-overview-orbit .zoe-orbit-board {
+    width: 100%;
+  }
+}
+
+body.zoe-route .nav-item[href="#lily/messages"] {
+  display: none;
+}
+
+/* Zoe acquisition loop: semantic HTML nodes over the reusable canvas. */
+.zoe-overview-orbit .zoe-orbit-motion {
+  z-index: 2;
+}
+
+.zoe-orbit-edges path {
+  fill: none;
+  stroke: url("#zoe-orbit-edge-gradient");
+  stroke-width: 2;
+  stroke-dasharray: 7 8;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  marker-end: url("#zoe-orbit-arrow");
+  opacity: .92;
+  animation: zoeOrbitFlowLine 1.4s linear infinite paused;
+}
+
+.zoe-orbit-edges path:nth-child(2n) {
+  animation-duration: 1.75s;
+}
+
+.zoe-orbit-edges path:nth-child(3n) {
+  animation-duration: 2.1s;
+}
+
+.zoe-overview-orbit .zoe-orbit-activity {
+  z-index: 7;
+}
+
+.zoe-overview-orbit .zoe-keyword-pulse,
+.zoe-overview-orbit .zoe-source-orchestrator,
+.zoe-overview-orbit .zoe-realtime-push,
+.zoe-overview-orbit .zoe-ontology-node {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.zoe-overview-orbit .zoe-keyword-pulse {
+  z-index: 4;
+  top: 14.4%;
+  left: 3.9%;
+  width: 25%;
+  min-height: 0;
+  height: 10.8%;
+  padding: 13px 14px;
+  border-color: #dddff0;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 96%);
+}
+
+.zoe-overview-orbit .zoe-keyword-pulse > strong {
+  color: #404861;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-overview-orbit .zoe-keyword-pulse span {
+  gap: 4px;
+  margin-top: 8px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-overview-orbit .zoe-keyword-pulse span em,
+.zoe-overview-orbit .zoe-keyword-pulse b em {
+  color: #6254e8;
+  font-size: var(--oz-text-lg);
+  line-height: var(--oz-leading-lg);
+  font-style: normal;
+  font-weight: var(--oz-weight-extrabold);
+}
+
+.zoe-overview-orbit .zoe-keyword-pulse b {
+  right: 12px;
+  bottom: 13px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-overview-orbit .zoe-source-orchestrator {
+  z-index: 4;
+  top: 1.1%;
+  left: 34.2%;
+  width: 40%;
+  min-height: 0;
+  height: 26.2%;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .92fr);
+  gap: 8px;
+  padding: 12px;
+  border-color: #dce4ec;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgb(255 255 255 / 95%), rgb(242 253 252 / 91%));
+}
+
+.zoe-overview-orbit .zoe-source-map {
+  height: 100%;
+  min-height: 0;
+}
+
+.zoe-overview-orbit .zoe-source-core {
+  width: 54px;
+  height: 54px;
+  border-color: #d8d2fb;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  box-shadow: var(--oz-shadow-2xs);
+  animation: zoeOrbitCoreBreath 4.8s ease-in-out infinite paused;
+}
+
+.zoe-source-map .zoe-source-node {
+  position: absolute;
+  z-index: 3;
+  inset: auto;
+  width: 27px;
+  height: 27px;
+  max-height: 27px;
+  min-height: 27px;
+  display: grid;
+  place-items: center;
+  padding: 5px;
+  border: 1px solid #dfe3ef;
+  border-radius: 8px;
+  color: #6559df;
+  background: #fff;
+  box-shadow: var(--oz-shadow-md);
+  animation: zoeOrbitSourceFloat 3.6s ease-in-out infinite paused;
+}
+
+.zoe-source-node img,
+.zoe-source-node > svg {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.zoe-source-node small {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  color: #7f8494;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.zoe-source-node.source-one { top: 1%; left: 49%; color: #df4a48; animation-delay: -.3s; }
+.zoe-source-node.source-two { top: 29%; left: 7%; animation-delay: -.9s; }
+.zoe-source-node.source-three { top: 51%; left: 0; color: #202635; animation-delay: -1.5s; }
+.zoe-source-node.source-four { top: 27%; right: 0; color: #2998df; animation-delay: -2.1s; }
+.zoe-source-node.source-five { right: 17%; bottom: 5%; animation-delay: -2.7s; }
+.zoe-source-node.source-six { bottom: 0; left: 43%; color: #4f6fdc; animation-delay: -3.3s; }
+
+.zoe-overview-orbit .zoe-search-monitor {
+  align-self: center;
+  padding: 9px;
+  border-radius: 13px;
+  background: rgb(255 255 255 / 88%);
+}
+
+.zoe-overview-orbit .zoe-search-monitor header {
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-overview-orbit .zoe-search-monitor header i,
+.zoe-overview-orbit .zoe-realtime-push header i {
+  animation: zoeOrbitLiveDot 1.7s ease-out infinite paused;
+}
+
+.zoe-overview-orbit .zoe-search-monitor > div {
+  min-height: 38px;
+  margin-top: 7px;
+  padding: 6px;
+}
+
+.zoe-overview-orbit .zoe-search-monitor p {
+  margin-top: 6px;
+}
+
+.zoe-overview-orbit .zoe-search-monitor > strong b {
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
+}
+
+.zoe-overview-orbit .zoe-realtime-push {
+  z-index: 5;
+  top: 8%;
+  right: 4.4%;
+  width: 22%;
+  min-height: 0;
+  height: 17%;
+  padding: 10px;
+  border-radius: 14px;
+}
+
+.zoe-overview-orbit .zoe-realtime-push > div {
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  gap: 5px;
+  margin-top: 7px;
+  padding: 6px;
+  animation: zoeOrbitRealtimeCard 6s ease-in-out infinite paused;
+}
+
+.zoe-overview-orbit .zoe-realtime-push > div > span {
+  width: 27px;
+  height: 27px;
+  color: #b86b76;
+  background: #fcecef;
+}
+
+.zoe-overview-orbit .zoe-realtime-push em {
+  color: #a75c68;
+  background: #fbe9ed;
+}
+
+.zoe-overview-orbit .zoe-realtime-push > small {
+  margin-top: 6px;
+}
+
+.zoe-overview-orbit .zoe-ontology-node {
+  z-index: 4;
+  top: 54.2%;
+  left: 2.8%;
+  width: 16%;
+}
+
+.zoe-overview-orbit .zoe-ontology-node > span {
+  width: 88px;
+  height: 88px;
+  margin-bottom: 9px;
+  animation: zoeOrbitOntologyBreath 5.2s ease-in-out infinite paused;
+}
+
+.zoe-overview-orbit .zoe-ontology-node small {
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-overview-orbit .zoe-ontology-node strong {
+  margin-top: 4px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-overview-orbit .zoe-ontology-node p {
+  margin-top: 3px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-overview-orbit .zoe-orbit-stages li {
+  z-index: 6;
+  width: 18.6%;
+  height: 18.2%;
+}
+
+.zoe-overview-orbit .zoe-orbit-stages li:nth-child(1) { top: 33.3%; left: 10.6%; }
+.zoe-overview-orbit .zoe-orbit-stages li:nth-child(2) { top: 33.3%; left: 46.5%; }
+.zoe-overview-orbit .zoe-orbit-stages li:nth-child(3) { top: 33.3%; right: 7.9%; }
+.zoe-overview-orbit .zoe-orbit-stages li:nth-child(4) { top: 74.7%; left: 46.5%; }
+
+.zoe-overview-orbit .zoe-stage-node,
+.zoe-overview-orbit .zoe-orbit-stages button {
+  width: 100%;
+  height: 100%;
+}
+
+.zoe-overview-orbit .zoe-orbit-stages button {
+  min-height: 0;
+  gap: 3px;
+  padding: 12px 13px;
+  border-color: #d8deed;
+  border-radius: 14px;
+  opacity: 1;
+  background: linear-gradient(145deg, rgb(255 255 255 / 97%) 54%, rgb(238 235 255 / 91%) 100%);
+  box-shadow: var(--oz-shadow-lg);
+}
+
+.zoe-overview-orbit .zoe-orbit-stages li:nth-child(2) button,
+.zoe-overview-orbit .zoe-orbit-stages li:nth-child(3) button {
+  background: linear-gradient(145deg, rgb(255 255 255 / 97%) 54%, rgb(225 248 247 / 91%) 100%);
+}
+
+.zoe-overview-orbit .zoe-orbit-stages .zoe-stage-card-icon {
+  width: 29px;
+  height: 29px;
+  margin-bottom: 5px;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.zoe-overview-orbit .zoe-orbit-stages button > span {
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-overview-orbit .zoe-orbit-stages button strong {
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+}
+
+.zoe-overview-orbit .zoe-orbit-stages button small {
+  margin-top: 2px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+}
+
+.zoe-orbit-stage-pulse {
+  width: 18.6%;
+  height: 18.2%;
+  border-radius: 14px;
+}
+
+.zoe-orbit-stage-pulse.is-strategy { top: 33.3%; left: 10.6%; }
+.zoe-orbit-stage-pulse.is-search { top: 33.3%; left: 46.5%; }
+.zoe-orbit-stage-pulse.is-screening { top: 33.3%; left: 73.5%; }
+.zoe-orbit-stage-pulse.is-iteration { top: 74.7%; left: 46.5%; }
+
+.zoe-orbit-board.is-motion-active .zoe-source-core,
+.zoe-orbit-board.is-motion-active .zoe-source-node,
+.zoe-orbit-board.is-motion-active .zoe-search-monitor header i,
+.zoe-orbit-board.is-motion-active .zoe-realtime-push header i,
+.zoe-orbit-board.is-motion-active .zoe-realtime-push > div,
+.zoe-orbit-board.is-motion-active .zoe-ontology-node > span,
+.zoe-orbit-board.is-motion-active .zoe-orbit-edges path {
+  animation-play-state: running;
+}
+
+@keyframes zoeOrbitFlowLine {
+  to { stroke-dashoffset: -30; }
+}
+
+@keyframes zoeOrbitCoreBreath {
+  0%, 100% { box-shadow: var(--oz-shadow-2xs); transform: translate(-50%, -50%) scale(.96); }
+  50% { box-shadow: var(--oz-shadow-2xs); transform: translate(-50%, -50%) scale(1.04); }
+}
+
+@keyframes zoeOrbitSourceFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes zoeOrbitLiveDot {
+  0% { box-shadow: var(--oz-shadow-2xs); }
+  75%, 100% { box-shadow: var(--oz-shadow-2xs); }
+}
+
+@keyframes zoeOrbitRealtimeCard {
+  0%, 100% { opacity: .78; transform: translateY(2px); }
+  12%, 82% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zoeOrbitOntologyBreath {
+  0%, 100% { transform: scale(.96); box-shadow: var(--oz-shadow-inner); }
+  50% { transform: scale(1.04); box-shadow: var(--oz-shadow-inner); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zoe-source-core,
+  .zoe-source-node,
+  .zoe-search-monitor header i,
+  .zoe-realtime-push header i,
+  .zoe-realtime-push > div,
+  .zoe-ontology-node > span,
+  .zoe-orbit-edges path {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .zoe-overview-orbit .zoe-orbit-board {
+    height: auto;
+    background: #fbfdff;
+  }
+
+  .zoe-overview-orbit .zoe-keyword-pulse,
+  .zoe-overview-orbit .zoe-source-orchestrator,
+  .zoe-overview-orbit .zoe-realtime-push,
+  .zoe-overview-orbit .zoe-ontology-node,
+  .zoe-overview-orbit .zoe-orbit-stages li {
+    position: relative;
+    inset: auto;
+    width: auto;
+    height: auto;
+  }
+
+  .zoe-overview-orbit .zoe-source-orchestrator {
+    grid-row: 1;
+    min-height: 190px;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .zoe-overview-orbit .zoe-keyword-pulse,
+  .zoe-overview-orbit .zoe-realtime-push {
+    min-height: 100px;
+  }
+
+  .zoe-overview-orbit .zoe-ontology-node {
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+    grid-template-rows: repeat(3, auto);
+    column-gap: 14px;
+    padding: 12px;
+    border: 1px solid #dde2ef;
+    border-radius: 16px;
+    background: rgb(255 255 255 / 92%);
+    text-align: left;
+  }
+
+  .zoe-overview-orbit .zoe-ontology-node > span {
+    grid-row: 1 / 4;
+    width: 72px;
+    height: 72px;
+    margin: 0;
+  }
+
+  .zoe-overview-orbit .zoe-orbit-stages {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .zoe-overview-orbit .zoe-stage-node,
+  .zoe-overview-orbit .zoe-orbit-stages button {
+    height: auto;
+  }
+
+  .zoe-overview-orbit .zoe-orbit-stages button {
+    min-height: 148px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 430px) {
+  .zoe-overview-orbit .zoe-source-orchestrator {
+    grid-template-columns: 1fr;
+    min-height: 330px;
+  }
+
+  .zoe-overview-orbit .zoe-source-map {
+    min-height: 150px;
+  }
 }

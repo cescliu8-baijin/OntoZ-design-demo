@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-17",
+  "url": "https://iihcw7mp26x.feishu.cn/docx/HGw5dksH4oRKR2xFTpscYfxZn3b",
+  "document_id": "HGw5dksH4oRKR2xFTpscYfxZn3b",
+  "revision_id": 29,
+  "verification": "CLI inserted Figma component policy in chapter 2, clarified previous button wording in chapters 2 and 4, and read back all policy paragraphs and the component-library URL (Feishu normalizes URL encoding).",
+  "tables": 10,
+  "version": "2.1",
+  "component_library_url": "https://www.figma.com/design/oPNMfPosKibiZoqjOLh92h/OntoZ-%E7%BB%84%E4%BB%B6%E5%BA%93?node-id=3095-5236&t=aOkcUZreZOsizpMv-1",
+  "strict_component_types": [
+    "按钮",
+    "输入框",
+    "弹窗",
+    "标签"
+  ],
+  "change_scope": "Documentation only; no OntoZ product code changes in this revision."
+}

@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  font-family: var(--oz-font-family-sans);
   color: var(--oz-foreground);
   background: var(--oz-background-color);
   font-synthesis: none;
@@ -368,6 +368,20 @@ svg { width: 16px; height: 16px; stroke-width: 1.5; }
   outline-offset: 2px;
 }
 
+/* Shared application shell. Route-specific page styles must not target this container. */
+.app-workspace {
+  position: relative;
+  width: calc(100% - 240px);
+  min-height: 100vh;
+  margin-left: 240px;
+  background: var(--oz-background-color);
+  transition: width .2s ease, margin-left .2s ease;
+}
+
+.toast { position: fixed; left: 50%; bottom: 26px; z-index: 80; display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px; color: var(--oz-white); background: var(--oz-zinc-900); box-shadow: var(--oz-shadow-lg); font-size: var(--oz-text-sm); line-height: var(--oz-leading-sm); opacity: 0; pointer-events: none; transform: translate(-50%, 12px); transition: .2s; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast svg { color: var(--oz-green-300); }
+
 .skip-link {
   position: fixed;
   top: 12px;
@@ -377,7 +391,7 @@ svg { width: 16px; height: 16px; stroke-width: 1.5; }
   border-radius: 10px;
   color: var(--oz-white);
   background: var(--oz-slate-900);
-  box-shadow: 0 8px 24px var(--oz-slate-900-24);
+  box-shadow: var(--oz-shadow-lg);
   text-decoration: none;
   transform: translateY(calc(-100% - 20px));
   transition: transform .16s ease;
@@ -396,7 +410,8 @@ svg { width: 16px; height: 16px; stroke-width: 1.5; }
   background: var(--oz-amber-100);
   border-bottom: 1px solid var(--oz-amber-200);
   text-align: center;
-  font-size: 14px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .mobile-app-bar,
@@ -435,9 +450,9 @@ svg { width: 16px; height: 16px; stroke-width: 1.5; }
   flex: 1;
   color: var(--indigo);
   text-decoration: none;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 600;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
+  font-weight: var(--oz-weight-semibold);
 }
 
 .collapse-button {
@@ -461,9 +476,9 @@ svg { width: 16px; height: 16px; stroke-width: 1.5; }
   margin: 0;
   padding: 0 8px;
   color: var(--muted);
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 400;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  font-weight: var(--oz-weight-normal);
 }
 
 .nav-item {
@@ -476,8 +491,8 @@ svg { width: 16px; height: 16px; stroke-width: 1.5; }
   color: var(--foreground);
   border-radius: 8px;
   text-decoration: none;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
   white-space: nowrap;
 }
 
@@ -501,7 +516,7 @@ svg { width: 16px; height: 16px; stroke-width: 1.5; }
 
 .account:hover { background: var(--oz-black-4); }
 .account img { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
-.account strong { flex: 1; min-width: 0; overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+.account strong { flex: 1; min-width: 0; overflow: hidden; font-size: var(--oz-text-sm); line-height: var(--oz-leading-sm); text-overflow: ellipsis; white-space: nowrap; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -514,4 +529,18 @@ svg { width: 16px; height: 16px; stroke-width: 1.5; }
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
+}
+
+/* Accessible labels and live status must not occupy the visual layout. */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }

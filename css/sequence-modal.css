@@ -34,15 +34,15 @@
 }
 .marketing-header h2 {
   margin: 0;
-  font-size: 18px;
-  line-height: 26px;
-  font-weight: 600;
+  font-size: var(--oz-text-lg);
+  line-height: var(--oz-leading-lg);
+  font-weight: var(--oz-weight-semibold);
 }
 .marketing-header p {
   margin: 2px 0 0;
   color: var(--muted);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 .marketing-header button {
   width: 32px;
@@ -90,7 +90,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--oz-white);
-  box-shadow: 0 1px 2px var(--oz-slate-900-4);
+  box-shadow: var(--oz-shadow-xs);
 }
 .sequence-panel[hidden] {
   display: none !important;
@@ -103,9 +103,9 @@
 .assistant-line {
   margin: 0;
   color: var(--foreground);
-  font-size: 15px;
-  line-height: 22px;
-  font-weight: 600;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
+  font-weight: var(--oz-weight-semibold);
 }
 .mail-round-tabs {
   width: 100%;
@@ -130,14 +130,14 @@
   border-radius: 8px;
   color: var(--foreground);
   background: transparent;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
 }
 .mail-round-tabs button.active {
   border-color: var(--border);
   background: var(--oz-white);
-  box-shadow: 0 1px 1.5px var(--oz-black-10);
+  box-shadow: var(--oz-shadow-xs);
 }
 .mail-preview {
   display: flex;
@@ -153,8 +153,8 @@
 .mail-preview p {
   margin: 0;
   color: var(--foreground);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
   white-space: pre-wrap;
 }
 .template-tips {
@@ -167,8 +167,8 @@
   flex: 1;
   min-width: 0;
   color: var(--muted);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 .template-tips svg {
   flex: none;
@@ -192,9 +192,9 @@
   border-radius: 8px;
   color: var(--foreground);
   background: var(--oz-white);
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 500;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
 }
 .mail-actions button:disabled {
   opacity: .72;
@@ -216,9 +216,9 @@
   border-radius: 14px;
   color: var(--indigo);
   background: var(--oz-indigo-50);
-  box-shadow: 0 1px 1px var(--oz-black-10);
-  font-size: 14px;
-  line-height: 20px;
+  box-shadow: var(--oz-shadow-xs);
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 .audience-list {
   display: flex;
@@ -256,7 +256,7 @@
   border-radius: 6px;
   color: var(--indigo);
   background: var(--oz-indigo-50);
-  box-shadow: 0 1px 2px var(--oz-black-10);
+  box-shadow: var(--oz-shadow-xs);
 }
 .audience-check svg {
   width: 12px;
@@ -265,7 +265,7 @@
 .audience-company input:not(:checked) + .audience-check {
   color: transparent;
   background: var(--oz-white);
-  box-shadow: inset 0 0 0 1px var(--border);
+  box-shadow: var(--oz-shadow-inner);
 }
 .audience-info {
   flex: 1;
@@ -274,9 +274,9 @@
 .audience-company strong {
   display: block;
   color: var(--foreground);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
 }
 .audience-company small {
   display: flex;
@@ -284,8 +284,8 @@
   gap: 4px;
   margin-top: 4px;
   color: var(--muted);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 .audience-company small svg {
   width: 16px;
@@ -330,8 +330,8 @@
   align-items: center;
   gap: 4px;
   color: var(--oz-white);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
   white-space: nowrap;
 }
 .audience-tooltip svg {
@@ -378,14 +378,14 @@
 }
 .auto-unlock strong {
   color: var(--foreground);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
 }
 .auto-unlock div span {
   color: var(--muted);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 .sequence-heading {
   display: flex;
@@ -402,8 +402,8 @@
   border-radius: 10px;
   color: var(--oz-green-600);
   background: var(--oz-green-100);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 .sequence-field {
   display: flex;
@@ -415,8 +415,8 @@
 .exit-criteria > span,
 .sequence-steps-header > span {
   color: var(--muted);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 .sequence-field input,
 .sequence-field select {
@@ -429,13 +429,13 @@
   outline: 0;
   color: var(--foreground);
   background: var(--oz-white);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 .sequence-field input:focus,
 .sequence-field select:focus {
   border-color: var(--oz-indigo-300);
-  box-shadow: 0 0 0 3px var(--oz-indigo-500-12);
+  box-shadow: var(--oz-shadow-focus);
 }
 .sequence-summary {
   display: grid;
@@ -455,21 +455,21 @@
 }
 .sequence-summary span {
   color: var(--muted);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 .sequence-summary strong {
   min-width: 0;
   overflow: hidden;
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 500;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
   text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .sequence-summary b {
-  font-weight: 500;
+  font-weight: var(--oz-weight-medium);
 }
 .sequence-preset {
   flex: none;
@@ -484,13 +484,13 @@
   outline: 0;
   color: var(--foreground);
   background: var(--oz-white);
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 500;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
 }
 .sequence-preset select:focus {
   border-color: var(--oz-indigo-300);
-  box-shadow: 0 0 0 3px var(--oz-indigo-500-10);
+  box-shadow: var(--oz-shadow-focus);
 }
 .sequence-settings-grid {
   display: grid;
@@ -527,8 +527,8 @@
   gap: 6px;
   min-width: 0;
   color: var(--foreground);
-  font-size: 13px;
-  line-height: 18px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 .sequence-toggle-list svg {
   flex: none;
@@ -542,9 +542,9 @@
 }
 .exit-criteria b {
   color: var(--foreground);
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 500;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
 }
 .sequence-steps-header {
   display: flex;
@@ -563,8 +563,8 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--oz-white);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 .sequence-steps-header svg {
   width: 14px;
@@ -603,9 +603,9 @@
 .sequence-step h3 {
   margin: 0;
   color: var(--foreground);
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 500;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
+  font-weight: var(--oz-weight-medium);
 }
 .sequence-delay {
   height: 32px;
@@ -632,9 +632,9 @@
   outline: 0;
   color: var(--foreground);
   background: transparent;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
 }
 .sequence-step-copy {
   width: 100%;
@@ -646,12 +646,12 @@
   outline: 0;
   color: var(--foreground);
   background: transparent;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
   white-space: pre-wrap;
 }
 .sequence-step-copy:focus {
-  box-shadow: none;
+  box-shadow: var(--oz-shadow-none);
 }
 .sequence-personal-note {
   display: flex;
@@ -659,8 +659,8 @@
   gap: 8px;
   width: 100%;
   color: var(--muted);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 .sequence-personal-note svg {
   flex: none;
@@ -685,18 +685,18 @@
   border-radius: 10px;
   color: var(--foreground);
   background: var(--oz-neutral-100);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
 }
 .sequence-step-actions button:hover {
   background: var(--oz-neutral-200);
 }
 .sequence-rules-card h3 {
   margin: 0;
-  font-size: 15px;
-  line-height: 22px;
-  font-weight: 600;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
+  font-weight: var(--oz-weight-semibold);
 }
 .marketing-footer {
   flex: none;
@@ -717,8 +717,8 @@
   gap: 6px;
   padding: 0 10px;
   border-radius: 10px;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 .marketing-footer > button:first-child {
   border: 1px solid var(--border);
@@ -729,7 +729,7 @@
   border: 0;
   color: var(--oz-white);
   background: var(--indigo);
-  font-weight: 500;
+  font-weight: var(--oz-weight-medium);
 }
 .confirm-marketing:hover { background: var(--oz-indigo-600); }
 
@@ -770,9 +770,9 @@
   min-width: 0;
   margin: 0;
   overflow: hidden;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
+  font-weight: var(--oz-weight-normal);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -788,10 +788,10 @@
   border: 0;
   border-radius: 10px;
   background: transparent;
-  box-shadow: none;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+  box-shadow: var(--oz-shadow-none);
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
 }
 
 .marketing-title-row #closeMarketingDrawer:hover {
@@ -815,9 +815,9 @@
   border-radius: 10px;
   background: var(--indigo);
   color: var(--oz-white);
-  box-shadow: none;
-  font-size: 14px;
-  line-height: 20px;
+  box-shadow: var(--oz-shadow-none);
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
   white-space: nowrap;
 }
 
@@ -841,7 +841,7 @@
   padding: 16px 24px;
   border-radius: 12px;
   background: var(--oz-white);
-  box-shadow: 0 1px 1.5px var(--oz-black-10);
+  box-shadow: var(--oz-shadow-xs);
 }
 
 .sequence-rules-card {
@@ -858,9 +858,9 @@
 .sequence-task-heading h3 {
   margin: 0;
   color: var(--foreground);
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 500;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
+  font-weight: var(--oz-weight-medium);
 }
 
 .sequence-task-heading span {
@@ -884,9 +884,9 @@
   border-radius: 8px;
   color: var(--foreground);
   background: var(--oz-white);
-  box-shadow: 0 1px 1px var(--oz-black-10);
-  font-size: 14px;
-  line-height: 20px;
+  box-shadow: var(--oz-shadow-xs);
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .sequence-select-trigger span {
@@ -897,7 +897,7 @@
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  font-weight: 400;
+  font-weight: var(--oz-weight-normal);
   text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -919,7 +919,7 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--oz-white);
-  box-shadow: 0 4px 3px var(--oz-black-10), 0 2px 2px var(--oz-black-10);
+  box-shadow: var(--oz-shadow-lg);
 }
 
 .sequence-select > .sequence-dropdown {
@@ -944,10 +944,10 @@
   border-radius: 6px;
   color: var(--foreground);
   background: transparent;
-  box-shadow: none;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
+  box-shadow: var(--oz-shadow-none);
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-normal);
   text-align: left;
 }
 
@@ -977,8 +977,8 @@
 }
 
 .sequence-step h3 {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: var(--oz-text-base);
+  line-height: var(--oz-leading-base);
 }
 
 .sequence-delay {
@@ -990,11 +990,11 @@
   padding: 0 0;
   border: 0;
   background: transparent;
-  box-shadow: none;
+  box-shadow: var(--oz-shadow-none);
   color: var(--foreground);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
 }
 
 .sequence-delay-menu {
@@ -1048,8 +1048,8 @@
 
 .sequence-rules-card .sequence-field span {
   color: var(--oz-black);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
 }
 
 .sequence-control {
@@ -1131,14 +1131,14 @@
 .auto-unlock-copy strong {
   flex: none;
   color: var(--foreground);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+  font-weight: var(--oz-weight-medium);
 }
 
 .auto-unlock-copy small {
   min-width: 0;
   color: var(--muted);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }

@@ -1,5 +1,13 @@
 # 项目维护规则
 
+## 开发前必读
+
+新增页面、组件或基于本项目开发新项目之前，先阅读 `docs/agent-project-guide.md`。
+完整变量、图标、Auto Layout、响应式规则与接入示例见 `docs/design-system/OntoZ平台设计规范.html`。
+新增 Agent 首页还需阅读 `docs/new-agent-development-guide.md`；当前响应式参数以新版指南及源码为准。
+
+组件库入口：[OntoZ Figma 组件库](https://www.figma.com/design/oPNMfPosKibiZoqjOLh92h/OntoZ-%E7%BB%84%E4%BB%B6%E5%BA%93?node-id=3095-5236&t=aOkcUZreZOsizpMv-1)。页面开发时，AI Agent 必须通过 Figma 插件读取目标组件及其变体、样式和适用状态。按钮、输入框、弹窗、标签严格遵守组件库；其他类型可按需修改，仍遵守共享变量和自适应规则。具体执行顺序见 `docs/agent-project-guide.md` 第3.1节。
+
 ## 唯一源目录
 
 本项目根目录是唯一源码目录。

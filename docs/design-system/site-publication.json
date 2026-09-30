@@ -1,0 +1,13 @@
+{
+  "project_id": "appgprj_6aab87e661cc81919f73597e535cd6f0",
+  "title": "OntoZ平台设计规范",
+  "source": "docs/design-system/OntoZ平台设计规范.html",
+  "generated_site_directory": "output/ontoz-design-spec-site",
+  "audience": "private",
+  "status": "succeeded",
+  "url": "https://ontoz-design-spec.ericliuhanqing.chatgpt.site",
+  "version_id": "appgprj_6aab87e661cc81919f73597e535cd6f0~appgver_c8a1e4922f088191a7abb831704d76fd",
+  "deployment_id": "appgdep_6aab88a52e748191b5aa4bc24456f879",
+  "commit_sha": "c921d7ef7be5ec33b475a0830a2a5872ef592f1d",
+  "published_at": "2026-09-17T06:31:31.959986+00:00"
+}

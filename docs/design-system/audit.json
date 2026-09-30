@@ -1,0 +1,1860 @@
+{
+  "date": "2026-09-17",
+  "baseline": "3abd8ef5 + working-tree changes",
+  "tokens": 330,
+  "literalIconNames": 120,
+  "runtime": {
+    "rows": [
+      {
+        "route": "wendy",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "zoe",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lucas",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "leo",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "dashboard",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "customers",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/messages",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/templates",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/tasks",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/dashboard",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "lily/scan",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/ads",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "john/create-ad",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "ontology/buyer-search-strategy/keyword-validation",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 320,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 390,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 767,
+        "nav": "mobile",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 768,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 1024,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 1135,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 1136,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 1280,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 1439,
+        "nav": "rail",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 1440,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 1920,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      },
+      {
+        "route": "wendy/content",
+        "width": 2560,
+        "nav": "desktop",
+        "overflow": false,
+        "offenders": [],
+        "broken": []
+      }
+    ],
+    "errors": []
+  },
+  "version": "2.0",
+  "sources": {
+    "typographyAndShadow": "https://www.figma.com/design/oPNMfPosKibiZoqjOLh92h/OntoZ?node-id=3095-5236&view=variables",
+    "responsive": "https://iihcw7mp26x.feishu.cn/docx/FTHBdjdvyoZuGJxEzFncR3GAnzd",
+    "responsiveAuthority": "chapter 3; overrides legacy 40px / 520px statements",
+    "textStyles": 117,
+    "shadowStyles": 11
+  },
+  "checks": {
+    "viewportCombinations": 228,
+    "horizontalOverflow": 0,
+    "visibleBrokenImages": 0,
+    "consoleOrResourceErrors": 0,
+    "wendyResponsive": "passed: 14 widths, drafts, focus, scroll, short mobile viewport",
+    "wendyBusiness": "passed: goals, comments, editing, collaboration, approval queue",
+    "inquiryBusiness": "passed: channels, drafts, attachments, mobile flows",
+    "handbook": "passed: 390/768/1440, 120 icons, search, calculator, resources",
+    "standaloneBuilds": "passed: inquiry and Wendy; generated from root source",
+    "designSystemRegression": "passed: scripts/test-design-system.cjs; 19 routes × 12 widths, shared shell, overlay navigation without content displacement, common typography and display-title exceptions",
+    "zoeCreateMobile": "passed: 390px, padding 16px, no page overflow"
+  },
+  "limitations": [
+    "System font fallback; Inter is not bundled.",
+    "Browser checks cover selected demo states, not all backend states."
+  ]
+}

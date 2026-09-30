@@ -5,16 +5,34 @@ const collapseButton = document.querySelector('#collapseButton');
 const mobileMenuButton = document.querySelector('#mobileMenuButton');
 const mobileNavScrim = document.querySelector('#mobileNavScrim');
 const mobilePageTitle = document.querySelector('#mobilePageTitle');
-const mobileNavigationQuery = window.matchMedia('(max-width: 560px)');
+const agentMobileNavigationQuery = window.matchMedia('(width < 768px)');
+const agentCompactNavigationQuery = window.matchMedia('(width < 1440px)');
+// One shell for every route. Overlay navigation never changes occupied width.
+const agentNavigationActive = true;
+let navigationAgent = '';
+let agentSidebarCollapsed = false;
+function usesMobileNavigation() { return agentMobileNavigationQuery.matches; }
+function syncAgentNavigation() {
+  const nextAgent = location.hash.replace(/^#/, '').split('/')[0] || 'lucas';
+  if (nextAgent !== navigationAgent) {
+    navigationAgent = nextAgent;
+    agentSidebarCollapsed = false;
+    try { agentSidebarCollapsed = localStorage.getItem(`ontoz-${navigationAgent}-sidebar-collapsed`) === 'true'; } catch (_) {}
+  }
+  document.body.classList.add('agent-home-shell');
+  document.body.dataset.agentNav = agentMobileNavigationQuery.matches ? 'mobile' : agentCompactNavigationQuery.matches ? 'rail' : 'desktop';
+  setMobileNavigation(false);
+  setDesktopSidebarCollapsed(agentCompactNavigationQuery.matches || agentSidebarCollapsed);
+}
 
 function setMobileNavigation(open) {
-  const nextOpen = Boolean(open && mobileNavigationQuery.matches);
+  const nextOpen = Boolean(open && usesMobileNavigation());
   sidebar.classList.toggle('mobile-open', nextOpen);
   document.body.classList.toggle('mobile-nav-open', nextOpen);
   mobileNavScrim.hidden = !nextOpen;
   mobileMenuButton.setAttribute('aria-expanded', String(nextOpen));
   mobileMenuButton.setAttribute('aria-label', nextOpen ? '关闭主导航' : '打开主导航');
-  if (mobileNavigationQuery.matches) {
+  if (usesMobileNavigation()) {
     sidebar.inert = !nextOpen;
     sidebar.setAttribute('aria-hidden', String(!nextOpen));
     collapseButton.setAttribute('aria-expanded', String(nextOpen));
@@ -26,34 +44,53 @@ function setMobileNavigation(open) {
 }
 
 function setDesktopSidebarCollapsed(collapsed) {
-  const nextCollapsed = Boolean(collapsed && !mobileNavigationQuery.matches);
+  const nextCollapsed = Boolean(collapsed && !usesMobileNavigation());
+  const mobileAgent = agentNavigationActive && usesMobileNavigation();
   sidebar.classList.toggle('collapsed', nextCollapsed);
-  collapseButton.setAttribute('aria-expanded', String(!nextCollapsed));
-  collapseButton.setAttribute('aria-label', nextCollapsed ? '展开导航' : '收起导航');
+  collapseButton.setAttribute('aria-expanded', String(mobileAgent ? sidebar.classList.contains('mobile-open') : !nextCollapsed));
+  collapseButton.setAttribute('aria-label', mobileAgent ? '关闭导航' : nextCollapsed ? '展开导航' : '收起导航');
   collapseButton.innerHTML = renderIcon(nextCollapsed ? 'panel-left-open' : 'panel-left-close');
+  if (agentNavigationActive && document.body.dataset.agentNav === 'rail') mobileNavScrim.hidden = nextCollapsed;
   refreshIcons();
 }
 
 collapseButton.addEventListener('click', () => {
-  if (mobileNavigationQuery.matches) {
+  if (usesMobileNavigation()) {
     setMobileNavigation(false);
     return;
   }
   setDesktopSidebarCollapsed(!sidebar.classList.contains('collapsed'));
+  if (agentNavigationActive && !agentCompactNavigationQuery.matches) {
+    agentSidebarCollapsed = sidebar.classList.contains('collapsed');
+    try { localStorage.setItem(`ontoz-${navigationAgent}-sidebar-collapsed`, String(agentSidebarCollapsed)); } catch (_) {}
+  }
 });
 
 mobileMenuButton.addEventListener('click', () => {
   setMobileNavigation(!sidebar.classList.contains('mobile-open'));
 });
 
-mobileNavScrim.addEventListener('click', () => setMobileNavigation(false));
-
-mobileNavigationQuery.addEventListener('change', event => {
-  setMobileNavigation(false);
-  setDesktopSidebarCollapsed(event.matches ? false : sidebar.classList.contains('collapsed'));
+mobileNavScrim.addEventListener('click', () => {
+  if (agentNavigationActive && document.body.dataset.agentNav === 'rail') {
+    setDesktopSidebarCollapsed(true);
+    collapseButton.focus();
+  } else setMobileNavigation(false);
 });
 
+for (const query of [agentMobileNavigationQuery, agentCompactNavigationQuery]) {
+  query.addEventListener('change', () => {
+    if (!agentNavigationActive) return;
+    const hadNavigationFocus = sidebar.contains(document.activeElement);
+    syncAgentNavigation();
+    if (hadNavigationFocus) (usesMobileNavigation() ? mobileMenuButton : collapseButton).focus();
+  });
+}
+
 document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && agentNavigationActive && document.body.dataset.agentNav === 'rail' && !sidebar.classList.contains('collapsed')) {
+    setDesktopSidebarCollapsed(true);
+    collapseButton.focus();
+  }
   if (event.key === 'Escape' && sidebar.classList.contains('mobile-open')) {
     setMobileNavigation(false);
     mobileMenuButton.focus();
@@ -65,12 +102,8 @@ const lilyDashboard = document.querySelector('#lilyDashboard');
 const lilyAgent = document.querySelector('#lilyAgent');
 const appPages = {
   wendy: document.querySelector('#wendyPage'),
-  'wendy/accounts': document.querySelector('#wendyAccountsPage'),
-  'wendy/agent': document.querySelector('#wendyAgentPage'),
   lucas: document.querySelector('#lucasPage'),
   john: document.querySelector('#johnPage'),
-  'john/ads': document.querySelector('#johnAdsPage'),
-  'john/create-ad': document.querySelector('#johnCreateFlowPage'),
   'lily/messages': document.querySelector('#lilyInquiryPage'),
   'lily/templates': document.querySelector('#lilyTemplatesPage'),
   'lily/tasks': document.querySelector('#lilyTasksPage'),
@@ -85,12 +118,12 @@ const appPages = {
 
 const standalonePageTitles = {
   wendy: '社媒运营 Wendy',
-  'wendy/accounts': '账号管理 · 社媒运营 Wendy',
-  'wendy/agent': '制定周期策略 · 社媒运营 Wendy',
   lucas: '专业建站 Lucas',
   john: '24/7 投流 John',
   'john/ads': '广告管理 · 24/7 投流 John',
   'john/create-ad': '新建广告 · 24/7 投流 John',
+  'john/data': '投放数据 · 24/7 投流 John',
+  'john/logs': '工作日志 · 24/7 投流 John',
   'lily/messages': '询盘消息',
   'lily/templates': '话术模板',
   'lily/tasks': '任务管理',
@@ -101,7 +134,7 @@ const standalonePageTitles = {
 
 function getCurrentRoute() {
   const hash = window.location.hash.replace(/^#/, '') || 'lucas';
-  const standalonePage = appPages[hash] ? hash : '';
+  const standalonePage = /^john(?:\/|$)/.test(hash) ? 'john' : /^lucas(?:\/|$)/.test(hash) ? 'lucas' : /^wendy(?:\/|$)/.test(hash) ? 'wendy' : appPages[hash] ? hash : '';
   return {
     hash,
     standalonePage,
@@ -144,7 +177,7 @@ function syncRouteNavigation(route) {
 
 function getRouteTitle(route) {
   if (route.standalonePage) {
-    const pageTitle = standalonePageTitles[route.standalonePage]
+    const pageTitle = standalonePageTitles[route.hash] || standalonePageTitles[route.standalonePage]
       || document.querySelector(`a[href="#${route.standalonePage}"] span`)?.textContent
       || 'OntoZ';
     return `${pageTitle} · OntoZ`;
@@ -199,8 +232,6 @@ function resumeAgentRoute() {
 function runRouteEffects(route) {
   if (route.standalonePage === 'customers') renderLeads();
   if (route.standalonePage === 'lily/messages') window.scrollInquiryToLatest?.();
-  if (route.standalonePage === 'wendy/accounts') renderWendyAccounts();
-  if (route.standalonePage === 'wendy/agent') resumeWendyAgent();
   scrollToRouteTop(route);
   if (route.showStandalonePage) {
     refreshIcons();
@@ -212,6 +243,7 @@ function runRouteEffects(route) {
 
 function updateLilyRoute({ focusHeading = false } = {}) {
   const route = getCurrentRoute();
+  syncAgentNavigation();
   syncRoutePages(route);
   syncRouteNavigation(route);
   syncRouteTitle(route);
@@ -226,6 +258,7 @@ document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', event => {
     const target = item.getAttribute('href');
     setMobileNavigation(false);
+    if (agentNavigationActive && document.body.dataset.agentNav === 'rail') setDesktopSidebarCollapsed(true);
     if (['#ontology', '#dashboard', '#customers', '#lily/messages', '#zoe', '#leo', '#lily', '#wendy', '#lucas', '#john'].includes(target)) return;
     event.preventDefault();
     showToast('该模块暂未在本次设计稿中展开', 1800);

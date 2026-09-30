@@ -123,10 +123,10 @@
   ];
 
   const reviewQueueData = [
-    { name: 'Aurora Hospitality Group', region: '美国 · 高端酒店采购', score: 96, signal: '近 12 个月新增 3 个酒店翻新计划', business: '精品酒店、度假村与公共空间运营', match: '高端酒店业主与采购团队', support: ['官网披露 2027 翻新计划', '新增区域采购负责人'], risk: '未找到明确的照明供应商合作记录' },
-    { name: 'Nordlicht Distribution', region: '德国 · 区域渠道商', score: 93, signal: '新增建筑照明品牌合作页面', business: 'DACH 区工程照明分销与项目服务', match: '工程照明渠道伙伴', support: ['覆盖德国与奥地利项目渠道', '近期扩充酒店工程团队'], risk: '自有品牌占比较高，代理意愿待确认' },
-    { name: 'Meridian Buildworks', region: '新加坡 · 工程采购', score: 89, signal: '公开招标文件出现酒店照明升级需求', business: '酒店与商业空间总承包', match: '酒店设计与工程伙伴', support: ['在建项目与产品能力高度重合', '具备项目选型与采购职责'], risk: '采购决策可能由业主方最终确认' },
-    { name: 'Atelier Northfield', region: '英国 · 设计顾问', score: 87, signal: '新增三个国际酒店灯光设计案例', business: '酒店室内、灯光与材料设计顾问', match: '酒店设计与工程伙伴', support: ['参与照明选型与供应商推荐', '项目集中在高端酒店市场'], risk: '通常不是合同直接签署方' }
+    { name: 'Aurora Hospitality Group', category: '酒店业主与采购方', country: '美国', contacts: 12, team: '高端酒店业主与采购团队', website: 'aurora-hospitality.example', products: ['高端酒店运营', '酒店改造'] },
+    { name: 'Oceanview Hospitality', category: '度假酒店运营方', country: '美国', contacts: 8, team: '海滨度假酒店与采购团队', website: 'oceanview-hospitality.example', products: ['度假酒店运营', '公共空间改造'] },
+    { name: 'Nordlicht Distribution', category: '工程照明渠道伙伴', country: '德国', contacts: 6, team: 'DACH 区工程与渠道销售团队', website: 'nordlicht-distribution.example', products: ['工程照明分销', '项目服务'] },
+    { name: 'Meridian Buildworks', category: '酒店工程采购方', country: '新加坡', contacts: 9, team: '酒店与商业空间工程采购团队', website: 'meridian-buildworks.example', products: ['酒店总承包', '商业空间改造'] }
   ];
 
   const strategyData = {
@@ -242,6 +242,7 @@
     chatStream: page.querySelector('#zoeChatStream'),
     chatComposer: page.querySelector('#zoeChatComposer'),
     chatInput: page.querySelector('#zoeChatInput'),
+    chatSubmit: page.querySelector('#zoeChatComposer button[type="submit"]'),
     chatRailBadge: page.querySelector('#zoeChatRailBadge'),
     chatMobileBadge: page.querySelector('#zoeChatMobileBadge'),
     chatMobileTrigger: page.querySelector('[data-zoe-chat-mobile-toggle]'),
@@ -254,7 +255,9 @@
     createProgress: page.querySelector('#zoeCreateProgressText'),
     createAssistant: page.querySelector('#zoeCreateAssistantText'),
     createPrevious: page.querySelector('[data-zoe-create-previous]'),
-    createNext: page.querySelector('[data-zoe-create-next]')
+    createNext: page.querySelector('[data-zoe-create-next]'),
+    orbitBoard: page.querySelector('.zoe-orbit-board'),
+    orbitMotion: page.querySelector('.zoe-orbit-motion')
   };
 
   const state = {
@@ -271,7 +274,8 @@
     unreadCount: 0,
     chatCollapsed: false,
     mobileChatOpen: false,
-    conditionalPushed: { review: false, strategy: false, leads: false }
+    conditionalPushed: { review: false, strategy: false, leads: false },
+    entryMessagePushed: false
   };
 
   function formatNumber(value) {
@@ -371,7 +375,9 @@
   }
 
   function noteIncomingMessage() {
-    const mobileClosed = window.matchMedia('(max-width: 820px)').matches && !state.mobileChatOpen;
+    const mobileClosed = elements.overview.dataset.av2Compact === 'true'
+      ? !elements.overview.querySelector('.av2-dialog[open]')
+      : window.matchMedia('(max-width: 820px)').matches && !state.mobileChatOpen;
     if (state.chatCollapsed || mobileClosed) {
       state.unreadCount += 1;
       updateChatBadges();
@@ -412,6 +418,50 @@
     return message.querySelector('.zoe-chat-card');
   }
 
+  function renderOptimizationSummary(message) {
+    const pending = strategyData.risky.filter(item => item.status === 'pending');
+    message.className = 'zoe-copilot-optimization';
+    message.dataset.zoeEntryMessage = 'true';
+    message.dataset.zoeCardType = 'optimization';
+    message.innerHTML = `
+      <header class="zoe-copilot-optimization-header">
+        <span><i data-lucide="wand-sparkles"></i></span>
+        <div><small>策略优化</small><h3>本轮已为您优化</h3></div>
+        <b>${pending.length} 项待确认</b>
+      </header>
+      <section class="zoe-copilot-optimization-group is-complete">
+        <h4><i data-lucide="circle-check"></i>已经为您优化</h4>
+        ${strategyData.optimized.map(item => `<article><strong>${escapeHTML(item.title)}</strong><span>${escapeHTML(item.meta)}</span></article>`).join('')}
+      </section>
+      <section class="zoe-copilot-optimization-group is-risk">
+        <h4><i data-lucide="shield-alert"></i>有风险，需要您确认</h4>
+        ${pending.length ? pending.map(item => `
+          <article data-strategy-id="${item.id}">
+            <strong>${escapeHTML(item.title)}</strong>
+            <p>${escapeHTML(item.description)}</p>
+            <span>${escapeHTML(item.impact)}</span>
+            <div class="zoe-copilot-optimization-actions">
+              <button class="is-primary" type="button" data-zoe-chat-strategy="approve">批准</button>
+              <button type="button" data-zoe-chat-strategy="ignore">忽略</button>
+            </div>
+          </article>
+        `).join('') : '<div class="zoe-chat-inline-success"><i data-lucide="circle-check-big"></i>风险策略已全部处理</div>'}
+      </section>
+    `;
+    elements.strategyCount.textContent = String(pending.length);
+    refreshIcons();
+  }
+
+  function pushOptimizationSummary() {
+    if (state.entryMessagePushed) return;
+    state.entryMessagePushed = true;
+    const message = document.createElement('article');
+    renderOptimizationSummary(message);
+    elements.chatStream.append(message);
+    noteIncomingMessage();
+    scrollChatToLatest();
+  }
+
   function renderTaskCard(card, index = Number(card.dataset.taskIndex || state.taskIndex), { syncState = true } = {}) {
     const safeIndex = (index + taskData.length) % taskData.length;
     const task = taskData[safeIndex];
@@ -420,26 +470,18 @@
     card.dataset.taskIndex = String(safeIndex);
     if (syncState) elements.chatContextButton.firstChild.textContent = task.name;
     card.innerHTML = `
-      <header class="zoe-chat-card-header">
-        <span><i data-lucide="activity"></i></span>
-        <div><small>任务进度 · ${safeIndex + 1}/${taskData.length}</small><h3>${escapeHTML(task.name)}</h3></div>
-        <b>运行中</b>
+      <header class="zoe-copilot-task-header">
+        <div><h3>${escapeHTML(task.name)}</h3><small>已持续 ${formatDuration(task.seconds)}</small></div>
+        <span><i></i>运行中</span>
       </header>
-      <p class="zoe-chat-card-subtitle">${escapeHTML(task.scope)}</p>
-      <div class="zoe-chat-task-switcher" role="group" aria-label="切换任务">
-        <button type="button" data-zoe-chat-task-prev aria-label="上一个任务"><i data-lucide="chevron-left"></i></button>
-        <strong>${escapeHTML(task.short)}</strong>
-        <button type="button" data-zoe-chat-task-next aria-label="下一个任务"><i data-lucide="chevron-right"></i></button>
+      <div class="zoe-copilot-task-body">
+        <div class="zoe-copilot-task-kpis">
+          <p><span>今日已分析</span><strong>${formatNumber(task.analyzed)} <small>家</small></strong></p>
+          <p><span>今日已找到</span><strong>${formatNumber(task.found)} <small>个</small></strong></p>
+        </div>
+        <div class="zoe-copilot-task-ring" style="--progress:${stage.progress * 3.6}deg"><span>累计发现<br><strong>${formatNumber(task.total)}</strong> 个客户</span></div>
       </div>
-      <div class="zoe-chat-kpis">
-        <div><span>今日分析</span><strong>${formatNumber(task.analyzed)}</strong></div>
-        <div><span>今日找到</span><strong>${formatNumber(task.found)}</strong></div>
-        <div><span>累计线索</span><strong>${formatNumber(task.total)}</strong></div>
-      </div>
-      <div class="zoe-chat-progress-copy"><span><i></i>${escapeHTML(stage.copy[0])}</span><b>${stage.progress}%</b></div>
-      <div class="zoe-chat-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${stage.progress}"><i style="width:${stage.progress}%"></i></div>
-      <div class="zoe-chat-task-meta"><span>${escapeHTML(stage.copy[1])}</span><span>已持续 ${formatDuration(task.seconds)}</span></div>
-      <footer><button type="button" data-zoe-chat-task-log>展开实时数据<i data-lucide="arrow-up-right"></i></button></footer>
+      <footer><button type="button" data-zoe-chat-task-log>详情<i data-lucide="chevron-down"></i></button></footer>
     `;
     refreshIcons();
   }
@@ -452,24 +494,50 @@
       refreshIcons();
       return;
     }
-    card.classList.remove('is-complete');
+    card.classList.remove('is-complete', 'zoe-copilot-feedback-card');
+    card.classList.add('zoe-copilot-review');
     card.dataset.reviewIndex = String(state.reviewCursor);
     card.innerHTML = `
-      <header class="zoe-chat-card-header">
-        <span><i data-lucide="scan-search"></i></span>
-        <div><small>画像精准度判断 · ${state.reviewCursor + 1}/${reviewQueueData.length}</small><h3>${escapeHTML(company.name)}</h3></div>
-        <b>${company.score} 分</b>
-      </header>
-      <p class="zoe-chat-card-subtitle">${escapeHTML(company.region)} · ${escapeHTML(company.business)}</p>
-      <div class="zoe-chat-evidence is-positive"><span>支持判断</span><strong>${escapeHTML(company.support[0])}</strong><small>${escapeHTML(company.support[1])}</small></div>
-      <div class="zoe-chat-evidence is-risk"><span>反向证据</span><strong>${escapeHTML(company.risk)}</strong></div>
-      <p class="zoe-chat-match-reason"><b>匹配画像：</b>${escapeHTML(company.match)} · ${escapeHTML(company.signal)}</p>
-      <div class="zoe-chat-card-actions" role="group" aria-label="判断 ${escapeHTML(company.name)}">
-        <button class="is-primary" type="button" data-zoe-chat-review="target">目标客户</button>
-        <button type="button" data-zoe-chat-review="not-target">不是目标</button>
-        <button type="button" data-zoe-chat-review="unsure">不确定</button>
+      <span class="zoe-copilot-stack" aria-hidden="true"></span>
+      <header><h3>${escapeHTML(company.name)}</h3><span><i data-lucide="chevron-down"></i><i data-lucide="chevron-up"></i></span></header>
+      <div class="zoe-copilot-review-meta"><strong>${escapeHTML(company.category)}</strong><span><i data-lucide="users"></i>${company.contacts} 位联系人</span></div>
+      <p><i data-lucide="map-pin"></i>${escapeHTML(company.country)} <i data-lucide="shopping-bag"></i>${escapeHTML(company.team)}</p>
+      <a href="https://${escapeHTML(company.website)}" target="_blank" rel="noreferrer"><i data-lucide="external-link"></i>${escapeHTML(company.website)}</a>
+      <div class="zoe-copilot-products"><b>主营产品</b>${company.products.map(product => `<span>${escapeHTML(product)}</span>`).join('')}</div>
+      <div class="zoe-copilot-review-actions" role="group" aria-label="判断 ${escapeHTML(company.name)}">
+        <button type="button" data-zoe-chat-review="not-target"><i data-lucide="thumbs-down"></i>不喜欢</button>
+        <button class="is-primary" type="button" data-zoe-chat-review="target"><i data-lucide="heart"></i>喜欢</button>
       </div>
     `;
+    refreshIcons();
+  }
+
+  function renderReviewFeedback(card) {
+    const company = reviewQueueData[Number(card.dataset.reviewIndex)];
+    if (!company) return;
+    card.classList.remove('zoe-copilot-review');
+    card.classList.add('zoe-copilot-feedback-card');
+    card.innerHTML = `
+      <h3>请告诉Zoe不喜欢该线索的原因</h3>
+      <div class="zoe-copilot-feedback-options">
+        <button type="button" data-zoe-feedback="market">此线索不是美国的</button>
+        <button type="button" data-zoe-feedback="product">此线索的产品是不匹配的</button>
+        <button type="button" data-zoe-feedback="competitor">此线索是同行友商</button>
+        <button type="button" data-zoe-feedback="operator">此线索不是 microgrid control system Operator</button>
+      </div>
+      <footer><button type="button" data-zoe-feedback-cancel>取消</button><button type="button" data-zoe-feedback-confirm disabled>移出该线索<i data-lucide="arrow-right"></i></button></footer>
+    `;
+    refreshIcons();
+  }
+
+  function appendReviewMoveNotice(company, direction) {
+    const notice = document.createElement('p');
+    notice.className = 'zoe-copilot-note zoe-copilot-move';
+    const target = direction === 'in' ? '已成交客户' : '高质量线索';
+    const verb = direction === 'in' ? '移入' : '移出';
+    notice.innerHTML = `已将 <span>${escapeHTML(company.name)}</span> ${verb} <a href="#customers">${target}</a><i data-lucide="arrow-up-right"></i>`;
+    elements.chatStream.append(notice);
+    scrollChatToLatest();
     refreshIcons();
   }
 
@@ -522,7 +590,7 @@
   function pushChatCard(type, { source = 'quick' } = {}) {
     const introByType = {
       task: source === 'entry' ? '欢迎回来，先同步你最近活跃任务的进度。' : '这是当前任务的最新进度，你可以直接在卡片内切换任务。',
-      review: source === 'condition' ? '我发现了一家处于新业务边界的高分客户，需要你校准一次。' : '这里还有客户等待画像判断，完成后会自动切换下一位。',
+      review: source === 'condition' ? '我发现了一家处于新业务边界的高分客户，需要你校准一次。' : '评价Zoe的客户搜索筛选',
       strategy: source === 'condition' ? '本轮产生了需要确认的策略变化，低风险优化已先执行。' : '这是本轮已完成和待确认的策略调整。',
       leads: source === 'condition' ? '新一批结果完成去重与验证，发现 3 家高价值客户。' : '这是最近发现的高价值线索，可以直接加入客户池。'
     };
@@ -536,19 +604,38 @@
   }
 
   function resolveReview(card, answer) {
-    const company = reviewQueueData[state.reviewCursor];
-    if (!company || Number(card.dataset.reviewIndex) !== state.reviewCursor) return;
+    const index = Number(card.dataset.reviewIndex);
+    const company = reviewQueueData[index];
+    if (!company || index !== state.reviewCursor) return;
+    if (answer === 'not-target') {
+      renderReviewFeedback(card);
+      scrollChatToLatest();
+      return;
+    }
     card.classList.add('is-busy');
     card.querySelectorAll('button').forEach(button => { button.disabled = true; });
-    const answerCopy = answer === 'target' ? '已确认为目标客户，并同步强化相似企业的正向特征。' : answer === 'not-target' ? '已加入排除边界，相似企业会降低匹配权重。' : '已保留为待观察客户，不影响当前任务继续运行。';
     window.setTimeout(() => {
+      appendReviewMoveNotice(company, 'in');
       state.reviewCursor += 1;
       state.reviewCount = Math.max(0, reviewQueueData.length - state.reviewCursor);
       elements.reviewCount.textContent = String(state.reviewCount);
+      card.classList.remove('is-busy');
       renderReviewCard(card);
-      appendAgentText(`${company.name}：${answerCopy}`, 'success');
-      showToast(`${company.name}：判断已记录`);
-    }, 260);
+      showToast(`${company.name} 已移入已成交客户`);
+    }, 220);
+  }
+
+  function confirmReviewFeedback(card) {
+    const index = Number(card.dataset.reviewIndex);
+    const company = reviewQueueData[index];
+    if (!company || index !== state.reviewCursor) return;
+    const message = card.closest('.zoe-chat-message-with-card');
+    appendReviewMoveNotice(company, 'out');
+    message?.remove();
+    state.reviewCursor += 1;
+    state.reviewCount = Math.max(0, reviewQueueData.length - state.reviewCursor);
+    elements.reviewCount.textContent = String(state.reviewCount);
+    showToast(`${company.name} 已移出高质量线索`);
   }
 
   function resolveStrategy(card, itemId, action) {
@@ -558,7 +645,8 @@
     if (action === 'approve') {
       strategyData.optimized.unshift({ title: item.title, meta: `${item.impact} · 刚刚批准` });
     }
-    renderStrategyCard(card);
+    if (card.dataset.zoeCardType === 'optimization') renderOptimizationSummary(card);
+    else renderStrategyCard(card);
     const message = action === 'approve' ? `已批准“${item.title}”，Zoe 将从下一批任务开始执行。` : `已忽略“${item.title}”，当前策略保持不变。`;
     appendAgentText(message, 'success');
     showToast(message);
@@ -612,11 +700,13 @@
   }
 
   function syncZoeRouteEntry() {
-    const active = window.location.hash.replace(/^#/, '') === 'zoe';
+    const route = window.location.hash.replace(/^#/, '');
+    const active = route === 'zoe';
+    const routeStyles = document.querySelector('#zoeAgentV2Styles');
+    if (routeStyles) routeStyles.disabled = active !== true && route !== 'lily';
     if (active && !state.routeActive) {
       state.routeActive = true;
-      window.setTimeout(() => pushChatCard('task', { source: 'entry' }), 80);
-      scheduleConditionalMockCards();
+      window.setTimeout(pushOptimizationSummary, 80);
       return;
     }
     if (!active) {
@@ -728,7 +818,7 @@
 
     const strategyButton = event.target.closest('[data-zoe-chat-strategy]');
     if (strategyButton) {
-      const card = event.target.closest('[data-zoe-card-type="strategy"]');
+      const card = event.target.closest('[data-zoe-card-type="strategy"], [data-zoe-card-type="optimization"]');
       const strategy = strategyButton.closest('[data-strategy-id]');
       if (card && strategy) resolveStrategy(card, strategy.dataset.strategyId, strategyButton.dataset.zoeChatStrategy);
     }
@@ -739,6 +829,24 @@
       const card = event.target.closest('[data-zoe-card-type="leads"]');
       const lead = leadButton.closest('[data-lead-id]');
       if (card && lead) addLeadToPool(card, lead.dataset.leadId);
+    }
+
+    const feedbackOption = event.target.closest('[data-zoe-feedback]');
+    if (feedbackOption) {
+      const feedback = feedbackOption.closest('.zoe-copilot-feedback-card');
+      feedback?.querySelectorAll('[data-zoe-feedback]').forEach(button => button.setAttribute('aria-pressed', String(button === feedbackOption)));
+      const confirm = feedback?.querySelector('[data-zoe-feedback-confirm]');
+      if (confirm) confirm.disabled = false;
+    }
+
+    if (event.target.closest('[data-zoe-feedback-cancel]')) {
+      const card = event.target.closest('[data-zoe-card-type="review"]');
+      if (card) renderReviewCard(card);
+    }
+
+    if (event.target.closest('[data-zoe-feedback-confirm]:not([disabled])')) {
+      const card = event.target.closest('[data-zoe-card-type="review"]');
+      if (card) confirmReviewFeedback(card);
     }
 
     if (event.target.closest('[data-zoe-open-stage]')) openStageDialog();
@@ -772,12 +880,21 @@
     }
   });
 
+  function syncChatSubmitState() {
+    const disabled = !elements.chatInput.value.trim();
+    elements.chatSubmit.disabled = disabled;
+    elements.chatSubmit.setAttribute('aria-disabled', String(disabled));
+  }
+
+  elements.chatInput.addEventListener('input', syncChatSubmitState);
+
   elements.chatComposer.addEventListener('submit', event => {
     event.preventDefault();
     const message = elements.chatInput.value.trim();
     if (!message) return;
     appendUserMessage(message);
     elements.chatInput.value = '';
+    syncChatSubmitState();
     window.setTimeout(() => {
       if (/欧洲|经销/.test(message)) state.taskIndex = 1;
       else if (/东南亚|工程/.test(message)) state.taskIndex = 2;
@@ -841,14 +958,50 @@
     }
   }, 4200);
 
+  if (elements.orbitBoard && elements.orbitMotion) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let orbitInView = false;
+
+    const syncOrbitMotion = () => {
+      const active = orbitInView && !document.hidden && !prefersReducedMotion.matches;
+      elements.orbitBoard.classList.toggle('is-motion-active', active);
+      if (typeof elements.orbitMotion.pauseAnimations !== 'function') return;
+      if (active) elements.orbitMotion.unpauseAnimations();
+      else elements.orbitMotion.pauseAnimations();
+    };
+
+    const orbitObserver = new IntersectionObserver(entries => {
+      orbitInView = entries.some(entry => entry.isIntersecting && entry.intersectionRatio > .12);
+      syncOrbitMotion();
+    }, { threshold: [.12, .5] });
+
+    const refreshOrbitVisibility = () => {
+      const rect = elements.orbitBoard.getBoundingClientRect();
+      orbitInView = rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < window.innerHeight;
+      syncOrbitMotion();
+    };
+
+    orbitObserver.observe(elements.orbitBoard);
+    document.addEventListener('visibilitychange', syncOrbitMotion);
+    prefersReducedMotion.addEventListener?.('change', syncOrbitMotion);
+    window.addEventListener('hashchange', () => window.requestAnimationFrame(refreshOrbitVisibility));
+    window.addEventListener('resize', refreshOrbitVisibility);
+    window.requestAnimationFrame(refreshOrbitVisibility);
+    syncOrbitMotion();
+  }
+
   renderStage(0);
   renderCreateStep();
+  syncChatSubmitState();
   elements.reviewCount.textContent = String(state.reviewCount);
   elements.strategyCount.textContent = String(strategyData.risky.filter(item => item.status === 'pending').length);
   try {
     state.chatCollapsed = window.localStorage.getItem('zoe-chat-collapsed') === 'true';
   } catch (_) {}
-  setChatCollapsed(state.chatCollapsed);
+  // Initial layout must not scroll the homepage to the composer.
+  elements.workbench.classList.toggle('is-chat-collapsed', state.chatCollapsed);
+  elements.chat.setAttribute('aria-expanded', String(!state.chatCollapsed));
+  elements.overview.addEventListener('agent:collaboration-open', markChatRead);
   updateChatBadges();
   syncZoeRouteEntry();
   window.addEventListener('hashchange', syncZoeRouteEntry);

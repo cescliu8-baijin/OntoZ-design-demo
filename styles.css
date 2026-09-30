@@ -1,21 +1,23 @@
-@import url("./css/base.css?v=professional-static-4");
-@import url("./css/lily-home.css?v=lily-home-figma-935-1");
-@import url("./css/lily-secondary.css?v=inquiry-company-detail-2");
-@import url("./css/wendy.css?v=professional-static-14");
-@import url("./css/lucas.css?v=professional-static-4");
-@import url("./css/john.css?v=john-create-flow-26");
-@import url("./css/core-pages.css?v=customer-detail-3");
-@import url("./css/lily-agent.css?v=professional-static-4");
-@import url("./css/sequence-modal.css?v=professional-static-4");
-@import url("./css/lily-dashboard.css?v=professional-static-4");
-@import url("./css/responsive.css?v=inquiry-company-detail-2");
-@import url("./css/ontology.css?v=enterprise-ontology-1");
-@import url("./css/ontology-strategy.css?v=buyer-strategy-1");
-@import url("./css/keyword-validation.css?v=keyword-validation-history-3");
-@import url("./css/leo.css?v=exhibition-marketing-5");
-@import url("./css/zoe.css?v=zoe-chat-no-avatar-1");
+@import url("./css/design-tokens.css?v=foundations-2");
+@import url("./css/base.css?v=foundations-2");
+@import url("./css/lily-home.css?v=foundations-2");
+@import url("./css/lily-secondary.css?v=foundations-2");
+@import url("./css/wendy.css?v=foundations-2");
+@import url("./css/lucas.css?v=benchmark-1");
+@import url("./css/lucas-animation.css?v=five-step-1");
+@import url("./css/john.css?v=demo-041-nav-2");
+@import url("./css/core-pages.css?v=foundations-2");
+@import url("./css/lily-agent.css?v=foundations-2");
+@import url("./css/sequence-modal.css?v=foundations-2");
+@import url("./css/lily-dashboard.css?v=foundations-2");
+@import url("./css/responsive.css?v=foundations-2");
+@import url("./css/ontology.css?v=foundations-2");
+@import url("./css/ontology-strategy.css?v=foundations-2");
+@import url("./css/keyword-validation.css?v=foundations-2");
+@import url("./css/leo.css?v=foundations-2");
+@import url("./css/zoe.css?v=foundations-2");
 
-/* Shared responsive typography for agent overview heroes. */
+/* Shared typography for the remaining agent pages. Zoe and Lily own their title styles. */
 h1.agent-hero-title {
   margin: 0;
   font-family: "Songti SC", SongtiSC, STSong, serif;
@@ -31,8 +33,8 @@ h1.agent-hero-title {
 }
 
 p.agent-hero-subtitle.agent-hero-subtitle {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
 }
 
 @media (max-width: 560px) {
