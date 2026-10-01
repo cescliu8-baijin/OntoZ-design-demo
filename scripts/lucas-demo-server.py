@@ -83,7 +83,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send_response(200);self.send_header('Content-Type','text/html; charset=utf-8');self.send_header('X-Robots-Tag','noindex, nofollow');self.end_headers();self.wfile.write(html.encode());return
         # Serve only application source/assets, never state, dotfiles or source control.
         rel=path.lstrip('/') or 'index.html'
-        if '..' in Path(rel).parts or any(p.startswith('.') for p in Path(rel).parts) or not (rel in ['index.html','styles.css','lucide-icons.css'] or rel.startswith(('css/','js/','assets/'))): return self.respond({'error':'未找到资源'},404)
+        if '..' in Path(rel).parts or any(p.startswith('.') for p in Path(rel).parts) or not (rel in ['index.html','lucas-site.html','styles.css','lucide-icons.css'] or rel.startswith(('css/','js/','assets/'))): return self.respond({'error':'未找到资源'},404)
         file=(ROOT/rel).resolve()
         if not file.is_relative_to(ROOT) or not file.is_file(): return self.respond({'error':'未找到资源'},404)
         self.send_response(200);self.send_header('Content-Type',mimetypes.guess_type(file)[0] or 'application/octet-stream');self.end_headers();self.wfile.write(file.read_bytes())

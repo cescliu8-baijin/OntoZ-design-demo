@@ -1,3 +1,11 @@
+# Lucas 浏览器建站 Demo
+
+2026-10-01：默认建站流程已迁移至浏览器。访问托管网页即可使用，无需 Python 服务。保存、模拟生成、静态预览、演示发布、版本恢复、询盘和示例竞对分析均不请求 Lucas API。数据保存在当前网站的浏览器本地存储；不会自动读取旧 SQLite，不跨设备共享，清除网站数据会重置。
+
+预览入口为 `lucas-site.html?preview=1`，发布入口为 `lucas-site.html`，均相对于当前部署目录。关闭页面不运行任务，重新打开按时间戳恢复模拟进度。
+
+以下是此前本地服务版本的历史实现记录，其启动要求、SQLite、真实竞对抓取和后台任务说明不适用于当前默认浏览器版。
+
 # Lucas 本地建站 Demo
 
 依据 [Lucas 建站 PRD](https://iihcw7mp26x.feishu.cn/docx/Ib6qd1DR4opYUKxxptQcD3uanKX) 实现，PRD 已通过飞书 CLI 读取。正式源码直接维护在本项目中，没有单独的 Site 镜像或第二套页面源码。

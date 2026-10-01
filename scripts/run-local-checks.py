@@ -50,23 +50,23 @@ def main():
     # The server binds before printing its readiness line. A busy port fails,
     # so tests cannot accidentally connect to an existing user's server.
     with tempfile.TemporaryDirectory(prefix='ontoz-checks-') as data:
-        server = subprocess.Popen([sys.executable, '-u', '-B', str(ROOT / 'scripts/lucas-demo-server.py'), '--port', str(args.port), '--data-dir', data], cwd=ROOT, env=env, stdout=subprocess.PIPE, text=True)
+        server = subprocess.Popen([sys.executable, '-u', '-B', '-m', 'http.server', str(args.port), '--bind', '127.0.0.1', '--directory', str(ROOT)], cwd=ROOT, env=env, stdout=subprocess.PIPE, text=True)
         try:
             ready = server.stdout.readline()
-            if not ready.startswith('Lucas demo:'):
+            if not ready.startswith('Serving HTTP'):
                 raise RuntimeError('Test server could not start. Choose an unused --port.')
             for attempt in range(50):
                 if server.poll() is not None:
                     raise RuntimeError('Test server stopped unexpectedly.')
                 try:
-                    with urlopen(base + 'api/lucas/state', timeout=1) as response:
+                    with urlopen(base + 'index.html', timeout=1) as response:
                         response.read()
                     break
                 except OSError:
                     if attempt == 49:
                         raise
                     time.sleep(.1)
-            for name in ['test-lucas-demo.cjs', 'test-john-demo.cjs', 'test-inquiry.cjs', 'test-wendy-home.cjs', 'test-wendy-responsive.cjs', 'test-design-system.cjs']:
+            for name in ['test-lucas-demo.cjs', 'test-lucas-browser.cjs', 'test-john-demo.cjs', 'test-inquiry.cjs', 'test-wendy-home.cjs', 'test-wendy-responsive.cjs', 'test-design-system.cjs']:
                 run([node, ROOT / 'scripts' / name], env)
         finally:
             server.terminate()

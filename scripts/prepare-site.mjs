@@ -6,6 +6,7 @@ const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const publicSite = join(projectRoot, "public", "site");
 const sourceEntries = [
   "index.html",
+  "lucas-site.html",
   "styles.css",
   "lucide-icons.css",
   "css",

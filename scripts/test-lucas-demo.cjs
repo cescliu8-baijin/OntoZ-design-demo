@@ -1,4 +1,4 @@
-// Use a dedicated data directory for testing; see docs/lucas-demo.md.
+// Fresh browser context and static hosting only; never reads the legacy SQLite database.
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const assert=require('node:assert/strict');
 const base=process.env.LUCAS_BASE_URL||'http://127.0.0.1:8767';
@@ -9,7 +9,14 @@ const p=await context.newPage(),errors=[];
 p.on('pageerror',err=>errors.push(err.message));
 p.on('console',m=>{if(m.type()==='error'&&!m.text().includes('503'))errors.push(m.text())});
 const click=async a=>p.locator(`#lucasApp [data-action="${a}"]`).first().click();
-const get=async()=> (await context.request.get(base+'/api/lucas/state')).json();
+const get=async()=>p.evaluate(()=>LucasBrowser.request('state'));
+const post=async(url,{data})=>{
+ const result=await p.evaluate(async({path,data})=>{try{return {status:200,body:await LucasBrowser.request(path,data)}}catch(e){return {status:e.message.includes('模拟发布失败')?503:400,body:{error:e.message}}}},{path:url.split('/api/lucas/')[1],data});
+ return {status:()=>result.status,json:async()=>result.body};
+};
+const apiRequests=[];
+context.on('request',r=>{if(r.url().includes('/api/lucas/'))apiRequests.push(r.url());});
+
 try{
 await p.goto(base+'/#lucas');await p.locator('[data-action="browse"]').waitFor();
 for(const width of [390,768,1440]){await p.setViewportSize({width,height:1000});await p.waitForTimeout(300);assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'welcome overflow '+width);await p.screenshot({path:'/tmp/lucas-welcome-'+width+'.png',fullPage:true});}
@@ -110,7 +117,7 @@ assert.equal(await p.locator('.lc-generation [role="progressbar"]').getAttribute
 assert.equal(await p.locator('.is-loading').count(),0,'animation stops on completion');
 const profile=await get();assert(profile.draft.profile.name==='NOX Robotics Ltd.');assert.equal(profile.draft.ontology.version,'lucas-mock-v1');assert(profile.draft.profile.email&&profile.draft.profile.countries&&profile.draft.profile.specs&&profile.draft.profile.image,'ontology automatically populated');assert(profile.draft.design.font==='serif');assert(profile.draft.design.modules[1].id==='about');
 // Exercise durable failure/retry through the test API; no failure switch in the product flow.
-await context.request.post(base+'/api/lucas/generate',{data:{simulateFailure:true}});
+await post(base+'/api/lucas/generate',{data:{simulateFailure:true}});
 await p.reload();
 await p.getByText('部分页面需要重试',{exact:true}).waitFor({timeout:20000});
 const job=(await get()).job.id;await p.reload();await click('retry-job');
@@ -166,11 +173,11 @@ await click('publish');await p.waitForURL('**/#lucas/dashboard');await p.locator
 assert.equal(await p.locator('#lcAgentFlow > header').count(),0,'animation header removed');
 assert.equal(await p.locator('#lucasHome .av2-collab-header,#lcCollabForm').count(),0,'collaboration title and composer removed');
 assert.equal(await p.locator('#lucasHome .av2-page-actions [data-action="live"],#lucasHome .av2-page-actions [data-action="preview"]').count(),0,'view site button removed');
-assert.equal(await p.locator('#lucasHome .lc-site-link').getAttribute('href'),'/lucas-site','management URL opens published site');
+assert.equal(await p.locator('#lucasHome .lc-site-link').getAttribute('href'),new URL('lucas-site.html',base+'/').href,'management URL opens published site');
 const leadPayload={name:'Alex',company:'Demo Buyer',email:'buyer@example.com',message:'Interested in a warehouse pilot.',consent:true,submission_id:'published-inquiry-regression',page:'contact'};
-const removedTest=await context.request.post(base+'/api/lucas/lead',{data:{...leadPayload,test:true}});assert.equal(removedTest.status(),400,'test inquiry endpoint removed');
-const submitted=await context.request.post(base+'/api/lucas/lead',{data:leadPayload});assert.equal(submitted.status(),200);
-const repeated=await context.request.post(base+'/api/lucas/lead',{data:leadPayload});assert.equal(repeated.status(),200);assert.equal((await get()).leads.length,1,'idempotent public inquiry');assert.equal((await get()).leads[0].test,false);
+const removedTest=await post(base+'/api/lucas/lead',{data:{...leadPayload,test:true}});assert.equal(removedTest.status(),400,'test inquiry endpoint removed');
+const submitted=await post(base+'/api/lucas/lead',{data:leadPayload});assert.equal(submitted.status(),200);
+const repeated=await post(base+'/api/lucas/lead',{data:leadPayload});assert.equal(repeated.status(),200);assert.equal((await get()).leads.length,1,'idempotent public inquiry');assert.equal((await get()).leads[0].test,false);
 const publishedSettings=(await get()).settings;assert.equal(publishedSettings.domain,'www.nox.example');assert.equal(publishedSettings.inquiryEmail,'inquiries@nox.example');assert.equal(publishedSettings.language,'Deutsch');
 assert.equal((await get()).draft.profile.email,confirmedProfile.email,'inquiry recipient does not replace public contact');
 assert.equal((await get()).published.version,1);assert.equal(await p.locator('#lucasHome [data-action="editor"]:visible').count(),0,'manual editing entry hidden');assert.equal(await p.locator('#lcAgentFlow').count(),1,'Agent animation present');assert.equal(await p.locator('#lucasHome a[href="#lucas/leads"]').count(),1,'inquiry secondary page');assert.equal(await p.locator('#lucasHome a[href="#lucas/settings"]').count(),1,'settings secondary page');
@@ -179,10 +186,10 @@ for(const width of [360,390,767,768,1024,1135,1136,1280,1439,1440,1920,2560]){aw
 await p.setViewportSize({width:1440,height:1000});await p.locator('#lucasHome a[href="#lucas/leads"]').click();await click('lead-detail');assert.equal(await p.locator('#lcLeadStatus').inputValue(),'new');await p.locator('#lcLeadStatus').selectOption('following');await p.locator('#lcLeadNotes').fill('Arrange local test call');await p.locator('#lucasDialog [data-action="save-lead"]').click();assert.equal((await get()).leads[0].status,'following');
 await p.goto(base+'/#lucas/editor');await p.locator('#lcEditTitle').fill('Version two');await click('save');
 await click('publish-check');await p.waitForURL('**/#lucas/confirm');
-const beforeFailed=await get();const failed=await context.request.post(base+'/api/lucas/publish',{data:{revision:beforeFailed.revision,requestId:'failure-test',simulateFailure:true}});assert.equal(failed.status(),503);assert.equal((await get()).published.version,1,'failed publish preserves live');
+const beforeFailed=await get();const failed=await post(base+'/api/lucas/publish',{data:{revision:beforeFailed.revision,requestId:'failure-test',simulateFailure:true}});assert.equal(failed.status(),503);assert.equal((await get()).published.version,1,'failed publish preserves live');
 await click('launch');await p.waitForURL('**/#lucas/launch');await p.waitForFunction(()=>document.querySelector('[data-action="publish"]')&&!document.querySelector('[data-action="publish"]').disabled);await click('publish');await p.waitForURL('**/#lucas/dashboard');assert.equal((await get()).published.version,2);
 await p.goto(base+'/#lucas/settings');await p.locator('[data-action="restore"][data-version="1"]').click();await p.locator('#lucasDialog [data-action="confirm-restore"]').click();await p.locator('#lcEditTitle').waitFor();assert.equal((await get()).published.version,2,'restore only affects draft');assert.equal((await get()).leads[0].notes,'Arrange local test call');
 for(const route of ['welcome','style','profile','review','confirm','launch','editor','leads','settings','notifications']){await p.goto(base+'/#lucas/'+route);await p.waitForTimeout(250);for(const width of [390,768,1440]){await p.setViewportSize({width,height:900});await p.waitForTimeout(300);assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),route+' overflow '+width);const broken=await p.locator('#lucasPage img').evaluateAll(imgs=>imgs.filter(x=>x.getClientRects().length&&(!x.complete||!x.naturalWidth)).map(x=>x.src));assert.deepEqual(broken,[],route+' images');if(['profile','review'].includes(route))assert(p.url().endsWith('#lucas/style'),'legacy confirmation route redirects');if(route==='editor')await p.screenshot({path:'/tmp/lucas-editor-'+width+'.png',fullPage:true});}}
-assert.deepEqual(errors,[],'browser errors');console.log('PASS: default toggle groups and keyboard selection, close icon, direct generation with automatic ontology, animated snapshot progress, configuration persistence, partial retry, draft editing/conflicts, website confirmation, publication gates, inquiry idempotence, publish failure, restore isolation, responsive layouts and resources.');
+assert.deepEqual(apiRequests,[],'zero Lucas backend requests');assert.deepEqual(errors,[],'browser errors');console.log('PASS: default toggle groups and keyboard selection, close icon, direct generation with automatic ontology, animated snapshot progress, configuration persistence, partial retry, draft editing/conflicts, website confirmation, publication gates, inquiry idempotence, publish failure, restore isolation, responsive layouts and resources.');
 }finally{await browser.close()}
 })().catch(e=>{console.error(e);process.exit(1)});
