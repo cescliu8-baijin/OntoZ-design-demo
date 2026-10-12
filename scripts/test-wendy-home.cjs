@@ -33,22 +33,14 @@ const base = process.env.WENDY_BASE_URL || 'http://127.0.0.1:8877/';
     assert.deepEqual(await fields(), confirmation, 'dialog fields differ from the final confirmation step');
     console.log('PASS goal dialog shares all confirmation fields; Escape restores focus');
     await home();
-    const comments = await page.locator('.wd-home-comment-item').evaluateAll(nodes => nodes.map(el => ({ id: el.dataset.id, name: el.querySelector('b').childNodes[0].textContent, text: el.querySelector('p').textContent })));
-    for (const comment of comments) {
-      await page.locator(`[data-wd="read-home-comment"][data-id="${comment.id}"]`).click();
-      await page.locator('.wd-comment-thread').waitFor();
-      assert.equal(new URL(page.url()).hash, `#wendy/fans/${comment.id}`);
-      assert(await page.locator('.wd-comment-messages h1').evaluate(el => el === document.activeElement));
-      assert.equal(await page.locator('.wd-comment-thread article b').textContent(), comment.name);
-      assert.equal(await page.locator('.wd-comment-thread article p').textContent(), comment.text);
-      await page.reload();
-      await page.locator('.wd-comment-thread').waitFor();
-      assert.equal(await page.locator('.wd-comment-thread article p').textContent(), comment.text);
-      await page.goBack();
-      await page.locator('#wendyHome').waitFor();
-      assert(await page.locator(`[data-id="${comment.id}"].wd-home-comment-item`).evaluate(el => el.classList.contains('read')));
-    }
-    console.log('PASS all five comments open the correct message, survive refresh/back and retain read state');
+    assert.deepEqual(await page.locator('#wendyHome .av2-status a b').allTextContents(), ['互动与线索', '社媒账号']);
+    assert.equal(await page.locator('#wendyHome .av2-main .wd-content-calendar').count(), 1);
+    assert.equal(await page.locator('#wendyHome .av2-collab .wd-home-goal-panel').count(), 1);
+    assert.equal(await page.locator('#wendyHome .av2-collab .wd-home-approval').count(), 1);
+    await page.locator('#wendyHome .av2-status a[href="#wendy/fans"]').click();
+    await page.waitForURL('**/#wendy/fans');
+    await page.locator('.wsi').waitFor();
+    await home();
     await page.locator('[data-wd="schedule-edit"]').click();
     await page.locator('.wd-schedule-time').fill('18:45');
     await page.locator('[data-wd="schedule-save"]').click();
@@ -70,24 +62,27 @@ const base = process.env.WENDY_BASE_URL || 'http://127.0.0.1:8877/';
       const broken = await page.locator('#wendyHome img').evaluateAll(images => images.filter(img => img.getClientRects().length && (!img.complete || !img.naturalWidth)).map(img => img.src));
       assert.deepEqual(broken, [], `broken visible images at ${width}`);
       assert(await page.locator('#wendyHome svg').count() > 10);
+      if (await page.locator('#wendyHome').getAttribute('data-av2-compact') === 'true') await page.locator('#wendyHome .av2-attention').click();
       await page.locator('[data-wd="view-home-goal"]').click();
       await noOverflow();
       await page.locator('.wd-goal-summary-dialog button[aria-label="关闭目标详情"]').click();
-      if (await page.locator('#wendyHome').getAttribute('data-av2-compact') === 'true') await page.locator('#wendyHome .av2-attention').click();
-      await page.locator('[data-wd="read-home-comment"][data-id="hc2"]').click();
-      await page.locator('.wd-comment-thread').waitFor();
+      if (await page.locator('#wendyHomeDialog[open]').count()) await page.keyboard.press('Escape');
+      await page.locator('#wendyHome .av2-status a[href="#wendy/fans"]').click();
+      await page.waitForURL('**/#wendy/fans');
+      await page.locator('.wsi').waitFor();
+      if (await page.locator('[data-si=back]').isVisible()) await page.locator('[data-si=back]').click();
+      await page.locator('[data-si=select][data-id=hc2]').click();
+      await page.locator('.wsi-thread').waitFor();
       await noOverflow();
-      if (width === 390) {
-        await page.waitForTimeout(500); // Let navigation and focus transitions settle.
-        await page.screenshot({ path: '/tmp/wendy-comment-mobile.png', fullPage: true });
-      }
       console.log(`PASS ${width}px: homepage, goal dialog, comment navigation, images and icons`);
     }
     await page.setViewportSize({ width: 1440, height: 914 });
     await home();
     for (let index = 0; index < 3; index++) await page.locator('[data-wd="home-approve"]').click();
-    assert(await page.locator('[data-wd-live-home]').isVisible());
-    console.log('PASS approval queue advances and restores runtime animation');
+    assert(await page.locator('.wd-v22-empty-review').isVisible());
+    assert(await page.locator('.wd-home-calendar').isVisible());
+    assert.equal(await page.locator('#wendyFlow').count(), 0);
+    console.log('PASS approval queue advances and keeps the publication calendar visible');
     assert.deepEqual(errors, [], 'browser errors');
     assert.deepEqual(failures, [], 'failed resources');
     console.log('PASS no browser console errors or failed resources');

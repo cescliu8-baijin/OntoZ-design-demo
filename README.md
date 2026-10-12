@@ -101,3 +101,14 @@ python3 scripts/build-lucas-animation.py
 当前默认流程为纯浏览器演示。草稿、生成进度、询盘、发布快照保存在当前网站的 localStorage；刷新恢复，跨设备不共享，清除网站数据会重置。静态托管同时包含 `lucas-site.html`，支持 `/site/` 等子目录。Python / SQLite 为历史实现和数据保全用途，不再是前端运行依赖；旧数据库不会自动导入浏览器。
 
 生成由时间戳模拟，重新打开时恢复进度，不运行后台任务。竞对分析固定示例并明确标注；发布不提供可跨浏览器分享的真实企业网站。
+
+## Vercel / GitHub 自动部署
+
+Vercel 导入 `cescliu8-baijin/OntoZ-design-demo`，生产分支选择 `main`，根目录保持仓库根目录。仓库中的 `vercel.json` 已指定：
+
+- Framework Preset：Other
+- Install Command：留空，跳过依赖安装
+- Build Command：`node scripts/prepare-site.mjs`
+- Output Directory：`public/site`
+
+只发布由根目录源码生成的静态网页，无需运行 Cloudflare/vinext 构建，也不需要环境变量或 Python 服务。每次向 `main` 推送新提交后，Vercel 会自动重新部署。浏览器内的演示数据仍按网站域名分别保存，不会从本机预览自动迁移到线上域名。

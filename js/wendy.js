@@ -26,7 +26,7 @@
   };
   const avatar = (small = false) => `<img class="wd-avatar${small ? ' small' : ''}" src="${persona}" alt="Wendy 数字人分身">`;
   const btn = (label, action, options = '') => `<button type="button" data-wd="${action}" ${options}>${label}</button>`;
-  const link = (label, path = '', className = '') => `<a class="${className}" href="#wendy${path ? '/' + path : ''}">${label}</a>`;
+  const link = (label, path = '', className = '') => path === 'quick' ? btn(label, 'quick-open', `class="${className}" aria-haspopup="dialog"`) : `<a class="${className}" href="#wendy${path ? '/' + path : ''}">${label}</a>`;
   const spark = (values, tone = 'up') => {
     const width = 100, top = 4, base = 28, height = 32;
     const max = Math.max(...values), min = Math.min(...values), span = max - min || 1;
@@ -113,7 +113,6 @@
     const stale = (list, keys) => !Array.isArray(list) || !list.length || list.some(item => keys.some(key => item[key] === undefined));
     if (stale(state.conversations, ['avatar', 'handle', 'identified', 'reachable'])) state.conversations = fresh.conversations;
     if (stale(state.posts, ['platform', 'status'])) state.posts = fresh.posts;
-    state.posts = state.posts.map(post => post.platform === 'X' ? { ...post, platform: 'TikTok' } : post);
 
     /* v75：打包时把大图从 PNG 转成了 JPEG，旧缓存里仍是 .png 路径，会渲染成裂图。
        只替换确实被转换过的那 20 个文件，其余 .png（友商头像等）保持不变。 */
@@ -179,9 +178,8 @@
     contentStatus: 'all',
     contentQuery: '',
     contentView: 'library',
+    calendarWeek: 0,
     contentDetailOpen: false,
-    quickPublishMode: 'now',
-    quickCopy: '',
     aiPlatform: 'LinkedIn',
     aiFormat: '图文',
     aiStyle: 'cold',
@@ -201,22 +199,6 @@
   const currentPost = () => state.posts.find(post => post.id === ui.selectedPost) || state.posts[0];
   const currentTrend = () => state.trends.find(trend => trend.id === ui.selectedTrend) || state.trends[0];
   const currentConversation = () => state.conversations.find(item => item.id === ui.selectedConversation) || state.conversations[0];
-  const saveQuickPost = status => {
-    const copy = (root.querySelector('#wdQuickCopy')?.value || ui.quickCopy).trim();
-    if (!copy) { toast('请先填写发布内容'); return false; }
-    state.posts.unshift({
-      id: `manual-${Date.now()}`,
-      title: copy.slice(0, 28),
-      platform: 'LinkedIn',
-      status,
-      time: status === 'published' ? '刚刚' : status === 'scheduled' ? '9月3日 15:00' : '未排期',
-      theme: '主动发布', image: asset, version: 1, copy, origin: 'manual'
-    });
-    persist();
-    ui.quickCopy = '';
-    ui.contentStatus = 'all';
-    return true;
-  };
 
   const homeCompetitors = {
     nova: {
@@ -355,7 +337,7 @@
     const pending = queue.filter(item => item.status !== 'approved');
     const approvedCount = queue.length - pending.length;
     const ordinal = Math.min(approvedCount + 1, queue.length);
-    const content = pending.length ? `<article class="wd-v22-review-post expanded"><header>${social(post.platform || 'LinkedIn')}<span><b>NOX Robotics</b><small>${post.platform || 'LinkedIn'} · Wendy 生成</small></span>${badge('待审核', 'amber')}</header><img src="${post.image || inspectionHero}" alt="${E(post.title)}"><section><small class="wd-v22-review-kicker">内容预览</small><h3>${E(post.title)}</h3><p>${E(post.copy)}</p><div class="wd-review-meta"><span>${I('target')}欧洲制造业</span><span>${I('clock-3')}${E(post.time)} 发布</span></div></section><footer><small>${I('lock-keyhole')}未经你的确认，内容不会发布</small><div class="wd-review-actions">${homeScheduleControl(post)}</div></footer></article>` : `<section class="wd-v22-empty-review">${I('circle-check-big')}<h3>本轮内容已确认</h3><p>本轮内容已进入排期，Wendy 会继续准备下一批内容。</p>${link('查看排期', 'content', 'wd-button primary')}</section>`;
+    const content = pending.length ? `<article class="wd-v22-review-post expanded"><header>${social(post.platform || 'LinkedIn')}<span><b>NOX Robotics</b><small>${post.platform || 'LinkedIn'} · Wendy 生成</small></span>${badge('待审核', 'amber')}</header><img src="${post.image || inspectionHero}" alt="${E(post.title)}"><section><small class="wd-v22-review-kicker">内容预览</small><h3>${E(post.title)}</h3><p>${E(post.copy)}</p><div class="wd-review-meta"><span>${I('target')}欧洲制造业</span><span>${I('clock-3')}${E(post.time)} 发布</span></div></section><footer><small>${I('lock-keyhole')}未经你的确认，内容不会发布</small><div class="wd-review-actions">${homeScheduleControl(post)}</div></footer></article>` : `<section class="wd-v22-empty-review">${I('circle-check-big')}<h3>本轮内容已确认</h3><p>本轮内容已进入排期，Wendy 会继续准备下一批内容。</p>${btn('查看发布日历', 'show-home-calendar', 'class="primary"')}</section>`;
     return `<section class="wd-v22-review-workspace">${''}<header class="wd-v22-review-heading"><span>${I('clipboard-check')}</span><div><small>待审批内容</small><h2>${pending.length} 条内容等待你确认</h2><p>确认后进入发布排期，未经确认不会发布</p></div><strong>${ordinal} / ${queue.length}</strong></header><div class="wd-v22-review-grid">${content}</div></section>`;
   }
 
@@ -379,8 +361,10 @@
 
   function homeScheduleControl(post) {
     const { day, clock } = parsePostTime(post.time);
+    const absoluteDay = /^\d{4}-\d{2}-\d{2}/.exec(post.time)?.[0];
+    const options = absoluteDay ? [{ value: absoluteDay, label: absoluteDay }, ...scheduleDayOptions] : scheduleDayOptions;
     if (ui.scheduleEditing === post.id) {
-      return `<span class="wd-schedule-inline" role="group" aria-label="设置发布时间"><label class="sr-only" for="wdScheduleDay-${post.id}">发布日期</label><select id="wdScheduleDay-${post.id}" class="wd-schedule-day">${scheduleDayOptions.map(option => `<option value="${option.value}" ${option.value === day ? 'selected' : ''}>${option.label}</option>`).join('')}</select><label class="sr-only" for="wdScheduleTime-${post.id}">发布时间</label><input id="wdScheduleTime-${post.id}" class="wd-schedule-time" type="time" step="300" value="${clock}"></span>${btn('取消', 'schedule-cancel', `data-id="${post.id}"`)}${btn(`${I('check')}保存时间`, 'schedule-save', `data-id="${post.id}" class="primary"`)}`;
+      return `<span class="wd-schedule-inline" role="group" aria-label="设置发布时间"><label class="sr-only" for="wdScheduleDay-${post.id}">发布日期</label><select id="wdScheduleDay-${post.id}" class="wd-schedule-day">${options.map(option => `<option value="${option.value}" ${option.value === (absoluteDay || day) ? 'selected' : ''}>${option.label}</option>`).join('')}</select><label class="sr-only" for="wdScheduleTime-${post.id}">发布时间</label><input id="wdScheduleTime-${post.id}" class="wd-schedule-time" type="time" step="300" value="${clock}"></span>${btn('取消', 'schedule-cancel', `data-id="${post.id}"`)}${btn(`${I('check')}保存时间`, 'schedule-save', `data-id="${post.id}" class="primary"`)}`;
     }
     return `${btn(`${I('calendar-range')}<span class="sr-only">改时间</span>`, 'schedule-edit', `data-id="${post.id}" aria-label="修改发布时间：${E(post.title)}"`)}${btn(`${I('pencil-line')}<span class="sr-only">预览与修改</span>`, 'home-revise', `data-id="${post.id}"`)}${btn(`${I('circle-check-big')}确认内容和排期`, 'home-approve', `data-id="${post.id}" class="primary"`)}`;
   }
@@ -389,7 +373,7 @@
     const goal = state.strategy;
     const day = 6;
     const total = goalDuration(goal);
-    return `<section class="wd-home-goal-panel" aria-labelledby="wdHomeGoalTitle"><button type="button" class="wd-goal-card-trigger" data-wd="view-home-goal" aria-label="查看本周代运营目标" aria-haspopup="dialog"></button><header><h2 id="wdHomeGoalTitle">本周代运营目标</h2>${badge(goal.status === 'ended' ? '已结束' : '执行中', goal.status === 'ended' ? '' : 'green')}</header><div class="wd-goal-panel-summary"><p class="wd-goal-panel-title">${E(goalSummary(goal))}</p><b class="wd-goal-panel-day">第 ${Math.min(day, total)} / ${total} 天</b></div></section>`;
+    return `<section class="wd-home-goal-panel" aria-labelledby="wdHomeGoalTitle"><button type="button" class="wd-goal-card-trigger" data-wd="view-home-goal" aria-label="查看本周代运营目标" aria-haspopup="dialog"></button><header><h2 id="wdHomeGoalTitle">代运营状态</h2>${badge(goal.status === 'ended' ? '已结束' : state.management === 'paused' ? '已暂停' : '执行中', goal.status === 'ended' ? '' : 'green')}</header><div class="wd-goal-panel-summary"><p class="wd-goal-panel-title">${E(goalSummary(goal))}</p><b class="wd-goal-panel-day">第 ${Math.min(day, total)} / ${total} 天</b></div></section>`;
   }
 
   const commentPriorityMeta = {
@@ -416,36 +400,8 @@
     }).join('')}</section></aside>`;
   }
 
-  /* 来自 Wendy animation.html 的首页运行视图。平台图标复用项目 assets，避免维护内嵌副本。 */
-  function homeRuntimeAnimation() {
-    const runtimePlatforms = ['LinkedIn', 'Instagram', 'TikTok', 'YouTube'];
-    const runtimeSteps = [
-      ['calendar-plus', '新建发布计划', '设定产量、平台和周期'],
-      ['scan-search', 'Agent 研究', '分析行业竞品、热点与趋势<br>调研内容选题'],
-      ['layers-3', '生成多平台内容', '图文 / 视频脚本多端衍生<br>本地化语言内容适配'],
-      ['send', '审核发布', '确认媒体内容<br>排期发布'],
-      ['messages-square', '互动线索', '汇总评论私信、自动回复<br>高质量线索进入客户池'],
-      ['chart-no-axes-combined', 'AI 复盘', '汇总内容表现与线索进展<br>建议优化后续发布计划']
-    ];
-    const businessInputs = [
-      ['globe', '官网'], ['images', '素材'], ['gem', '品牌'], ['users-round', '受众'],
-      ['chart-no-axes-combined', '市场'], ['target', '目标'], ['panels-top-left', '平台']
-    ];
-    return `<section class="wf" id="wendyFlow" data-wd-live-home aria-label="Wendy Agent 社媒运营流程动画">
-      <header class="wf-toolbar"><span><b class="wf-live-dot"></b>WENDY AGENT <small>流程演示</small></span><button type="button" class="wf-toggle" aria-label="暂停流程动画" aria-pressed="false">${I('pause')}<span>暂停</span></button></header>
-      <div class="wf-platforms"><span class="wf-platforms-label">支持平台</span><ul>${runtimePlatforms.map(platform => `<li><span class="wf-platform-icon">${social(platform)}</span><span>${platform}</span></li>`).join('')}</ul></div>
-      <div class="wf-canvas">
-        <svg class="wf-wires" aria-hidden="true"><defs><filter id="wf-glow" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="3"></feGaussianBlur></filter><marker id="wf-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1 7 4 1 7" fill="none" stroke="#9e8bea" stroke-width="1.5"></path></marker></defs><g class="wf-paths"></g><g class="wf-particles"></g></svg>
-        <ol class="wf-nodes" aria-label="循环工作流程">${runtimeSteps.map(([icon, title, copy], index) => `<li class="wf-node${index === 0 ? ' is-active' : ''}" data-step="${index}"><div class="wf-node-top">${I(icon)}<span>${String(index + 1).padStart(2, '0')}</span></div><h3>${title}</h3><p>${copy}</p></li>`).join('')}</ol>
-        <div class="wf-hub"><span class="wf-hub-icon">${I('sparkles')}</span><div><strong>Wendy Agent</strong><span>持续研究 · 执行 · 进化</span></div>${I('repeat-2')}</div>
-        <div class="wf-foundation"><div class="wf-foundation-head"><span class="wf-foundation-icon">${I('network')}</span><div><h3>企业本体</h3><p>持续为 Wendy 提供最高智能分析与决策支持</p></div><span class="wf-foundation-badge">智能底座</span></div><div class="wf-knowledge"><span>品牌认知</span><span>业务理解</span><span>策略决策</span><span>持续学习</span></div></div>
-        <ul class="wf-inputs" aria-label="汇入企业本体的业务信息">${businessInputs.map(([icon, label]) => `<li>${I(icon)}${label}</li>`).join('')}</ul>
-      </div>
-      <footer class="wf-caption"><span class="wf-current">01 / 06 · 新建发布计划</span><span>业务信息汇入 · 智能持续驱动</span></footer>
-    </section>`;
-  }
-
   function homeScreen() {
+    calendarSeed();
     const queue = ui.homeBatchIds.map(id => state.posts.find(post => post.id === id)).filter(post => post && !post.needsRegeneration);
     const post = queue.find(item => item.status !== 'approved') || queue[0] || state.posts[0];
     const pending = queue.filter(item => item.status !== 'approved');
@@ -460,11 +416,11 @@
       ['clock-3', '周三 15:00 是最佳发布窗口', 'LinkedIn 的专业受众此时最活跃']
     ];
     return `<section class="wd-home-v22 agent-v2" id="wendyHome" data-agent="Wendy">
-      <header class="wd-v22-hero av2-header"><div><h1><span class="wd-home-name">Wendy</span> 帮你持续运营海外社媒</h1><p class="av2-subtitle">从内容创作到多平台运营，Wendy 陪你把品牌声音变成增长。</p><nav class="av2-page-actions">${link(`${I('target')}设定代运营目标`, 'goal/1', 'wd-button primary')}<button type="button" data-av2-compose>${I('sparkles')}与 Wendy 一起创作</button>${link(`${I('send')}快速发布`, 'quick', 'wd-button wd-quick-publish-action')}</nav></div><aside class="wd-v22-console av2-status"><header><h2>Wendy正在运行中</h2>${publicationIssue() ? badge(`${I('key-round')} 发布权限待更新`, 'amber') : boundAccountCount() ? badge(`${I('circle-check')} 账号已就绪`, 'green') : badge('待连接账号')}</header><div>${link(`${I('files')}<span><b>内容与排期</b><small>7 条内容待排期</small></span>${I('chevron-right')}`, 'content')}${link(`${I('messages-square')}<span><b>评论与线索</b><small>7 条高意向评论</small></span>${I('chevron-right')}`, 'fans')}${link(`${I('users-round')}<span><b>社媒账号</b><small>${boundAccountCount()} / 4 个账号已绑定</small></span>${I('chevron-right')}`, 'settings')}</div></aside></header>
+      <header class="wd-v22-hero av2-header"><div><h1><span class="wd-home-name">Wendy</span> 帮你持续运营海外社媒</h1><p class="av2-subtitle">从内容创作到多平台运营，Wendy 陪你把品牌声音变成增长。</p><nav class="av2-page-actions">${link(`${I('target')}设定代运营目标`, 'goal/1', 'wd-button primary')}${link(`${I('sparkles')}与 Wendy 一起创作`, 'ai', 'wd-button')}${link(`${I('send')}快速发布`, 'quick', 'wd-button wd-quick-publish-action')}</nav></div><aside class="wd-v22-console av2-status"><header><h2>工作区</h2></header><div>${link(`${I('messages-square')}<span><b>互动与线索</b><small>评论、私信与客户线索</small></span>${I('chevron-right')}`, 'fans')}${link(`${I('users-round')}<span><b>社媒账号</b><small>${boundAccountCount()} / 4 个账号已绑定</small></span>${I('chevron-right')}`, 'settings')}</div></aside></header>
       <div class="wd-v22-layout av2-columns"><main class="av2-main">
         <section class="wd-v22-performance compact"><div class="wd-v22-metrics">${metrics.map(([icon,label,value,note]) => `<article>${I(icon)}<small>${label}</small><strong>${value}</strong>${note ? `<em>${note}</em>` : ''}</article>`).join('')}</div></section>
-        ${homeAttentionPanel()}<section class="wd-runtime-layer" aria-labelledby="wdRuntimeTitle"><header class="wd-runtime-heading"><h2 id="wdRuntimeTitle" tabindex="-1">Agent 运行视图</h2><span role="status">${pending.length ? `<b>${Math.min(queue.length - pending.length + 1, queue.length)} / ${queue.length}</b> 条内容等待你确认` : 'Wendy 持续运行中'}</span></header>${pending.length ? `<div class="wd-runtime-review" aria-label="内容审核">${homeReviewWorkspace(queue, post)}</div>` : homeRuntimeAnimation()}</section>
-      </main><aside class="av2-collab" aria-labelledby="wdCollabTitle"><header class="av2-collab-header"><h2 id="wdCollabTitle">评论与 Wendy 协作</h2><button type="button" data-av2-close aria-label="关闭协作面板">${I('x')}</button></header><div class="av2-stream">${homeCommentsPanel()}</div><footer class="av2-compose"><form id="wdCollaborationForm" class="av2-prompt-box"><label class="sr-only" for="wdHomeFeedback">告诉 Wendy 你的内容需求</label><textarea id="wdHomeFeedback" rows="1" placeholder="告诉 Wendy 你的内容需求…">${E(collaborationDraft)}</textarea><div><button type="submit">发送 ${I('arrow-up')}</button></div></form></footer></aside></div>
+        <section class="wd-runtime-layer" aria-labelledby="wdRuntimeTitle"><header class="wd-runtime-heading"><h2 id="wdRuntimeTitle" tabindex="-1">Agent 运行区</h2><span>发布日历</span></header>${publicationCalendar(contentCatalog(), true)}</section>
+      </main><aside class="av2-collab" aria-labelledby="wdCollabTitle"><header class="av2-collab-header"><h2 id="wdCollabTitle">Agent 互动区</h2><button type="button" data-av2-compose aria-label="向 Wendy 提需求">${I('sparkles')}</button><button type="button" data-av2-close aria-label="关闭协作面板">${I('x')}</button></header><div class="av2-stream">${homeAttentionPanel()}<section class="wd-home-approval" aria-labelledby="wdApprovalTitle"><header><h2 id="wdApprovalTitle" tabindex="-1">社媒内容审批</h2>${badge(`<span id="wdHomeApprovalCount">${pending.length}</span> 条待确认`, pending.length ? 'amber' : 'green')}</header>${homeReviewWorkspace(queue, post)}</section></div><footer class="av2-compose"><form id="wdCollaborationForm" class="av2-prompt-box"><label class="sr-only" for="wdHomeFeedback">告诉 Wendy 你的内容需求</label><textarea id="wdHomeFeedback" rows="1" placeholder="告诉 Wendy 你的内容需求…">${E(collaborationDraft)}</textarea><div><button type="submit">发送 ${I('arrow-up')}</button></div></form></footer></aside></div>
     </section>`;
   }
 
@@ -688,7 +644,7 @@
     const summaryTitle = goalSummary(goal);
     const filters = [['all', '全部', briefs.length], ['pending', '待审批', pending], ['planned', '待生成', briefs.length - generated]];
     return `<section class="wd-weekly-workbench">${breadcrumb(pageBreadcrumbs['本周代运营目标'])}
-      <header class="ww-page-head"><div><h1>本周代运营目标</h1><span class="ww-status executing">${goal.status === 'ended' ? '已结束' : '执行中'}</span></div>${btn('调整目标', 'weekly-adjust')}</header>
+      <header class="ww-page-head"><div><h1>本周代运营目标</h1><span class="ww-status executing">${goal.status === 'ended' ? '已结束' : state.management === 'paused' ? '已暂停' : '执行中'}</span></div>${btn('调整目标', 'weekly-adjust')}</header>
       <section class="ww-goal-overview" aria-label="本期目标概览"><h2>${E(summaryTitle)}</h2><div class="ww-goal-meta"><span>${I('calendar')}${E(goal.start)} — ${E(goal.end)}<em>${duration} 天</em></span><span>${I('box')}${E(goal.product)}</span><span>${channels.map(social).join('')}<em>${channels.length} 个渠道</em></span><span>${I('files')}${briefs.length} 篇独立策划</span></div><div class="ww-progress-line"><span>${I('check')}策划已完成</span><label>内容已生成 <b>${generated} / ${briefs.length}</b><progress value="${generated}" max="${briefs.length}" aria-label="内容生成进度"></progress></label><span><b>${pending}</b> 待审批</span><span>${scheduled} 已排期</span></div></section>
       <div class="ww-workspace"><aside class="ww-list" aria-label="帖子列表"><header><h2>帖子与 brief <span>${briefs.length}</span></h2><p>每篇帖子对应一份独立策划</p><label class="ww-channel-filter"><span>发布渠道</span><select data-wd-select="weekly-channel" ${ui.weeklyEditing ? 'disabled' : ''}><option value="all">全部渠道</option>${channels.map(channel => `<option value="${channel}" ${ui.weeklyChannel === channel ? 'selected' : ''}>${channel}</option>`).join('')}</select></label></header><div class="ww-list-tabs" aria-label="帖子状态筛选">${filters.map(([value,label,count]) => `<button type="button" data-wd="weekly-filter" data-value="${value}" aria-pressed="${ui.weeklyStatus === value}" ${ui.weeklyEditing ? 'disabled' : ''}>${label}<span>${count}</span></button>`).join('')}</div><div class="ww-list-scroll">${filtered.map(brief => `<button type="button" class="ww-list-item ${brief.id === selected?.id ? 'selected' : ''}" data-wd="weekly-select" data-id="${brief.id}" aria-current="${brief.id === selected?.id ? 'true' : 'false'}" ${ui.weeklyEditing ? 'disabled' : ''}><span class="ww-list-platform">${social(brief.platform)}</span><span class="ww-list-text"><strong>${E(brief.title)}</strong><small>${E(brief.platform)}<span class="ww-separator">/</span>${E(brief.objective)}</small></span>${weeklyStatusBadge(weeklyStatus(brief))}</button>`).join('') || '<div class="ww-list-empty">当前筛选下暂无帖子</div>'}</div><footer>显示 ${filtered.length} / ${briefs.length} 篇<span>所有变更自动保存</span></footer></aside>${selected ? weeklyDetail(selected) : `<section class="ww-detail ww-empty-detail">${I('files')}<h2>没有符合筛选条件的内容</h2><p>切换渠道或查看全部帖子。</p>${btn('重置筛选', 'weekly-reset')}</section>`}</div>
     </section>`;
@@ -790,7 +746,7 @@
     return `<section class="wd-onboarding">${breadcrumb(pageBreadcrumbs['初始化 Wendy'])}<header class="wd-milestones"><span class="done"><b>${I('check')}</b>品牌分身完成<small>Wendy 已了解你的品牌</small></span><span class="active"><b>2</b>运营目标当前<small>告诉 Wendy 重点讲什么</small></span><span><b>3</b>连接社媒下一步<small>授权账号以便内容分发</small></span><span><b>4</b>审批规则最后<small>设定谁来审、何时发布</small></span></header><div class="wd-brief-canvas"><main><h1>这段时间重点讲什么？</h1><p>明确运营目标，Wendy 将围绕目标捕捉趋势、制作内容，并在你审批后发布。</p><label class="wd-mission">${I('sparkles')}<input id="wdMission" value="新品发布：X100"></label><section><h3>${I('globe')}目标市场</h3><div class="wd-token-row"><button>工业自动化制造商</button><button>欧洲市场</button><button>北美市场</button><button>＋ 添加市场</button></div></section><section><h3>${I('message-circle')}内容主题</h3><div class="wd-token-row"><button>产品性能与优势</button><button>真实应用案例</button><button>行业趋势洞察</button><button>＋ 添加主题</button></div></section><section><h3>${I('calendar')}发布节奏</h3><div class="wd-token-row"><button>每周 2–3 篇</button><button>重要节点加密发布</button><button>＋ 添加节奏</button></div></section></main><aside><h2>${I('sparkles')}Wendy 会如何执行</h2><ol><li class="active"><b>${I('target')}</b><div><strong>捕捉趋势</strong><p>监测行业与社媒信号，发现相关高价值话题。</p></div></li><li><b>${I('file-search')}</b><div><strong>制作分身内容</strong><p>结合品牌事实与趋势，适配不同平台。</p></div></li><li><b>${I('user-round-check')}</b><div><strong>等待审批</strong><p>提交预览与依据，通过后进入排期。</p></div></li></ol><p class="wd-lock-note">${I('lock-keyhole')}未经你的审批，Wendy 不会发布</p></aside></div><footer><p>${I('shield-check')}你全程掌控发布节奏与内容质量</p>${btn('保存草稿', 'save-onboarding')}${btn('继续连接社媒 ' + I('arrow-right'), 'continue-onboarding', 'class="primary"')}</footer></section>`;
   }
 
-  function contentScreen() {
+  function contentCatalog() {
     const manualCatalog = state.posts.filter(item => item.origin === 'manual').map(item => ({ ...item, type: '图文', audience: '主动发布\n自有内容' }));
     const catalog = [...manualCatalog,
       ...state.posts.filter(post => post.origin === 'weekly-plan' && !['p1','p3','p4','p5'].includes(post.id)).map(post => ({ ...post, type: '图文', audience: '本周代运营目标' })),
@@ -801,6 +757,190 @@
       { id: 'p5', title: 'X100 产品演示与应用场景解析', platform: 'YouTube', type: '视频', audience: '技术工程师\n集成商', time: '9/3 11:00', status: 'scheduled', image: asset, copy: '全面展示 X100 在多行业的部署与应用。' },
       { id: 'cm6', title: '边缘 AI 如何把质检响应压缩至 40ms', platform: 'LinkedIn', type: '图片', audience: '技术工程师\n智能制造', time: '8/30 16:30', status: 'published', image: asset, copy: 'VisionEdge 在边缘端实现实时检测与决策。' }
     ];
+    const byId = new Map(catalog.map(item => [item.id, item]));
+    state.posts.forEach(post => byId.set(post.id, { type: '图文', audience: '本周代运营目标', ...byId.get(post.id), ...post }));
+    return [...byId.values()];
+  }
+
+  const calendarDemoDay = '2026-09-11';
+  function calendarDate(time) {
+    const text = String(time || '');
+    const relative = /^(今天|明天|后天)/.exec(text);
+    if (relative) {
+      const date = new Date(`${calendarDemoDay}T12:00:00Z`);
+      date.setUTCDate(date.getUTCDate() + ['今天', '明天', '后天'].indexOf(relative[1]));
+      return date.toISOString().slice(0, 10);
+    }
+    const absolute = /(\d{4})[-/](\d{1,2})[-/](\d{1,2})/.exec(text);
+    if (absolute) return `${absolute[1]}-${absolute[2].padStart(2, '0')}-${absolute[3].padStart(2, '0')}`;
+    const short = /(\d{1,2})(?:月|\/)(\d{1,2})/.exec(text);
+    return short ? `2026-${short[1].padStart(2, '0')}-${short[2].padStart(2, '0')}` : null;
+  }
+
+  // Calendar: OntoZ tokens/components; Postiz-style day/week/month planning, no channel module.
+  const calendarLabels = { pending: '待审批', draft: '待确认', approved: '已排期', scheduled: '已排期', published: '已发布' };
+  let calendarUndo = null;
+  let calendarDragId = null;
+  const calendarISO = date => date.toISOString().slice(0, 10);
+  const calendarAsDate = value => new Date(`${value}T12:00:00Z`);
+  const calendarAdd = (value, days) => { const date = calendarAsDate(value); date.setUTCDate(date.getUTCDate() + days); return calendarISO(date); };
+  const calendarValid = value => /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(+calendarAsDate(value)) && calendarISO(calendarAsDate(value)) === value;
+  function calendarPrefs() {
+    if (!state.calendar) state.calendar = { view: 'week', anchor: calendarDemoDay, account: 'all', status: 'all' };
+    if (!['day', 'week', 'month'].includes(state.calendar.view)) state.calendar.view = 'week';
+    if (!calendarValid(state.calendar.anchor)) state.calendar.anchor = calendarDemoDay;
+    return state.calendar;
+  }
+  function calendarAccount(post) {
+    return { id: post.accountId || `default-${post.platform}`, name: post.accountName || 'NOX Robotics', handle: post.accountHandle || '@noxrobotics', platform: post.platform };
+  }
+  function calendarSeed() {
+    if (state.calendarSeeded) return;
+    const samples = [
+      ['li', 'LinkedIn', 'NOX Robotics', '@noxrobotics', 'default-LinkedIn', '2026-09-11 09:00', 'NOX：为真实工业场景而生', 'approved'],
+      ['ig', 'Instagram', 'NOX Robotics', '@noxrobotics', 'default-Instagram', '2026-09-11 11:30', '走进 NOX 的协作现场', 'approved'],
+      ['eu', 'LinkedIn', 'NOX Europe', '@nox-europe', 'nox-europe-li', '2026-09-11 09:00', '欧洲团队分享：从试点到落地', 'scheduled'],
+      ['tt', 'TikTok', 'NOX Robotics', '@noxrobotics', 'default-TikTok', '2026-09-12 14:00', '60 秒看懂仓储搬运协作', 'approved'],
+      ['x', 'X', 'NOX Robotics', '@noxrobotics', 'default-X', '2026-09-11 16:00', '本周研发进展与产品亮点', 'scheduled'],
+      ['done', 'Instagram', 'NOX Robotics', '@noxrobotics', 'default-Instagram', '2026-09-09 10:00', '来自产线的日常记录', 'published']
+    ];
+    for (const [key, platform, accountName, accountHandle, accountId, time, title, status] of samples) {
+      if (!state.posts.some(post => post.id === `calendar-demo-${key}`)) state.posts.push({ id: `calendar-demo-${key}`, platform, accountName, accountHandle, accountId, time, title, status, origin: 'calendar-demo', image: 'assets/nox-campaign/linkedin-03-smart-manufacturing.jpg', copy: `${title}\n\n探索机器人与团队协作的更多可能。`, version: 1 });
+    }
+    state.calendarSeeded = true; persist();
+  }
+  function calendarCard(post) {
+    const account = calendarAccount(post), clock = parsePostTime(post.time).clock, movable = post.status !== 'published';
+    return `<article class="wcal-post ${post.status === 'published' ? 'is-published' : ['pending','draft'].includes(post.status) ? 'is-pending' : ''}" data-cal-post="${E(post.id)}" data-status="${post.status}" draggable="${movable}"><button type="button" class="wcal-post-main" draggable="${movable}" data-wd="cal-detail" data-id="${E(post.id)}" aria-label="查看内容详情：${E(post.title)}"><span class="wcal-post-meta">${social(post.platform)}<time>${clock}</time><i title="${calendarLabels[post.status]}" aria-label="${calendarLabels[post.status]}"></i></span><b>${E(post.title)}</b><small title="${E(account.name)} · ${E(account.handle)}">${E(account.name)}</small></button>${movable ? `<button type="button" class="wcal-drag-handle" draggable="true" data-cal-handle="${E(post.id)}" data-wd="cal-detail" data-id="${E(post.id)}" aria-label="修改排期：${E(post.title)}" title="拖动调整排期，或点击选择时间">${I('grip-vertical')}</button>` : ''}</article>`;
+  }
+  function publicationCalendar(catalog, home = false) {
+    const pref = calendarPrefs(), date = calendarAsDate(pref.anchor);
+    const weekStart = calendarAdd(pref.anchor, -((date.getUTCDay() + 6) % 7));
+    const monthFirst = pref.anchor.slice(0, 7) + '-01';
+    const monthStart = calendarAdd(monthFirst, -((calendarAsDate(monthFirst).getUTCDay() + 6) % 7));
+    const monthLength = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0)).getUTCDate();
+    const count = pref.view === 'day' ? 1 : pref.view === 'week' ? 7 : Math.ceil((((calendarAsDate(monthFirst).getUTCDay() + 6) % 7) + monthLength) / 7) * 7;
+    const first = pref.view === 'day' ? pref.anchor : pref.view === 'week' ? weekStart : monthStart;
+    const days = Array.from({ length: count }, (_, i) => calendarAdd(first, i));
+    const accounts = [...new Map(contentCatalog().filter(p => calendarLabels[p.status]).map(p => { const a = calendarAccount(p); return [a.id, a]; })).values()];
+    const visible = catalog.filter(p => calendarLabels[p.status] && !p.needsRegeneration && (pref.account === 'all' || calendarAccount(p).id === pref.account) && (pref.status === 'all' || (pref.status === 'scheduled' ? ['approved','scheduled'].includes(p.status) : pref.status === 'pending' ? ['pending','draft'].includes(p.status) : p.status === pref.status)));
+    const inRange = visible.filter(p => days.includes(calendarDate(p.time)));
+    const postsOn = day => inRange.filter(p => calendarDate(p.time) === day).sort((a,b) => parsePostTime(a.time).clock.localeCompare(parsePostTime(b.time).clock));
+    const title = pref.view === 'month' ? `${date.getUTCFullYear()} 年 ${date.getUTCMonth()+1} 月` : pref.view === 'day' ? `${date.getUTCFullYear()} 年 ${date.getUTCMonth()+1} 月 ${date.getUTCDate()} 日` : `${first.replaceAll('-', '/')} — ${days[6].slice(5).replace('-', '/')}`;
+    const dayHead = day => `<span>${['周日','周一','周二','周三','周四','周五','周六'][calendarAsDate(day).getUTCDay()]}</span><b>${Number(day.slice(8))}</b>`;
+    const header = `<div class="wcal-toolbar"><div class="wcal-date-nav">${btn(I('chevron-left'), 'cal-prev', 'aria-label="上一个日期范围"')}${btn('今天', 'cal-today')}${btn(I('chevron-right'), 'cal-next', 'aria-label="下一个日期范围"')}<h3 aria-live="polite">${title}</h3><label class="wcal-date-picker" title="跳转日期">${I('calendar-days')}<input type="date" value="${pref.anchor}" data-cal-input="anchor" aria-label="跳转日期"></label></div><div class="wcal-views" role="group" aria-label="日历视图">${[['day','日'],['week','周'],['month','月']].map(([view,label]) => btn(label, 'cal-view', `data-value="${view}" aria-pressed="${pref.view === view}" aria-label="${label}视图"`)).join('')}</div></div><div class="wcal-filters"><label>${I('users')}<select data-cal-input="account" aria-label="筛选社媒账号"><option value="all">全部账号 · ${accounts.length}</option>${accounts.map(a => `<option value="${E(a.id)}" ${pref.account === a.id ? 'selected' : ''}>${E(a.platform)} · ${E(a.name)} (${E(a.handle)})</option>`).join('')}</select></label><select data-cal-input="status" aria-label="筛选发布状态">${[['all','全部状态'],['scheduled','已排期'],['pending','待确认 / 待审批'],['published','已发布']].map(([v,l])=>`<option value="${v}" ${pref.status===v?'selected':''}>${l}</option>`).join('')}</select><span class="wcal-total">${inRange.length} 条内容</span><span class="wcal-zone">${I('clock-3')}上海时间 UTC+8</span></div>`;
+    let grid;
+    if (pref.view === 'month') grid = `<div class="wcal-month"><div class="wcal-weekdays">${['一','二','三','四','五','六','日'].map(d=>`<span>周${d}</span>`).join('')}</div><div class="wcal-month-grid">${days.map(day=>`<section class="wcal-month-day ${day.slice(0,7)!==pref.anchor.slice(0,7)?'outside':''} ${day===calendarDemoDay?'is-today':''}" data-cal-date="${day}"><button type="button" class="wcal-day-number" data-wd="cal-day" data-value="${day}" aria-label="查看 ${day} 日视图">${Number(day.slice(8))}${day===calendarDemoDay?'<span>今天</span>':''}</button><div class="wcal-month-posts">${postsOn(day).slice(0,2).map(calendarCard).join('')}${postsOn(day).length>2?`<button type="button" class="wcal-more" data-wd="cal-day" data-value="${day}">+${postsOn(day).length-2} 条内容</button>`:''}</div></section>`).join('')}</div></div>`;
+    else grid = `<div class="wcal-time-grid ${pref.view==='day'?'is-day':''}"><div class="wcal-time-head"><span class="wcal-time-corner">UTC+8</span>${days.map(day=>`<button type="button" data-wd="cal-day" data-value="${day}" class="${day===calendarDemoDay?'is-today':''}" aria-label="查看 ${day} 日视图">${dayHead(day)}</button>`).join('')}</div><div class="wcal-time-body">${Array.from({length:48},(_,slot)=>{const clock=`${String(Math.floor(slot/2)).padStart(2,'0')}:${slot%2?'30':'00'}`;return `<div class="wcal-time-row" data-cal-row="${clock}"><time>${slot%2?'':clock}</time>${days.map(day=>`<div class="wcal-slot ${day===calendarDemoDay?'is-today':''}" data-cal-date="${day}" data-cal-time="${clock}" aria-label="${day} ${clock}">${postsOn(day).filter(p=>{const [h,m]=parsePostTime(p.time).clock.split(':').map(Number);return Math.floor((h*60+m)/30)===slot;}).map(calendarCard).join('')}</div>`).join('')}</div>`;}).join('')}</div></div>`;
+    return `<section class="wd-content-calendar${home?' wd-home-calendar':''} wcal" aria-label="发布日历" data-cal-view="${pref.view}" data-cal-anchor="${pref.anchor}">${header}${!inRange.length?'<div class="wcal-empty" role="status">当前日期范围暂无匹配内容，可切换日期或账号查看。</div>':''}<div class="wcal-scroll" tabindex="0" aria-label="${pref.view==='month'?'月历，可横向滚动':'发布时间表，可横向和纵向滚动'}">${grid}</div><div class="wcal-footer"><div class="wcal-legend"><span><i></i>已排期</span><span><i class="pending"></i>待审批</span><span><i class="published"></i>已发布</span></div><small>${pref.view==='month'?'拖到其他日期，保留原时间':'拖到日期或半小时时段调整排期'} · 演示今天 9/11</small>${calendarUndo?btn('撤销改期','cal-undo'):''}</div><div class="sr-only" id="calendarLive" role="status" aria-live="polite"></div></section>`;
+  }
+  function mountCalendar(previous) {
+    const calendar = root.querySelector('.wcal'), area = calendar?.querySelector('.wcal-scroll'), row = calendar?.querySelector('[data-cal-row="08:00"]');
+    if (!area) return;
+    const observer = new ResizeObserver(() => initialize());
+    const initialize = () => {
+      if (!area.isConnected) { observer.disconnect(); return; }
+      // The route shell can still be hidden on the initial render.
+      if (!area.clientHeight || (row && !row.offsetHeight)) return;
+      const restore = previous?.key === `${calendar.dataset.calView}:${calendar.dataset.calAnchor}`;
+      area.scrollTop = restore ? previous.top : row ? row.offsetTop : 0;
+      area.scrollLeft = restore ? previous.left : 0;
+      area.dataset.calMounted = 'true'; observer.disconnect();
+    };
+    observer.observe(area); requestAnimationFrame(initialize);
+  }
+  function calendarRender(focus, preserve = true) {
+    const old = root.querySelector('.wcal-scroll'), scroll = old && { top: old.scrollTop, left: old.scrollLeft };
+    render();
+    const area = root.querySelector('.wcal-scroll');
+    if (preserve && area && scroll) { area.scrollTop = scroll.top; area.scrollLeft = scroll.left; }
+    if (focus) root.querySelector(focus)?.focus({ preventScroll: true });
+  }
+  function calendarMove(id, day, time) {
+    const post = contentCatalog().find(p => p.id === id);
+    if (!post || !calendarLabels[post.status] || post.status === 'published' || !calendarValid(day) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) return false;
+    const next = `${day} ${time}`, existing = state.posts.find(p => p.id === id);
+    if (calendarDate(post.time) === day && parsePostTime(post.time).clock === time) return false;
+    calendarUndo = { id, beforeTime: post.time, after: next };
+    if (existing) existing.time = next; else state.posts.push({...post, time:next});
+    const version = state.aiStudio?.versions?.find(v => v.id === id);
+    if (version) { calendarUndo.studio = {mode:version.mode,time:version.time}; version.time = next.replace(' ','T'); version.mode = 'scheduled'; }
+    persist(); calendarRender();
+    const message = `已将「${post.title}」调整至 ${day} ${time}`;
+    root.querySelector('#calendarLive').textContent = message; toast(message); return true;
+  }
+  function calendarDetail(id) {
+    const post = contentCatalog().find(p => p.id === id); if (!post) return;
+    const a = calendarAccount(post), trigger = document.activeElement, host = root.querySelector('#wdOverlay');
+    host.innerHTML = `<dialog class="wcal-dialog" aria-labelledby="wcalDialogTitle"><header><h2 id="wcalDialogTitle">${post.status==='published'?'已发布内容':'内容与排期'}</h2><form method="dialog"><button aria-label="关闭内容与排期">${I('x')}</button></form></header><p class="wcal-dialog-account">${social(post.platform)}${E(a.platform)} · ${E(a.name)} <small>${E(a.handle)}</small></p><img class="wcal-preview" src="${E(post.image)}" alt="${E(post.title)}"><h3>${E(post.title)}</h3><p class="wcal-copy">${E(post.copy)}</p><form id="wcalScheduleForm" data-id="${E(id)}"><div class="wcal-fields"><label>发布日期<input type="date" name="date" required value="${calendarDate(post.time)}" ${post.status==='published'?'disabled':''}></label><label>发布时间<input type="time" name="time" required step="60" value="${parsePostTime(post.time).clock}" ${post.status==='published'?'disabled':''}></label></div><p class="wcal-dialog-hint">上海时间 UTC+8 · ${calendarLabels[post.status]}${post.status==='published'?'，历史记录不可改期':['pending','draft'].includes(post.status)?'，调整建议时间不会自动审批':''}</p><p class="wcal-error" role="alert"></p><footer><button type="button" data-wd="cal-close">关闭</button>${post.status!=='published'?'<button class="wcal-primary" type="submit">保存排期</button>':''}</footer></form></dialog>`;
+    const dialog = host.querySelector('dialog'); dialog.showModal(); refreshIcons();
+    dialog.addEventListener('close',()=>{host.replaceChildren();if(trigger?.isConnected)trigger.focus();},{once:true});
+  }
+  function handleCalendarAction(action, value, id) {
+    const pref=calendarPrefs();
+    if(action==='cal-detail'){calendarDetail(id);return;}
+    if(action==='cal-close'){root.querySelector('.wcal-dialog')?.close();return;}
+    if(action==='cal-undo') {
+      if(!calendarUndo)return;
+      const undo=calendarUndo, current=state.posts.find(p=>p.id===undo.id);
+      if(current?.time!==undo.after){calendarUndo=null;calendarRender();toast('内容已再次更新，无法撤销旧排期');return;}
+      current.time=undo.beforeTime;
+      const version=state.aiStudio?.versions?.find(v=>v.id===undo.id);if(version&&undo.studio)Object.assign(version,undo.studio);
+      calendarUndo=null;persist();calendarRender('[data-wd="cal-today"]');toast('已恢复原排期');return;
+    }
+    if(action==='cal-view'&&['day','week','month'].includes(value))pref.view=value;
+    if(action==='cal-day'&&calendarValid(value)){pref.view='day';pref.anchor=value;}
+    if(action==='cal-today')pref.anchor=calendarDemoDay;
+    if(action==='cal-prev'||action==='cal-next') {
+      const step=action==='cal-prev'?-1:1;
+      if(pref.view==='month') {
+        const d=calendarAsDate(pref.anchor),day=d.getUTCDate();d.setUTCDate(1);d.setUTCMonth(d.getUTCMonth()+step);
+        d.setUTCDate(Math.min(day,new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth()+1,0)).getUTCDate()));pref.anchor=calendarISO(d);
+      } else pref.anchor=calendarAdd(pref.anchor,step*(pref.view==='week'?7:1));
+    }
+    persist();calendarRender(action==='cal-view'?`[data-wd="cal-view"][data-value="${value}"]`:`[data-wd="${action}"]`,false);
+  }
+  root.addEventListener('change',event=>{
+    const key=event.target.dataset.calInput;if(!key)return;
+    if(key==='anchor'&&!calendarValid(event.target.value))return;
+    calendarPrefs()[key]=event.target.value;persist();calendarRender(`[data-cal-input="${key}"]`,key!=='anchor');
+  });
+  root.addEventListener('submit',event=>{
+    if(event.target.id!=='wcalScheduleForm')return;event.preventDefault();
+    const day=event.target.elements.date.value,time=event.target.elements.time.value,id=event.target.dataset.id;
+    if(!calendarValid(day)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)){event.target.querySelector('.wcal-error').textContent='请填写有效的日期和时间';return;}
+    root.querySelector('.wcal-dialog').close();calendarMove(id,day,time);
+    root.querySelector(`[data-cal-post="${CSS.escape(id)}"] .wcal-post-main`)?.focus({preventScroll:true});
+  });
+  function calendarDropTarget(x,y) {return document.elementFromPoint(x,y)?.closest('.wcal [data-cal-date]');}
+  function calendarHighlight(target) {root.querySelectorAll('.wcal-drop-active').forEach(el=>el.classList.remove('wcal-drop-active'));target?.classList.add('wcal-drop-active');}
+  function calendarDrop(id,target) {if(!target)return;const post=contentCatalog().find(p=>p.id===id);if(post)calendarMove(id,target.dataset.calDate,target.dataset.calTime||parsePostTime(post.time).clock);}
+  root.addEventListener('dragstart',event=>{
+    const card=event.target.closest('.wcal-post');if(!card)return;
+    if(card.draggable===false){event.preventDefault();return;}
+    calendarDragId=card.dataset.calPost;event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',calendarDragId);card.classList.add('is-dragging');
+  });
+  root.addEventListener('dragover',event=>{const target=event.target.closest('.wcal [data-cal-date]');if(!calendarDragId||!target)return;event.preventDefault();event.dataTransfer.dropEffect='move';calendarHighlight(target);const area=root.querySelector('.wcal-scroll'),box=area.getBoundingClientRect();if(event.clientY>box.bottom-45)area.scrollTop+=18;if(event.clientY<box.top+65)area.scrollTop-=18;if(event.clientX>box.right-35)area.scrollLeft+=14;if(event.clientX<box.left+35)area.scrollLeft-=14;});
+  root.addEventListener('drop',event=>{if(!calendarDragId)return;event.preventDefault();const id=calendarDragId;calendarDragId=null;calendarHighlight(null);calendarDrop(id,event.target.closest('.wcal [data-cal-date]'));});
+  root.addEventListener('dragend',()=>{calendarDragId=null;calendarHighlight(null);root.querySelectorAll('.is-dragging').forEach(el=>el.classList.remove('is-dragging'));});
+  // Touch/pen drag uses the visible handle; scrolling the rest of a card stays native.
+  let calendarPointer=null,calendarSuppressClick=0;
+  root.addEventListener('pointerdown',event=>{
+    const handle=event.target.closest('[data-cal-handle]');if(!handle||event.pointerType==='mouse')return;
+    calendarPointer={id:handle.dataset.calHandle,x:event.clientX,y:event.clientY,handle,moved:false};handle.setPointerCapture(event.pointerId);
+  });
+  root.addEventListener('pointermove',event=>{
+    const drag=calendarPointer;if(!drag)return;
+    if(Math.hypot(event.clientX-drag.x,event.clientY-drag.y)>8)drag.moved=true;if(!drag.moved)return;
+    event.preventDefault();drag.handle.closest('.wcal-post').classList.add('is-dragging');calendarHighlight(calendarDropTarget(event.clientX,event.clientY));
+    const area=root.querySelector('.wcal-scroll'),box=area.getBoundingClientRect();if(event.clientY>box.bottom-40)area.scrollTop+=15;if(event.clientY<box.top+60)area.scrollTop-=15;if(event.clientX>box.right-30)area.scrollLeft+=12;if(event.clientX<box.left+30)area.scrollLeft-=12;
+  });
+  root.addEventListener('pointerup',event=>{const drag=calendarPointer;if(!drag)return;calendarPointer=null;calendarHighlight(null);drag.handle.closest('.wcal-post').classList.remove('is-dragging');if(drag.moved){calendarSuppressClick=Date.now()+500;calendarDrop(drag.id,calendarDropTarget(event.clientX,event.clientY));}});
+  root.addEventListener('pointercancel',()=>{calendarPointer=null;calendarHighlight(null);root.querySelectorAll('.is-dragging').forEach(el=>el.classList.remove('is-dragging'));});
+  root.addEventListener('click',event=>{if(Date.now()<calendarSuppressClick){event.preventDefault();event.stopImmediatePropagation();}},true);
+
+  function contentScreen() {
+    const catalog = contentCatalog();
     const statusMeta = { pending: ['待审批', 'amber'], draft: ['生成中', 'violet'], 'manual-draft': ['草稿', ''], approved: ['已排期', 'green'], scheduled: ['已排期', 'green'], published: ['已发布', 'green'] };
     let items = catalog.filter(item => (ui.contentPlatform === 'all' || item.platform === ui.contentPlatform) && (ui.contentType === 'all' || item.type === ui.contentType) && (ui.contentStatus === 'all' || item.status === ui.contentStatus));
     if (ui.contentQuery) items = items.filter(item => `${item.title}${item.copy}`.toLowerCase().includes(ui.contentQuery.toLowerCase()));
@@ -812,11 +952,7 @@
         ? `<section><h3>内容状态</h3>${badge(statusMeta[selected.status][0], statusMeta[selected.status][1])}${btn(I('pencil') + ' 继续编辑', 'revise-catalog', `data-id="${selected.id}" class="wide"`)}</section>`
         : `<section><h3>内容状态</h3>${badge(statusMeta[selected.status][0], statusMeta[selected.status][1])}<p>这条内容已进入后续流程，无需重复审批。</p></section>`;
     const libraryView = `<div class="wd-content-library ${ui.contentDetailOpen ? 'detail-open' : ''}"><main><header><span></span><span>内容</span><span>类型</span><span>受众</span><span>排期时间</span><span>状态</span></header>${items.map(row).join('') || '<p class="wd-library-empty">没有符合当前筛选条件的内容</p>'}<footer>共 ${items.length} 条内容 <span>‹ <b>1</b> ›</span></footer></main><button type="button" class="wd-content-detail-scrim" data-wd="close-content-detail" aria-label="关闭内容详情"></button><aside aria-label="内容详情"><header><h2>内容详情</h2><button type="button" class="wd-close" data-wd="close-content-detail" aria-label="关闭内容详情">${I('x')}</button></header><img class="wd-detail-hero" src="${selected.image}" alt="${E(selected.title)}"><p class="wd-detail-channel">${social(selected.platform)}${selected.platform} · ${selected.type}</p><h2>${E(selected.title)}</h2><p>${E(selected.copy)}</p><p class="wd-detail-tags">#工业AI #高温检测 #质量控制 #智能制造</p><h3>内容来源</h3><div class="wd-source-tags"><span>运营热点 <b>2</b></span><span>我的帖子评论 <b>23</b></span><span>产品资料 <b>3</b></span></div><dl><dt>排期时间</dt><dd>${I('calendar')}${selected.time}</dd><dt>版本</dt><dd>v1.2</dd></dl>${approvalPanel}</aside></div>`;
-    const calendarDays = [
-      ['周一', '9/1', []], ['周二', '9/2', [catalog[2]]], ['周三', '9/3', [catalog[0], catalog[3]]],
-      ['周四', '9/4', [catalog[1]]], ['周五', '9/5', [catalog[4]]], ['周六', '9/6', []], ['周日', '9/7', [catalog[5]]]
-    ];
-    const calendarView = `<section class="wd-content-calendar"><header><div><button type="button">‹</button><h2>2026 年 9 月 1–7 日</h2><button type="button">›</button></div><span>${I('clock-3')}时区 Asia/Shanghai</span></header><div class="wd-calendar-grid">${calendarDays.map(([week, date, posts], index) => `<article class="${index === 2 ? 'today' : ''}"><header><b>${week}</b><strong>${date}</strong></header>${posts.map(item => `<button type="button" data-wd="select-catalog-post" data-id="${item.id}">${social(item.platform)}<span><b>${E(item.title)}</b><small>${item.time} · ${statusMeta[item.status][0]}</small></span></button>`).join('') || '<p>暂无排期</p>'}</article>`).join('')}</div><footer>${I('info')}已批准内容才会进入排期；发布失败或授权失效会在这里提醒。</footer></section>`;
+    const calendarView = publicationCalendar(items);
     return `<section class="wd-content-v15">${pageHead('内容管理', '从创作、审批到发布，统一管理每一条社媒内容', `${link(I('send') + ' 主动发布', 'quick', 'wd-button')}${link(I('sparkles') + ' 让 Wendy 生成', 'ai', 'wd-button primary')}`)}
       <section class="wd-content-stats"><article>${I('loader-circle')}<span><small>制作中</small><b>4</b></span></article><article>${I('clock-3')}<span><small>待审批</small><b class="amber">3</b></span></article><article>${I('calendar')}<span><small>已排期</small><b class="green">6</b></span></article><article>${I('check-circle')}<span><small>已发布</small><b class="green">28</b></span></article></section>
       <div class="wd-content-toolbar"><label>${I('search')}<input data-wd-input="content-search" value="${E(ui.contentQuery)}" placeholder="搜索内容"></label><div class="wd-platform-tabs">${['all','LinkedIn','Instagram','TikTok','YouTube'].map(platform => `<button data-wd="content-platform" data-value="${platform}" class="${ui.contentPlatform === platform ? 'active' : ''}">${platform === 'all' ? '全部平台' : social(platform)}</button>`).join('')}</div><div class="wd-type-tabs">${[['all','帖子'],['图片','图片'],['视频','视频']].map(([value,label]) => `<button data-wd="content-type" data-value="${value}" class="${ui.contentType === value ? 'active' : ''}">${label}</button>`).join('')}</div><select data-wd-select="content-status"><option value="all">全部状态</option><option value="pending" ${ui.contentStatus === 'pending' ? 'selected' : ''}>待审批</option><option value="draft" ${ui.contentStatus === 'draft' ? 'selected' : ''}>生成中</option><option value="manual-draft" ${ui.contentStatus === 'manual-draft' ? 'selected' : ''}>草稿</option><option value="scheduled" ${ui.contentStatus === 'scheduled' ? 'selected' : ''}>已排期</option><option value="published" ${ui.contentStatus === 'published' ? 'selected' : ''}>已发布</option></select><div class="wd-view-tabs"><button data-wd="content-view" data-value="library" class="${ui.contentView === 'library' ? 'active' : ''}">${I('list')}内容库</button><button data-wd="content-view" data-value="calendar" class="${ui.contentView === 'calendar' ? 'active' : ''}">${I('calendar')}排期日历</button></div></div>
@@ -891,35 +1027,331 @@
     return `<section class="wd-strategy">${pageHead('接下来，Wendy 应该重点做什么？', 'Wendy 会把你的临时指导与趋势结合，不会覆盖企业事实。', '<span>2026-08-31</span>')}<div class="wd-strategy-layout"><main><span class="wd-kicker">当前指导</span><h2>${E(strategy.directive)}</h2><button class="wd-edit-icon">${I('pencil')}</button><div class="wd-strategy-fields"><article>${I('clock-3')}<b>时间范围</b><span>未来两周（2026-09-07 至 2026-09-20）</span></article><article>${I('megaphone')}<b>主推内容</b><span>X100 工业传感器新品发布与应用</span></article><article>${I('pie-chart')}<b>行业教育比例</b><span>约 ${strategy.mix}% 新品 + ${100 - strategy.mix}% 行业教育</span></article><article>${I('globe')}<b>目标市场</b><span>${strategy.markets.join('、')}</span></article><article>${I('bell-off')}<b>暂停话题</b><span>公司内部活动、招聘类内容</span></article></div><footer><p>${I('info')}已发布/已审批内容不受影响，新方向将于下周一开始生效。</p>${btn(I('sparkles') + ' 生成新策略', 'generate-strategy-preview', 'class="primary"')}</footer></main><aside><h2>调整后会发生什么</h2><div class="wd-mix-bar"><i style="width:70%"></i><em></em></div><p>下周内容配比（预计）<b>70% 新品 · 30% 行业教育</b></p><h3>投放与触达渠道</h3><div class="wd-social-row">${platforms.map(social).join('')}</div><h3>变化一览</h3><ul><li><i class="green"></i><b>保持不变</b><span>品牌基调、视觉规范、核心受众</span></li><li><i class="amber"></i><b>将增加</b><span>X100 新品内容与应用案例</span></li><li><i></i><b>将减少/暂停</b><span>通用公司动态与活动类内容</span></li></ul><p class="wd-safe-note">${I('shield-check')}已发布/已审批内容不受影响</p></aside></div>${ui.strategyPreview ? `<footer class="wd-strategy-preview"><div><b>${I('sparkles')}已生成新策略（待确认）</b><p>基于你的指导、趋势与企业事实生成。</p></div><span><small>发布时间</small>下周一开始生效</span><span><small>核心方向</small>X100 新品发布</span><span><small>内容节奏</small>70% 新品 + 30% 行业教育</span>${btn('继续调整', 'adjust-strategy')}${btn('确认下周生效', 'confirm-strategy', 'class="primary"')}</footer>` : ''}</section>`;
   }
 
-  function aiScreen() {
-    const post = currentPost();
-    const previewPost = { ...post, platform: ui.aiPlatform };
-    const channelState = { LinkedIn: '已连接', Instagram: '可连接', TikTok: '可连接', YouTube: '待接入' };
-    const visualStyles = [
-      ['cold', '冷白商业棚拍', 'assets/wendy-styles/linkedin-01-cool-white-studio.jpg'],
-      ['dark', '深色电影工业', 'assets/wendy-styles/linkedin-02-dark-cinematic-industrial.jpg'],
-      ['field', '现场工业纪实', 'assets/wendy-styles/linkedin-03-field-industrial-documentary.jpg'],
-      ['hud', '技术蓝图 HUD', 'assets/wendy-styles/linkedin-04-blueprint-hud.jpg'],
-      ['macro', '材质微距精工', 'assets/wendy-styles/linkedin-05-material-macro-craft.jpg'],
-      ['minimal', '品牌极简几何', 'assets/wendy-styles/linkedin-06-brand-minimal-geometry.jpg']
-    ];
-    return `<section class="wd-ai wd-ai-v17">
-      ${breadcrumb(pageBreadcrumbs['创意工作室'])}<header class="wd-ai-title"><h1>让 Wendy 生成 · 创意工作室</h1><p>${I('lock-keyhole')}Wendy 生成内容 · 必须审批后才能发布</p></header>
-      <div class="wd-ai-progress"><span class="done">${I('check')}理解要求</span><span class="done">${I('check')}选取依据</span><span class="active"><b>3</b>生成多平台版本</span><span><b>4</b>等待审批</span></div>
-      <div class="wd-ai-grid wd-ai-grid-v17"><aside class="wd-ai-brief">
-        <section><header><h2>1. 业务目标与当前简报</h2><button type="button" data-wd="edit-ai-brief">编辑</button></header><label class="wd-brief-field" for="wdCreativeBrief"><b>业务目标</b><textarea id="wdCreativeBrief" rows="4">${E(creativeBrief)}</textarea></label><ul><li>IP67 级防护，适应严苛工业环境</li><li>高精度采集，稳定可靠</li><li>支持主流工业协议，易集成</li></ul></section>
-        <section><header><h2>2. 产品选择</h2><small>必填</small></header><article class="wd-ai-product"><img src="${asset}" alt="X100 工业传感器"><div><b>X100 工业传感器</b><p>IP67 防护 · 高精度采集 · 工业协议</p><button type="button" data-wd="change-ai-product">更换产品</button></div></article></section>
-        <section><h2>3. 选取依据（可多选）</h2>${['企业资料 · 产品手册 / 技术白皮书 / 官网内容','趋势热点 · 工业 AI 与智能制造趋势报告','我的帖子评论 · 已发布内容下的技术问题','客户案例 · 欧洲汽车零部件客户案例集'].map(item => `<label><input type="checkbox" checked>${item}</label>`).join('')}</section>
-        <section><h2>4. 可用品牌资产（自动匹配）</h2><div class="wd-assets-mini"><span><img src="${persona}" alt="Wendy 数字人分身">数字人分身<small>可用</small></span><span>${I('audio-waveform')}克隆声音<small>可用</small></span><span><img src="${threeView}" alt="Wendy 三维三视图">三维三视图<small>可用</small></span></div>${link('查看全部资产库 ' + I('chevron-right'), 'persona')}</section>
-      </aside><main><nav>${platforms.map(platform => `<button type="button" data-wd="ai-platform" data-value="${platform}" class="${ui.aiPlatform === platform ? 'active' : ''}">${social(platform)}<span>${platform}<small>${channelState[platform]}</small></span></button>`).join('')}</nav>${postPreview(previewPost)}<p class="wd-ai-platform-note">${I('lightbulb')}不同平台的版本会自动优化文案长度与格式。</p></main>
-      <aside class="wd-ai-settings"><h2>5. 输出设置</h2><label>语言<select><option>简体中文</option><option>English</option></select></label><label>语气<select><option>专业 / 可信 / 权威</option></select></label><label>长度<select><option>中等（约 130–180 字）</option></select></label><h3>内容形式</h3><div class="wd-ai-format">${[['图文','image'],['图片','image'],['视频','video'],['轮播图','gallery-horizontal']].map(([label,icon]) => `<button type="button" data-wd="ai-format" data-value="${label}" class="${ui.aiFormat === label ? 'active' : ''}">${I(icon)}${label}</button>`).join('')}</div><header class="wd-style-head"><h3>6. 视觉风格</h3><label><input type="checkbox" data-wd-check="ai-auto-style" ${ui.aiAutoStyle ? 'checked' : ''}>由 Wendy 自动匹配</label></header><div class="wd-style-grid">${visualStyles.map(([key,label,image]) => `<button type="button" data-wd="ai-style" data-value="${key}" class="${ui.aiStyle === key && !ui.aiAutoStyle ? 'active' : ''}"><img src="${image}" alt=""><span>${label}</span></button>`).join('')}</div><article class="wd-ai-cost"><small>7. 预计消耗</small><b>289 <span>点</span></b><a href="#wendy/points">查看计费规则 ${I('chevron-right')}</a></article><footer>${btn('保存简报', 'save-ai-brief')}${btn(I('sparkles') + (ui.composeGenerated ? ' 重新生成内容' : ' 生成多平台内容'), 'compose-generate', 'class="primary"')}${ui.composeGenerated ? btn('继续审核与排期 ' + I('arrow-right'), 'compose-next', 'class="primary"') : ''}</footer></aside></div>
-    </section>`;
+  // Figma AI发布 203:1941: brief → progress → editable preview → channel adaptations.
+  const studioStyles = [
+    ['cinema', '电影级'], ['real', '超写实摄影'], ['minimal', '日系极简'],
+    ['documentary', '超写实摄影'], ['dramatic', '电影级'], ['clean', '日系极简'], ['soft', '日系极简']
+  ];
+  const studioProducts = [
+    { id: 'nox', name: 'NOX · 通用人形机器人', image: 'assets/nox-campaign/linkedin-02-global-standards.jpg', images: ['assets/nox-campaign/linkedin-04-warehouse-logistics.jpg', 'assets/nox-campaign/linkedin-03-smart-manufacturing.jpg'], copy: '面向制造、仓储物流与设施巡检场景，从小范围试点开始，探索重复工作中的机器人协作。' },
+    { id: 'x100', name: 'X100 工业传感器', image: asset, images: [inspectionHero, maintenance], copy: '面向严苛工业环境，结合高精度采集、IP67 防护与工业协议集成，帮助团队稳定获取现场数据。' }
+  ];
+  let studioTimer;
+  let studioErrors = {};
+  const studioFresh = () => ({ stage: 'brief', platform: 'LinkedIn', goal: '', product: '', style: 'cinema', reference: '', referenceName: '', versions: [], sync: [], feedback: '', revision: 0 });
+  function studioState() {
+    if (!state.aiStudio || !['brief', 'generating', 'preview'].includes(state.aiStudio.stage)) state.aiStudio = studioFresh();
+    return state.aiStudio;
   }
+  const studioNow = () => new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Shanghai' }).slice(0, 16);
+  function studioOption(platform, selected, action, disabled = false) {
+    return `<button type="button" class="ws-platform${selected ? ' selected' : ''}" data-wd="${action}" data-value="${platform}" aria-pressed="${selected}" ${disabled ? 'disabled' : ''}>${social(platform)}<span>${platform}</span></button>`;
+  }
+  function studioNewVersion(platform, index = 0) {
+    const draft = studioState(), product = studioProducts.find(p => p.id === draft.product);
+    const ending = platform === 'Instagram' ? '\n\n#新品介绍 #工业创新 #品牌故事' : platform === 'TikTok' ? '\n\n你最想了解哪个应用场景？在评论区告诉我们。' : platform === 'YouTube' ? '\n\n欢迎查看产品演示，了解应用场景与试点方案。' : '\n\n欢迎与我们交流你的应用需求，获取产品资料与试点方案。';
+    const primary = index > 0 ? draft.versions[0] : null;
+    const preset = studioStyles.findIndex(s => s[0] === draft.style);
+    const previewImage = draft.style === 'custom' && draft.reference ? draft.reference : preset > 0 ? product.images[(preset - 1) % product.images.length] : product.image;
+    return { id: `${draft.batch}-${index}`, platform, copy: primary ? `${primary.copy}${ending}` : `${draft.goal}\n\n${product.name}\n${product.copy}${ending}`, image: primary?.image || previewImage, mode: 'now', time: '', status: 'pending' };
+  }
+  function studioFinish() {
+    const draft = studioState();
+    if (draft.stage !== 'generating') return;
+    draft.versions = [studioNewVersion(draft.platform)]; draft.stage = 'preview'; persist();
+  }
+  function studioVersionCard(version, index) {
+    const confirmed = ['approved', 'published'].includes(version.status);
+    return `<article class="ws-result" data-studio-version="${index}"><header><div class="ws-identity"><img src="assets/avatar.png" alt=""><span><b>@John Smith</b><small>${E(version.platform)}</small></span></div><div class="ws-time"><label for="wsMode-${index}">发布时间</label><select id="wsMode-${index}" data-studio-mode="${index}" ${confirmed ? 'disabled' : ''}><option value="now" ${version.mode === 'now' ? 'selected' : ''}>立即发布</option><option value="scheduled" ${version.mode === 'scheduled' ? 'selected' : ''}>定时发布</option></select>${version.mode === 'scheduled' ? `<input type="datetime-local" data-studio-time="${index}" value="${E(version.time)}" aria-label="${E(version.platform)} 发布时间（上海时间）" ${confirmed ? 'disabled' : ''}>` : ''}</div></header><div class="ws-result-body"><img src="${E(version.image)}" alt="${E(studioProducts.find(p => p.id === studioState().product)?.name)} 社媒配图"><label class="ws-caption" for="wsCopy-${index}"><span>推送文案</span><textarea id="wsCopy-${index}" data-studio-copy="${index}" ${confirmed ? 'readonly' : ''}>${E(version.copy)}</textarea></label></div><footer>${confirmed ? `<span class="ws-confirmed">${I('circle-check-big')}${version.status === 'published' ? '已确认社媒发布（演示）' : `已确认排期 · ${E(version.time.replace('T', ' '))}`}</span>` : `${version.status === 'manual-draft' ? '<span class="ws-saved" role="status">草稿已保存</span>' : ''}${btn(`${I('save')}保存草稿`, 'studio-save', `data-value="${index}"`)}${btn(`${I('send')}发布`, 'studio-publish', `data-value="${index}" class="ws-primary"`)}`}</footer></article>`;
+  }
+  function aiScreen() {
+    const draft = studioState();
+    clearTimeout(studioTimer);
+    if (draft.stage === 'generating') {
+      if (Date.now() >= draft.readyAt) studioFinish();
+      else studioTimer = setTimeout(() => { studioFinish(); if (route()[0] === 'ai') render(); }, draft.readyAt - Date.now());
+    }
+    const top = `<header class="ws-topbar">${btn(`${I('arrow-left')}返回日历`, 'studio-back')}<h1>Wendy ${draft.stage === 'generating' ? '正在生成' : '与你一起创作'}社媒内容方案</h1>${btn(I('refresh-ccw'), 'studio-reset', 'aria-label="重新开始创作" title="重新开始创作"')}</header>`;
+    let body;
+    if (draft.stage === 'brief') body = `<form id="wsBriefForm" class="ws-brief" novalidate><section class="ws-card"><header><h2>选择发布平台</h2><p>选择一个主力发布平台，后续可以调整为全平台发布</p></header><div class="ws-platforms" aria-label="主力发布平台">${platforms.map(p => studioOption(p, draft.platform === p, 'studio-platform')).join('')}</div></section><section class="ws-card"><header><h2><label for="wdCreativeBrief">设定发布目标</label></h2><p>告诉 Wendy 你想要发关于什么内容的社媒</p></header><textarea id="wdCreativeBrief" class="ws-goal" placeholder="描述你想要的社媒内容，例如：帮我生成一条 LinkedIn 新品介绍" maxlength="2000" aria-invalid="${!!studioErrors.goal}" aria-describedby="wsGoalError">${E(draft.goal)}</textarea><p id="wsGoalError" class="ws-error" role="alert">${studioErrors.goal || ''}</p></section><section class="ws-card"><header><h2><label for="wsProduct">选择商品信息</label></h2><p>选择这次内容要介绍的商品</p></header><select id="wsProduct" aria-invalid="${!!studioErrors.product}" aria-describedby="wsProductError"><option value="">请选择</option>${studioProducts.map(p => `<option value="${p.id}" ${draft.product === p.id ? 'selected' : ''}>${E(p.name)}</option>`).join('')}</select><p id="wsProductError" class="ws-error" role="alert">${studioErrors.product || ''}</p></section><section class="ws-card"><header><h2>选择视觉方案</h2><p>已经为你预设了不同的风格</p></header><div class="ws-styles"><div class="ws-style-custom"><button type="button" class="ws-style${draft.style === 'custom' ? ' selected' : ''}" data-wd="studio-material" aria-label="上传或从知识库选择自定义风格">${draft.reference ? `<img src="${E(draft.reference)}" alt="${E(draft.referenceName)}">` : `<span class="ws-upload">${I('upload')}<span>上传或从知识库选择</span></span>`}<b>自定义风格</b></button>${draft.reference ? btn(I('x'), 'studio-remove-material', 'class="ws-remove" aria-label="移除自定义风格图片"') : ''}</div>${studioStyles.map(([key, name]) => `<button type="button" class="ws-style${draft.style === key ? ' selected' : ''}" data-wd="studio-style" data-value="${key}" aria-pressed="${draft.style === key}"><span class="ws-style-swatch" aria-hidden="true">${draft.style === key ? I('check') : ''}</span><b>${name}</b></button>`).join('')}</div></section><footer class="ws-generate"><button type="submit" class="ws-primary">${I('send')}消耗 289 生成方案</button><small>当前为演示：使用示例文案和已有素材，不扣除真实点数。</small></footer></form>`;
+    else if (draft.stage === 'generating') body = `<section class="ws-progress" role="status" aria-live="polite" aria-busy="true"><h2>${I('loader-circle')}Wendy 正在准备社媒内容建议</h2><div><p>正在读取你的社媒诉求和上传素材…<br>正在整理适合 ${E(draft.platform)} 的文案与版式…</p><small>第 1 层 · 内容目标</small><p>${E(draft.goal)}</p><small>第 2 层 · 发布时间</small><p>整理建议发布时间，你可以在预览时选择立即发布或定时发布。</p><small>第 3 层 · 素材与格式</small><p>将选定商品与${draft.style === 'custom' ? '自定义参考素材' : studioStyles.find(s => s[0] === draft.style)?.[1]}方案组合为内容预览。</p></div><small>演示生成中 · 不调用真实 AI 或社媒服务</small></section>`;
+    else {
+      const main = draft.versions[0], confirmed = ['approved', 'published'].includes(main.status);
+      body = `<div class="ws-preview"><p class="ws-summary">${I('circle-check-big')}Wendy 已生成社媒内容建议摘要 <small>演示内容</small></p>${studioVersionCard(main, 0)}${confirmed ? `<section class="ws-card ws-sync"><h2>是否将社媒内容同步发送至其他平台</h2><div class="ws-platforms">${platforms.filter(p => p !== draft.platform).map(p => studioOption(p, draft.sync.includes(p), 'studio-sync', draft.versions.some(v => v.platform === p))).join('')}</div>${btn(`${I('send')}确认`, 'studio-adapt', `class="ws-accent" ${draft.sync.every(p => draft.versions.some(v => v.platform === p)) ? 'disabled' : ''}`)}</section>` : ''}${draft.versions.slice(1).map((version, index) => studioVersionCard(version, index + 1)).join('')}${!confirmed ? `<form id="wsFeedbackForm" class="ws-feedback"><label class="sr-only" for="wsFeedback">图片修改建议</label><textarea id="wsFeedback" placeholder="对生成的图片不满意，请告诉 Wendy 修改建议" maxlength="1000">${E(draft.feedback)}</textarea><button type="submit" ${draft.revision >= 8 ? 'disabled' : ''}>${I('wand-sparkles')}AI 重新生图 ${draft.revision}/8</button><small>演示会替换为该商品的已有素材，最多可调整 8 次。</small></form>` : ''}</div>`;
+    }
+    return `<section class="ws-studio">${top}<main class="ws-content">${body}</main></section>`;
+  }
+  function studioDialog(markup) {
+    const host = root.querySelector('#wdOverlay'), trigger = document.activeElement;
+    host.innerHTML = `<dialog class="ws-dialog">${markup}</dialog>`;
+    const dialog = host.querySelector('dialog'); dialog.showModal(); refreshIcons();
+    dialog.addEventListener('close', () => { host.replaceChildren(); if (trigger?.isConnected) trigger.focus(); }, { once: true });
+    return dialog;
+  }
+  function studioSaveVersion(index, publish) {
+    const draft = studioState(), version = draft.versions[index];
+    if (!version || ['approved', 'published'].includes(version.status)) return;
+    if (!version.copy.trim()) { toast('请先填写推送文案'); root.querySelector(`#wsCopy-${index}`)?.focus(); return; }
+    if (publish && version.mode === 'scheduled' && (!version.time || version.time <= studioNow().replace(' ', 'T'))) { toast('请选择上海时区的未来发布时间'); root.querySelector(`[data-studio-time="${index}"]`)?.focus(); return; }
+    version.status = publish ? (version.mode === 'scheduled' ? 'approved' : 'published') : 'manual-draft';
+    const post = { id: version.id, title: draft.goal.slice(0, 48), platform: version.platform, image: version.image, copy: version.copy, time: (version.mode === 'scheduled' && version.time ? version.time : studioNow()).replace('T', ' '), status: version.status, origin: 'ai-studio', theme: '自主创作', version: draft.revision + 1 };
+    const existing = state.posts.findIndex(p => p.id === post.id);
+    if (existing < 0) state.posts.unshift(post); else state.posts[existing] = post;
+    persist(); render(); toast(publish ? (version.mode === 'scheduled' ? '已确认排期，首页日历已更新' : '已完成演示发布，未发送到真实社媒') : '已保存到内容库，尚未发布');
+  }
+  function handleStudioAction(action, value) {
+    const draft = studioState();
+    if (action === 'studio-back') {
+      const saved = draft.versions.find(v => ['approved', 'published'].includes(v.status));
+      if (saved) { const time = saved.mode === 'scheduled' ? saved.time : studioNow(); const date = new Date(`${time.slice(0, 10)}T12:00:00Z`); calendarPrefs().anchor = calendarISO(date); calendarPrefs().account = 'all'; calendarPrefs().status = 'all'; persist(); }
+      go(''); return;
+    }
+    if (action === 'studio-reset') {
+      studioDialog(`<h2>重新开始创作？</h2><p>当前创作表单和未保存的预览将清空，已保存的内容仍在内容库中。</p><footer><form method="dialog"><button>取消</button></form>${btn('重新开始', 'studio-reset-confirm', 'class="primary"')}</footer>`); return;
+    }
+    if (action === 'studio-reset-confirm') { clearTimeout(studioTimer); state.aiStudio = studioFresh(); studioErrors = {}; persist(); render(); return; }
+    if (action === 'studio-platform') draft.platform = value;
+    if (action === 'studio-style') draft.style = value;
+    if (action === 'studio-remove-material') { draft.reference = ''; draft.referenceName = ''; draft.style = 'cinema'; }
+    if (action === 'studio-save' || action === 'studio-publish') { studioSaveVersion(Number(value), action === 'studio-publish'); return; }
+    if (action === 'studio-sync') draft.sync = draft.sync.includes(value) ? draft.sync.filter(p => p !== value) : [...draft.sync, value];
+    if (action === 'studio-adapt') {
+      draft.sync.forEach(platform => { if (!draft.versions.some(v => v.platform === platform)) draft.versions.push(studioNewVersion(platform, draft.versions.length)); });
+      toast('已生成所选平台版本，请逐条确认后发布');
+    }
+    if (action === 'studio-material') {
+      studioDialog(`<header><h2>选择自定义风格素材</h2><form method="dialog"><button aria-label="关闭素材选择">${I('x')}</button></form></header><label class="ws-file">${I('upload')}上传图片<input type="file" id="wsFile" accept="image/png,image/jpeg,image/webp"></label><p>支持 PNG、JPEG、WebP，最大 2 MB。仅保存在当前浏览器。</p><h3>从知识库选择</h3><div class="ws-materials">${studioProducts.map(p => `<button type="button" data-wd="studio-library" data-value="${p.id}"><img src="${p.image}" alt="${E(p.name)}"><span>${E(p.name)}</span></button>`).join('')}</div>`); return;
+    }
+    if (action === 'studio-library') { const product = studioProducts.find(p => p.id === value); if (!product) return; draft.reference = product.image; draft.referenceName = product.name; draft.style = 'custom'; }
+    persist(); render();
+  }
+  root.addEventListener('submit', event => {
+    if (event.target.id === 'wsBriefForm') {
+      event.preventDefault(); const draft = studioState(); studioErrors = {};
+      if (!draft.goal.trim()) studioErrors.goal = '请填写发布目标';
+      if (!draft.product) studioErrors.product = '请选择商品';
+      if (Object.keys(studioErrors).length) { render(); root.querySelector('[aria-invalid="true"]')?.focus(); toast('请填写必填信息'); return; }
+      draft.stage = 'generating'; draft.batch = `ai-${Date.now()}`; draft.readyAt = Date.now() + 2400; draft.revision = 0; draft.sync = []; persist(); render();
+    }
+    if (event.target.id === 'wsFeedbackForm') {
+      event.preventDefault(); const draft = studioState();
+      if (draft.revision >= 8) return;
+      if (!draft.feedback.trim()) { toast('请先填写图片修改建议'); root.querySelector('#wsFeedback')?.focus(); return; }
+      const product = studioProducts.find(p => p.id === draft.product);
+      draft.versions[0].image = product.images[draft.revision % product.images.length]; draft.revision++; draft.feedback = ''; persist(); render(); toast('演示配图已更新，请预览后确认');
+    }
+  });
+  root.addEventListener('input', event => {
+    const el = event.target, draft = studioState();
+    if (el.id === 'wdCreativeBrief') { draft.goal = el.value; if (el.value.trim()) { studioErrors.goal = '';  el.setAttribute('aria-invalid', 'false'); root.querySelector('#wsGoalError').textContent = ''; } }
+    else if (el.id === 'wsFeedback') draft.feedback = el.value;
+    else if (el.dataset.studioCopy !== undefined) { draft.versions[Number(el.dataset.studioCopy)].copy = el.value; }
+    else return;
+    persist();
+  });
+  root.addEventListener('change', async event => {
+    const el = event.target, draft = studioState();
+    if (el.id === 'wsProduct') { draft.product = el.value; studioErrors.product = ''; el.setAttribute('aria-invalid', 'false'); root.querySelector('#wsProductError').textContent = ''; }
+    else if (el.dataset.studioMode !== undefined) { const version = draft.versions[Number(el.dataset.studioMode)]; version.mode = el.value; persist(); render(); return; }
+    else if (el.dataset.studioTime !== undefined) draft.versions[Number(el.dataset.studioTime)].time = el.value;
+    else if (el.id === 'wsFile') {
+      const file = el.files[0]; if (!file) return;
+      if (!['image/png','image/jpeg','image/webp'].includes(file.type) || file.size > 2 * 1024 * 1024) { toast('请选择不超过 2 MB 的 PNG、JPEG 或 WebP 图片'); el.value = ''; return; }
+      try {
+        const data = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); });
+        await new Promise((resolve, reject) => { const img = new Image(); img.onload = resolve; img.onerror = reject; img.src = data; });
+        if (state.aiStudio !== draft) return;
+        draft.reference = data; draft.referenceName = file.name; draft.style = 'custom'; persist(); render(); toast('自定义风格图片已上传');
+      } catch { toast('图片无法读取，请重新选择'); }
+      return;
+    } else return;
+    persist();
+  });
 
-  function quickScreen() {
-    const scheduled = ui.quickPublishMode === 'scheduled';
-    const post = { ...currentPost(), platform: 'LinkedIn', title: '用户主动发布', copy: '在这里输入帖子文案，并在发布前确认最终内容。' };
-    return `<section class="wd-quick-publish wd-quick-publish-v44">${pageHead('主动发布', '直接发布由你创建的内容，Wendy 只负责辅助润色。', `<span class="wd-quick-save-state">${I('check-circle')}草稿自动保存</span>`)}<section class="wd-quick-workspace"><div class="wd-quick-layout"><main class="wd-quick-compose"><header class="wd-quick-channel"><div>${social('LinkedIn')}<span><small>发布账号</small><strong>Nova Robotics · LinkedIn</strong></span></div><label><span>切换平台</span><select aria-label="发布平台"><option>LinkedIn · 已连接</option><option>Instagram · 可连接</option><option>TikTok · 可连接</option><option disabled>YouTube · 待接入</option></select></label></header><section class="wd-quick-editor"><header><div><small>帖子文案</small><h2>写下你想发布的内容</h2></div><span>${ui.quickCopy.length}/3000</span></header><textarea id="wdQuickCopy" data-wd-input="quick-copy" maxlength="3000" placeholder="输入帖子文案…">${E(ui.quickCopy)}</textarea><footer><label><span>语言</span><select><option>英语</option><option>简体中文</option></select></label>${btn(I('wand-sparkles') + ' AI 润色', 'quick-polish')}<small>润色只改写当前文案，不会直接发布</small></footer></section><button type="button" class="wd-quick-upload" data-wd="quick-upload"><span>${I('upload-cloud')}</span><div><b>添加图片或海报</b><small>JPG、PNG · 最大 5 MB</small></div><strong>选择文件</strong></button><fieldset class="wd-quick-schedule"><legend>发布时间</legend><p>选择立即发送，或为这条内容安排一个时间。</p><div class="wd-quick-mode"><button type="button" data-wd="quick-mode" data-value="now" class="${scheduled ? '' : 'active'}">立即发布</button><button type="button" data-wd="quick-mode" data-value="scheduled" class="${scheduled ? 'active' : ''}">定时发布</button></div>${scheduled ? '<div class="wd-quick-datetime"><input type="date" value="2026-09-03"><input type="time" value="15:00"></div>' : ''}</fieldset></main><aside class="wd-quick-preview"><header><div><small>发布预览</small><h2>${social('LinkedIn')}LinkedIn</h2></div><span>实时同步</span></header>${postPreview({ ...post, title: ui.quickCopy ? ui.quickCopy.slice(0, 24) : post.title, copy: ui.quickCopy || post.copy }, true)}<p>${I('shield-check')}主动发布内容由你最终确认；Wendy 生成内容仍需审批。</p></aside></div><footer class="wd-quick-actions"><span>${I('shield-check')}发布前会再次校验账号与内容</span>${link('取消', '', 'wd-button')}${btn('存为草稿', 'quick-save-draft')}${btn('确认发布', 'quick-confirm', 'class="primary"')}</footer></section></section>`;
+  // Quick publisher stays on the current screen. Provider actions are local demo records.
+  const qpAssets = {
+    close: 'assets/wendy-publisher/close.svg', linkedin: 'assets/wendy-publisher/linkedin.svg',
+    instagram: 'assets/wendy-publisher/instagram.svg', tiktok: 'assets/wendy-publisher/tiktok.svg', youtube: 'assets/wendy-publisher/youtube.svg',
+    polish: 'assets/wendy-publisher/polish.svg', upload: 'assets/wendy-publisher/upload.svg', dot: 'assets/wendy-publisher/dot.svg',
+    globe: 'assets/wendy-publisher/globe.svg', more: 'assets/wendy-publisher/more.svg', like: 'assets/wendy-publisher/like.svg',
+    celebrate: 'assets/wendy-publisher/celebrate.svg', love: 'assets/wendy-publisher/love.svg', insight: 'assets/wendy-publisher/insight.svg',
+    curious: 'assets/wendy-publisher/curious.svg', support: 'assets/wendy-publisher/support.svg', thumb: 'assets/wendy-publisher/thumb.svg',
+    comment: 'assets/wendy-publisher/comment.svg', share: 'assets/wendy-publisher/share.svg', 'send-gray': 'assets/wendy-publisher/send-gray.svg',
+    save: 'assets/wendy-publisher/save.svg', send: 'assets/wendy-publisher/send.svg'
+  };
+  const qpIcon = name => `${name === 'tiktok' ? '<span class="wqp-tiktok-slot">' : ''}<img class="wqp-icon wqp-icon-${name}" src="${qpAssets[name]}" alt="" aria-hidden="true">${name === 'tiktok' ? '</span>' : ''}`;
+  const qpFresh = () => ({ copy: '', platforms: ['LinkedIn'], mode: 'now', date: '', time: '10:30', media: [], editingIds: [] });
+  let qpDraft = { ...qpFresh(), ...(state.quickPublisher || {}) };
+  let qpDialog = null, qpTrigger = null, qpPreviewPlatform = qpDraft.platforms[0] || 'LinkedIn', qpReading = false;
+  const qpLibrary = [
+    { name: 'X100 工业传感器', src: asset, type: 'image/jpeg' },
+    { name: '产线维护与应用', src: maintenance, type: 'image/jpeg' },
+    { name: '工业 AI 质检场景', src: inspectionHero, type: 'image/jpeg' }
+  ];
+  function qpRemember() { state.quickPublisher = qpDraft; persist(); }
+  function qpError(message, target) {
+    const error = qpDialog?.querySelector('.wqp-error');
+    if (error) error.textContent = message;
+    if (target) { target.setAttribute('aria-invalid', 'true'); target.focus(); }
+  }
+  function qpAccount(platform) { return siData().accounts.find(a => a.platform === platform && a.connected); }
+  function qpMediaMarkup(item, className = '') {
+    return item.type.startsWith('video/')
+      ? `<video class="${className}" src="${E(item.src)}" controls preload="metadata" playsinline aria-label="${E(item.name)}"></video>`
+      : `<img class="${className}" src="${E(item.src)}" alt="${E(item.name)}">`;
+  }
+  function qpPreview() {
+    if (!qpDialog) return;
+    const platform = qpPreviewPlatform, account = qpAccount(platform);
+    qpDialog.querySelector('.wqp-preview-tabs').innerHTML = qpDraft.platforms.length > 1 ? qpDraft.platforms.map(p => btn(p, 'quick-preview-platform', `data-value="${p}" aria-pressed="${p === platform}"`)).join('') : '';
+    qpDialog.querySelector('.wqp-preview-platform').textContent = `${platform} · 当前平台发布预览`;
+    qpDialog.querySelector('.wqp-post').innerHTML = `<header><img class="wqp-avatar" src="assets/nox-logo-source.png" alt=""><div><b>${E(account?.name || '未连接账号')}</b><small>${E(account?.handle || platform)}</small><small>刚刚 ${qpIcon('dot')}${qpIcon('globe')}</small></div>${qpIcon('more')}</header><p class="wqp-preview-copy">${E(qpDraft.copy || '输入文案后，在这里查看发布效果。')}</p><div class="wqp-post-media">${qpDraft.media.length ? qpDraft.media.map(m => qpMediaMarkup(m)).join('') : '<div class="wqp-empty-media">添加图片或短视频，预览发布效果</div>'}</div><div class="wqp-reactions">${['like','celebrate','love','insight','curious','support'].map(qpIcon).join('')}<small>0 ${qpIcon('dot')} 0 Comments</small></div><div class="wqp-post-actions">${[['thumb','Like'],['comment','Comment'],['share','Share'],['send-gray','Send']].map(([icon,label]) => `<span>${qpIcon(icon)}${label}</span>`).join('')}</div>`;
+  }
+  function qpMediaList() {
+    if (!qpDialog) return;
+    qpDialog.querySelector('.wqp-media-list').innerHTML = qpDraft.media.map((m,i) => `<article>${qpMediaMarkup(m)}<span>${E(m.name)}</span>${btn(qpIcon('close'), 'quick-remove-media', `data-value="${i}" aria-label="移除 ${E(m.name)}"`)}</article>`).join('');
+    qpPreview();
+  }
+  function qpSync() {
+    if (!qpDialog) return;
+    qpDialog.querySelectorAll('[data-wd="quick-platform"]').forEach(b => b.setAttribute('aria-pressed', String(qpDraft.platforms.includes(b.dataset.value))));
+    qpDialog.querySelectorAll('[data-wd="quick-mode"]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.value === qpDraft.mode)));
+    qpDialog.querySelector('.wqp-datetime').hidden = qpDraft.mode !== 'scheduled';
+    qpDialog.querySelector('[data-wd="quick-confirm"] span').textContent = qpDraft.mode === 'scheduled' ? '定时发布' : '发布';
+    qpDialog.querySelector('.wqp-counter').textContent = `${qpDraft.copy.length}/3000`;
+    qpDialog.querySelector('.wqp-error').textContent = '';
+    qpPreview();
+  }
+  function openQuickPublisher(editId) {
+    if (qpDialog?.open) return;
+    if (editId) {
+      const post = state.posts.find(p => p.id === editId && p.status === 'manual-draft');
+      if (!post) return;
+      const group = state.posts.filter(p => p.status === 'manual-draft' && (p.id === post.id || post.quickGroup && p.quickGroup === post.quickGroup));
+      qpDraft = { ...qpFresh(), copy: post.copy, platforms: group.map(p => p.platform), media: post.media || [], mode: post.quickMode || 'now', date: post.quickDate || '', time: post.quickTime || '10:30', editingIds: group.map(p => p.id) };
+    }
+    qpPreviewPlatform = qpDraft.platforms[0] || 'LinkedIn';
+    qpTrigger = document.activeElement;
+    qpDialog = document.createElement('dialog');
+    qpDialog.className = 'wqp-dialog';
+    qpDialog.setAttribute('aria-labelledby', 'wqpTitle');
+    qpDialog.setAttribute('aria-describedby', 'wqpDescription');
+    qpDialog.innerHTML = `<header class="wqp-header"><div><h2 id="wqpTitle">快速发布</h2><p id="wqpDescription">选择平台、内容、素材与排期，快速发布社媒内容</p></div>${btn(qpIcon('close'), 'quick-close', 'class="wqp-close" aria-label="关闭快速发布" autofocus')}</header>
+      <div class="wqp-body"><main class="wqp-compose">
+        <section><div class="wqp-heading"><h3>发布平台</h3><p>选择要同步分发的平台</p></div><div class="wqp-platforms" role="group" aria-label="发布平台">${platforms.map(p => btn(`${qpIcon(p.toLowerCase())}<b>${p}</b>`, 'quick-platform', `data-value="${p}" aria-pressed="false"`)).join('')}</div></section>
+        <section class="wqp-schedule"><div class="wqp-heading"><h3>发布时间</h3><p>设置发布身份和发布时间</p></div><div class="wqp-modes" role="group" aria-label="发布时间">${btn('立即发布','quick-mode','data-value="now"')}${btn('定时发布','quick-mode','data-value="scheduled"')}</div><div class="wqp-datetime" hidden><label>日期<input type="date" name="quickDate" value="${E(qpDraft.date)}" aria-label="发布日期"></label><label>时间<input type="time" name="quickTime" value="${E(qpDraft.time)}" aria-label="发布时间"></label><small>上海时间 UTC+8</small></div></section>
+        <section><div class="wqp-heading"><h3><label for="wdQuickCopy">发布文案</label></h3><p>编辑平台文案，或让 Wendy 基于素材生成</p></div><div class="wqp-editor"><textarea id="wdQuickCopy" maxlength="3000" placeholder="写下你想发布的内容…">${E(qpDraft.copy)}</textarea><div>${btn(qpIcon('polish')+'AI 润色','quick-polish','class="wqp-polish"')}<small class="wqp-counter"></small></div></div></section>
+        <section><div class="wqp-heading"><h3>素材</h3><p>从资料库选择或上传图片、短视频</p></div><div class="wqp-media-list"></div><div class="wqp-upload-wrap">${btn(qpIcon('upload')+'<span>上传或从知识库选择</span>','quick-upload','class="wqp-upload" aria-expanded="false" aria-controls="wqpUploadMenu"')}<div id="wqpUploadMenu" class="wqp-upload-menu" hidden>${btn('本地上传','quick-local')}${btn('从知识库上传','quick-library')}</div></div><input id="wqpFiles" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" multiple hidden><div class="wqp-library" hidden><div><b>知识库素材</b>${btn(qpIcon('close'),'quick-library-close','aria-label="关闭知识库素材"')}</div>${qpLibrary.map((m,i) => btn(`<img src="${m.src}" alt=""><span>${m.name}</span>`,'quick-library-select',`data-value="${i}"`)).join('')}</div><small class="wqp-file-hint">最多 4 张图片或 1 个视频 · 本地演示素材合计不超过 2 MB</small></section>
+      </main><aside class="wqp-preview"><div class="wqp-heading"><h3>预览</h3><p class="wqp-preview-platform"></p></div><div class="wqp-preview-tabs" role="group" aria-label="预览平台"></div><article class="wqp-post"></article></aside></div>
+      <p class="wqp-error" role="alert"></p><footer class="wqp-footer">${btn('取消','quick-close')}<div>${btn(qpIcon('save')+'保存草稿','quick-save-draft')}${btn(qpIcon('send')+'<span>发布</span>','quick-confirm','class="wqp-primary"')}</div></footer>`;
+    root.append(qpDialog);
+    const dialog = qpDialog;
+    dialog.addEventListener('cancel', event => { event.preventDefault(); closeQuickPublisher(); });
+    dialog.addEventListener('keydown', event => {
+      if (event.key === 'Escape') event.stopPropagation();
+      if (event.key !== 'Tab') return;
+      const focusable=[...dialog.querySelectorAll('button:not(:disabled), input:not(:disabled), textarea, select, video[controls], [tabindex="0"]')].filter(el=>el.getClientRects().length&&!el.closest('[hidden]'));
+      const first=focusable[0],last=focusable.at(-1);
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+    });
+    dialog.addEventListener('click', event => { if (event.target === dialog) { const r=dialog.getBoundingClientRect(); if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom) closeQuickPublisher(); } });
+    dialog.addEventListener('close', () => { dialog.remove(); if (qpDialog === dialog) qpDialog=null; if(!qpDialog){document.body.classList.remove('wqp-open'); if(qpTrigger?.isConnected)qpTrigger.focus({preventScroll:true});} });
+    dialog.addEventListener('input', event => {
+      const field=event.target;
+      field.removeAttribute('aria-invalid');
+      if(field.id==='wdQuickCopy') { qpDraft.copy=field.value; qpSync(); qpRemember(); }
+      if(field.name==='quickDate'||field.name==='quickTime') { qpDraft[field.name==='quickDate'?'date':'time']=field.value; qpRemember(); }
+    });
+    dialog.addEventListener('change', event => { if(event.target.id==='wqpFiles') qpReadFiles([...event.target.files]); });
+    dialog.addEventListener('dragover', event => { if(event.dataTransfer.types.includes('Files'))event.preventDefault(); });
+    dialog.addEventListener('drop', event => { if(event.dataTransfer.files.length) { event.preventDefault(); qpReadFiles([...event.dataTransfer.files]); } });
+    document.body.classList.add('wqp-open');
+    qpSync(); qpMediaList();
+    dialog.showModal();
+  }
+  function closeQuickPublisher() {
+    if(!qpDialog)return;
+    qpRemember();
+    const closing=qpDialog; qpDialog=null;
+    document.body.classList.remove('wqp-open');
+    closing.close();
+  }
+  async function qpReadFiles(files) {
+    if(qpReading||!files.length)return;
+    const allowed=['image/jpeg','image/png','image/webp','video/mp4','video/webm'];
+    if(files.some(f=>!allowed.includes(f.type)))return qpError('请选择 JPG、PNG、WebP 图片或 MP4、WebM 视频。');
+    const combined=[...qpDraft.media,...files], video=combined.filter(f=>f.type.startsWith('video/'));
+    if(combined.length>4||video.length&&combined.length>1)return qpError('可添加最多 4 张图片，或单独添加 1 个视频。');
+    if(combined.reduce((n,f)=>n+(f.size||0),0)>2*1024*1024)return qpError('本地演示素材合计不能超过 2 MB，请选择较小文件。');
+    qpReading=true;
+    const dialog=qpDialog;
+    dialog.querySelectorAll('[data-wd="quick-confirm"],[data-wd="quick-save-draft"]').forEach(b=>b.disabled=true);
+    try {
+      const media=await Promise.all(files.map(file=>new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve({name:file.name,type:file.type,size:file.size,src:reader.result});reader.onerror=reject;reader.readAsDataURL(file);})));
+      qpDraft.media.push(...media); qpError(''); qpRemember(); qpMediaList();
+    } catch { qpError('素材读取失败，请重试。'); }
+    finally { qpReading=false; if(dialog.isConnected){dialog.querySelector('#wqpFiles').value='';dialog.querySelectorAll('[data-wd="quick-confirm"],[data-wd="quick-save-draft"]').forEach(b=>b.disabled=false);} }
+  }
+  function qpSave(status) {
+    if(qpReading)return qpError('素材正在读取，请稍候。');
+    const copy=qpDraft.copy.trim();
+    if(!qpDraft.platforms.length)return qpError('请至少选择一个发布平台。',qpDialog.querySelector('[data-wd="quick-platform"]'));
+    if(!copy)return qpError('请先填写发布文案。',qpDialog.querySelector('#wdQuickCopy'));
+    if(status!=='manual-draft') {
+      const missing=qpDraft.platforms.filter(p=>!qpAccount(p));
+      if(missing.length)return qpError(`${missing.join('、')} 尚未连接账号，请先在账号管理中连接，或取消选择该平台。`);
+      const video=qpDraft.media.some(m=>m.type.startsWith('video/'));
+      if(qpDraft.platforms.some(p=>['TikTok','YouTube'].includes(p))&&!video)return qpError('TikTok 和 YouTube 需要添加视频素材。');
+      if(qpDraft.platforms.includes('Instagram')&&!qpDraft.media.length)return qpError('Instagram 需要添加图片或视频素材。');
+    }
+    const when=new Date(`${qpDraft.date}T${qpDraft.time}:00+08:00`);
+    if(status==='scheduled'&&(!calendarValid(qpDraft.date)||!/^\d{2}:\d{2}$/.test(qpDraft.time)||!Number.isFinite(+when)||+when<=Date.now()))return qpError('请选择晚于当前时间的发布日期和时间（上海时间）。',qpDialog.querySelector('[name="quickDate"]'));
+    const oldPosts=state.posts, oldDraft=state.quickPublisher, group=crypto.randomUUID();
+    const stamp=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date());
+    const records=qpDraft.platforms.map(platform=>{
+      const account=qpAccount(platform),media=qpDraft.media.map(m=>({...m}));
+      return {id:`manual-${crypto.randomUUID()}`,quickGroup:group,title:copy.slice(0,28),platform,status,copy,origin:'manual',version:1,theme:'主动发布',
+        type:media.some(m=>m.type.startsWith('video/'))?'视频':media.length?'图片':'帖子',media,image:media.find(m=>m.type.startsWith('image/'))?.src||asset,
+        time:status==='published'?stamp:status==='scheduled'?`${qpDraft.date} ${qpDraft.time}`:'未排期',scheduledAt:status==='scheduled'?when.toISOString():null,
+        quickMode:qpDraft.mode,quickDate:qpDraft.date,quickTime:qpDraft.time,accountId:account?.id,accountName:account?.name,accountHandle:account?.handle};
+    });
+    state.posts=[...records,...oldPosts.filter(p=>!qpDraft.editingIds.includes(p.id))];
+    state.quickPublisher=qpFresh();
+    try { localStorage.setItem(storeKey,JSON.stringify(state)); }
+    catch { state.posts=oldPosts;state.quickPublisher=oldDraft;return qpError('浏览器存储空间不足，未保存。请移除部分素材后重试。'); }
+    qpDraft=qpFresh();
+    const trigger=qpTrigger, action=trigger?.dataset.wd, scrollY=window.scrollY;
+    closeQuickPublisher();
+    render();
+    window.scrollTo({top:scrollY,behavior:'instant'});
+    (trigger?.isConnected?trigger:action?root.querySelector(`[data-wd="${action}"]`):null)?.focus({preventScroll:true});
+    toast(status==='manual-draft'?'草稿已保存，可在内容管理中继续编辑':status==='scheduled'?'已加入本地演示排期':'演示发布成功');
+  }
+  function handleQuickAction(action,value,id) {
+    if(action==='quick-open')return openQuickPublisher(id);
+    if(!qpDialog)return;
+    if(action==='quick-close')return closeQuickPublisher();
+    if(action==='quick-platform') { qpDraft.platforms=qpDraft.platforms.includes(value)?qpDraft.platforms.filter(p=>p!==value):[...qpDraft.platforms,value];if(!qpDraft.platforms.includes(qpPreviewPlatform))qpPreviewPlatform=qpDraft.platforms[0]||value;qpRemember();qpSync(); }
+    else if(action==='quick-preview-platform'){qpPreviewPlatform=value;qpPreview();qpDialog.querySelector(`[data-wd="quick-preview-platform"][data-value="${value}"]`)?.focus({preventScroll:true});}
+    else if(action==='quick-mode'){qpDraft.mode=value;qpRemember();qpSync();}
+    else if(action==='quick-polish'){
+      if(!qpDraft.copy.trim())return qpError('请先输入需要润色的文案。',qpDialog.querySelector('#wdQuickCopy'));
+      qpDraft.copy=qpDraft.copy.trim().replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n');
+      qpDialog.querySelector('#wdQuickCopy').value=qpDraft.copy;qpRemember();qpSync();toast('已整理文案格式（演示润色），请确认后发布');
+    }
+    else if(action==='quick-upload'){const menu=qpDialog.querySelector('.wqp-upload-menu');menu.hidden=!menu.hidden;qpDialog.querySelector('.wqp-upload').setAttribute('aria-expanded',String(!menu.hidden));}
+    else if(action==='quick-local'||action==='quick-library'){qpDialog.querySelector('.wqp-upload-menu').hidden=true;qpDialog.querySelector('.wqp-upload').setAttribute('aria-expanded','false');if(action==='quick-local')qpDialog.querySelector('#wqpFiles').click();else{qpDialog.querySelector('.wqp-library').hidden=false;qpDialog.querySelector('.wqp-library').scrollIntoView({block:'nearest'});}}
+    else if(action==='quick-library-close'){qpDialog.querySelector('.wqp-library').hidden=true;qpDialog.querySelector('.wqp-upload').focus();}
+    else if(action==='quick-library-select'){
+      const m=qpLibrary[Number(value)];if(!m)return;
+      if(qpDraft.media.some(a=>a.src===m.src))return qpError('该素材已添加。');
+      if(qpDraft.media.length>=4||qpDraft.media.some(m=>m.type.startsWith('video/')))return qpError('可添加最多 4 张图片，或单独添加 1 个视频。');
+      qpDraft.media.push({...m});qpError('');qpRemember();qpMediaList();qpDialog.querySelector('.wqp-library').hidden=true;qpDialog.querySelector('.wqp-upload').focus();
+    }
+    else if(action==='quick-remove-media'){qpDraft.media.splice(Number(value),1);qpRemember();qpMediaList();qpDialog.querySelector('.wqp-upload').focus();}
+    else if(action==='quick-save-draft')qpSave('manual-draft');
+    else if(action==='quick-confirm')qpSave(qpDraft.mode==='scheduled'?'scheduled':'published');
   }
 
   function publishScreen() {
@@ -937,35 +1369,211 @@
     return `<section class="wd-comment-messages">${pageHead('评论与线索', '查看自有帖子下的评论与消息', link('查看销售线索', 'fans', 'wd-button'), [['工作台', ''], ['评论与线索', 'fans'], [comment.name, null]])}<div class="wd-comment-message-layout"><nav aria-label="评论消息">${homeComments.map(item => `<a href="#wendy/fans/${item.id}" ${item.id === comment.id ? 'aria-current="page"' : ''}><img src="${item.avatar}" alt=""><span><b>${E(item.name)}</b><small>${E(item.text)}</small></span>${social(item.platform)}</a>`).join('')}</nav><main><header><img src="${comment.avatar}" alt=""><div><h2>${E(comment.name)}</h2><small>${social(comment.platform)}${E(comment.platform)} · ${comment.age}</small></div>${badge(commentPriorityMeta[comment.priority].label, comment.priority === 'high' ? 'amber' : '')}</header><section class="wd-comment-source"><small>评论来源 · 自有帖子</small><h3>${E(comment.source)}</h3></section><section class="wd-comment-thread" aria-label="对应评论消息"><small>${comment.age}</small><article><b>${E(comment.name)}</b><p>${E(comment.text)}</p></article><small>来自 ${E(comment.platform)} 评论</small></section></main></div></section>`;
   }
 
-  function fansScreen(id) {
-    const comment = homeComments.find(item => item.id === id);
-    if (comment) {
-      if (!state.homeCommentReads.includes(id)) { state.homeCommentReads.push(id); persist(); }
-      return homeCommentScreen(comment);
+  // Unified social inbox. Local demo adapter; no external messages or provider calls.
+  const siTypes = { comment: '评论', dm: '私信', mention: '提及', review: '评价' };
+  const siUI = { account: 'all', type: 'all', read: 'all', status: 'all', tag: 'all', query: '', selected: null, target: null, mobile: false, profile: true, route: null, mobileProfile: false };
+  const siKnowledge = [
+    { id: 'product', name: 'X100 产品与技术', text: 'X100 面向工业产线检测。协议兼容、精度及工作温度需根据具体配置和测试条件确认。', en: 'X100 is designed for industrial inspection. Protocol compatibility, accuracy and operating temperature depend on the configuration and test conditions.' },
+    { id: 'sales', name: '采购与样品咨询', text: '报价与交期需根据数量、配置和交付地点确认；可安排技术沟通与样品评估。', en: 'Pricing and lead time depend on quantity, configuration and delivery location. We can arrange a technical consultation and sample evaluation.' },
+    { id: 'service', name: '售后服务指南', text: '售后排查需提供产品序列号、故障现象和运行环境。请通过私信提供订单等个人信息。', en: 'For support, please share the product serial number, symptoms and operating environment. Please send order details by private message.' }
+  ];
+  function siData() {
+    if (state.socialInbox?.version === 1) return state.socialInbox;
+    const accounts = [
+      ['li', 'LinkedIn', 'Nova Robotics', '@novarobotics'], ['ig', 'Instagram', 'Nova Robotics', '@nova_robotics'],
+      ['tt', 'TikTok', 'Nova Robotics', '@nova.robotics'], ['yt', 'YouTube', 'Nova Robotics', '@NovaRobotics'],
+      ['fb', 'Facebook', 'Nova Robotics Europe', '@novarobotics.eu']
+    ].map(([id, platform, name, handle]) => ({ id, platform, name, handle, connected: true }));
+    const threads = [];
+    const add = (item, type, index) => {
+      const account = accounts.find(a => a.platform === item.platform);
+      const uid = item.handle || item.name;
+      // Identity is scoped to the provider and receiving account, never display name alone.
+      let t = threads.find(t => t.accountId === account.id && t.userId === uid);
+      if (!t) { t = { id: item.id, userId: uid, accountId: account.id, name: item.name, avatar: item.avatar, company: item.company || '', role: item.role || '', status: item.status === 'done' ? 'done' : 'open', messages: [], drafts: {} }; threads.push(t); }
+      const history = item.messages?.length ? item.messages : [{ from: 'customer', text: item.text, time: '10:24' }];
+      history.forEach((m, n) => t.messages.push({ id: item.id + '-m' + n, from: m.from === 'human' ? 'human' : 'customer', text: m.text, type, source: item.source || '社媒互动', time: `2026-10-08 ${m.time || '10:24'}`, unread: m.from !== 'human' && !state.homeCommentReads.includes(item.id) && item.status !== 'done', tags: item.intent === 'high' || item.priority === 'high' ? ['咨询', '潜在客户'] : ['咨询'] }));
+      if (item.draft) t.drafts[t.messages.at(-1).id] = item.draft;
+      return t;
+    };
+    homeComments.forEach((c, i) => add(c, 'comment', i));
+    state.conversations.forEach((c, i) => add(c, i === 0 ? 'dm' : 'comment', i));
+    const alex = threads.find(t => t.id === 'c1');
+    alex.messages.unshift({ id: 'c1-history', from: 'customer', text: 'We saw your X100 launch post. Is it suitable for our automotive production line?', type: 'comment', source: 'X100 工业传感器新品帖', time: '2026-10-07 16:40', unread: false, tags: ['咨询'] });
+    const maria = threads.find(t => t.id === 'c2');
+    maria.messages.push({ id: 'c2-dm', from: 'customer', text: 'Could we book a product demo for our team next week?', type: 'dm', source: 'Instagram 私信', time: '2026-10-08 11:18', unread: true, tags: ['潜在客户'] });
+    threads.push({ id: 'si-mention', userId: 'factory.insights', accountId: 'ig', name: 'Factory Insights', avatar: 'assets/wendy-avatars/james.jpg', company: 'Factory Insights', role: '行业媒体', status: 'open', drafts: {}, messages: [{ id: 'mention-1', from: 'customer', type: 'mention', source: '展会现场动态', time: '2026-10-08 11:35', text: '@nova_robotics Great meeting your team at the exhibition! Looking forward to the next demo.', unread: true, tags: ['咨询'] }] });
+    threads.push({ id: 'si-review', userId: 'anna.schmidt', accountId: 'fb', name: 'Anna Schmidt', avatar: 'assets/wendy-avatars/lena.jpg', company: 'Schmidt Manufacturing', role: '设备负责人', status: 'open', drafts: {}, messages: [{ id: 'review-1', from: 'customer', type: 'review', source: 'Nova Robotics Europe 主页评价 · 3/5', time: '2026-10-08 09:10', text: 'The product works well, but we need help with calibration. Could your support team get in touch?', unread: true, tags: ['售后'] }] });
+    state.socialInbox = { version: 1, accounts, threads, tags: ['咨询', '售后', '潜在客户'], syncedAt: null };
+    persist(); return state.socialInbox;
+  }
+  const siAccount = t => siData().accounts.find(a => a.id === t.accountId);
+  const siIncoming = t => t.messages.filter(m => m.from === 'customer');
+  const siThread = () => siData().threads.find(t => t.id === siUI.selected);
+  const siTarget = t => siIncoming(t).find(m => m.id === siUI.target) || siIncoming(t).at(-1);
+  const siTags = tags => tags.map(tag => `<span class="wsi-tag">${E(tag)}</span>`).join('');
+  const siButton = (label, action, extra = '') => `<button type="button" class="wsi-btn" data-si="${action}" ${extra}>${label}</button>`;
+  function siMatching(t) {
+    const a = siAccount(t);
+    if (!a.connected || (siUI.account !== 'all' && a.id !== siUI.account) || (siUI.status !== 'all' && t.status !== siUI.status)) return [];
+    const q = siUI.query.trim().toLocaleLowerCase();
+    return siIncoming(t).filter(m => (siUI.type === 'all' || siUI.type === m.type) && (siUI.read === 'all' || (siUI.read === 'unread' ? m.unread : !m.unread)) && (siUI.tag === 'all' || m.tags.includes(siUI.tag)) && (!q || [t.name,t.userId,t.company,m.text,m.source,...t.messages.filter(r => r.replyTo === m.id).map(r => r.text)].join(' ').toLocaleLowerCase().includes(q)));
+  }
+  function siRows() {
+    return siData().threads.map(t => ({ t, matches: siMatching(t) })).filter(x => x.matches.length).sort((a,b) => b.t.messages.at(-1).time.localeCompare(a.t.messages.at(-1).time));
+  }
+  function siRead(t) {
+    siIncoming(t).forEach(m => { m.unread = false; });
+    if (homeComments.some(c => c.id === t.id) && !state.homeCommentReads.includes(t.id)) state.homeCommentReads.push(t.id);
+    persist();
+  }
+  function siSelect(id, target) {
+    const t = siData().threads.find(t => t.id === id); if (!t) return;
+    siUI.selected = id; siUI.target = target || siIncoming(t).at(-1).id; siUI.mobile = true; siRead(t);
+    render();
+  }
+  function siScreen(id) {
+    siData();
+    if (siUI.route !== location.hash) {
+      siUI.route = location.hash;
+      if (!id) siUI.mobile = false;
+      if (id && siData().threads.some(t => t.id === id)) { const t=siData().threads.find(t=>t.id===id); siUI.selected=id; siUI.target=siIncoming(t).at(-1).id; siUI.mobile=true; siRead(t); }
     }
-    const leads = [
-      { id: 'c1', name: 'Thomas Becker', avatar: 'assets/wendy-avatars/james.jpg', role: 'Quality Director', company: 'RheinWerk Automotive GmbH', country: '德国 · 汽车零部件', sourcePost: 'X100 高温产线实测', comment: '请问 X100 在 200°C 环境下能保持多高的检出率？现有产线部署需要哪些基础条件？', age: '2 小时前', intent: '高意向', tone: 'coral', reasons: ['明确询问高温环境下的核心检出率', '进一步询问现有产线部署条件', '公司与欧洲汽车零部件客户画像匹配'] },
-      { id: 'c2', name: '李娜', avatar: persona, role: '自动化工程师', company: '华瑞汽车', country: '中国 · 汽车制造', sourcePost: 'X100 工业 AI 检测系统介绍', comment: 'X100 在高温产线的长期稳定性如何？有实际应用案例吗？', age: '4 小时前', intent: '高意向', tone: 'coral', reasons: ['主动询问长期稳定性与实际案例', '岗位负责自动化系统选型与集成', '问题体现明确的方案评估意图'] },
-      { id: 'c3', name: 'Paolo Conti', avatar: 'assets/wendy-avatars/kenji.jpg', role: 'Production Manager', company: 'ItalForge S.p.A.', country: '意大利 · 金属加工', sourcePost: '一分钟了解 X100 产线部署', comment: 'Can you share more details about the deployment process and required infrastructure?', age: '8 小时前', intent: '高意向', tone: 'coral', reasons: ['明确询问部署流程与基础设施要求', '具备现有产线改造场景', '所在行业与目标客户范围高度一致'] },
-      { id: 'c4', name: 'Maria Garcia', avatar: 'assets/wendy-avatars/maria.jpg', role: 'Process Engineer', company: 'Gestamp', country: '西班牙 · 汽车零部件', sourcePost: 'X100 在汽车零部件检测的应用', comment: 'Interesting solution! Do you have case studies in automotive?', age: '1 天前', intent: '值得培育', tone: 'amber', reasons: ['主动索取汽车行业案例', '所在公司符合目标行业范围', '仍需确认具体项目与采购周期'] },
-      { id: 'c5', name: 'James Wu', avatar: 'assets/wendy-avatars/alex.jpg', role: 'Quality Engineer', company: 'Magna International', country: '加拿大 · 汽车零部件', sourcePost: '为什么 X100 能降低误检率', comment: "This looks promising. What's the false positive rate?", age: '1 天前', intent: '值得培育', tone: 'amber', reasons: ['询问误检率这一核心质量指标', '岗位与质量检测场景直接相关', '需要进一步判断部署计划与决策权限'] }
-    ];
-    const selected = leads.find(item => item.id === ui.selectedConversation) || leads[0];
-    const leadCard = item => `<button type="button" class="${item.id === selected.id ? 'active' : ''}" data-wd="select-conversation" data-id="${item.id}"><img class="wd-face" src="${item.avatar}" alt="${E(item.name)}"><span><b>${E(item.name)}<time>${item.age}</time></b><small>${E(item.role)} · ${E(item.company)}</small><p>${E(item.comment)}</p><em class="owned">自有帖子</em>${ui.pausedLeadIds.includes(item.id) ? '<em class="paused">稍后跟进</em>' : ''}<small>${E(item.sourcePost)}</small></span>${social('LinkedIn')}</button>`;
-    return `<section class="wd-leads-v15">${pageHead('评论与线索', '从自己的帖子评论中识别真实需求，把互动转成可跟进的销售线索')}<section class="wd-recent-comment-links"><h2>最新评论消息</h2>${homeComments.map(item => link(`${E(item.name)} ${I('chevron-right')}`, 'fans/' + item.id, 'wd-button')).join('')}</section>
-      <section class="wd-lead-stats"><article>${I('users')}<span><small>新增线索</small><b>7 <em>↗ 20%</em></b></span></article><article>${I('flame')}<span><small>高意向</small><b>3 <em>↗ 33%</em></b></span></article><article>${I('message-square')}<span><small>来自自有帖子</small><b>7</b></span></article><button type="button" data-wd="open-lead-digest" aria-label="查看 5 个推荐友商账号">${I('building-2')}<span><small>推荐友商账号</small><b>5</b></span>${I('chevron-right')}</button></section>
-      <div class="wd-lead-toolbar"><label>${I('search')}<input placeholder="搜索姓名 / 公司 / 评论内容"></label><span>来源 <button class="active">全部</button><button>自有帖子</button></span><span>意向 <button class="active">全部</button><button>高意向</button><button>值得培育</button><button>普通互动</button></span><button>${social('LinkedIn')}LinkedIn ${I('chevron-down')}</button><button>${I('calendar')}最近 7 天</button></div>
-      <div class="wd-lead-grid"><aside class="wd-lead-list"><section><h2>高意向（3）</h2>${leads.filter(item => item.intent === '高意向').map(leadCard).join('')}</section><section><h2>值得培育（2）</h2>${leads.filter(item => item.intent === '值得培育').map(leadCard).join('')}</section></aside>
-      <main class="wd-lead-detail"><header><img class="wd-face" src="${selected.avatar}" alt="${E(selected.name)}"><div><h1>${E(selected.name)} ${social('LinkedIn')}</h1><p>${E(selected.role)} · ${E(selected.company)}</p><small>${E(selected.country)}</small></div>${badge(selected.intent, selected.tone)}</header><section class="wd-ai-reason"><h2>${I('sparkles')}Wendy 为什么判定为${selected.intent}</h2>${selected.reasons.map(reason => `<p>${I('check-circle')}${E(reason)}</p>`).join('')}</section><section class="wd-source-context"><h2>评论来源（完整上下文）</h2><p class="wd-source-path">${I('git-branch')}自有帖子 → 评论意向识别 → 线索管理</p><article><p>来自我的帖子：<b>${E(selected.sourcePost)}</b><time>发布于 2026-08-30</time></p><div><img src="${inspectionHero}" alt="X100 高温检测产线"><span><b>${E(selected.sourcePost)}</b><p>X100 可在高温工业现场稳定运行，帮助制造团队识别微小缺陷、提升良率与一致性。</p><small>互动 428 · 评论 23</small></span></div><blockquote><b>${E(selected.name)} 的评论</b><small>2026-08-31 14:32</small><p>${E(selected.comment)}</p><footer>${I('thumbs-up')}8　回复</footer></blockquote></article></section></main>
-      <aside class="wd-lead-actions"><h2>建议下一步</h2>${btn(I('user-plus') + ' 保存到客户池', 'save-lead', `data-id="${selected.id}" class="primary wide"`)}${link(social('LinkedIn') + ' 查看 LinkedIn 资料', 'inbox/' + selected.id, 'wd-button wide')}${btn(I('sparkles') + ' 让 Wendy 生成触达话术', 'reply-suggestion', `data-id="${selected.id}" class="wide"`)}${btn(I('clock-3') + (ui.pausedLeadIds.includes(selected.id) ? ' 已标记稍后跟进' : ' 标记稍后跟进'), 'pause-lead', `data-id="${selected.id}" class="wide" ${ui.pausedLeadIds.includes(selected.id) ? 'disabled' : ''}`)}<section><h3>识别信息</h3><dl><dt>识别渠道</dt><dd>${social('LinkedIn')}LinkedIn</dd><dt>公司</dt><dd>${E(selected.company)}</dd><dt>职位</dt><dd>${E(selected.role)}</dd><dt>所在地区</dt><dd>${E(selected.country.split(' · ')[0])}</dd></dl></section><p class="wd-safe-note">${I('shield-check')}Wendy 不会在未获得你确认前向该联系人发送任何消息。</p></aside></div></section>${leadDigestModal()}`;
+    if (!siUI.selected && siRows().length) { const t=siRows()[0].t; siUI.selected=t.id; siUI.target=siIncoming(t).at(-1).id; }
+    const d = siData();
+    return `<section class="wsi ${siUI.mobile ? 'wsi-chat-open' : ''} ${siUI.profile ? '' : 'wsi-hide-profile'} ${siUI.mobileProfile ? 'wsi-show-profile' : ''}" aria-label="互动和线索">
+      <header class="wsi-heading"><div><a href="#wendy" class="wsi-backlink">${I('arrow-left')} Wendy 工作台</a><h1>互动和线索</h1></div><div class="wsi-head-actions"><span class="wsi-demo">演示环境</span>${siButton(I('settings-2')+' 管理账号','accounts')}</div></header>
+      <div class="wsi-workbench"><aside class="wsi-list" aria-label="会话列表"><header><h2>全部会话 <span id="siCount">${siRows().length}</span></h2><div class="wsi-filter-control"><button type="button" class="wsi-btn wsi-filter-trigger" id="siFilterTrigger" popovertarget="siFilterMenu" aria-label="筛选消息" aria-haspopup="dialog" aria-expanded="false" title="筛选消息">${I('list-filter')}<span class="wsi-filter-dot" ${siFilterCount()?'':'hidden'}></span></button><div id="siFilterMenu" class="wsi-filter-menu" popover="auto" role="dialog" aria-labelledby="siFilterTitle"><header><h3 id="siFilterTitle">筛选消息</h3>${siButton('重置','reset')}</header><label class="wsi-filter-field">关键词<input data-si-filter="query" type="search" aria-label="搜索消息" placeholder="搜索联系人、消息或关键词" value="${E(siUI.query)}"></label>
+      <label class="wsi-filter-field">账号${siFilter('account','账号',[['all','全部账号'],...d.accounts.filter(a=>a.connected).map(a=>[a.id,a.platform+' · '+a.name])])}</label>
+      <label class="wsi-filter-field">消息类型${siFilter('type','消息类型',[['all','全部类型'],...Object.entries(siTypes)])}</label><label class="wsi-filter-field">阅读状态${siFilter('read','阅读状态',[['all','全部阅读状态'],['unread','未读'],['read','已读']])}</label><label class="wsi-filter-field">标签${siFilter('tag','标签',[['all','全部标签'],...d.tags.map(t=>[t,t])])}</label><label class="wsi-filter-field">处理状态${siFilter('status','处理状态',[['all','全部状态'],['open','待处理'],['done','已完成']])}</label><footer><small>修改后即时生效</small><button type="button" class="wsi-btn" popovertarget="siFilterMenu" popovertargetaction="hide">完成</button></footer></div></div></header><div id="siRows" class="wsi-rows">${siList()}</div></aside><div id="siDetail" class="wsi-detail">${siDetail()}</div></div>
+    </section>`;
   }
+  function siFilter(key, label, options) { return `<select data-si-filter="${key}" aria-label="${label}">${options.map(([v,l])=>`<option value="${E(v)}" ${siUI[key]===v?'selected':''}>${E(l)}</option>`).join('')}</select>`; }
+  function siList() {
+    return siRows().map(({t,matches})=>{
+      const a=siAccount(t), m=matches.at(-1), unread=siIncoming(t).filter(m=>m.unread).length;
+      return `<button type="button" class="wsi-row ${t.id===siUI.selected?'active':''}" data-si="select" data-id="${E(t.id)}" data-target="${E(m.id)}" aria-pressed="${t.id===siUI.selected}"><span class="wsi-avatar-wrap"><img class="wsi-avatar" src="${t.avatar}" alt="">${social(a.platform)}</span><span class="wsi-row-copy"><strong>${E(t.name)}</strong><span class="wsi-row-preview">${E(m.text)}</span><small>${siTypes[m.type]} · ${E(a.name)}</small><span class="wsi-tags">${siTags([...new Set(matches.flatMap(m=>m.tags))].slice(0,2))}</span></span><span class="wsi-row-meta"><time>${E(m.time.slice(11))}</time>${unread?`<b>${unread}</b>`:t.status==='done'?I('check-check'):''}</span></button>`;
+    }).join('') || `<div class="wsi-empty">${I('search-x')}<h3>没有匹配的会话</h3><p>试试其他关键词或放宽筛选条件。</p>${siButton('重置筛选','reset')}</div>`;
+  }
+  function siDetail() {
+    const t=siThread();
+    if (!t || !siAccount(t).connected) return `<div class="wsi-empty wsi-empty-detail">${I('messages-square')}<h2>每一条消息，都值得回应</h2><p>从左侧选择会话，查看历史并开始回复。</p></div>`;
+    const a=siAccount(t), target=siTarget(t), tags=[...new Set(siIncoming(t).flatMap(m=>m.tags))];
+    return `<main class="wsi-chat" aria-label="${E(t.name)} 的会话"><header class="wsi-chat-head">${siButton(I('arrow-left'),'back','aria-label="返回会话列表" data-mobile-back')}<img class="wsi-avatar" src="${t.avatar}" alt=""><div><h2>${E(t.name)}</h2><p>${social(a.platform)} ${E(a.platform)} · ${E(t.userId)}</p></div>${siButton(I(t.status==='done'?'rotate-ccw':'check')+(t.status==='done'?' 重新打开':' 标记完成'),'status',`data-id="${E(t.id)}"`)}${siButton(I('panel-right'),'profile','aria-label="查看联系人资料"')}</header>
+    <div class="wsi-context">${I('inbox')}<span>收件账号：<b>${E(a.name)}</b> · ${E(a.handle)}</span></div>
+    <div class="wsi-thread" role="log" aria-label="历史消息"><div class="wsi-date">会话历史 · ${siIncoming(t).length} 条互动</div>${t.messages.map(m=>`<article class="wsi-message ${m.from==='human'?'sent':''} ${m.id===target.id?'is-target':''}" data-si-message="${E(m.id)}"><div class="wsi-message-meta">${m.from==='human'?'你':E(t.name)} · ${E(m.time)} · ${siTypes[m.type]}</div>${m.from!=='human'?`<div class="wsi-source">${I(m.type==='dm'?'mail':'message-circle')}${E(m.source)}</div>`:''}<div class="wsi-bubble">${E(m.text)}</div><footer>${m.from==='human'?`<small>${I('check-check')}已记录 · 演示发送</small>`:`<span class="wsi-tags">${siTags(m.tags)}</span>${siButton(I('reply')+(m.id===target.id?' 回复中':' 回复'),'target',`data-id="${E(m.id)}"`)}${siButton(I('tag'),'tags',`data-id="${E(m.id)}" aria-label="管理这条互动的标签"`)}`}</footer></article>`).join('')}</div>
+    <form class="wsi-composer" data-si-form="send"><div class="wsi-reply-to"><span>${I(target.type==='dm'?'lock-keyhole':'globe')} ${target.type==='dm'?'私信回复':'公开回复'} · ${siTypes[target.type]}</span><small>回复 ${E(t.name)}：${E(target.text.slice(0,54))}${target.text.length>54?'…':''}</small></div><div class="wsi-compose-box"><textarea id="siDraft" aria-label="回复内容" maxlength="2000" placeholder="输入回复，或使用 AI Assistant 生成建议…">${E(t.drafts[target.id]||'')}</textarea><footer>${siButton(I('sparkles')+' AI Assistant','ai')}<span id="siDraftCount">${(t.drafts[target.id]||'').length}/2000</span><button type="submit" class="wsi-btn wsi-primary" id="siSend" ${!(t.drafts[target.id]||'').trim()?'disabled':''}>${I('send')} 发送回复</button></footer></div></form></main>
+    <aside class="wsi-profile" aria-label="联系人资料"><header><h2>联系人资料</h2>${siButton(I('x'),'profile','aria-label="关闭联系人资料"')}</header><div class="wsi-profile-person"><img class="wsi-avatar" src="${t.avatar}" alt=""><h3>${E(t.name)}</h3><p>${E(t.role||'社媒联系人')}</p>${t.company?`<p>${I('building-2')} ${E(t.company)}</p>`:''}<span class="wsi-state ${t.status==='done'?'done':''}">${t.status==='done'?'已完成':'待处理'}</span></div><section><h3>${I('tag')} 互动标签</h3><div class="wsi-tags">${siTags(tags)}</div><p>标签对应具体互动，方便分类与跟进。</p>${siButton(I('plus')+' 管理当前互动标签','tags',`data-id="${E(target.id)}"`)}</section><section><h3>${I('history')} 会话概览</h3><dl><dt>平台</dt><dd>${E(a.platform)}</dd><dt>消息类型</dt><dd>${[...new Set(siIncoming(t).map(m=>siTypes[m.type]))].join('、')}</dd><dt>互动数量</dt><dd>${siIncoming(t).length} 条</dd><dt>接收账号</dt><dd>${E(a.name)}</dd></dl></section><section><h3>${I('book-open')} 品牌知识库</h3><p>生成建议时，可选择产品资料、采购指引或售后知识。</p><small>AI 建议由你确认后发送</small></section>${siButton(I('mail')+' 标记为未读','unread')}</aside>`;
+  }
+  function siFilterCount() { return ['account','type','read','tag','status'].filter(k=>siUI[k]!=='all').length+(siUI.query.trim()?1:0); }
+  function siPositionFilter() {
+    const menu=root.querySelector('#siFilterMenu'), trigger=root.querySelector('#siFilterTrigger');if(!menu||!trigger)return;
+    const box=trigger.getBoundingClientRect(), width=Math.min(320,innerWidth-32);
+    menu.style.width=width+'px';menu.style.left=Math.max(16,Math.min(box.right-width,innerWidth-width-16))+'px';
+    menu.style.top=Math.min(box.bottom+8,Math.max(16,innerHeight-480))+'px';
+    menu.style.maxHeight=(innerHeight-parseFloat(menu.style.top)-16)+'px';
+  }
+  window.addEventListener('resize',()=>{if(root.querySelector('#siFilterMenu:popover-open'))siPositionFilter();});
+  function siMount() {
+    const s=root.querySelector('.wsi'); if(!s) return;
+    const menu=s.querySelector('#siFilterMenu'), trigger=s.querySelector('#siFilterTrigger');
+    if(menu&&!menu.dataset.mounted){menu.dataset.mounted='true';menu.addEventListener('beforetoggle',e=>{if(e.newState==='open')siPositionFilter();});menu.addEventListener('toggle',e=>trigger.setAttribute('aria-expanded',String(e.newState==='open')));}
+    if(trigger){trigger.classList.toggle('has-filters',siFilterCount()>0);trigger.querySelector('.wsi-filter-dot').hidden=!siFilterCount();trigger.setAttribute('aria-label',siFilterCount()?'筛选消息，已启用 '+siFilterCount()+' 项条件':'筛选消息');}
 
-  function inboxScreen(id) {
-    if (id) ui.selectedConversation = id;
-    const conversation = state.conversations.find(item => item.id === ui.selectedConversation && item.reachable) || state.conversations.find(item => item.reachable);
-    const draft = conversation.draft || 'Hi Alex,\n\nThanks for your interest in the X100. We can confirm the verified product specifications. For pricing and lead time, our sales team needs to confirm the destination and quantity first.';
-    return `<section class="wd-linkedin-inbox">${breadcrumb(pageBreadcrumbs['LinkedIn 会话'])}<header class="wd-li-top">${social('LinkedIn')}<label>${I('search')}<input placeholder="搜索"></label><nav><span>${I('home')}首页</span><span>${I('users')}人脉</span><span class="active">${I('message-square')}消息</span><span>${I('bell')}通知</span>${avatar(true)}</nav></header><p class="wd-li-status">● LinkedIn 环境 · 已登录</p><div class="wd-inbox-layout"><aside><h2>消息</h2><input placeholder="搜索消息">${state.conversations.filter(item => item.reachable).map(item => `<button class="${item.id === conversation.id ? 'active' : ''}" data-wd="select-conversation" data-id="${item.id}"><img class="wd-face" src="${item.avatar}" alt=""><div><b>${item.name}</b><p>${E(item.text)}</p></div></button>`).join('')}</aside><main><header><img class="wd-face" src="${conversation.avatar}" alt=""><div><h2>${conversation.name}</h2><p>${conversation.role} · ${conversation.company}</p></div>${badge(conversation.status === 'done' ? '已回复' : conversation.status === 'human' ? '人工接管' : '待回复', conversation.status === 'done' ? 'green' : 'violet')}</header>${conversation.status === 'done' ? `<p class="wd-reply-complete">${I('circle-check')}回复已记录，首页待回复提醒已处理</p>` : `<p class="wd-risk-banner">${I('triangle-alert')}报价与交期需要人工确认 ${btn('接管并回复', 'takeover', `data-id="${conversation.id}"`)}</p>`}<div class="wd-message-thread"><time>2026年8月31日</time>${(conversation.messages?.length ? conversation.messages : [{ from: 'customer', text: conversation.text, time: '10:24' }]).map(message => `<article class="${message.from === 'human' ? 'wd-human-message' : ''}"><b>${message.from === 'human' ? '你' : E(conversation.name)} · ${E(message.time)}</b><p>${E(message.text)}</p></article>`).join('')}<small>来自 LinkedIn · ${conversation.company} 页面互动</small><section><b>历史记录</b><p>${conversation.status === 'done' ? '人工回复已记录，本次待回复事项已处理。' : 'Wendy 已完成低风险接待，价格和交期等待人工确认。'}</p></section></div><footer><textarea id="wdReply" placeholder="撰写消息…">${E(conversation.draft || '')}</textarea>${btn('发送', 'send-reply', `data-id="${conversation.id}" class="primary"`)}</footer></main><aside class="wd-reply-panel"><h2>${I('sparkles')}Wendy 建议回复 ${badge('基于可信来源', 'green')}</h2><article><b>回复草稿（待审核）</b><p>${E(draft)}</p></article><section><h3>信息来源</h3><p>产品性能：官网页面 · 高置信度</p><p>价格：需根据配置与交付地确认 · 低置信度</p><p>交期：需根据生产排期确认 · 低置信度</p></section><section><h3>客户洞察（已识别）</h3><p><b>${conversation.company}</b><br>${conversation.role} · LinkedIn 页面互动</p></section><footer>${btn('使用 Wendy 建议', 'use-suggestion', `data-id="${conversation.id}"`)}${btn('保存为询盘客户', 'save-lead', `data-id="${conversation.id}"`)}${btn('交回 Wendy', 'return-wendy', `data-id="${conversation.id}"`)}</footer><small>${conversation.status === 'human' ? '人工接管中，Wendy 已暂停自动回复。' : '接管后，Wendy 将暂停此会话的自动回复。'}</small></aside></div></section>`;
+    const thread=s.querySelector('.wsi-thread'); if(thread) thread.scrollTop=thread.scrollHeight;
+    const list=s.querySelector('.wsi-rows'), active=list?.querySelector('.active');
+    if(active){const row=active.getBoundingClientRect(),box=list.getBoundingClientRect();if(row.bottom>box.bottom)list.scrollTop+=row.bottom-box.bottom;if(row.top<box.top)list.scrollTop-=box.top-row.top;}
   }
+  function siRefreshFilter() {
+    const rows=siRows();
+    if(!rows.some(x=>x.t.id===siUI.selected)){siUI.selected=rows[0]?.t.id||null;siUI.target=rows[0]?.matches.at(-1)?.id||null;}
+    root.querySelector('#siRows').innerHTML=siList();root.querySelector('#siCount').textContent=rows.length;root.querySelector('#siDetail').innerHTML=siDetail();refreshIcons();siMount();
+  }
+  function siDialog(title, body, className='') {
+    const trigger=document.activeElement, host=root.querySelector('#wdOverlay');
+    host.innerHTML=`<dialog class="wsi-dialog ${className}" aria-labelledby="siDialogTitle"><header><h2 id="siDialogTitle">${title}</h2>${siButton(I('x'),'close','aria-label="关闭窗口"')}</header>${body}</dialog>`;
+    const dialog=host.querySelector('dialog');refreshIcons();dialog.showModal();
+    dialog.addEventListener('close',()=>{host.replaceChildren();if(trigger?.isConnected)trigger.focus();},{once:true});
+    return dialog;
+  }
+  function siAccountDialog() {
+    const d=siData();
+    siDialog('社媒账号管理',`<p>连接账号，在一个收件箱处理所有互动。</p><div class="wsi-demo-note">当前为演示连接，无需真实账号授权。</div><div class="wsi-account-list">${d.accounts.map(a=>`<article>${social(a.platform)}<div><b>${E(a.name)}</b><small>${E(a.platform)} · ${E(a.handle)}</small></div>${siButton(a.connected?'断开':'重新连接','connect',`data-id="${E(a.id)}"`)}</article>`).join('')}</div><form data-si-form="account" class="wsi-form"><h3>添加账号</h3><label>社媒平台<select name="platform">${['LinkedIn','Instagram','Facebook','TikTok','YouTube'].map(p=>`<option>${p}</option>`).join('')}</select></label><label>账号名称<input name="name" required maxlength="60" placeholder="例如：Nova Robotics Asia"></label><label>账号标识<input name="handle" required maxlength="60" placeholder="例如：@nova.asia" pattern="@?[A-Za-z0-9_.-]+" title="使用字母、数字、点、下划线或连字符"></label><button class="wsi-btn wsi-primary" type="submit">${I('plus')} 连接演示账号</button><p class="wsi-form-error" role="alert"></p></form>`);
+  }
+  function siTagsDialog(id) {
+    const t=siThread(), m=t?.messages.find(m=>m.id===id);if(!m)return;
+    siDialog('管理互动标签',`<p>为 ${E(t.name)} 的${siTypes[m.type]}分类。</p><form class="wsi-form" data-si-form="tags" data-message="${E(id)}"><div class="wsi-tag-options">${siData().tags.map(tag=>`<label><input type="checkbox" name="tag" value="${E(tag)}" ${m.tags.includes(tag)?'checked':''}>${siTags([tag])}</label>`).join('')}</div><label>新建标签<input name="newTag" maxlength="20" placeholder="输入标签名称，保存时同时添加"></label><footer><span>可选多个标签</span><button type="submit" class="wsi-btn wsi-primary">保存标签</button></footer></form>`);
+  }
+  function siAIDialog() {
+    const t=siThread(), m=t&&siTarget(t);if(!m)return;
+    const dialog=siDialog(I('sparkles')+' AI Assistant',`<p>结合会话上下文，为这条${siTypes[m.type]}起草回复。</p><blockquote>${E(m.text)}</blockquote><form class="wsi-form" data-si-form="ai" data-thread="${E(t.id)}" data-message="${E(m.id)}"><div class="wsi-form-grid"><label>回复语气<select name="tone"><option value="professional">专业严谨</option><option value="friendly">友好亲切</option><option value="concise">简洁直接</option><option value="empathetic">耐心共情</option></select></label><label>回复语言<select name="language"><option value="auto">跟随客户语言</option><option value="en">English</option><option value="zh">简体中文</option></select></label></div><label>回复要求<textarea name="instruction" maxlength="500" placeholder="例如：简短回复，邀请预约演示；不要承诺具体报价"></textarea></label><fieldset><legend>${I('book-open')} 品牌知识库 <small>可多选</small></legend>${siKnowledge.map(k=>`<label class="wsi-knowledge"><input type="checkbox" name="knowledge" value="${k.id}" ${m.tags.includes('售后')?k.id==='service'?'checked':'':k.id==='product'?'checked':''}><span><b>${k.name}</b><small>${k.text}</small></span></label>`).join('')}</fieldset><div class="wsi-demo-note">演示建议基于本地示例资料；自由文本要求需在建议中人工核对。</div><button class="wsi-btn wsi-primary" type="submit">${I('sparkles')} 生成建议回复</button><div class="wsi-ai-result" hidden aria-live="polite"><label>建议回复<textarea name="result" maxlength="2000"></textarea></label><small class="wsi-ai-sources"></small><footer>${siButton(I('arrow-down-to-line')+' 使用此回复','apply-ai')}<small>填入编辑框，由你确认后发送</small></footer></div></form>`,'wsi-ai-dialog');
+    dialog.querySelector('select').focus();
+  }
+  function siGenerate(form) {
+    const fd=new FormData(form), t=siData().threads.find(t=>t.id===form.dataset.thread), m=t.messages.find(m=>m.id===form.dataset.message);
+    const instructions=String(fd.get('instruction')||''), zh=fd.get('language')==='zh'||fd.get('language')==='auto'&&(/[\u4e00-\u9fff]/.test(m.text)||/中文/.test(instructions));
+    const tone=fd.get('tone'), text=m.text.toLowerCase(), chosen=siKnowledge.filter(k=>fd.getAll('knowledge').includes(k.id));
+    const intros=zh?{professional:'感谢您的咨询。',friendly:`您好 ${t.name}，很高兴收到您的消息！`,concise:'感谢联系。',empathetic:'感谢您的反馈，我们理解您的关注，会协助您一起确认。'}:{professional:`Thank you for your message, ${t.name}.`,friendly:`Hi ${t.name}, thanks for reaching out!`,concise:'Thanks for reaching out.',empathetic:'Thank you for sharing this. We understand your concern and would be happy to help.'};
+    let answer;
+    if(/calibrat|support|fault|broken/.test(text)) answer=zh?'请告诉我们具体的校准问题和运行环境，便于技术团队进一步排查。':'Could you describe the calibration issue and operating environment so our technical team can help troubleshoot?';
+    else if(/pric|lead time|units|quot/.test(text)) answer=zh?'为了准备合适的报价，请进一步确认所需配置和交付地点。具体价格与交期会由团队核实后回复。':'To prepare a suitable quotation, could you confirm the required configuration and delivery location? Our team will verify pricing and lead time before confirming.';
+    else if(/siemens|plc|profinet|integrat/.test(text)) answer=zh?'请提供控制器型号、接口要求和当前产线配置，我们会协助确认兼容性。':'Could you share the controller model, interface requirements and current line configuration? Our team can then verify compatibility.';
+    else if(/case stud|automotive/.test(text)) answer=zh?'请告诉我们您的应用场景与检测目标，我们会为您匹配适合参考的案例。':'Could you share your application and inspection goals? We can then identify the most relevant case studies for your team.';
+    else if(/install|deploy/.test(text)) answer=zh?'部署时间取决于现场条件和集成范围，请提供产线配置与可安排的停机窗口。':'Installation timing depends on site conditions and integration scope. Could you share the line configuration and available installation window?';
+    else if(/certif|ip67/.test(text)) answer=zh?'请确认产品型号与所需认证范围，我们会核对对应版本的认证资料。':'Could you confirm the product model and certification scope? We will check the documentation for the relevant configuration.';
+    else if(/demo|book|meeting|exhibition/.test(text)) answer=zh?'很高兴与您交流！请分享适合您的时间和时区，我们会协助安排产品演示。':'It would be a pleasure to connect. Please share your preferred time and time zone so we can help arrange a product demo.';
+    else answer=zh?'感谢分享您的使用体验！如有需要进一步了解的产品细节，欢迎告诉我们。':'We appreciate you sharing your experience! Please let us know which product details you would like to explore further.';
+    if(/演示|预约|demo/i.test(instructions)&&!/demo/.test(text)) answer+=zh?'也欢迎分享合适的时间与时区，方便安排产品演示。':' Please also share your preferred time and time zone for a product demo.';
+    if(m.type!=='dm'&&/support|calibrat|fault/.test(text)) answer+=zh?'涉及订单或序列号的信息，请通过私信发送。':' Please send any order or serial-number details by private message.';
+    const concise=tone==='concise'||/简短|简洁|short|concise/i.test(instructions);
+    const result=[intros[tone],answer,...(concise?[]:chosen.map(k=>zh?k.text:k.en))].join('\n\n');
+    form.querySelector('[name=result]').value=result;
+    form.querySelector('.wsi-ai-result').hidden=false;
+    form.querySelector('.wsi-ai-sources').textContent='参考：当前消息与 '+t.messages.length+' 条会话记录'+(chosen.length?' · '+chosen.map(k=>k.name).join('、'):' · 未调用品牌知识库');
+    form.querySelector('[type=submit]').innerHTML=I('refresh-cw')+' 重新生成';refreshIcons();form.querySelector('[name=result]').focus();
+  }
+  root.addEventListener('click', event=>{
+    const b=event.target.closest('[data-si]');if(!b)return;
+    const action=b.dataset.si,t=siThread();
+    if(action==='select')siSelect(b.dataset.id,b.dataset.target);
+    else if(action==='target'&&t){siUI.target=b.dataset.id;render();root.querySelector('#siDraft')?.focus();}
+    else if(action==='back'){siUI.mobile=false;render();}
+    else if(action==='profile'){const panel=root.querySelector('.wsi');if(panel.clientWidth<1120||innerWidth<=1250){siUI.mobileProfile=!siUI.mobileProfile;panel.classList.toggle('wsi-show-profile',siUI.mobileProfile);}else{siUI.profile=!siUI.profile;panel.classList.toggle('wsi-hide-profile',!siUI.profile);}}
+    else if(action==='reset'){Object.assign(siUI,{account:'all',type:'all',read:'all',tag:'all',status:'all',query:''});root.querySelectorAll('[data-si-filter]').forEach(el=>el.value=siUI[el.dataset.siFilter]);siRefreshFilter();}
+    else if(action==='status'&&t){t.status=t.status==='done'?'open':'done';persist();render();}
+    else if(action==='unread'&&t){siIncoming(t).at(-1).unread=true;state.homeCommentReads=state.homeCommentReads.filter(id=>id!==t.id);persist();render();toast('已标记为未读');}
+    else if(action==='sync'){siData().syncedAt=new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});persist();render();toast('演示收件箱已刷新');}
+    else if(action==='accounts')siAccountDialog();
+    else if(action==='connect'){const a=siData().accounts.find(a=>a.id===b.dataset.id);a.connected=!a.connected;persist();render();siAccountDialog();}
+    else if(action==='tags')siTagsDialog(b.dataset.id);
+    else if(action==='ai')siAIDialog();
+    else if(action==='close')b.closest('dialog').close();
+    else if(action==='apply-ai'){
+      const f=b.closest('form'),thread=siData().threads.find(t=>t.id===f.dataset.thread),text=f.querySelector('[name=result]').value.trim();
+      if(!text)return toast('请先生成或填写建议回复');thread.drafts[f.dataset.message]=text;persist();b.closest('dialog').close();render();root.querySelector('#siDraft')?.focus();toast('建议已填入，可编辑后发送');
+    }
+  });
+  root.addEventListener('input',event=>{
+    if(event.target.matches('[data-si-filter=query]')){siUI.query=event.target.value;siRefreshFilter();}
+    if(event.target.id==='siDraft'){const t=siThread(),m=siTarget(t);t.drafts[m.id]=event.target.value;persist();root.querySelector('#siDraftCount').textContent=event.target.value.length+'/2000';root.querySelector('#siSend').disabled=!event.target.value.trim();}
+  });
+  root.addEventListener('change',event=>{const key=event.target.dataset.siFilter;if(!key||key==='query')return;siUI[key]=event.target.value;siRefreshFilter();});
+  root.addEventListener('submit',event=>{
+    const f=event.target;if(!f.matches('[data-si-form]'))return;event.preventDefault();const fd=new FormData(f);
+    if(f.dataset.siForm==='send'){
+      const t=siThread(),m=siTarget(t),text=root.querySelector('#siDraft').value.trim();if(!text||!siAccount(t).connected)return;
+      t.messages.push({id:'reply-'+crypto.randomUUID(),from:'human',text,type:m.type,replyTo:m.id,time:new Date().toLocaleString('sv-SE').slice(0,16),tags:[],unread:false});t.drafts[m.id]='';siRead(t);
+      const legacy=state.conversations.find(c=>c.id===t.id);if(legacy){legacy.status='done';legacy.draft='';legacy.messages.push({from:'human',text,time:new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})});}
+      persist();render();toast('回复已记录（演示），未发送至真实社媒');
+    }else if(f.dataset.siForm==='account'){
+      const platform=fd.get('platform'),name=fd.get('name').trim(),handle='@'+fd.get('handle').trim().replace(/^@/,'');
+      if(!name||handle==='@')return;
+      if(siData().accounts.some(a=>a.platform===platform&&a.handle.toLowerCase()===handle.toLowerCase())){f.querySelector('.wsi-form-error').textContent='此账号已存在，请在上方重新连接或使用其他账号。';return;}
+      siData().accounts.push({id:'account-'+crypto.randomUUID(),platform,name,handle,connected:true});persist();f.closest('dialog').close();render();toast('演示账号已连接，暂无消息');
+    }else if(f.dataset.siForm==='tags'){
+      const m=siThread().messages.find(m=>m.id===f.dataset.message),tag=fd.get('newTag').trim();if(tag&&!siData().tags.includes(tag))siData().tags.push(tag);m.tags=[...new Set([...fd.getAll('tag'),...(tag?[tag]:[])])];persist();f.closest('dialog').close();render();toast('互动标签已更新');
+    }else if(f.dataset.siForm==='ai')siGenerate(f);
+  });
 
   function personaScreen() {
     return `<section class="wd-persona">${pageHead('Wendy · 品牌分身资产库', '统一管理数字分身形象、声音与三维资料，让每次内容创作保持专业一致。', link(I('pencil') + ' 使用分身创作', 'ai', 'wd-button primary'))}<div class="wd-persona-layout"><main><div class="wd-persona-stage"><img src="${persona}" alt="Wendy 数字分身"><span>${badge('已就绪', 'green')}</span></div><h3>形象版本</h3><div class="wd-persona-versions"><button class="active"><img src="${persona}" alt=""><b>默认形象</b><small>v1.2 · 当前</small></button><button><img src="${persona}" alt=""><b>微笑版</b><small>v1.1</small></button><button><img src="${persona}" alt=""><b>正式版</b><small>v1.0</small></button><button>${I('plus')}<b>创建新版本</b></button></div></main><section class="wd-persona-info"><h2>分身信息 ${I('pencil')}</h2><dl><dt>名称</dt><dd>Wendy</dd><dt>角色定位</dt><dd>社媒运营专家</dd><dt>更新时间</dt><dd>2026-08-31</dd><dt>版本</dt><dd>v1.2</dd><dt>支持语言</dt><dd>中文 · English</dd><dt>适用渠道</dt><dd>${social('LinkedIn')}${social('Instagram')}${social('YouTube')}</dd></dl><p>分身素材仅用于你授权的内容。生成的社媒内容仍需人工审批后发布。</p>${btn(I('pencil') + ' 更新形象', 'persona-update', 'class="primary wide"')}${btn('创建新分身', 'persona-create', 'class="wide"')}</section><aside><section><h2>克隆声音 ${badge('已就绪', 'green')}</h2><select><option>Wendy · 中文 · v1.1</option></select><div class="wd-audio">${btn(I('play'), 'voice-play')}<span>${'▮ '.repeat(22)}</span><time>00:18</time></div><button>中文</button><button>English</button>${btn(I('mic') + ' 录制新声音', 'voice-record', 'class="wide"')}</section><section><h2>三维三视图 ${badge('已就绪', 'green')}</h2><img src="${threeView}" alt="Wendy 三维三视图">${btn(I('upload') + ' 上传三视图', 'three-upload', 'class="wide"')}</section></aside></div><section class="wd-persona-history"><h2>分身使用记录</h2><div><button class="active">全部版本</button><button>v1.2 当前</button><button>v1.1</button></div><table><tbody><tr><td>2026-08-30</td><td>${social('LinkedIn')}已发布</td><td>工业传感器如何提升产线稳定性</td><td>LinkedIn · 图文</td></tr><tr><td>2026-08-29</td><td>${social('Instagram')}草稿</td><td>Nova Robotics 产线升级故事</td><td>Instagram · 图文</td></tr></tbody></table></section></section>`;
@@ -1050,17 +1658,19 @@
        否则主区域会是一片空白，只剩静态侧栏。 */
     if (!/^#wendy(?:\/|$)/.test(location.hash)) { stopWorkstream(); document.body.classList.remove('wd-goal-locked'); return; }
     let [page = '', id = ''] = route();
-    if (page === 'promotion' || page === 'analytics') {
+    const quickDeepLink = page === 'quick';
+    if (quickDeepLink || page === 'promotion' || page === 'analytics') {
       history.replaceState(null, '', `${location.pathname}${location.search}#wendy`);
       page = '';
       id = '';
     }
+    if (!['fans', 'inbox'].includes(page)) siUI.route = null;
     const screens = {
       '': homeScreen, goal: () => goalScreen(id), onboarding: onboardingScreen, content: contentScreen,
       post: () => postScreen(id), hotspots: () => trendScreen(id), strategy: strategyScreen,
       'strategy-edit': strategyScreen, 'strategy-changes': strategyScreen,
-      ai: aiScreen, quick: quickScreen, publish: publishScreen, fans: () => fansScreen(id),
-      inbox: () => inboxScreen(id), persona: personaScreen,
+      ai: aiScreen, publish: publishScreen, fans: () => siScreen(id),
+      inbox: () => siScreen(id), persona: personaScreen,
       settings: settingsScreen, notifications: notificationsScreen, linkedin: linkedinScreen,
       'weekly-goal': weeklyGoalScreen
     };
@@ -1070,15 +1680,26 @@
     layout?.destroy();
     root.dataset.motionEngine = window.gsap ? 'gsap' : 'fallback';
     stopWorkstream();
-    root.innerHTML = `<div class="wd-content">${screens[page] ? screens[page]() : aliasScreen(page, id)}</div><div id="wdOverlay"></div>`;
+    const oldCalendar = root.querySelector('.wcal'), oldCalendarArea = oldCalendar?.querySelector('.wcal-scroll');
+    const previousCalendar = oldCalendarArea?.dataset.calMounted === 'true' && { key: `${oldCalendar.dataset.calView}:${oldCalendar.dataset.calAnchor}`, top: oldCalendarArea.scrollTop, left: oldCalendarArea.scrollLeft };
+    const screenMarkup = `<div class="wd-content">${screens[page] ? screens[page]() : aliasScreen(page, id)}</div><div id="wdOverlay"></div>`;
+    if (qpDialog?.open) {
+      // A background refresh may update the page without dismissing its active publisher.
+      const content = document.createElement('template'); content.innerHTML = screenMarkup;
+      [...root.children].filter(child => child !== qpDialog).forEach(child => child.remove());
+      root.insertBefore(content.content, qpDialog);
+    } else root.innerHTML = screenMarkup;
     const audioWave = root.querySelector('.wd-audio>span');
     if (audioWave) audioWave.innerHTML = I('audio-waveform');
     document.body.classList.toggle('wd-goal-locked', ui.goalDrawerOpen || ui.leadDigestOpen && page === 'fans');
     document.querySelector('#wendyPage').setAttribute('aria-labelledby', 'wd-page-title');
     root.querySelector('h1')?.setAttribute('id', 'wd-page-title');
     refreshIcons();
+    mountCalendar(previousCalendar);
+    siMount();
+    if (quickDeepLink) openQuickPublisher();
     const home = root.querySelector('#wendyHome');
-    layout = home ? window.mountAgentHome({ root: home, count: '#wdHomeCommentCount', flow: '[data-wd-live-home]', onMotion: paused => { if (paused) stopWorkstream(); else playHomeRuntime(); }, previous: previousLayout,
+    layout = home ? window.mountAgentHome({ root: home, count: '#wdHomeApprovalCount', previous: previousLayout,
       responsive: window.agentHomeResponsiveRules
     }) : null;
     if (page === 'fans' && homeComments.some(comment => comment.id === id)) {
@@ -1092,7 +1713,6 @@
     if (ui.goalDrawerOpen) setTimeout(() => root.querySelector('#wdGoalInput')?.focus(), 0);
     if (root.querySelector('[data-wd-flow]')) requestAnimationFrame(playWorkstream);
     if (root.querySelector('[data-wd-generation]')) requestAnimationFrame(playHomeGeneration);
-    if (root.querySelector('[data-wd-live-home]')) requestAnimationFrame(playHomeRuntime);
     if (root.querySelector('[data-wd-insights]')) requestAnimationFrame(startHomeInsights);
   }
 
@@ -1100,224 +1720,20 @@
   let flowTimers = [];
   let flowRaf = 0;
   let insightTimer = 0;
-  let runtimeFlowCleanup = null;
 
   /* 标签页切到后台时 rAF 会暂停，回到前台重新播一遍，避免卡在中间状态。 */
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible' && root.querySelector('[data-wd-flow]')) playWorkstream();
     if (document.visibilityState === 'visible' && root.querySelector('[data-wd-generation]')) playHomeGeneration();
-    if (document.visibilityState === 'visible' && root.querySelector('[data-wd-live-home]')) playHomeRuntime();
   });
 
   function stopWorkstream() {
-    if (runtimeFlowCleanup) {
-      runtimeFlowCleanup();
-      runtimeFlowCleanup = null;
-    }
     stopHomeOrbit();
     flowTimers.forEach(window.clearTimeout);
     flowTimers = [];
     window.clearTimeout(insightTimer);
     insightTimer = 0;
     if (flowRaf) { cancelAnimationFrame(flowRaf); flowRaf = 0; }
-  }
-
-  /* Wendy animation.html 的流程连线、粒子与播放控制，适配首页的重复渲染生命周期。 */
-  function playHomeRuntime() {
-    if (runtimeFlowCleanup) runtimeFlowCleanup();
-    runtimeFlowCleanup = null;
-    if (document.hidden || !/^#wendy(?:\/|$)/.test(location.hash)) return;
-    const runtime = root.querySelector('#wendyFlow');
-    if (!runtime) return;
-    const canvas = runtime.querySelector('.wf-canvas');
-    const svg = runtime.querySelector('.wf-wires');
-    const paths = runtime.querySelector('.wf-paths');
-    const particles = runtime.querySelector('.wf-particles');
-    const nodes = [...runtime.querySelectorAll('.wf-node')];
-    const hub = runtime.querySelector('.wf-hub');
-    const foundation = runtime.querySelector('.wf-foundation');
-    const toggle = runtime.querySelector('.wf-toggle');
-    const caption = runtime.querySelector('.wf-current');
-    if (!canvas || !svg || !paths || !particles || !nodes.length || !hub || !foundation || !toggle || !caption) return;
-
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const namespace = 'http://www.w3.org/2000/svg';
-    let tracks = [];
-    let frame = 0;
-    let last = 0;
-    let elapsed = 0;
-    let step = -1;
-    let userPaused = reduced.matches;
-    let visible = false;
-    let destroyed = false;
-
-    const element = (tag, attributes) => {
-      const node = document.createElementNS(namespace, tag);
-      Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, value));
-      return node;
-    };
-    const addTrack = (d, kind, index = 0) => {
-      const path = element('path', { d, class: `wf-wire wf-wire--${kind}` });
-      if (kind === 'cycle') path.setAttribute('marker-end', 'url(#wf-arrow)');
-      paths.append(path);
-      const group = element('g', {});
-      group.append(
-        element('circle', { r: 5, class: `wf-particle wf-particle--${kind} wf-particle-halo` }),
-        element('circle', { r: 2, class: `wf-particle wf-particle--${kind}` })
-      );
-      particles.append(group);
-      tracks.push({ path, group, kind, index, length: path.getTotalLength() });
-    };
-    const draw = () => {
-      if (destroyed || !tracks.length) return;
-      const active = Math.floor(elapsed / 3000) % nodes.length;
-      if (active !== step) {
-        step = active;
-        nodes.forEach((node, index) => node.classList.toggle('is-active', index === step));
-        caption.textContent = `${String(step + 1).padStart(2, '0')} / 06 · ${nodes[step].querySelector('h3').textContent}`;
-      }
-      tracks.forEach(track => {
-        const cycle = track.kind === 'cycle';
-        track.path.classList.toggle('is-active', cycle && track.index === step);
-        track.group.style.opacity = cycle && track.index !== step ? '0' : '1';
-        const progress = cycle
-          ? (elapsed % 3000) / 3000
-          : (elapsed / (track.kind === 'supply' ? 3600 : 2400) + track.index / 7) % 1;
-        const point = track.path.getPointAtLength(progress * track.length);
-        track.group.setAttribute('transform', `translate(${point.x} ${point.y})`);
-      });
-    };
-    const layoutRuntime = () => {
-      if (destroyed || !canvas.clientWidth || !canvas.clientHeight) return;
-      const bounds = canvas.getBoundingClientRect();
-      const box = node => {
-        const rect = node.getBoundingClientRect();
-        return { x:rect.x - bounds.x, y:rect.y - bounds.y, w:rect.width, h:rect.height, cx:rect.x - bounds.x + rect.width / 2, cy:rect.y - bounds.y + rect.height / 2 };
-      };
-      const cards = nodes.map(box);
-      const mobile = runtime.clientWidth <= 480;
-      if (!mobile) hub.style.top = `${cards[0].y + Math.max(...cards.slice(0, 3).map(node => node.h)) + (90 - hub.offsetHeight) / 2}px`;
-      else hub.style.removeProperty('top');
-      const base = box(foundation);
-      const center = box(hub);
-      svg.setAttribute('viewBox', `0 0 ${bounds.width} ${bounds.height}`);
-      paths.replaceChildren();
-      particles.replaceChildren();
-      tracks = [];
-      cards.forEach((current, index) => {
-        const next = cards[(index + 1) % cards.length];
-        let d;
-        if (index === 5 && mobile) {
-          const right = bounds.width - 10;
-          const left = 10;
-          const bottom = current.y + current.h + 18;
-          const top = cards[0].y - 12;
-          d = `M ${current.x + current.w} ${current.cy} H ${right} V ${bottom} H ${left} V ${top} H ${next.cx} V ${next.y}`;
-        } else if (index === 5) {
-          d = `M ${current.x} ${current.cy} H 10 V ${next.cy} H ${next.x}`;
-        } else if (Math.abs(current.cy - next.cy) < 5) {
-          const direction = next.cx > current.cx ? 1 : -1;
-          d = `M ${current.cx + direction * current.w / 2} ${current.cy} H ${next.cx - direction * next.w / 2}`;
-        } else {
-          d = `M ${current.cx} ${current.y + current.h} V ${next.y}`;
-        }
-        addTrack(d, 'cycle', index);
-      });
-      const gutter = mobile
-        ? (cards[0].x + cards[0].w + cards[1].x) / 2
-        : (cards[4].x + cards[4].w + cards[3].x) / 2;
-      const hubBottom = center.y + center.h;
-      addTrack(`M ${base.cx} ${base.y} V ${base.y - 20} H ${gutter} V ${hubBottom + 8} Q ${gutter} ${center.cy} ${center.x + center.w} ${center.cy}`, 'supply');
-      if (mobile) addTrack(`M ${center.cx} ${hubBottom} V ${cards[0].y - 18} H ${cards[1].cx} V ${cards[1].y}`, 'supply');
-      else addTrack(`M ${center.cx} ${center.y} V ${cards[1].y + cards[1].h}`, 'supply');
-      runtime.querySelectorAll('.wf-inputs li').forEach((input, index) => {
-        const source = box(input);
-        const targetX = base.x + base.w * (index + 1) / 8;
-        let d = `M ${source.cx} ${source.y} V ${base.y + base.h + 25} L ${targetX} ${base.y + base.h + 12}`;
-        if (mobile && index >= 4) {
-          const gutterX = source.x + source.w + 4.5;
-          d = `M ${source.cx} ${source.y} V ${source.y - 4.5} H ${gutterX} V ${base.y + base.h + 25} L ${targetX} ${base.y + base.h + 12}`;
-        }
-        addTrack(d, 'input', index);
-      });
-      draw();
-    };
-    const tick = time => {
-      if (destroyed) return;
-      if (last) elapsed += Math.min(time - last, 100);
-      last = time;
-      draw();
-      frame = requestAnimationFrame(tick);
-    };
-    const syncPlayback = () => {
-      cancelAnimationFrame(frame);
-      frame = 0;
-      last = 0;
-      const paused = userPaused || !visible || document.hidden || reduced.matches;
-      runtime.classList.toggle('is-paused', paused);
-      const controlledPause = userPaused || reduced.matches;
-      toggle.setAttribute('aria-pressed', String(controlledPause));
-      toggle.setAttribute('aria-label', reduced.matches ? '查看下一流程步骤' : controlledPause ? '播放流程动画' : '暂停流程动画');
-      toggle.querySelector('span').textContent = reduced.matches ? '下一步' : controlledPause ? '播放' : '暂停';
-      toggle.querySelectorAll(':scope > i, :scope > svg').forEach(icon => icon.remove());
-      toggle.insertAdjacentHTML('afterbegin', I(reduced.matches ? 'step-forward' : controlledPause ? 'play' : 'pause'));
-      window.lucide?.createIcons({ root:toggle, attrs:{ 'aria-hidden':'true', focusable:'false', 'stroke-width':1.5 } });
-      if (!paused) frame = requestAnimationFrame(tick);
-    };
-    const refreshVisibility = () => {
-      if (destroyed) return;
-      const bounds = runtime.getBoundingClientRect();
-      const inView = bounds.width > 0 && bounds.height > 0 && bounds.bottom > 0 && bounds.top < window.innerHeight && bounds.right > 0 && bounds.left < window.innerWidth;
-      if (inView !== visible || document.hidden) {
-        visible = inView;
-        syncPlayback();
-      }
-    };
-    const onToggle = () => {
-      if (reduced.matches) {
-        elapsed = (Math.floor(elapsed / 3000) + 1) * 3000;
-        draw();
-        return;
-      }
-      userPaused = !userPaused;
-      syncPlayback();
-    };
-    const onReducedMotion = () => {
-      userPaused = reduced.matches;
-      syncPlayback();
-    };
-    const onVisibility = () => {
-      refreshVisibility();
-      syncPlayback();
-    };
-    const resizeObserver = new ResizeObserver(() => {
-      layoutRuntime();
-      refreshVisibility();
-    });
-    const intersectionObserver = new IntersectionObserver(refreshVisibility, { threshold:0 });
-    toggle.addEventListener('click', onToggle);
-    reduced.addEventListener('change', onReducedMotion);
-    document.addEventListener('visibilitychange', onVisibility);
-    document.addEventListener('scroll', refreshVisibility, { passive:true, capture:true });
-    window.addEventListener('resize', refreshVisibility, { passive:true });
-    resizeObserver.observe(canvas);
-    intersectionObserver.observe(runtime);
-    document.fonts?.ready.then(() => { if (!destroyed) layoutRuntime(); });
-    layoutRuntime();
-    refreshVisibility();
-    syncPlayback();
-
-    runtimeFlowCleanup = () => {
-      destroyed = true;
-      cancelAnimationFrame(frame);
-      toggle.removeEventListener('click', onToggle);
-      reduced.removeEventListener('change', onReducedMotion);
-      document.removeEventListener('visibilitychange', onVisibility);
-      document.removeEventListener('scroll', refreshVisibility, { capture:true });
-      window.removeEventListener('resize', refreshVisibility);
-      resizeObserver.disconnect();
-      intersectionObserver.disconnect();
-    };
   }
 
   function showHomeInsight(nextIndex, direction = 1) {
@@ -1672,6 +2088,9 @@
     const action = control.dataset.wd;
     const id = control.dataset.id;
     const value = control.dataset.value;
+    if (action === 'quick-open' || control.closest('.wqp-dialog')) return handleQuickAction(action, value, id);
+    if (action.startsWith('cal-')) return handleCalendarAction(action, value, id);
+    if (action.startsWith('studio-')) return handleStudioAction(action, value);
     if (action.startsWith('weekly-')) return handleWeeklyAction(action, id, value);
     if (action === 'bind-competitor') {
       const input = root.querySelector('#wdCompetitorId');
@@ -1710,6 +2129,13 @@
     }
     else if (action === 'competitor-more') go('benchmarks');
     else if (action === 'preview-home-post') toast('视频预览已准备，可在审批详情中播放');
+    else if (action === 'calendar-week' || action === 'calendar-reset') {
+      ui.calendarWeek = action === 'calendar-reset' ? 0 : ui.calendarWeek + Number(value);
+      render();
+      root.querySelector(`[data-wd="${action}"]${value ? `[data-value="${value}"]` : ''}`)?.focus({ preventScroll: true });
+    }
+    else if (action === 'open-calendar-post') { ui.selectedPost = id; ui.contentDetailOpen = true; ui.contentView = 'library'; go('content'); }
+    else if (action === 'show-home-calendar') { root.querySelector('#wendyHomeDialog')?.close(); root.querySelector('#wdRuntimeTitle')?.focus(); }
     else if (action === 'open-content-calendar') { ui.contentView = 'calendar'; go('content'); }
     else if (action === 'home-approve') {
       const post = state.posts.find(item => item.id === id);
@@ -1720,8 +2146,8 @@
       const next = queue.find(item => item.status !== 'approved');
       if (next) ui.selectedPost = next.id;
       render();
-      root.querySelector(next ? '[data-wd="home-approve"]' : '#wdRuntimeTitle')?.focus({ preventScroll: true });
-      toast(next ? '已批准并进入排期，正在查看下一条内容' : '本轮内容已全部审批，已恢复 Agent 运行视图');
+      root.querySelector(next ? '[data-wd="home-approve"]' : '#wdApprovalTitle')?.focus({ preventScroll: true });
+      toast(next ? '已批准并进入排期，正在查看下一条内容' : '本轮内容已全部审批，发布日历已更新');
     }
     else if (action === 'home-revise') {
       ui.revisionText = root.querySelector('#wdHomeFeedback')?.value.trim() || '';
@@ -1802,6 +2228,7 @@
     }
     else if (action === 'revise-catalog') {
       const post = state.posts.find(item => item.id === id);
+      if (post?.status === 'manual-draft') return openQuickPublisher(id);
       if (post) { ui.selectedPost = id; go('post/' + id); }
       else toast('已打开修改意见入口');
     }
@@ -1844,7 +2271,7 @@
       render();
     }
     else if (action === 'select-trend') { ui.selectedTrend = id; render(); }
-    else if (action === 'trend-create') { ui.selectedTrend = id; ui.composeGenerated = true; go('ai'); }
+    else if (action === 'trend-create') { ui.selectedTrend = id; state.aiStudio = { ...studioFresh(), goal: currentTrend().title }; persist(); go('ai'); }
     else if (action === 'trend-add') toast('已加入下周内容方向');
     else if (action === 'generate-strategy-preview') { ui.strategyPreview = true; render(); toast('已生成新策略预览'); }
     else if (action === 'confirm-strategy') { state.strategy.effective = '2026-09-07'; persist(); toast('新策略将于下周一生效'); }
@@ -1860,16 +2287,6 @@
     else if (action === 'edit-ai-brief') root.querySelector('#wdCreativeBrief')?.focus();
     else if (action === 'change-ai-product') toast('已打开产品选择器');
     else if (action === 'compose-next') go('publish');
-    else if (action === 'quick-mode') { ui.quickPublishMode = value; render(); }
-    else if (action === 'quick-polish') {
-      const area = root.querySelector('#wdQuickCopy');
-      ui.quickCopy = 'X100 在高温产线中仍能稳定识别微小缺陷，帮助制造团队提升良率与一致性。';
-      if (area) area.value = ui.quickCopy;
-      toast('AI 润色已完成，请确认后发布');
-    }
-    else if (action === 'quick-upload') toast('演示上传区已就绪，支持 JPG / PNG');
-    else if (action === 'quick-save-draft') { if (saveQuickPost('manual-draft')) { go('content'); toast('已存为草稿，可在内容管理中继续编辑'); } }
-    else if (action === 'quick-confirm') { if (saveQuickPost(ui.quickPublishMode === 'scheduled' ? 'scheduled' : 'published')) { go('content'); toast(ui.quickPublishMode === 'scheduled' ? '内容已加入发布排期' : '内容已确认发布'); } }
     else if (action === 'publish-mode') { ui.publishMode = value; render(); }
     else if (action === 'publish-confirm') { state.posts.filter(post => ['p1','p2','p3'].includes(post.id)).forEach(post => post.status = 'approved'); persist(); go('content'); toast('发布任务已创建，等待计划时间'); }
     else if (action === 'publish-back') go('ai');
@@ -1969,6 +2386,7 @@
     event.preventDefault();
     const value = root.querySelector('#wdHomeFeedback').value.trim();
     if (!value) { toast('请先填写内容需求'); return; }
+    state.aiStudio = { ...studioFresh(), goal: value };
     creativeBrief = value;
     state.creativeBrief = value;
     persist();
@@ -1994,19 +2412,7 @@
       state.strategy.instruction = event.target.value;
       persist();
     }
-    else if (event.target?.dataset?.wdInput === 'quick-copy') {
-      ui.quickCopy = event.target.value;
-      const page = root.querySelector('.wd-quick-publish-v44');
-      const counter = page?.querySelector('.wd-quick-editor>header>span');
-      const previewTitle = page?.querySelector('.wd-post-preview>h3');
-      const previewCopy = page?.querySelector('.wd-post-preview>p');
-      const previewImage = page?.querySelector('.wd-post-preview>img');
-      const title = ui.quickCopy ? ui.quickCopy.slice(0, 24) : '用户主动发布';
-      if (counter) counter.textContent = `${ui.quickCopy.length}/3000`;
-      if (previewTitle) previewTitle.textContent = title;
-      if (previewCopy) previewCopy.textContent = ui.quickCopy || '在这里输入帖子文案，并在发布前确认最终内容。';
-      if (previewImage) previewImage.alt = title;
-    }
+
   });
 
   root.addEventListener('change', event => {
@@ -2054,6 +2460,7 @@
   });
 
   window.addEventListener('hashchange', () => {
+    if (qpDialog) closeQuickPublisher();
     if (!/^#wendy(?:\/|$)/.test(location.hash)) { if (layout) homeLayoutState = layout.snapshot(); layout?.destroy(); layout = null; stopWorkstream(); document.body.classList.remove('wd-goal-locked'); return; }
     ui.goalDrawerOpen = false;
     ui.contentDetailOpen = false;

@@ -430,3 +430,53 @@
   #wendyApp .wd-comment-source { margin:16px; }
   #wendyApp .wd-comment-thread { padding:0 16px 24px; }
 }
+
+/* Homepage module arrangement: calendar in main; status and approvals in collaboration. */
+#wendyHome .av2-status > div { grid-template-columns:repeat(2,minmax(0,1fr)); }
+#wendyHome .av2-collab-header { display:flex; border-bottom:1px solid var(--oz-border); }
+#wendyHome .av2-stream { display:flex; flex-direction:column; gap:20px; }
+#wendyHome .av2-stream > section { flex:none; min-width:0; }
+#wendyHome .av2-stream .wd-home-goal-panel { padding:16px; border:1px solid var(--oz-border); border-radius:12px; background:var(--oz-secondary); }
+#wendyHome .wd-home-goal-panel header { gap:8px; flex-wrap:wrap; }
+#wendyHome .wd-goal-panel-summary { display:grid; gap:8px; }
+#wendyHome .wd-goal-panel-title { overflow-wrap:anywhere; }
+#wendyHome .wd-home-approval > header { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; }
+#wendyHome .wd-home-approval h2 { margin:0; font-size:var(--oz-text-base); line-height:var(--oz-leading-base); }
+#wendyHome .wd-home-approval .wd-v22-review-heading { display:none; }
+#wendyHome .wd-home-approval .wd-v22-review-workspace { padding:0; }
+#wendyHome .wd-home-approval .wd-v22-review-grid { display:block; margin:0; }
+#wendyHome .wd-home-approval .wd-v22-review-post.expanded { display:flex; flex-direction:column; gap:0; border:1px solid var(--oz-border); border-radius:12px; overflow:hidden; }
+#wendyHome .wd-home-approval .wd-v22-review-post.expanded > header { padding:12px; height:auto; }
+#wendyHome .wd-home-approval .wd-v22-review-post.expanded > img { width:100%; height:auto; min-height:0; max-height:200px; object-fit:contain; background:var(--oz-secondary); }
+#wendyHome .wd-home-approval .wd-v22-review-post.expanded > section { padding:12px; border:0; background:var(--oz-card); }
+#wendyHome .wd-home-approval .wd-v22-review-post.expanded > section > p { display:block; overflow:visible; white-space:pre-line; -webkit-line-clamp:unset; }
+#wendyHome .wd-home-approval .wd-v22-review-post.expanded > footer { display:flex; flex-direction:column; align-items:stretch; padding:12px; gap:8px; border-top:1px solid var(--oz-border); }
+#wendyHome .wd-home-approval .wd-review-actions { display:flex; flex-wrap:wrap; gap:8px; }
+#wendyHome .wd-home-approval .wd-review-actions > button { width:auto; }
+#wendyHome .wd-home-approval .wd-review-actions > button.primary { min-width:0; }
+#wendyHome .wd-v22-empty-review { padding:24px 12px; }
+#wendyHome .wd-home-calendar { border:0; border-radius:0 0 16px 16px; overflow:hidden; }
+#wendyHome .wd-home-calendar > header { height:auto; min-height:54px; flex-wrap:wrap; gap:12px; padding:16px; }
+#wendyHome .wd-home-calendar > header > div { flex-wrap:wrap; gap:8px; }
+#wendyHome .wd-home-calendar .wd-calendar-grid { min-width:0; min-height:420px; grid-template-columns:repeat(7,minmax(0,1fr)); }
+#wendyHome .wd-calendar-grid > article { padding:8px; }
+#wendyHome .wd-calendar-grid article > header { flex-wrap:wrap; gap:4px; }
+#wendyHome .wd-calendar-grid article > button { grid-template-columns:1fr; }
+#wendyHome .wd-calendar-grid article > button b { white-space:normal; overflow-wrap:anywhere; }
+#wendyHome .wd-calendar-grid article > button small { margin-top:8px; }
+#wendyHome[data-av2-compact="true"] .av2-attention > span::after { content:'查看 Agent 互动区'; }
+@container wd-main (max-width:639px) {
+  #wendyHome .wd-home-calendar .wd-calendar-grid { grid-template-columns:1fr; min-height:0; }
+  #wendyHome .wd-calendar-grid > article { display:flex; flex-direction:column; gap:8px; padding:12px; border-right:0; border-bottom:1px solid var(--oz-border); }
+  #wendyHome .wd-calendar-grid article > header { flex-direction:row; align-items:center; margin:0; }
+  #wendyHome .wd-calendar-grid article > button { grid-column:2; grid-template-columns:18px minmax(0,1fr); margin:0; }
+  #wendyHome .wd-calendar-grid article > p { grid-column:2; margin:0; padding:8px 0; text-align:left; }
+}
+
+/* Figma Buttons: 73:3681 (Outline / Only icon / primary); Badge: 665:2024. */
+#wendyHome .wd-home-calendar > header button { height:32px; min-height:32px !important; padding:6px 10px !important; gap:4px; border:1px solid var(--oz-border) !important; border-radius:10px !important; background:var(--oz-card) !important; color:var(--oz-foreground) !important; font-size:var(--oz-text-sm); line-height:var(--oz-leading-sm); font-weight:var(--oz-weight-medium); }
+#wendyHome .wd-home-calendar > header button[data-wd="calendar-week"] { width:32px; padding:8px !important; }
+#wendyHome .wd-home-calendar > header button:hover { background:var(--oz-secondary) !important; }
+#wendyHome .wd-home-calendar > header button:focus-visible { outline:0; box-shadow:var(--oz-shadow-focus); }
+#wendyHome .wd-home-approval > header .wd-badge { height:22px; padding:2px 10px; border:1px solid var(--oz-border); border-radius:10px; color:var(--oz-foreground); background:var(--oz-card); font-weight:var(--oz-weight-medium); }
+#wendyHome .av2-status > div > a { justify-content:flex-start; }

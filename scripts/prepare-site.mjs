@@ -7,6 +7,7 @@ const publicSite = join(projectRoot, "public", "site");
 const sourceEntries = [
   "index.html",
   "lucas-site.html",
+  "lucas-animation.html",
   "styles.css",
   "lucide-icons.css",
   "css",

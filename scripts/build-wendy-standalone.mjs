@@ -11,6 +11,10 @@ const styleEntries = [
   "css/agent-shared.css",
   "css/wendy.css",
   "css/wendy-home.css",
+  "css/wendy-studio.css",
+  "css/wendy-calendar.css",
+  "css/wendy-inbox.css",
+  "css/wendy-publisher.css",
 ];
 
 const scriptEntries = [
@@ -20,7 +24,7 @@ const scriptEntries = [
   "js/wendy.js",
 ];
 
-const socialPlatforms = ["LinkedIn", "Instagram", "TikTok", "YouTube"];
+const socialPlatforms = ["LinkedIn", "Instagram", "TikTok", "YouTube", "Facebook", "X"];
 const mimeTypes = {
   ".gif": "image/gif",
   ".jpeg": "image/jpeg",
