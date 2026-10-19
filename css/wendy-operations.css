@@ -1,0 +1,79 @@
+/* Unified managed operations summary and detail dialog. */
+#wendyApp .wd-ops-card { border:1px solid var(--oz-border);border-radius:14px;background:var(--oz-card);overflow:hidden; }
+#wendyApp .wd-ops-card-trigger { display:flex;flex-direction:column;gap:18px;width:100%;height:auto;min-height:0;padding:20px;border:0;border-radius:14px;background:transparent;text-align:left;color:var(--oz-foreground);cursor:pointer; }
+#wendyApp .wd-ops-card-trigger:hover { background:var(--oz-muted); }
+#wendyApp .wd-ops-card-heading { display:flex;align-items:center;gap:8px;width:100%; }
+#wendyApp .wd-ops-card-heading strong { font-size:16px;font-weight:600;line-height:24px; }
+#wendyApp .wd-ops-card-heading>svg { margin-left:auto;width:16px;height:16px;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-card-heading>i { width:8px;height:8px;flex:none;border-radius:50%;background:var(--oz-green-500); }
+#wendyApp .wd-ops-card-heading>i.paused { background:var(--oz-amber-500); }
+#wendyApp .wd-ops-card-heading>i.ended { background:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-period { display:flex;align-items:center;gap:6px;font-size:12px;color:var(--oz-muted-foreground);margin-top:-10px; }
+#wendyApp .wd-ops-period svg { width:14px;height:14px; }
+#wendyApp .wd-ops-goal { font-size:13px;line-height:21px; }
+#wendyApp .wd-ops-metrics { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%; }
+#wendyApp .wd-ops-metrics>span { display:flex;flex-direction:column;gap:7px; }
+#wendyApp .wd-ops-metrics strong { font-size:28px;line-height:32px;font-weight:600;font-variant-numeric:tabular-nums; }
+#wendyApp .wd-ops-metrics strong small { font-size:13px;font-weight:400;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-metrics>span>small { font-size:12px;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-metrics .wd-ops-pending strong { color:var(--oz-indigo-500); }
+#wendyApp .wd-ops-track { display:block;height:5px;border-radius:5px;background:var(--oz-muted);width:100%;overflow:hidden; }
+#wendyApp .wd-ops-track>i { display:block;height:100%;background:var(--oz-indigo-500);border-radius:inherit; }
+#wendyApp .wd-ops-card-bottom { display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;font-size:11px;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-card-bottom>span { display:flex;align-items:center;gap:3px; }
+#wendyApp .wd-ops-card-bottom svg { width:12px;height:12px; }
+#wendyApp .wd-ops-dialog { width:min(1120px,calc(100vw - 48px));height:min(860px,calc(100dvh - 64px));max-height:none;max-width:none;margin:auto;padding:0;border:1px solid var(--oz-border);border-radius:18px;background:var(--oz-card);color:var(--oz-foreground);box-shadow:var(--oz-shadow-xl);overflow:hidden; }
+#wendyApp .wd-ops-dialog[open] { display:flex;flex-direction:column; }
+#wendyApp .wd-ops-dialog::backdrop { background:rgb(20 20 35 / .4); }
+#wendyApp .wd-ops-dialog * { box-sizing:border-box; }
+#wendyApp .wd-ops-dialog :is(h2,h3,p) { margin:0; }
+#wendyApp .wd-ops-dialog>header { display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 28px;border-bottom:1px solid var(--oz-border);flex:none; }
+#wendyApp .wd-ops-dialog>header h2 { font-size:20px;line-height:28px;font-weight:600; }
+#wendyApp .wd-ops-dialog>header p { font-size:12px;line-height:18px;color:var(--oz-muted-foreground);margin-top:5px; }
+#wendyApp .wd-ops-dialog button { display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;min-height:36px;border:1px solid var(--oz-border);border-radius:8px;background:var(--oz-card);color:var(--oz-foreground);font:inherit;font-size:13px;cursor:pointer; }
+#wendyApp .wd-ops-dialog button.primary { background:var(--oz-primary);color:var(--oz-primary-foreground);border-color:var(--oz-primary); }
+#wendyApp .wd-ops-dialog>header button { width:32px;height:32px;min-height:32px;padding:6px;border:0; }
+#wendyApp .wd-ops-dialog button svg { width:18px;height:18px; }
+#wendyApp .wd-ops-dialog button:focus-visible,#wendyApp .wd-ops-card-trigger:focus-visible { outline:2px solid var(--oz-indigo-500);outline-offset:-3px; }
+#wendyApp .wd-ops-body { flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:24px 28px; }
+#wendyApp .wd-ops-overview { padding:20px 24px;border:1px solid var(--oz-border);border-radius:12px;background:var(--oz-muted);margin-bottom:24px; }
+#wendyApp .wd-ops-overview .wd-ops-metrics { max-width:640px; }
+#wendyApp .wd-ops-overview>p { margin-top:16px;font-size:12px;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-columns { display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.4fr);gap:28px;align-items:start; }
+#wendyApp .wd-ops-columns>aside { min-width:0;display:flex;flex-direction:column;gap:24px; }
+#wendyApp .wd-ops-columns>main { min-width:0; }
+#wendyApp .wd-ops-dialog h3 { font-size:15px;line-height:22px;font-weight:600; }
+#wendyApp .wd-ops-goal-details .wd-goal-review { display:grid;grid-template-columns:1fr;gap:5px;margin:18px 0 0;padding:0;border:0;background:transparent; }
+#wendyApp .wd-ops-goal-details .wd-goal-review dt { display:flex;align-items:center;gap:6px;grid-column:1;padding:0;border:0;margin-top:12px;font-size:12px;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-goal-details .wd-goal-review dt:first-child { margin-top:0; }
+#wendyApp .wd-ops-goal-details .wd-goal-review dt svg { width:14px;height:14px; }
+#wendyApp .wd-ops-goal-details .wd-goal-review dd { display:flex;flex-wrap:wrap;align-items:center;gap:6px;grid-column:1;padding:0 0 10px;border:0;margin:0;font-size:13px;line-height:21px;font-weight:400;overflow-wrap:anywhere; }
+#wendyApp .wd-ops-goal-details .wd-goal-review dd img:not(.wd-social) { width:32px;height:32px;object-fit:cover;border-radius:6px; }
+#wendyApp .wd-ops-goal-details .wd-goal-review .wd-social { width:16px;height:16px; }
+#wendyApp .wd-ops-advice { padding:18px;border-radius:12px;background:var(--oz-indigo-50); }
+#wendyApp .wd-ops-advice h3 { display:flex;align-items:center;gap:7px; }
+#wendyApp .wd-ops-advice h3 svg { width:16px;height:16px;color:var(--oz-indigo-500); }
+#wendyApp .wd-ops-advice ul { list-style:none;padding:0;margin:16px 0;display:flex;flex-direction:column;gap:16px; }
+#wendyApp .wd-ops-advice b { font-size:13px; }
+#wendyApp .wd-ops-advice li p { margin-top:5px;font-size:12px;line-height:20px;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-dialog .wd-ops-text-button { padding:0;min-height:24px;border:0;background:transparent;color:var(--oz-indigo-600); }
+#wendyApp .wd-ops-queue-heading { display:flex;align-items:center;justify-content:space-between; }
+#wendyApp .wd-ops-queue-heading>span { font-size:12px;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-queue-hint { margin-top:5px!important;margin-bottom:18px!important;font-size:12px;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-post { border:1px solid var(--oz-border);border-radius:12px;overflow:hidden;margin-bottom:18px; }
+#wendyApp .wd-ops-post>header { display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid var(--oz-border); }
+#wendyApp .wd-ops-post>header>img { width:22px;height:22px; }
+#wendyApp .wd-ops-post>header>span:not(.wd-badge) { display:flex;flex:1;flex-direction:column;gap:3px; }
+#wendyApp .wd-ops-post b { font-size:13px; }
+#wendyApp .wd-ops-post small { font-size:11px;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-post-content>img { display:block;width:100%;height:240px;object-fit:contain;background:var(--oz-muted); }
+#wendyApp .wd-ops-post-content>div { padding:18px; }
+#wendyApp .wd-ops-post-content p { white-space:pre-wrap;font-size:13px;line-height:22px;margin-top:12px; }
+#wendyApp .wd-ops-post>footer { display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--oz-border); }
+#wendyApp .wd-ops-empty { padding:40px 20px;text-align:center;border:1px dashed var(--oz-border);border-radius:12px; }
+#wendyApp .wd-ops-empty>svg { color:var(--oz-green-500);width:32px;height:32px;margin-bottom:12px; }
+#wendyApp .wd-ops-empty p { margin-top:8px;font-size:13px;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-dialog>footer { display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 28px;border-top:1px solid var(--oz-border);flex:none;background:var(--oz-card); }
+#wendyApp .wd-ops-dialog>footer>span { font-size:12px;color:var(--oz-muted-foreground); }
+#wendyApp .wd-ops-dialog>footer>div { display:flex;gap:8px; }
+@media(max-width:800px) { #wendyApp .wd-ops-columns { grid-template-columns:1fr; } #wendyApp .wd-ops-columns>main { grid-row:1; } #wendyApp .wd-ops-dialog { width:calc(100vw - 24px);height:calc(100dvh - 24px); } #wendyApp .wd-ops-body { padding:20px; } #wendyApp .wd-ops-dialog>header,#wendyApp .wd-ops-dialog>footer { padding:16px 20px; } #wendyApp .wd-ops-dialog>footer>span { display:none; } #wendyApp .wd-ops-dialog>footer { justify-content:flex-end; } }

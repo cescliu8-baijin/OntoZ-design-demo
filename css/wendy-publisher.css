@@ -86,3 +86,63 @@ body.wqp-open { overflow:hidden; }
 #wendyApp .wqp-tiktok-slot { display:block; width:16px; height:16px; }
 #wendyApp .wqp-tiktok-slot img { transform:scale(.3333333333); transform-origin:top left; }
 #wendyApp .wqp-icon-thumb { transform:scaleX(-1); }
+
+/* Shared account avatar controls. Explicit square sizing prevents inherited button distortion. */
+#wendyApp .wd-account-face { position:relative;display:block;flex:0 0 auto;width:40px;height:40px;aspect-ratio:1; }
+#wendyApp .wd-account-portrait { display:block;width:100%;height:100%;min-width:0;max-width:none;object-fit:cover;border-radius:50%;border:2px solid var(--oz-card);outline:2px solid transparent; }
+#wendyApp .wd-account-network { position:absolute;right:-3px;bottom:-2px;display:grid;place-items:center;width:18px;height:18px;background:var(--oz-card);border:2px solid var(--oz-card);border-radius:50%; }
+#wendyApp .wd-account-network img { display:block;width:12px;height:12px;object-fit:contain;border-radius:0; }
+#wendyApp .wd-account-check { display:none;position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:var(--oz-indigo-500);color:white;border:2px solid var(--oz-card); }
+#wendyApp .wd-account-check svg { width:10px;height:10px; }
+#wendyApp [aria-pressed=true]>.wd-account-face .wd-account-portrait { outline-color:var(--oz-indigo-500); }
+#wendyApp [aria-pressed=true]>.wd-account-face .wd-account-check { display:grid;place-items:center; }
+#wendyApp .wcal .wcal-accounts { display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:4px 2px; }
+#wendyApp .wcal .wcal-accounts .wcal-account-avatar { display:block;flex:0 0 40px;width:40px;height:40px;min-width:40px;max-width:40px;min-height:40px;padding:0;border:0;border-radius:50%;background:transparent;box-shadow:none;opacity:1;overflow:visible; }
+#wendyApp .wcal .wcal-accounts .wcal-account-avatar[aria-pressed=false] .wd-account-portrait { opacity:.55;filter:grayscale(.65); }
+#wendyApp .wcal .wcal-accounts>button:first-child { flex:0 0 auto;width:auto;height:32px;min-height:32px;padding:4px 10px;border:0;border-radius:6px;opacity:1;background:transparent;color:var(--oz-muted-foreground); }
+#wendyApp .wcal .wcal-accounts>button:first-child[aria-pressed=true] { background:var(--oz-indigo-50);color:var(--oz-indigo-600); }
+#wendyApp .wcal-filters { gap:16px; }
+#wendyApp .wqp-dialog .wqp-platforms { display:flex;flex-wrap:wrap;gap:12px; }
+#wendyApp .wqp-dialog .wqp-platforms button { display:flex;flex:0 0 112px;width:112px;min-height:96px;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:8px 4px;border:0;border-radius:8px;background:transparent;box-shadow:none; }
+#wendyApp .wqp-dialog .wqp-platforms button:hover { background:var(--oz-muted); }
+#wendyApp .wqp-platforms .wd-account-face { width:44px;height:44px; }
+#wendyApp .wqp-platforms .wqp-account-name { max-width:104px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;line-height:16px;color:var(--oz-foreground); }
+#wendyApp .wqp-platforms small { margin-top:-5px;font-size:11px;line-height:14px;color:var(--oz-muted-foreground); }
+#wendyApp .wqp-dialog .wqp-platforms { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px; }
+#wendyApp .wqp-dialog .wqp-platforms button { width:100%;min-width:0; }
+#wendyApp .wqp-platforms .wqp-account-name { max-width:100%; }
+@media(max-width:540px) { #wendyApp .wqp-dialog .wqp-platforms { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+#wendyApp .wd-account-check { font:700 9px/10px sans-serif; }
+
+/* Compact account row and media picker embedded in the composer. */
+#wendyApp .wqp-dialog .wqp-platforms { display:flex;justify-content:flex-start;gap:16px;padding:3px; }
+#wendyApp .wqp-dialog .wqp-platforms button { flex:0 0 44px;width:44px;height:44px;min-height:44px;padding:0;border-radius:50%; }
+#wendyApp .wqp-editor-tools>div { display:flex;align-items:center;gap:8px; }
+#wendyApp .wqp-dialog .wqp-attach { display:inline-flex;align-items:center;gap:6px;min-height:32px;height:32px;padding:5px 8px;border:0;background:var(--oz-muted); }
+#wendyApp .wqp-attach img { width:16px;height:16px; }
+#wendyApp .wqp-editor-tools .wqp-counter { margin-left:auto;white-space:nowrap; }
+#wendyApp .wqp-media-list { display:flex;flex-wrap:wrap;gap:10px;margin-top:12px; }
+#wendyApp .wqp-media-list:empty { display:none;margin:0; }
+#wendyApp .wqp-media-list article { width:88px;height:88px;flex:none;overflow:visible;margin:0; }
+#wendyApp .wqp-media-list :is(img:not(.wqp-icon),video) { width:100%;height:100%;object-fit:cover;border-radius:8px; }
+#wendyApp .wqp-media-list button { display:grid;place-items:center;right:-6px;top:-6px;width:24px;height:24px;min-height:24px;padding:5px;border-radius:50%;box-shadow:var(--oz-shadow-sm); }
+#wendyApp .wqp-media-list button img { width:12px;height:12px; }
+#wendyApp .wqp-media-dialog { width:min(600px,calc(100vw - 40px));max-height:calc(100dvh - 64px);margin:auto;padding:0;border:1px solid var(--oz-border);border-radius:16px;background:var(--oz-card);color:var(--oz-foreground);box-shadow:var(--oz-shadow-xl);overflow:auto; }
+#wendyApp .wqp-media-dialog::backdrop { background:rgb(0 0 0 / .25); }
+#wendyApp .wqp-media-dialog>header { display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--oz-border); }
+#wendyApp .wqp-media-dialog h2 { font-size:18px;line-height:26px; }
+#wendyApp .wqp-media-dialog header p { margin-top:4px;font-size:12px;color:var(--oz-muted-foreground); }
+#wendyApp .wqp-media-dialog header button { display:grid;place-items:center;width:32px;height:32px;min-height:32px;padding:8px;border:0; }
+#wendyApp .wqp-media-body { display:flex;flex-direction:column;gap:20px;padding:24px; }
+#wendyApp .wqp-media-dialog .wqp-local-upload { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;min-height:132px;border:1px dashed var(--oz-input);background:var(--oz-muted); }
+#wendyApp .wqp-local-upload>img { width:24px;height:24px; }
+#wendyApp .wqp-local-upload span { font-size:12px;color:var(--oz-muted-foreground); }
+#wendyApp .wqp-media-body h3 { margin-bottom:12px;font-size:14px; }
+#wendyApp .wqp-media-library { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px; }
+#wendyApp .wqp-media-library button { display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0;padding:6px;text-align:left;font-size:12px; }
+#wendyApp .wqp-media-library img { width:100%;height:100px;object-fit:cover;border-radius:6px; }
+#wendyApp .wqp-media-library span { padding:0 2px 4px; }
+#wendyApp .wqp-media-error { color:var(--oz-destructive);font-size:13px; }
+#wendyApp .wqp-media-error:empty { display:none; }
+@media(max-width:540px) { #wendyApp .wqp-media-body { padding:16px; } #wendyApp .wqp-media-library { grid-template-columns:repeat(2,minmax(0,1fr)); } }

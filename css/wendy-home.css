@@ -14,7 +14,7 @@
 #wendyHome .av2-status { width: auto; min-width: 0; container: wd-status / inline-size; padding: 14px 16px; border: 0; border-radius: 12px; background: var(--oz-black-4); box-shadow: var(--oz-shadow-inner); }
 #wendyHome .av2-status > header { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0 0 10px; border: 0; }
 #wendyHome .av2-status h2 { font-size: var(--oz-text-base); line-height: var(--oz-leading-base); font-weight: var(--oz-weight-semibold); }
-#wendyHome .av2-status > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+#wendyHome .av2-status > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 #wendyHome .av2-status > div > a { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 0; border: 0; background: none; }
 #wendyHome .av2-status > div > a > svg:first-child { width: 32px; height: 32px; padding: 6px; border-radius: 10px; background: var(--oz-indigo-50); color: var(--oz-indigo-500); }
 #wendyHome .av2-status > div > a > svg:last-child { display: none; }
@@ -92,7 +92,7 @@
 #wendyHome[data-av2-compact="true"] .av2-header h1 { font-size: 40px; line-height: 48px; }
 #wendyHome[data-av2-compact="true"] .av2-attention { display: flex; justify-content: flex-start; }
 #wendyHome[data-av2-compact="true"] .av2-collab-header [data-av2-close] { display: inline-flex; }
-#wendyHome[data-av2-compact="true"] .av2-status > div { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#wendyHome[data-av2-compact="true"] .av2-status > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 #wendyHome[data-av2-small="true"] .av2-header h1 { font-size: 30px; line-height: 40px; }
 #wendyHome[data-av2-small="true"] .av2-header .av2-page-actions > :is(a, button) { min-height: 44px; }
 #wendyHome[data-av2-small="true"] .av2-status > div { grid-template-columns: 1fr; }
@@ -111,7 +111,7 @@
 #wendyApp :is(button, a, input, select, textarea) { touch-action: manipulation; }
 #wendyApp img { max-width: 100%; }
 /* Override reference revisions that used !important for the old fixed columns. */
-#wendyHome .av2-status > div { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 10px !important; }
+#wendyHome .av2-status > div { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
 #wendyHome .av2-status > div > a { height: auto; min-height: 36px; }
 #wendyHome .av2-status > div > a :is(b, small) { overflow: visible; white-space: normal; text-overflow: clip; }
 #wendyHome .av2-header .av2-page-actions > :is(a, button) { flex: none; width: auto; }
@@ -121,7 +121,7 @@
 #wendyHome .wd-badge { font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
 #wendyHome .wd-v22-review-post > header b { font-size: var(--oz-text-sm); line-height: var(--oz-leading-sm); }
 #wendyApp h1:focus:not(:focus-visible) { outline: none; }
-#wendyHome[data-av2-compact="true"] .av2-status > div { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+#wendyHome[data-av2-compact="true"] .av2-status > div { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 #wendyHome[data-av2-small="true"] .av2-status { padding: 16px; }
 #wendyHome[data-av2-small="true"] .av2-status > div { grid-template-columns: 1fr !important; }
 #wendyHome[data-av2-small="true"] .av2-status > div > a { flex-direction: row; align-items: center; gap: 8px; }
@@ -480,3 +480,45 @@
 #wendyHome .wd-home-calendar > header button:focus-visible { outline:0; box-shadow:var(--oz-shadow-focus); }
 #wendyHome .wd-home-approval > header .wd-badge { height:22px; padding:2px 10px; border:1px solid var(--oz-border); border-radius:10px; color:var(--oz-foreground); background:var(--oz-card); font-weight:var(--oz-weight-medium); }
 #wendyHome .av2-status > div > a { justify-content:flex-start; }
+
+.wd-social-summary{margin:16px 0;padding:16px;border:1px solid #e7e4ed;border-radius:14px;background:#fff;color:#302c3d}.wd-social-summary header{display:flex;justify-content:space-between;align-items:center;gap:8px}.wd-social-summary h2{display:flex;align-items:center;gap:6px;font-size:15px;margin:0}.wd-social-summary header a{font-size:12px;color:#7956b8}.wd-social-summary>p,.wd-social-summary>small{font-size:12px;color:#81798d;line-height:1.6}.wd-social-counts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}.wd-social-counts a{display:flex;flex-direction:column;gap:4px;padding:12px;background:#f7f5fb;border-radius:9px;text-decoration:none;color:inherit}.wd-social-counts b{font-size:23px}.wd-social-counts span{font-size:12px;color:#756c83}.wd-social-counts a:last-child{background:#fff6eb;color:#a36520}.wd-social-summary h3{font-size:13px}.wd-social-summary h3 small{float:right;color:#8b7b9f;font-weight:400}.wd-social-pending{display:flex;gap:9px;padding:12px 0;border-top:1px solid #f0edf4;text-decoration:none;color:inherit}.wd-social-pending img{width:30px;height:30px;border-radius:50%;object-fit:cover}.wd-social-pending>span{min-width:0;flex:1}.wd-social-pending b{font-size:12px;display:flex;justify-content:space-between;gap:5px}.wd-social-pending small{font-weight:400;color:#95889e}.wd-social-pending p{font-size:12px;line-height:1.5;margin:6px 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.wd-social-pending em{font-size:11px;font-style:normal;color:#b77c2c}
+
+/* Compact homepage hierarchy and inline metric deltas. */
+#wendyHome .av2-status h2 { font-size:13px;line-height:18px; }
+#wendyHome .wd-v22-performance.compact { padding:12px 20px; }
+#wendyHome .wd-v22-performance.compact .wd-v22-metrics { margin:0; }
+#wendyHome .wd-v22-metrics article { display:grid;grid-template-columns:16px max-content minmax(0,1fr);gap:2px 5px;align-items:center;padding:0;border:0; }
+#wendyHome .wd-v22-metrics article>svg { grid-column:1;grid-row:1;width:14px;height:14px;margin:0; }
+#wendyHome .wd-v22-metrics article>small { grid-column:2 / -1;grid-row:1; }
+#wendyHome .wd-v22-metrics article>strong { grid-column:1 / 3;grid-row:2;font-size:30px;line-height:34px; }
+#wendyHome .wd-v22-metrics article>em { grid-column:3;grid-row:2;margin-left:5px;line-height:16px;align-self:end;padding-bottom:4px; }
+#wendyHome .av2-stream { gap:12px; }
+#wendyHome .av2-stream .wd-ops-card-trigger { align-items:stretch;gap:10px;padding:14px; }
+#wendyHome .av2-stream .wd-ops-card-heading strong { font-size:14px;line-height:20px; }
+#wendyHome .av2-stream .wd-ops-period { margin-top:-5px;font-size:11px;line-height:16px; }
+#wendyHome .av2-stream .wd-ops-goal { font-size:12px;line-height:18px; }
+#wendyHome .av2-stream .wd-ops-metrics { gap:8px; }
+#wendyHome .av2-stream .wd-ops-metrics>span { gap:2px; }
+#wendyHome .av2-stream .wd-ops-metrics strong { font-size:24px;line-height:28px; }
+#wendyHome .av2-stream .wd-ops-metrics>span>small { font-size:11px;line-height:16px; }
+#wendyHome .av2-stream .wd-ops-card-bottom { font-size:10px;line-height:16px; }
+#wendyHome .wd-social-summary { margin:0;padding:14px; }
+#wendyHome .wd-social-summary>p { margin:5px 0 0;font-size:11px;line-height:16px; }
+#wendyHome .wd-social-summary h2 { font-size:14px;line-height:20px; }
+#wendyHome .wd-social-counts { gap:6px;margin:10px 0; }
+#wendyHome .wd-social-counts a { flex-direction:row;align-items:baseline;gap:7px;padding:8px 10px; }
+#wendyHome .wd-social-counts b { font-size:21px;line-height:26px; }
+#wendyHome .wd-social-counts span { font-size:11px;line-height:16px; }
+#wendyHome .wd-social-summary h3 { margin:10px 0 4px;font-size:12px;line-height:18px; }
+#wendyHome .wd-social-pending { gap:8px;padding:9px 0; }
+#wendyHome .wd-social-pending p { margin:4px 0;line-height:17px; }
+#wendyHome .wd-social-summary>small { display:block;font-size:11px;line-height:16px; }
+@media(max-width:600px) {
+ #wendyHome .wd-v22-performance.compact { padding:12px; }
+ #wendyHome .wd-v22-metrics { gap:10px; }
+ #wendyHome .wd-v22-metrics article { grid-template-columns:max-content minmax(0,1fr); }
+ #wendyHome .wd-v22-metrics article>svg { display:none; }
+ #wendyHome .wd-v22-metrics article>small { grid-column:1 / -1; }
+ #wendyHome .wd-v22-metrics article>strong { grid-column:1;font-size:26px; }
+ #wendyHome .wd-v22-metrics article>em { grid-column:2;margin-left:0;font-size:10px; }
+}

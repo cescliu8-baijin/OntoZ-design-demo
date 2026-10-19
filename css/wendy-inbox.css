@@ -208,3 +208,5 @@
   #wendyApp .wsi .wsi-compose-box > footer { padding:0 8px 8px; gap:6px; }
   #wendyApp .wsi .wsi-compose-box > footer .wsi-btn { font-size:12px; padding-inline:6px; }
 }
+
+.wsi-analysis{max-width:100%;padding:12px;margin:10px 0;border:1px solid #efdcb9;background:#fffaf1;border-radius:10px;font-size:12px;line-height:1.6;overflow-wrap:anywhere}.wsi-analysis.safe{background:#f2faf5;border-color:#cfe7d8}.wsi-analysis header{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.wsi-analysis header b{display:flex;gap:5px;align-items:center;color:#6e508c}.wsi-analysis header span{color:#a06c21}.wsi-analysis.safe header span{color:#42815d}.wsi-analysis .wsi-tags{margin-top:9px;display:flex;flex-wrap:wrap;gap:5px}.wsi-analysis p{margin:8px 0;color:#80705b}.wsi-analysis h4{margin:8px 0 4px}.wsi-analysis blockquote{margin:0 0 10px;padding:9px 12px;background:#fff;border-left:2px solid #d7c6e8;border-radius:4px;color:#51475c}.wsi-analysis>small{margin-left:8px;color:#93829c}

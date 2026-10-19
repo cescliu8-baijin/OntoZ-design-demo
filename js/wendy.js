@@ -24,6 +24,9 @@
     const file = platform;
     return `<img class="wd-social" src="assets/${file}.svg" alt="${E(platform)}">`;
   };
+  // Shared mock account identities for the calendar and publisher.
+  const accountPortrait = (platform, id = '') => `assets/wendy-avatars/${id === 'nox-europe-li' ? 'lena' : ({LinkedIn:'alex',Instagram:'maria',TikTok:'kenji',YouTube:'james',X:'lena'}[platform] || 'alex')}.jpg`;
+  const accountFace = (platform, id = '') => `<span class="wd-account-face"><img class="wd-account-portrait" src="${accountPortrait(platform, id)}" alt=""><span class="wd-account-network">${social(platform)}</span><span class="wd-account-check" aria-hidden="true">✓</span></span>`;
   const avatar = (small = false) => `<img class="wd-avatar${small ? ' small' : ''}" src="${persona}" alt="Wendy 数字人分身">`;
   const btn = (label, action, options = '') => `<button type="button" data-wd="${action}" ${options}>${label}</button>`;
   const link = (label, path = '', className = '') => path === 'quick' ? btn(label, 'quick-open', `class="${className}" aria-haspopup="dialog"`) : `<a class="${className}" href="#wendy${path ? '/' + path : ''}">${label}</a>`;
@@ -369,11 +372,58 @@
     return `${btn(`${I('calendar-range')}<span class="sr-only">改时间</span>`, 'schedule-edit', `data-id="${post.id}" aria-label="修改发布时间：${E(post.title)}"`)}${btn(`${I('pencil-line')}<span class="sr-only">预览与修改</span>`, 'home-revise', `data-id="${post.id}"`)}${btn(`${I('circle-check-big')}确认内容和排期`, 'home-approve', `data-id="${post.id}" class="primary"`)}`;
   }
 
+  function operationProgress() {
+    const goal = state.strategy, total = goalDuration(goal);
+    // Keep progress aligned with the calendar's explicit demo date.
+    const day = Math.max(0, Math.min(total, Math.floor((Date.parse(calendarDemoDay) - Date.parse(goal.start)) / 86400000) + 1));
+    const posts = contentCatalog().filter(p => p.origin !== 'manual' && !p.needsRegeneration && calendarDate(p.time) >= goal.start && calendarDate(p.time) <= goal.end);
+    const pending = posts.filter(p => ['pending','draft'].includes(p.status));
+    const published = posts.filter(p => p.status === 'published').length;
+    const scheduled = posts.filter(p => ['approved','scheduled'].includes(p.status)).length;
+    const status = goal.status === 'ended' || state.management === 'ended' ? 'ended' : state.management === 'paused' ? 'paused' : 'active';
+    return { goal, total, day, pending, published, scheduled, status, title: status === 'paused' ? 'AI社媒运营已暂停' : status === 'ended' ? 'AI社媒运营已结束' : 'AI社媒运营执行中' };
+  }
+  function operationMetrics(progress) {
+    return `<div class="wd-ops-metrics"><span><strong>${progress.day}<small> / ${progress.total}</small></strong><small>第 ${progress.day} 天 · 共 ${progress.total} 天</small></span><span><strong>${progress.published}</strong><small>已发布帖子</small></span><span class="wd-ops-pending"><strong>${progress.pending.length}</strong><small>待审批帖子</small></span></div>`;
+  }
   function homeAttentionPanel() {
-    const goal = state.strategy;
-    const day = 6;
-    const total = goalDuration(goal);
-    return `<section class="wd-home-goal-panel" aria-labelledby="wdHomeGoalTitle"><button type="button" class="wd-goal-card-trigger" data-wd="view-home-goal" aria-label="查看本周代运营目标" aria-haspopup="dialog"></button><header><h2 id="wdHomeGoalTitle">代运营状态</h2>${badge(goal.status === 'ended' ? '已结束' : state.management === 'paused' ? '已暂停' : '执行中', goal.status === 'ended' ? '' : 'green')}</header><div class="wd-goal-panel-summary"><p class="wd-goal-panel-title">${E(goalSummary(goal))}</p><b class="wd-goal-panel-day">第 ${Math.min(day, total)} / ${total} 天</b></div></section>`;
+    const progress = operationProgress();
+    return `<section class="wd-ops-card"><button type="button" class="wd-ops-card-trigger" data-wd="ops-open" aria-haspopup="dialog"><span class="wd-ops-card-heading"><i class="${progress.status}"></i><strong>${progress.title}</strong>${I('chevron-right')}</span><span class="wd-ops-period">${I('calendar-days')}${E(progress.goal.start)} — ${E(progress.goal.end)}</span><span class="wd-ops-goal">${E(goalSummary(progress.goal))}</span>${operationMetrics(progress).replace(`第 ${progress.day} 天 · 共 ${progress.total} 天`, "运营天数")}<span class="wd-ops-track" role="progressbar" aria-label="运营周期进度" aria-valuemin="0" aria-valuemax="${progress.total}" aria-valuenow="${progress.day}"><i style="width:${progress.day/progress.total*100}%"></i></span><span class="wd-ops-card-bottom">${progress.scheduled} 篇已排期<span>查看目标、审批与建议 ${I('arrow-up-right')}</span></span></button><span id="wdHomeApprovalCount" class="sr-only">${progress.pending.length}</span></section>`;
+  }
+  function operationPost(post) {
+    return `<article class="wd-ops-post" data-ops-post="${E(post.id)}"><header>${social(post.platform)}<span><b>${E(post.accountName || 'NOX Robotics')}</b><small>${E(post.platform)} · 建议 ${E(post.time)} 发布</small></span>${badge('待审批','amber')}</header><div class="wd-ops-post-content"><img src="${E(post.image || inspectionHero)}" alt="${E(post.title)}"><div><h3>${E(post.title)}</h3><p>${E(post.copy)}</p></div></div><footer><small>确认后加入发布排期</small>${btn('确认内容和排期','ops-approve',`data-id="${E(post.id)}" class="primary"`)}</footer></article>`;
+  }
+  function openOperations() {
+    if(root.querySelector('#wdOpsDialog'))return;
+    ui.operationsOpen = true;
+    const progress = operationProgress(), host = root.querySelector('#wdOverlay');
+    if(!host)return;
+    host.innerHTML = `<dialog id="wdOpsDialog" class="wd-ops-dialog" aria-labelledby="wdOpsTitle"><header><div><h2 id="wdOpsTitle">${progress.title}</h2><p>${E(progress.goal.start)} — ${E(progress.goal.end)} · 截至 ${calendarDemoDay}</p></div>${btn(I('x'),'ops-close','aria-label="关闭运营详情"')}</header><div class="wd-ops-body"><div class="wd-ops-overview">${operationMetrics(progress)}<p>${progress.status === 'paused' ? '运营已暂停，目标和待审批内容已保留，恢复后继续执行。' : progress.status === 'ended' ? '本期运营已结束，历史目标与内容保留。' : `Wendy 正在按目标持续运营，${progress.scheduled} 篇帖子已进入排期。`}</p></div><div class="wd-ops-columns"><aside><section class="wd-ops-goal-details"><h3>运营目标与安排</h3>${goalConfirmationFields()}</section><section class="wd-ops-advice"><h3>${I('sparkles')}运营调整建议</h3><ul><li><b>${progress.pending.length ? '优先确认待审批内容' : '继续准备下一批内容'}</b><p>${progress.pending.length ? `当前有 ${progress.pending.length} 篇内容等待确认，建议核对图文与发布时间后加入排期。` : '当前审批已处理完毕，可以结合本期目标补充下一批选题。'}</p></li><li><b>保持内容配比与发布节奏</b><p>按${E(progress.goal.cadence)}的节奏，搭配产品推广与行业教育内容，围绕${E(progress.goal.product)}补充真实应用场景。</p></li><li><b>业务重点变化时调整目标</b><p>可以重新设置周期、产品、受众与渠道，确认后更新后续运营安排。</p></li></ul>${btn('调整运营目标','ops-adjust','class="wd-ops-text-button"')}</section></aside><main><header class="wd-ops-queue-heading"><h3>待审批帖子</h3><span>${progress.pending.length} 篇</span></header><p class="wd-ops-queue-hint">逐篇查看图文内容，确认后进入发布排期。</p>${progress.pending.length ? progress.pending.map(operationPost).join('') : `<div class="wd-ops-empty">${I('circle-check-big')}<h3>当前没有待审批帖子</h3><p>后续生成的内容会在这里等待你确认。</p></div>`}</main></div></div><footer><span>${progress.status === 'paused' ? '已暂停 · 可随时恢复' : '运营状态由你掌控'}</span><div>${progress.status !== 'ended' ? btn(progress.status === 'paused' ? '恢复运营' : '暂停运营','ops-toggle') : ''}${btn('调整运营目标','ops-adjust','class="primary"')}</div></footer></dialog>`;
+    const dialog = host.querySelector('dialog');
+    dialog.addEventListener('close', () => {ui.operationsOpen=false;dialog.remove();root.querySelector('[data-wd="ops-open"]')?.focus({preventScroll:true});},{once:true});
+    refreshIcons(); dialog.showModal();
+  }
+  function handleOperationAction(action, id) {
+    if(action==='ops-open')return openOperations();
+    if(action==='ops-close'){root.querySelector('#wdOpsDialog')?.close();return;}
+    if(action==='ops-adjust') {
+      ui.operationsOpen=false;
+      ui.opsGoalSnapshot=JSON.parse(JSON.stringify(state.strategy));
+      ui.opsGoalEditing=true;ui.goalReturn='';
+      root.querySelector('#wdOpsDialog')?.remove();go('goal/1');return;
+    }
+    if(action==='ops-toggle') {
+      if(operationProgress().status==='ended')return;
+      state.management=state.management==='paused'?'active':'paused';
+      persist();render();toast(state.management==='paused'?'AI社媒运营已暂停':'AI社媒运营已恢复');return;
+    }
+    if(action==='ops-approve') {
+      const post=operationProgress().pending.find(p=>p.id===id);if(!post)return;
+      const existing=state.posts.find(p=>p.id===id);
+      if(existing)existing.status='approved';else state.posts.push({...post,status:'approved'});
+      const version=state.aiStudio?.versions?.find(v=>v.id===id);if(version)version.status='approved';
+      persist();render();toast('内容已确认并加入排期');
+    }
   }
 
   const commentPriorityMeta = {
@@ -419,8 +469,8 @@
       <header class="wd-v22-hero av2-header"><div><h1><span class="wd-home-name">Wendy</span> 帮你持续运营海外社媒</h1><p class="av2-subtitle">从内容创作到多平台运营，Wendy 陪你把品牌声音变成增长。</p><nav class="av2-page-actions">${link(`${I('target')}设定代运营目标`, 'goal/1', 'wd-button primary')}${link(`${I('sparkles')}与 Wendy 一起创作`, 'ai', 'wd-button')}${link(`${I('send')}快速发布`, 'quick', 'wd-button wd-quick-publish-action')}</nav></div><aside class="wd-v22-console av2-status"><header><h2>工作区</h2></header><div>${link(`${I('messages-square')}<span><b>互动与线索</b><small>评论、私信与客户线索</small></span>${I('chevron-right')}`, 'fans')}${link(`${I('users-round')}<span><b>社媒账号</b><small>${boundAccountCount()} / 4 个账号已绑定</small></span>${I('chevron-right')}`, 'settings')}</div></aside></header>
       <div class="wd-v22-layout av2-columns"><main class="av2-main">
         <section class="wd-v22-performance compact"><div class="wd-v22-metrics">${metrics.map(([icon,label,value,note]) => `<article>${I(icon)}<small>${label}</small><strong>${value}</strong>${note ? `<em>${note}</em>` : ''}</article>`).join('')}</div></section>
-        <section class="wd-runtime-layer" aria-labelledby="wdRuntimeTitle"><header class="wd-runtime-heading"><h2 id="wdRuntimeTitle" tabindex="-1">Agent 运行区</h2><span>发布日历</span></header>${publicationCalendar(contentCatalog(), true)}</section>
-      </main><aside class="av2-collab" aria-labelledby="wdCollabTitle"><header class="av2-collab-header"><h2 id="wdCollabTitle">Agent 互动区</h2><button type="button" data-av2-compose aria-label="向 Wendy 提需求">${I('sparkles')}</button><button type="button" data-av2-close aria-label="关闭协作面板">${I('x')}</button></header><div class="av2-stream">${homeAttentionPanel()}<section class="wd-home-approval" aria-labelledby="wdApprovalTitle"><header><h2 id="wdApprovalTitle" tabindex="-1">社媒内容审批</h2>${badge(`<span id="wdHomeApprovalCount">${pending.length}</span> 条待确认`, pending.length ? 'amber' : 'green')}</header>${homeReviewWorkspace(queue, post)}</section></div><footer class="av2-compose"><form id="wdCollaborationForm" class="av2-prompt-box"><label class="sr-only" for="wdHomeFeedback">告诉 Wendy 你的内容需求</label><textarea id="wdHomeFeedback" rows="1" placeholder="告诉 Wendy 你的内容需求…">${E(collaborationDraft)}</textarea><div><button type="submit">发送 ${I('arrow-up')}</button></div></form></footer></aside></div>
+        <section class="wd-runtime-layer" aria-labelledby="wdRuntimeTitle"><header class="wd-runtime-heading"><h2 id="wdRuntimeTitle" tabindex="-1">发布日历</h2></header>${publicationCalendar(contentCatalog(), true)}</section>
+      </main><aside class="av2-collab" aria-labelledby="wdCollabTitle"><header class="av2-collab-header"><h2 id="wdCollabTitle">Agent 互动区</h2><button type="button" data-av2-close aria-label="关闭协作面板">${I('x')}</button></header><div class="av2-stream">${homeAttentionPanel()}${siHomePanel()}</div><footer class="av2-compose"><form id="wdCollaborationForm" class="av2-prompt-box"><label class="sr-only" for="wdHomeFeedback">告诉 Wendy 你的内容需求</label><textarea id="wdHomeFeedback" rows="1" placeholder="告诉 Wendy 你的内容需求…">${E(collaborationDraft)}</textarea><div><button type="submit">发送 ${I('arrow-up')}</button></div></form></footer></aside></div>
     </section>`;
   }
 
@@ -483,19 +533,7 @@
     return `<dl class="wd-goal-review"><dt>${I('target')}目标</dt><dd class="wd-goal-summary-value">${E(goalSummary(goal))}</dd><dt>${I('calendar')}周期</dt><dd>${E(goal.start)} 至 ${E(goal.end)}（共 ${goalDuration(goal)} 天）</dd><dt>${I('box')}主推产品</dt><dd><img src="${inspectionHero}" alt="">${E(goal.product)}</dd><dt>${I('users')}目标受众</dt><dd>${E(goalAudienceLabel(goal))}</dd><dt>${I('layout-grid')}主运营平台</dt><dd class="wd-goal-primary-review">${social(weeklyPrimaryPlatform())}<strong>${E(weeklyPrimaryPlatform())}</strong><span>${E(goal.cadence)} · 主稿</span></dd><dt>${I('git-branch')}同步平台</dt><dd class="wd-goal-sync-review">${weeklyAdaptationPlatforms().length ? `<div>${weeklyAdaptationPlatforms().map(platform => `<span>${social(platform)}${E(platform)}</span>`).join('')}</div><small>沿用主稿，适配配图与版式</small>` : '本期仅运营主平台'}</dd><dt>${I('file-text')}内容设置</dt><dd>${E(goal.formats.join('、'))} · 产品推广 ${goal.mix}% / 行业教育 ${100 - goal.mix}%</dd><dt>${I('file-text')}执行指导</dt><dd>${E(goal.instruction)}</dd></dl>`;
   }
 
-  function openHomeGoal() {
-    const trigger = root.querySelector('[data-wd="view-home-goal"]');
-    const host = root.querySelector('#wdOverlay');
-    host.innerHTML = `<dialog class="wd-goal-summary-dialog" aria-labelledby="wdGoalSummaryTitle"><header><div><h2 id="wdGoalSummaryTitle">本周代运营目标</h2><p>查看本期目标、受众与内容安排</p></div><form method="dialog"><button type="submit" aria-label="关闭目标详情">${I('x')}</button></form></header><div class="wd-goal-summary-body">${goalConfirmationFields()}</div><footer>${link('查看执行进度', 'weekly-goal', 'wd-button')}${link('调整目标', 'goal/1', 'wd-button primary')}</footer></dialog>`;
-    const dialog = host.querySelector('dialog');
-    dialog.addEventListener('close', () => { host.replaceChildren(); trigger?.focus({ preventScroll: true }); }, { once: true });
-    dialog.addEventListener('click', event => {
-      const box = dialog.getBoundingClientRect();
-      if (event.target === dialog && (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom)) dialog.close();
-    });
-    refreshIcons();
-    dialog.showModal();
-  }
+  function openHomeGoal() { openOperations(); }
 
   function goalStepScreen(step) {
     const goal = state.strategy;
@@ -511,7 +549,7 @@
     if (step === 2) body = `<h2>Wendy 将围绕这个产品展开运营</h2><p>确定推广产品后，Wendy 会匹配重点市场与受众，并据此安排内容。</p><h3>推广产品</h3><button type="button" class="wd-goal-product" data-wd="change-goal-product"><img src="${inspectionHero}" alt="X100 工业 AI 检测系统"><span><strong>${E(goal.product)}</strong><small>高温稳定运行，精准检出微小缺陷</small></span>${I('chevron-down')}</button>${goalAudienceSummary()}`;
     if (step === 3) body = `<h2>Wendy 将以 ${E(weeklyPrimaryPlatform())} 为主平台展开运营</h2><p>先围绕主平台策划内容，再将主稿适配到其他平台。</p>${goalChannelPlan()}<h3>主平台内容形式</h3><div class="wd-goal-chip-grid wd-goal-channel-formats">${formats.map(item => goalChoice(item, 'goal-format', goal.formats.includes(item))).join('')}</div><label class="wd-goal-text"><span>特别指导（可选）</span><textarea data-wd-input="goal-instruction">${E(goal.instruction)}</textarea></label>`;
     if (step === 4) body = `<h2>确认代运营计划</h2><p>确认后，Wendy 将按这套目标执行；你仍然拥有每条内容的最终决定权。</p>${goalConfirmationFields()}<p class="wd-goal-approval-lock">${I('lock-keyhole')}未经你的审批，Wendy 不会发布任何内容</p>`;
-    return `<section class="wd-goal-flow wd-goal-flow-v44">${breadcrumb([['工作台', ''], [step === 4 ? '确认执行' : '设定代运营目标', null]])}<div class="wd-goal-title"><div><h1>${step === 4 ? '确认代运营计划' : '设定代运营目标'}</h1><span>把本期重点告诉 Wendy，后续每条内容仍由你确认。</span></div><p>${I('calendar')}未来两周　/　${I('box')}新品推广　/　${I('target')}获取询盘</p></div><section class="wd-goal-shell"><nav class="wd-goal-progress" aria-label="设置进度">${goalStepper(step)}</nav><div class="wd-goal-layout"><main>${body}</main>${goalAdvice(step)}</div><footer class="wd-goal-actions"><button type="button" data-wd="goal-back" data-value="${step}">${step === 1 ? '返回工作台' : '上一步'}</button><span></span>${step === 4 ? btn('保存草稿', 'goal-save-draft') + btn('确认并开始代运营', 'goal-confirm', 'class="primary"') : btn(`继续：${['产品与受众','内容与渠道','确认执行'][step - 1]} ${I('arrow-right')}`, 'goal-next', `data-value="${step}" class="primary"`)}</footer></section></section>`;
+    return `<section class="wd-goal-flow wd-goal-flow-v44">${breadcrumb([['工作台', ''], [step === 4 ? '确认执行' : '设定代运营目标', null]])}<div class="wd-goal-title"><div><h1>${step === 4 ? '确认代运营计划' : '设定代运营目标'}</h1><span>把本期重点告诉 Wendy，后续每条内容仍由你确认。</span></div><p>${I('calendar')}未来两周　/　${I('box')}新品推广　/　${I('target')}获取询盘</p></div><section class="wd-goal-shell"><nav class="wd-goal-progress" aria-label="设置进度">${goalStepper(step)}</nav><div class="wd-goal-layout"><main>${body}</main>${goalAdvice(step)}</div><footer class="wd-goal-actions"><button type="button" data-wd="goal-back" data-value="${step}">${step === 1 ? '返回工作台' : '上一步'}</button><span></span>${step === 4 ? btn('保存草稿', 'goal-save-draft') + btn(ui.opsGoalEditing ? '确认并更新运营目标' : '确认并开始代运营', 'goal-confirm', 'class="primary"') : btn(`继续：${['产品与受众','内容与渠道','确认执行'][step - 1]} ${I('arrow-right')}`, 'goal-next', `data-value="${step}" class="primary"`)}</footer></section></section>`;
   }
 
   function activeGoalScreen() {
@@ -759,7 +797,7 @@
     ];
     const byId = new Map(catalog.map(item => [item.id, item]));
     state.posts.forEach(post => byId.set(post.id, { type: '图文', audience: '本周代运营目标', ...byId.get(post.id), ...post }));
-    return [...byId.values()];
+    return [...byId.values()].filter(post => post.status !== 'deleted');
   }
 
   const calendarDemoDay = '2026-09-11';
@@ -823,16 +861,17 @@
     const first = pref.view === 'day' ? pref.anchor : pref.view === 'week' ? weekStart : monthStart;
     const days = Array.from({ length: count }, (_, i) => calendarAdd(first, i));
     const accounts = [...new Map(contentCatalog().filter(p => calendarLabels[p.status]).map(p => { const a = calendarAccount(p); return [a.id, a]; })).values()];
-    const visible = catalog.filter(p => calendarLabels[p.status] && !p.needsRegeneration && (pref.account === 'all' || calendarAccount(p).id === pref.account) && (pref.status === 'all' || (pref.status === 'scheduled' ? ['approved','scheduled'].includes(p.status) : pref.status === 'pending' ? ['pending','draft'].includes(p.status) : p.status === pref.status)));
+    const visible = catalog.filter(p => calendarLabels[p.status] && !p.needsRegeneration && (pref.accounts?.length ? pref.accounts.includes(calendarAccount(p).id) : pref.account === 'all' || calendarAccount(p).id === pref.account) && (pref.status === 'all' || (pref.status === 'scheduled' ? ['approved','scheduled'].includes(p.status) : pref.status === 'pending' ? ['pending','draft'].includes(p.status) : p.status === pref.status)));
     const inRange = visible.filter(p => days.includes(calendarDate(p.time)));
     const postsOn = day => inRange.filter(p => calendarDate(p.time) === day).sort((a,b) => parsePostTime(a.time).clock.localeCompare(parsePostTime(b.time).clock));
     const title = pref.view === 'month' ? `${date.getUTCFullYear()} 年 ${date.getUTCMonth()+1} 月` : pref.view === 'day' ? `${date.getUTCFullYear()} 年 ${date.getUTCMonth()+1} 月 ${date.getUTCDate()} 日` : `${first.replaceAll('-', '/')} — ${days[6].slice(5).replace('-', '/')}`;
     const dayHead = day => `<span>${['周日','周一','周二','周三','周四','周五','周六'][calendarAsDate(day).getUTCDay()]}</span><b>${Number(day.slice(8))}</b>`;
-    const header = `<div class="wcal-toolbar"><div class="wcal-date-nav">${btn(I('chevron-left'), 'cal-prev', 'aria-label="上一个日期范围"')}${btn('今天', 'cal-today')}${btn(I('chevron-right'), 'cal-next', 'aria-label="下一个日期范围"')}<h3 aria-live="polite">${title}</h3><label class="wcal-date-picker" title="跳转日期">${I('calendar-days')}<input type="date" value="${pref.anchor}" data-cal-input="anchor" aria-label="跳转日期"></label></div><div class="wcal-views" role="group" aria-label="日历视图">${[['day','日'],['week','周'],['month','月']].map(([view,label]) => btn(label, 'cal-view', `data-value="${view}" aria-pressed="${pref.view === view}" aria-label="${label}视图"`)).join('')}</div></div><div class="wcal-filters"><label>${I('users')}<select data-cal-input="account" aria-label="筛选社媒账号"><option value="all">全部账号 · ${accounts.length}</option>${accounts.map(a => `<option value="${E(a.id)}" ${pref.account === a.id ? 'selected' : ''}>${E(a.platform)} · ${E(a.name)} (${E(a.handle)})</option>`).join('')}</select></label><select data-cal-input="status" aria-label="筛选发布状态">${[['all','全部状态'],['scheduled','已排期'],['pending','待确认 / 待审批'],['published','已发布']].map(([v,l])=>`<option value="${v}" ${pref.status===v?'selected':''}>${l}</option>`).join('')}</select><span class="wcal-total">${inRange.length} 条内容</span><span class="wcal-zone">${I('clock-3')}上海时间 UTC+8</span></div>`;
+    const header = `<div class="wcal-toolbar"><div class="wcal-date-nav">${btn(I('chevron-left'), 'cal-prev', 'aria-label="上一个日期范围"')}${btn('今天', 'cal-today')}${btn(I('chevron-right'), 'cal-next', 'aria-label="下一个日期范围"')}<h3 aria-live="polite">${title}</h3><label class="wcal-date-picker" title="跳转日期">${I('calendar-days')}<input type="date" value="${pref.anchor}" data-cal-input="anchor" aria-label="跳转日期"></label></div><div class="wcal-views" role="tablist" aria-label="日历视图">${[['day','日'],['week','周'],['month','月']].map(([view,label]) => btn(label, 'cal-view', `data-value="${view}" role="tab" aria-selected="${pref.view === view}" tabindex="${pref.view === view ? 0 : -1}" aria-label="${label}视图"`)).join('')}</div></div><div class="wcal-filters"><div class="wcal-accounts" role="group" aria-label="筛选社媒账号">${btn('全部','cal-account',`data-value="all" aria-pressed="${!pref.accounts?.length && pref.account === 'all'}"`)}${accounts.map(a => btn(accountFace(a.platform, a.id), 'cal-account', `class="wcal-account-avatar" data-value="${E(a.id)}" aria-label="${E(a.platform)} · ${E(a.name)}" title="${E(a.platform)} · ${E(a.name)} (${E(a.handle)})" aria-pressed="${pref.accounts?.length ? pref.accounts.includes(a.id) : pref.account === 'all' || pref.account === a.id}"`)).join('')}</div><details class="wcal-status-filter"><summary aria-label="筛选发布状态">${({all:'全部状态',scheduled:'已排期',pending:'待确认 / 待审批',published:'已发布'})[pref.status] || '全部状态'}${I('chevron-down')}</summary><div class="wcal-status-options" aria-label="发布状态选项">${[['all','全部状态'],['scheduled','已排期'],['pending','待确认 / 待审批'],['published','已发布']].map(([v,l])=>btn(l,'cal-status',`data-value="${v}" aria-pressed="${pref.status===v}"`)).join('')}</div></details></div>`;
+    const addPost = (day, clock = '10:30') => btn(I('plus'), 'cal-create', `class="wcal-add" data-value="${day}T${clock}" aria-label="${day} ${clock} 新增帖子" title="新增帖子"`);
     let grid;
-    if (pref.view === 'month') grid = `<div class="wcal-month"><div class="wcal-weekdays">${['一','二','三','四','五','六','日'].map(d=>`<span>周${d}</span>`).join('')}</div><div class="wcal-month-grid">${days.map(day=>`<section class="wcal-month-day ${day.slice(0,7)!==pref.anchor.slice(0,7)?'outside':''} ${day===calendarDemoDay?'is-today':''}" data-cal-date="${day}"><button type="button" class="wcal-day-number" data-wd="cal-day" data-value="${day}" aria-label="查看 ${day} 日视图">${Number(day.slice(8))}${day===calendarDemoDay?'<span>今天</span>':''}</button><div class="wcal-month-posts">${postsOn(day).slice(0,2).map(calendarCard).join('')}${postsOn(day).length>2?`<button type="button" class="wcal-more" data-wd="cal-day" data-value="${day}">+${postsOn(day).length-2} 条内容</button>`:''}</div></section>`).join('')}</div></div>`;
-    else grid = `<div class="wcal-time-grid ${pref.view==='day'?'is-day':''}"><div class="wcal-time-head"><span class="wcal-time-corner">UTC+8</span>${days.map(day=>`<button type="button" data-wd="cal-day" data-value="${day}" class="${day===calendarDemoDay?'is-today':''}" aria-label="查看 ${day} 日视图">${dayHead(day)}</button>`).join('')}</div><div class="wcal-time-body">${Array.from({length:48},(_,slot)=>{const clock=`${String(Math.floor(slot/2)).padStart(2,'0')}:${slot%2?'30':'00'}`;return `<div class="wcal-time-row" data-cal-row="${clock}"><time>${slot%2?'':clock}</time>${days.map(day=>`<div class="wcal-slot ${day===calendarDemoDay?'is-today':''}" data-cal-date="${day}" data-cal-time="${clock}" aria-label="${day} ${clock}">${postsOn(day).filter(p=>{const [h,m]=parsePostTime(p.time).clock.split(':').map(Number);return Math.floor((h*60+m)/30)===slot;}).map(calendarCard).join('')}</div>`).join('')}</div>`;}).join('')}</div></div>`;
-    return `<section class="wd-content-calendar${home?' wd-home-calendar':''} wcal" aria-label="发布日历" data-cal-view="${pref.view}" data-cal-anchor="${pref.anchor}">${header}${!inRange.length?'<div class="wcal-empty" role="status">当前日期范围暂无匹配内容，可切换日期或账号查看。</div>':''}<div class="wcal-scroll" tabindex="0" aria-label="${pref.view==='month'?'月历，可横向滚动':'发布时间表，可横向和纵向滚动'}">${grid}</div><div class="wcal-footer"><div class="wcal-legend"><span><i></i>已排期</span><span><i class="pending"></i>待审批</span><span><i class="published"></i>已发布</span></div><small>${pref.view==='month'?'拖到其他日期，保留原时间':'拖到日期或半小时时段调整排期'} · 演示今天 9/11</small>${calendarUndo?btn('撤销改期','cal-undo'):''}</div><div class="sr-only" id="calendarLive" role="status" aria-live="polite"></div></section>`;
+    if (pref.view === 'month') grid = `<div class="wcal-month"><div class="wcal-weekdays">${['一','二','三','四','五','六','日'].map(d=>`<span>周${d}</span>`).join('')}</div><div class="wcal-month-grid">${days.map(day=>`<section class="wcal-month-day ${day.slice(0,7)!==pref.anchor.slice(0,7)?'outside':''} ${day===calendarDemoDay?'is-today':''}" data-cal-date="${day}"><button type="button" class="wcal-day-number" data-wd="cal-day" data-value="${day}" aria-label="查看 ${day} 日视图">${Number(day.slice(8))}${day===calendarDemoDay?'<span>今天</span>':''}</button>${addPost(day)}<div class="wcal-month-posts">${postsOn(day).slice(0,2).map(calendarCard).join('')}${postsOn(day).length>2?`<button type="button" class="wcal-more" data-wd="cal-day" data-value="${day}">+${postsOn(day).length-2} 条内容</button>`:''}</div></section>`).join('')}</div></div>`;
+    else grid = `<div class="wcal-time-grid ${pref.view==='day'?'is-day':''}"><div class="wcal-time-head"><span class="wcal-time-corner">UTC+8</span>${days.map(day=>`<button type="button" data-wd="cal-day" data-value="${day}" class="${day===calendarDemoDay?'is-today':''}" aria-label="查看 ${day} 日视图">${dayHead(day)}</button>`).join('')}</div><div class="wcal-time-body">${Array.from({length:48},(_,slot)=>{const clock=`${String(Math.floor(slot/2)).padStart(2,'0')}:${slot%2?'30':'00'}`;return `<div class="wcal-time-row" data-cal-row="${clock}"><time>${slot%2?'':clock}</time>${days.map(day=>`<div class="wcal-slot ${day===calendarDemoDay?'is-today':''}" data-cal-date="${day}" data-cal-time="${clock}" aria-label="${day} ${clock}">${addPost(day, clock)}${postsOn(day).filter(p=>{const [h,m]=parsePostTime(p.time).clock.split(':').map(Number);return Math.floor((h*60+m)/30)===slot;}).map(calendarCard).join('')}</div>`).join('')}</div>`;}).join('')}</div></div>`;
+    return `<section class="wd-content-calendar${home?' wd-home-calendar':''} wcal" aria-label="发布日历" data-cal-view="${pref.view}" data-cal-anchor="${pref.anchor}">${header}${!inRange.length?'<div class="wcal-empty" role="status">当前日期范围暂无匹配内容，可切换日期或账号查看。</div>':''}<div class="wcal-scroll" tabindex="0" aria-label="${pref.view==='month'?'月历，可横向滚动':'发布时间表，可横向和纵向滚动'}">${grid}</div><div class="wcal-footer"><div class="wcal-legend"><span><i></i>已排期</span><span><i class="pending"></i>待审批</span><span><i class="published"></i>已发布</span></div><small>${pref.view==='month'?'拖到其他日期，保留原时间':'拖到日期或半小时时段调整排期'} · 演示今天 9/11</small>${calendarUndo?btn('撤销改期','cal-undo'):''}${state.calendarLastDeleted?btn('撤销删除','cal-restore'):''}</div><div class="sr-only" id="calendarLive" role="status" aria-live="polite"></div></section>`;
   }
   function mountCalendar(previous) {
     const calendar = root.querySelector('.wcal'), area = calendar?.querySelector('.wcal-scroll'), row = calendar?.querySelector('[data-cal-row="08:00"]');
@@ -872,12 +911,57 @@
   function calendarDetail(id) {
     const post = contentCatalog().find(p => p.id === id); if (!post) return;
     const a = calendarAccount(post), trigger = document.activeElement, host = root.querySelector('#wdOverlay');
-    host.innerHTML = `<dialog class="wcal-dialog" aria-labelledby="wcalDialogTitle"><header><h2 id="wcalDialogTitle">${post.status==='published'?'已发布内容':'内容与排期'}</h2><form method="dialog"><button aria-label="关闭内容与排期">${I('x')}</button></form></header><p class="wcal-dialog-account">${social(post.platform)}${E(a.platform)} · ${E(a.name)} <small>${E(a.handle)}</small></p><img class="wcal-preview" src="${E(post.image)}" alt="${E(post.title)}"><h3>${E(post.title)}</h3><p class="wcal-copy">${E(post.copy)}</p><form id="wcalScheduleForm" data-id="${E(id)}"><div class="wcal-fields"><label>发布日期<input type="date" name="date" required value="${calendarDate(post.time)}" ${post.status==='published'?'disabled':''}></label><label>发布时间<input type="time" name="time" required step="60" value="${parsePostTime(post.time).clock}" ${post.status==='published'?'disabled':''}></label></div><p class="wcal-dialog-hint">上海时间 UTC+8 · ${calendarLabels[post.status]}${post.status==='published'?'，历史记录不可改期':['pending','draft'].includes(post.status)?'，调整建议时间不会自动审批':''}</p><p class="wcal-error" role="alert"></p><footer><button type="button" data-wd="cal-close">关闭</button>${post.status!=='published'?'<button class="wcal-primary" type="submit">保存排期</button>':''}</footer></form></dialog>`;
+    host.innerHTML = `<dialog class="wcal-dialog" aria-labelledby="wcalDialogTitle"><header><h2 id="wcalDialogTitle">${post.status==='published'?'已发布内容':'内容与排期'}</h2><form method="dialog"><button aria-label="关闭内容与排期">${I('x')}</button></form></header><p class="wcal-dialog-account">${social(post.platform)}${E(a.platform)} · ${E(a.name)} <small>${E(a.handle)}</small></p><img class="wcal-preview" src="${E(post.image)}" alt="${E(post.title)}"><h3>${E(post.title)}</h3><p class="wcal-copy">${E(post.copy)}</p><form id="wcalScheduleForm" data-id="${E(id)}"><div class="wcal-fields"><label>发布日期<input type="date" name="date" required value="${calendarDate(post.time)}" ${post.status==='published'?'disabled':''}></label><label>发布时间<input type="time" name="time" required step="60" value="${parsePostTime(post.time).clock}" ${post.status==='published'?'disabled':''}></label></div><p class="wcal-dialog-hint">北京时间 UTC+8 · ${calendarLabels[post.status]}${post.status==='published'?'，历史记录不可改期':['pending','draft'].includes(post.status)?'，调整建议时间不会自动审批':''}</p><p class="wcal-error" role="alert"></p><footer>${post.status!=='published'?btn(I('trash-2')+'删除帖子','cal-delete',`class="wcal-delete" data-id="${E(id)}"`):''}<button type="button" data-wd="cal-close">关闭</button>${post.status!=='published'?'<button class="wcal-primary" type="submit">保存排期</button>':''}</footer></form></dialog>`;
     const dialog = host.querySelector('dialog'); dialog.showModal(); refreshIcons();
     dialog.addEventListener('close',()=>{host.replaceChildren();if(trigger?.isConnected)trigger.focus();},{once:true});
   }
+  root.addEventListener('keydown',event=>{
+    if(event.key!=='Escape')return;
+    const menu=root.querySelector('.wcal-status-filter[open]');
+    if(menu){menu.open=false;menu.querySelector('summary').focus();}
+  });
+  root.addEventListener('click',event=>{
+    const menu=root.querySelector('.wcal-status-filter[open]');
+    if(menu&&!menu.contains(event.target))menu.open=false;
+  });
   function handleCalendarAction(action, value, id) {
     const pref=calendarPrefs();
+    if(action==='cal-delete') {
+      const post = contentCatalog().find(p => p.id === id);
+      if (!post || post.status === 'published') return;
+      const existing = state.posts.find(p => p.id === id);
+      const version = state.aiStudio?.versions?.find(v => v.id === id);
+      state.calendarLastDeleted = {id, post: existing ? {...existing} : null, version: version ? {...version} : null};
+      if (existing) existing.status = 'deleted'; else state.posts.push({...post, status:'deleted'});
+      if (version) version.status = 'deleted';
+      if (calendarUndo?.id === id) calendarUndo = null;
+      root.querySelector('.wcal-dialog')?.close();
+      persist(); render(); toast('帖子已删除，可在日历底部撤销'); return;
+    }
+    if(action==='cal-restore') {
+      const deleted = state.calendarLastDeleted;
+      if (!deleted) return;
+      state.posts = state.posts.filter(p => p.id !== deleted.id);
+      if (deleted.post) state.posts.push(deleted.post);
+      const version = state.aiStudio?.versions?.find(v => v.id === deleted.id);
+      if (version && deleted.version) Object.assign(version, deleted.version);
+      state.calendarLastDeleted = null;
+      persist(); render(); toast('帖子已恢复'); return;
+    }
+    if(action==='cal-create') {
+      const [day, clock] = value.split('T');
+      if (!calendarValid(day)) return;
+      qpDraft = {...qpDraft, editingIds: [], mode: 'scheduled', date: day, time: clock};
+      qpRemember(); openQuickPublisher(); return;
+    }
+    if(action==='cal-status') { pref.status=value;persist();calendarRender('.wcal-status-filter summary');return; }
+    if(action==='cal-account') {
+      const all = [...new Set(contentCatalog().filter(p => calendarLabels[p.status]).map(p => calendarAccount(p).id))];
+      const selected = pref.accounts?.length ? pref.accounts : pref.account === 'all' ? all : [pref.account];
+      pref.accounts = value === 'all' ? [] : selected.includes(value) ? selected.filter(id => id !== value) : [...selected, value];
+      if (value !== 'all' && !pref.accounts.length) pref.accounts = [value];
+      pref.account = 'all'; persist(); calendarRender(`[data-wd="cal-account"][data-value="${value}"]`); return;
+    }
     if(action==='cal-detail'){calendarDetail(id);return;}
     if(action==='cal-close'){root.querySelector('.wcal-dialog')?.close();return;}
     if(action==='cal-undo') {
@@ -900,6 +984,13 @@
     }
     persist();calendarRender(action==='cal-view'?`[data-wd="cal-view"][data-value="${value}"]`:`[data-wd="${action}"]`,false);
   }
+  root.addEventListener('keydown', event => {
+    const tab = event.target.closest('[data-wd="cal-view"]');
+    if (!tab || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const views = ['day', 'week', 'month'], i = views.indexOf(tab.dataset.value);
+    handleCalendarAction('cal-view', views[event.key === 'Home' ? 0 : event.key === 'End' ? 2 : (i + (event.key === 'ArrowRight' ? 1 : 2)) % 3]);
+  });
   root.addEventListener('change',event=>{
     const key=event.target.dataset.calInput;if(!key)return;
     if(key==='anchor'&&!calendarValid(event.target.value))return;
@@ -1062,7 +1153,7 @@
   }
   function studioVersionCard(version, index) {
     const confirmed = ['approved', 'published'].includes(version.status);
-    return `<article class="ws-result" data-studio-version="${index}"><header><div class="ws-identity"><img src="assets/avatar.png" alt=""><span><b>@John Smith</b><small>${E(version.platform)}</small></span></div><div class="ws-time"><label for="wsMode-${index}">发布时间</label><select id="wsMode-${index}" data-studio-mode="${index}" ${confirmed ? 'disabled' : ''}><option value="now" ${version.mode === 'now' ? 'selected' : ''}>立即发布</option><option value="scheduled" ${version.mode === 'scheduled' ? 'selected' : ''}>定时发布</option></select>${version.mode === 'scheduled' ? `<input type="datetime-local" data-studio-time="${index}" value="${E(version.time)}" aria-label="${E(version.platform)} 发布时间（上海时间）" ${confirmed ? 'disabled' : ''}>` : ''}</div></header><div class="ws-result-body"><img src="${E(version.image)}" alt="${E(studioProducts.find(p => p.id === studioState().product)?.name)} 社媒配图"><label class="ws-caption" for="wsCopy-${index}"><span>推送文案</span><textarea id="wsCopy-${index}" data-studio-copy="${index}" ${confirmed ? 'readonly' : ''}>${E(version.copy)}</textarea></label></div><footer>${confirmed ? `<span class="ws-confirmed">${I('circle-check-big')}${version.status === 'published' ? '已确认社媒发布（演示）' : `已确认排期 · ${E(version.time.replace('T', ' '))}`}</span>` : `${version.status === 'manual-draft' ? '<span class="ws-saved" role="status">草稿已保存</span>' : ''}${btn(`${I('save')}保存草稿`, 'studio-save', `data-value="${index}"`)}${btn(`${I('send')}发布`, 'studio-publish', `data-value="${index}" class="ws-primary"`)}`}</footer></article>`;
+    return `<article class="ws-result" data-studio-version="${index}"><header><div class="ws-identity"><img src="assets/avatar.png" alt=""><span><b>@John Smith</b><small>${E(version.platform)}</small></span></div><div class="ws-time"><label for="wsMode-${index}">发布时间</label><select id="wsMode-${index}" data-studio-mode="${index}" ${confirmed ? 'disabled' : ''}><option value="now" ${version.mode === 'now' ? 'selected' : ''}>立即发布</option><option value="scheduled" ${version.mode === 'scheduled' ? 'selected' : ''}>定时发布</option></select>${version.mode === 'scheduled' ? `<input type="datetime-local" data-studio-time="${index}" value="${E(version.time)}" aria-label="${E(version.platform)} 发布时间（北京时间）" ${confirmed ? 'disabled' : ''}>` : ''}</div></header><div class="ws-result-body"><img src="${E(version.image)}" alt="${E(studioProducts.find(p => p.id === studioState().product)?.name)} 社媒配图"><label class="ws-caption" for="wsCopy-${index}"><span>推送文案</span><textarea id="wsCopy-${index}" data-studio-copy="${index}" ${confirmed ? 'readonly' : ''}>${E(version.copy)}</textarea></label></div><footer>${confirmed ? `<span class="ws-confirmed">${I('circle-check-big')}${version.status === 'published' ? '已确认社媒发布（演示）' : `已确认排期 · ${E(version.time.replace('T', ' '))}`}</span>` : `${version.status === 'manual-draft' ? '<span class="ws-saved" role="status">草稿已保存</span>' : ''}${btn(`${I('save')}保存草稿`, 'studio-save', `data-value="${index}"`)}${btn(`${I('send')}发布`, 'studio-publish', `data-value="${index}" class="ws-primary"`)}`}</footer></article>`;
   }
   function aiScreen() {
     const draft = studioState();
@@ -1182,6 +1273,7 @@
   const qpIcon = name => `${name === 'tiktok' ? '<span class="wqp-tiktok-slot">' : ''}<img class="wqp-icon wqp-icon-${name}" src="${qpAssets[name]}" alt="" aria-hidden="true">${name === 'tiktok' ? '</span>' : ''}`;
   const qpFresh = () => ({ copy: '', platforms: ['LinkedIn'], mode: 'now', date: '', time: '10:30', media: [], editingIds: [] });
   let qpDraft = { ...qpFresh(), ...(state.quickPublisher || {}) };
+  let qpMediaDialog = null;
   let qpDialog = null, qpTrigger = null, qpPreviewPlatform = qpDraft.platforms[0] || 'LinkedIn', qpReading = false;
   const qpLibrary = [
     { name: 'X100 工业传感器', src: asset, type: 'image/jpeg' },
@@ -1190,7 +1282,7 @@
   ];
   function qpRemember() { state.quickPublisher = qpDraft; persist(); }
   function qpError(message, target) {
-    const error = qpDialog?.querySelector('.wqp-error');
+    const error = qpMediaDialog?.querySelector('.wqp-media-error') || qpDialog?.querySelector('.wqp-error');
     if (error) error.textContent = message;
     if (target) { target.setAttribute('aria-invalid', 'true'); target.focus(); }
   }
@@ -1209,7 +1301,7 @@
   }
   function qpMediaList() {
     if (!qpDialog) return;
-    qpDialog.querySelector('.wqp-media-list').innerHTML = qpDraft.media.map((m,i) => `<article>${qpMediaMarkup(m)}<span>${E(m.name)}</span>${btn(qpIcon('close'), 'quick-remove-media', `data-value="${i}" aria-label="移除 ${E(m.name)}"`)}</article>`).join('');
+    qpDialog.querySelector('.wqp-media-list').innerHTML = qpDraft.media.map((m,i) => `<article title="${E(m.name)}">${qpMediaMarkup(m)}${btn(qpIcon('close'), 'quick-remove-media', `data-value="${i}" aria-label="移除 ${E(m.name)}"`)}</article>`).join('');
     qpPreview();
   }
   function qpSync() {
@@ -1238,10 +1330,10 @@
     qpDialog.setAttribute('aria-describedby', 'wqpDescription');
     qpDialog.innerHTML = `<header class="wqp-header"><div><h2 id="wqpTitle">快速发布</h2><p id="wqpDescription">选择平台、内容、素材与排期，快速发布社媒内容</p></div>${btn(qpIcon('close'), 'quick-close', 'class="wqp-close" aria-label="关闭快速发布" autofocus')}</header>
       <div class="wqp-body"><main class="wqp-compose">
-        <section><div class="wqp-heading"><h3>发布平台</h3><p>选择要同步分发的平台</p></div><div class="wqp-platforms" role="group" aria-label="发布平台">${platforms.map(p => btn(`${qpIcon(p.toLowerCase())}<b>${p}</b>`, 'quick-platform', `data-value="${p}" aria-pressed="false"`)).join('')}</div></section>
-        <section class="wqp-schedule"><div class="wqp-heading"><h3>发布时间</h3><p>设置发布身份和发布时间</p></div><div class="wqp-modes" role="group" aria-label="发布时间">${btn('立即发布','quick-mode','data-value="now"')}${btn('定时发布','quick-mode','data-value="scheduled"')}</div><div class="wqp-datetime" hidden><label>日期<input type="date" name="quickDate" value="${E(qpDraft.date)}" aria-label="发布日期"></label><label>时间<input type="time" name="quickTime" value="${E(qpDraft.time)}" aria-label="发布时间"></label><small>上海时间 UTC+8</small></div></section>
-        <section><div class="wqp-heading"><h3><label for="wdQuickCopy">发布文案</label></h3><p>编辑平台文案，或让 Wendy 基于素材生成</p></div><div class="wqp-editor"><textarea id="wdQuickCopy" maxlength="3000" placeholder="写下你想发布的内容…">${E(qpDraft.copy)}</textarea><div>${btn(qpIcon('polish')+'AI 润色','quick-polish','class="wqp-polish"')}<small class="wqp-counter"></small></div></div></section>
-        <section><div class="wqp-heading"><h3>素材</h3><p>从资料库选择或上传图片、短视频</p></div><div class="wqp-media-list"></div><div class="wqp-upload-wrap">${btn(qpIcon('upload')+'<span>上传或从知识库选择</span>','quick-upload','class="wqp-upload" aria-expanded="false" aria-controls="wqpUploadMenu"')}<div id="wqpUploadMenu" class="wqp-upload-menu" hidden>${btn('本地上传','quick-local')}${btn('从知识库上传','quick-library')}</div></div><input id="wqpFiles" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" multiple hidden><div class="wqp-library" hidden><div><b>知识库素材</b>${btn(qpIcon('close'),'quick-library-close','aria-label="关闭知识库素材"')}</div>${qpLibrary.map((m,i) => btn(`<img src="${m.src}" alt=""><span>${m.name}</span>`,'quick-library-select',`data-value="${i}"`)).join('')}</div><small class="wqp-file-hint">最多 4 张图片或 1 个视频 · 本地演示素材合计不超过 2 MB</small></section>
+        <section><div class="wqp-platforms" role="group" aria-label="发布账号">${platforms.map(p => btn(accountFace(p), 'quick-platform', `data-value="${p}" aria-label="${E(p)} · ${E(qpAccount(p)?.name || 'NOX Robotics')}" title="${E(p)} · ${E(qpAccount(p)?.name || 'NOX Robotics')}" aria-pressed="false"`)).join('')}</div></section>
+        <section class="wqp-schedule"><div class="wqp-heading"><h3>发布时间</h3><p>设置发布身份和发布时间</p></div><div class="wqp-modes" role="group" aria-label="发布时间">${btn('立即发布','quick-mode','data-value="now"')}${btn('定时发布','quick-mode','data-value="scheduled"')}</div><div class="wqp-datetime" hidden><label>日期<input type="date" name="quickDate" value="${E(qpDraft.date)}" aria-label="发布日期"></label><label>时间<input type="time" name="quickTime" value="${E(qpDraft.time)}" aria-label="发布时间"></label><small>北京时间 UTC+8</small></div></section>
+        <section><div class="wqp-heading"><h3><label for="wdQuickCopy">发布文案</label></h3><p>编辑平台文案，或让 Wendy 基于素材生成</p></div><div class="wqp-editor"><textarea id="wdQuickCopy" maxlength="3000" placeholder="写下你想发布的内容…">${E(qpDraft.copy)}</textarea><div class="wqp-editor-tools"><div>${btn(qpIcon('upload')+'添加素材','quick-upload','class="wqp-attach" aria-haspopup="dialog"')}${btn(qpIcon('polish')+'AI 润色','quick-polish','class="wqp-polish"')}</div><small class="wqp-counter"></small></div></div><div class="wqp-media-list" aria-label="已添加素材"></div></section>
+
       </main><aside class="wqp-preview"><div class="wqp-heading"><h3>预览</h3><p class="wqp-preview-platform"></p></div><div class="wqp-preview-tabs" role="group" aria-label="预览平台"></div><article class="wqp-post"></article></aside></div>
       <p class="wqp-error" role="alert"></p><footer class="wqp-footer">${btn('取消','quick-close')}<div>${btn(qpIcon('save')+'保存草稿','quick-save-draft')}${btn(qpIcon('send')+'<span>发布</span>','quick-confirm','class="wqp-primary"')}</div></footer>`;
     root.append(qpDialog);
@@ -1270,8 +1362,26 @@
     qpSync(); qpMediaList();
     dialog.showModal();
   }
+  function openQuickMedia() {
+    if (!qpDialog || qpMediaDialog?.open) return;
+    const dialog = document.createElement('dialog');
+    qpMediaDialog = dialog;
+    dialog.className = 'wqp-media-dialog';
+    dialog.setAttribute('aria-labelledby', 'wqpMediaTitle');
+    dialog.innerHTML = `<header><div><h2 id="wqpMediaTitle">添加素材</h2><p>从素材库选择，或上传本地图片和视频</p></div>${btn(qpIcon('close'),'quick-media-close','aria-label="关闭素材弹窗"')}</header><div class="wqp-media-body"><button type="button" class="wqp-local-upload" data-wd="quick-local">${qpIcon('upload')}<b>点击上传或将文件拖到这里</b><span>JPG、PNG、WebP、MP4、WebM</span></button><input id="wqpFiles" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" multiple hidden><section><h3>素材库</h3><div class="wqp-media-library">${qpLibrary.map((m,i) => btn(`<img src="${m.src}" alt=""><span>${E(m.name)}</span>`, 'quick-library-select', `data-value="${i}" aria-label="添加素材：${E(m.name)}" ${qpDraft.media.some(a=>a.src===m.src)?'disabled':''}`)).join('')}</div></section><p class="wqp-file-hint">最多 4 张图片或 1 个视频 · 本地演示素材合计不超过 2 MB</p><p class="wqp-media-error" role="alert"></p></div>`;
+    qpDialog.append(dialog);
+    dialog.addEventListener('cancel', event => {event.preventDefault();event.stopPropagation();closeQuickMedia();});
+    dialog.addEventListener('keydown', event => event.stopPropagation());
+    dialog.addEventListener('close', () => { if(qpMediaDialog===dialog)qpMediaDialog=null;dialog.remove();qpDialog?.querySelector('[data-wd="quick-upload"]')?.focus({preventScroll:true});if(qpDraft.media.length)requestAnimationFrame(()=>qpDialog?.querySelector('.wqp-media-list')?.scrollIntoView({block:'nearest',behavior:'instant'})); });
+    dialog.showModal();
+  }
+  function closeQuickMedia() {
+    if(qpReading)return;
+    qpMediaDialog?.close();
+  }
   function closeQuickPublisher() {
     if(!qpDialog)return;
+    if(qpMediaDialog){qpMediaDialog.close();qpMediaDialog=null;}
     qpRemember();
     const closing=qpDialog; qpDialog=null;
     document.body.classList.remove('wqp-open');
@@ -1285,13 +1395,16 @@
     if(combined.length>4||video.length&&combined.length>1)return qpError('可添加最多 4 张图片，或单独添加 1 个视频。');
     if(combined.reduce((n,f)=>n+(f.size||0),0)>2*1024*1024)return qpError('本地演示素材合计不能超过 2 MB，请选择较小文件。');
     qpReading=true;
-    const dialog=qpDialog;
+    const dialog=qpDialog, draft=qpDraft;
+    qpMediaDialog?.querySelectorAll('button').forEach(b=>b.disabled=true);
     dialog.querySelectorAll('[data-wd="quick-confirm"],[data-wd="quick-save-draft"]').forEach(b=>b.disabled=true);
     try {
       const media=await Promise.all(files.map(file=>new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve({name:file.name,type:file.type,size:file.size,src:reader.result});reader.onerror=reject;reader.readAsDataURL(file);})));
+      if(qpDialog!==dialog || qpDraft!==draft)return;
       qpDraft.media.push(...media); qpError(''); qpRemember(); qpMediaList();
+      qpReading=false;closeQuickMedia();
     } catch { qpError('素材读取失败，请重试。'); }
-    finally { qpReading=false; if(dialog.isConnected){dialog.querySelector('#wqpFiles').value='';dialog.querySelectorAll('[data-wd="quick-confirm"],[data-wd="quick-save-draft"]').forEach(b=>b.disabled=false);} }
+    finally { qpReading=false; if(dialog.isConnected){const input=dialog.querySelector('#wqpFiles');if(input)input.value='';qpMediaDialog?.querySelectorAll('button').forEach(b=>b.disabled=false);dialog.querySelectorAll('[data-wd="quick-confirm"],[data-wd="quick-save-draft"]').forEach(b=>b.disabled=false);} }
   }
   function qpSave(status) {
     if(qpReading)return qpError('素材正在读取，请稍候。');
@@ -1306,7 +1419,7 @@
       if(qpDraft.platforms.includes('Instagram')&&!qpDraft.media.length)return qpError('Instagram 需要添加图片或视频素材。');
     }
     const when=new Date(`${qpDraft.date}T${qpDraft.time}:00+08:00`);
-    if(status==='scheduled'&&(!calendarValid(qpDraft.date)||!/^\d{2}:\d{2}$/.test(qpDraft.time)||!Number.isFinite(+when)||+when<=Date.now()))return qpError('请选择晚于当前时间的发布日期和时间（上海时间）。',qpDialog.querySelector('[name="quickDate"]'));
+    if(status==='scheduled'&&(!calendarValid(qpDraft.date)||!/^\d{2}:\d{2}$/.test(qpDraft.time)||!Number.isFinite(+when)||+when<=Date.now()))return qpError('请选择晚于当前时间的发布日期和时间（北京时间）。',qpDialog.querySelector('[name="quickDate"]'));
     const oldPosts=state.posts, oldDraft=state.quickPublisher, group=crypto.randomUUID();
     const stamp=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date());
     const records=qpDraft.platforms.map(platform=>{
@@ -1340,16 +1453,16 @@
       qpDraft.copy=qpDraft.copy.trim().replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n');
       qpDialog.querySelector('#wdQuickCopy').value=qpDraft.copy;qpRemember();qpSync();toast('已整理文案格式（演示润色），请确认后发布');
     }
-    else if(action==='quick-upload'){const menu=qpDialog.querySelector('.wqp-upload-menu');menu.hidden=!menu.hidden;qpDialog.querySelector('.wqp-upload').setAttribute('aria-expanded',String(!menu.hidden));}
-    else if(action==='quick-local'||action==='quick-library'){qpDialog.querySelector('.wqp-upload-menu').hidden=true;qpDialog.querySelector('.wqp-upload').setAttribute('aria-expanded','false');if(action==='quick-local')qpDialog.querySelector('#wqpFiles').click();else{qpDialog.querySelector('.wqp-library').hidden=false;qpDialog.querySelector('.wqp-library').scrollIntoView({block:'nearest'});}}
-    else if(action==='quick-library-close'){qpDialog.querySelector('.wqp-library').hidden=true;qpDialog.querySelector('.wqp-upload').focus();}
+    else if(action==='quick-upload')openQuickMedia();
+    else if(action==='quick-media-close')closeQuickMedia();
+    else if(action==='quick-local')qpMediaDialog?.querySelector('#wqpFiles').click();
     else if(action==='quick-library-select'){
       const m=qpLibrary[Number(value)];if(!m)return;
       if(qpDraft.media.some(a=>a.src===m.src))return qpError('该素材已添加。');
       if(qpDraft.media.length>=4||qpDraft.media.some(m=>m.type.startsWith('video/')))return qpError('可添加最多 4 张图片，或单独添加 1 个视频。');
-      qpDraft.media.push({...m});qpError('');qpRemember();qpMediaList();qpDialog.querySelector('.wqp-library').hidden=true;qpDialog.querySelector('.wqp-upload').focus();
+      qpDraft.media.push({...m});qpError('');qpRemember();qpMediaList();closeQuickMedia();
     }
-    else if(action==='quick-remove-media'){qpDraft.media.splice(Number(value),1);qpRemember();qpMediaList();qpDialog.querySelector('.wqp-upload').focus();}
+    else if(action==='quick-remove-media'){qpDraft.media.splice(Number(value),1);qpRemember();qpMediaList();qpDialog.querySelector('[data-wd="quick-upload"]').focus();}
     else if(action==='quick-save-draft')qpSave('manual-draft');
     else if(action==='quick-confirm')qpSave(qpDraft.mode==='scheduled'?'scheduled':'published');
   }
@@ -1407,6 +1520,46 @@
     state.socialInbox = { version: 1, accounts, threads, tags: ['咨询', '售后', '潜在客户'], syncedAt: null };
     persist(); return state.socialInbox;
   }
+  // Deterministic demo policy: risk overrides match strength; unknown intent needs review.
+  function siAnalysis(t, m) {
+    const rules = [
+      [/pric\w*|quot\w*|\bunits\b|lead time|报价|价格|交期/ig, '报价与交期', 'high', 'sales'],
+      [/siemens|profinet|integrat\w*|compatib\w*|accuracy|200°C|calibrat\w*|certif\w*|ip67|兼容|精度|认证/ig, '技术参数与承诺', 'high', 'product'],
+      [/support|fault|broken|refund|complaint|售后|退款|投诉/ig, '售后与投诉', 'high', 'service'],
+      [/demo|book|meeting|exhibition|演示|预约/ig, '预约演示', 'low', 'sales'],
+      [/thanks|thank you|impressive|great|installed|感谢/ig, '体验与反馈', 'low', 'product']
+    ];
+    const hits=rules.map(([pattern,label,risk,knowledge])=>({words:[...new Set(m.text.match(pattern)||[])],label,risk,knowledge})).filter(r=>r.words.length);
+    const high=hits.some(r=>r.risk==='high'), matched=hits.length>0;
+    const level=high?'高风险':matched?'低风险':'待核实';
+    const reply=t.messages.find(r=>r.replyTo===m.id);
+    const status=reply?(reply.from==='ai'?'已自动回复':'已手动回复'):t.status==='done'?'已完成':high||!matched?'需手动回复':'待自动回复';
+    const suggestion=high ? (hits.some(r=>r.knowledge==='service') ? 'Thank you for reaching out. Could you share the issue and operating environment? Please send order details by private message so our support team can investigate.' : hits.some(r=>r.knowledge==='sales') ? 'Thank you for your interest. Could you confirm the quantity, configuration and delivery location? Our team will verify pricing and lead time before confirming.' : 'Thank you for your question. Could you share the product model, line configuration and requirements? Our technical team will verify the relevant specifications and documentation before confirming.') : hits.some(r=>r.label==='预约演示') ? 'Thanks for your interest! Please share your preferred time and time zone so our team can help arrange a product demo.' : matched ? 'Thank you for sharing your experience! Please let us know if there is anything else you would like to learn about X100.' : 'Thank you for your message. Could you share more details so our team can help with your request?';
+    return {hits,level,status,suggestion,reason:high?'命中报价、技术或售后敏感关键词，需人工核实，已暂停自动回复。':matched?'明确匹配常规互动规则，无价格或技术承诺，可自动回复。':'未明确匹配知识库规则，需人工确认意图。'};
+  }
+  function siApplyPolicy() {
+    const d=siData(); let changed=false;
+    d.threads.forEach(t=>{
+      if(t.status==='done'||!d.accounts.find(a=>a.id===t.accountId)?.connected)return;
+      t.messages.filter(m=>m.from==='customer'&&['comment','dm'].includes(m.type)).forEach(m=>{
+        const a=siAnalysis(t,m);
+        if(a.status==='待自动回复') { t.messages.push({id:'auto-'+m.id,from:'ai',text:a.suggestion,type:m.type,replyTo:m.id,time:m.time,tags:[],unread:false});changed=true; }
+      });
+    });
+    if(changed)persist();
+  }
+  function siHomePanel() {
+    siApplyPolicy();
+    const rows=siData().threads.filter(t=>siAccount(t).connected).flatMap(t=>siIncoming(t).filter(m=>['comment','dm'].includes(m.type)).map(m=>({t,m,a:siAnalysis(t,m)})));
+    const pending=rows.filter(r=>r.a.status==='需手动回复');
+    const latest=pending.slice().sort((a,b)=>b.m.time.localeCompare(a.m.time)).slice(0,4);
+    const count=type=>rows.filter(r=>r.m.type===type).length;
+    return `<section class="wd-social-summary"><header><h2>${I('messages-square')}社媒互动</h2>${link('查看全部 '+I('arrow-up-right'),'fans')}</header><p>已同步评论与私信 · 演示数据</p><div class="wd-social-counts">${[['评论',count('comment')],['私信',count('dm')],['已自动回复',rows.filter(r=>r.a.status==='已自动回复').length],['需手动回复',pending.length]].map(([label,n])=>link(`<b>${n}</b><span>${label}</span>`,'fans')).join('')}</div><h3>最新待处理 <small>${pending.length} 条</small></h3>${latest.map(({t,m,a})=>link(`<img src="${t.avatar}" alt=""><span><b>${E(t.name)}<small>${siTypes[m.type]}</small></b><p>${E(m.text)}</p><em>${a.level} · ${a.status}</em></span>`,'inbox/'+t.id+'/'+m.id,'wd-social-pending')).join('')||'<p>所有互动均已处理</p>'}<small>低风险明确匹配自动回复；高风险或匹配不足交由你确认。</small></section>`;
+  }
+  function siAnalysisPanel(t,m) {
+    const a=siAnalysis(t,m);
+    return `<section class="wsi-analysis ${a.level==='低风险'?'safe':'review'}"><header><b>${I('sparkles')} AI 关键词分析</b><span>${a.level} · ${a.status}</span></header><div class="wsi-tags">${a.hits.length?a.hits.map(h=>`<span class="wsi-tag">${E(h.label)}：${E(h.words.join('、'))}</span>`).join(''):'<span class="wsi-tag">暂无明确关键词</span>'}</div><p>匹配等级：${a.hits.length?'明确匹配':'匹配不足'} · ${a.reason}</p>${a.status==='需手动回复'?`<h4>建议回复</h4><blockquote>${E(a.suggestion)}</blockquote>${siButton('采用建议并编辑','use-policy',`data-id="${E(m.id)}"`)}<small>由你审核后发送</small>`:''}</section>`;
+  }
   const siAccount = t => siData().accounts.find(a => a.id === t.accountId);
   const siIncoming = t => t.messages.filter(m => m.from === 'customer');
   const siThread = () => siData().threads.find(t => t.id === siUI.selected);
@@ -1433,16 +1586,16 @@
     render();
   }
   function siScreen(id) {
-    siData();
+    siApplyPolicy();
     if (siUI.route !== location.hash) {
       siUI.route = location.hash;
       if (!id) siUI.mobile = false;
-      if (id && siData().threads.some(t => t.id === id)) { const t=siData().threads.find(t=>t.id===id); siUI.selected=id; siUI.target=siIncoming(t).at(-1).id; siUI.mobile=true; siRead(t); }
+      if (id && siData().threads.some(t => t.id === id)) { const t=siData().threads.find(t=>t.id===id); siUI.selected=id; siUI.target=decodeURIComponent(location.hash.split('/')[3]||'')||siIncoming(t).at(-1).id; siUI.mobile=true; siRead(t); }
     }
     if (!siUI.selected && siRows().length) { const t=siRows()[0].t; siUI.selected=t.id; siUI.target=siIncoming(t).at(-1).id; }
     const d = siData();
     return `<section class="wsi ${siUI.mobile ? 'wsi-chat-open' : ''} ${siUI.profile ? '' : 'wsi-hide-profile'} ${siUI.mobileProfile ? 'wsi-show-profile' : ''}" aria-label="互动和线索">
-      <header class="wsi-heading"><div><a href="#wendy" class="wsi-backlink">${I('arrow-left')} Wendy 工作台</a><h1>互动和线索</h1></div><div class="wsi-head-actions"><span class="wsi-demo">演示环境</span>${siButton(I('settings-2')+' 管理账号','accounts')}</div></header>
+      <header class="wsi-heading"><div><a href="#wendy" class="wsi-backlink">${I('arrow-left')} Wendy 工作台</a><h1>互动与线索</h1></div><div class="wsi-head-actions"><span class="wsi-demo">演示环境</span>${siButton(I('settings-2')+' 管理账号','accounts')}</div></header>
       <div class="wsi-workbench"><aside class="wsi-list" aria-label="会话列表"><header><h2>全部会话 <span id="siCount">${siRows().length}</span></h2><div class="wsi-filter-control"><button type="button" class="wsi-btn wsi-filter-trigger" id="siFilterTrigger" popovertarget="siFilterMenu" aria-label="筛选消息" aria-haspopup="dialog" aria-expanded="false" title="筛选消息">${I('list-filter')}<span class="wsi-filter-dot" ${siFilterCount()?'':'hidden'}></span></button><div id="siFilterMenu" class="wsi-filter-menu" popover="auto" role="dialog" aria-labelledby="siFilterTitle"><header><h3 id="siFilterTitle">筛选消息</h3>${siButton('重置','reset')}</header><label class="wsi-filter-field">关键词<input data-si-filter="query" type="search" aria-label="搜索消息" placeholder="搜索联系人、消息或关键词" value="${E(siUI.query)}"></label>
       <label class="wsi-filter-field">账号${siFilter('account','账号',[['all','全部账号'],...d.accounts.filter(a=>a.connected).map(a=>[a.id,a.platform+' · '+a.name])])}</label>
       <label class="wsi-filter-field">消息类型${siFilter('type','消息类型',[['all','全部类型'],...Object.entries(siTypes)])}</label><label class="wsi-filter-field">阅读状态${siFilter('read','阅读状态',[['all','全部阅读状态'],['unread','未读'],['read','已读']])}</label><label class="wsi-filter-field">标签${siFilter('tag','标签',[['all','全部标签'],...d.tags.map(t=>[t,t])])}</label><label class="wsi-filter-field">处理状态${siFilter('status','处理状态',[['all','全部状态'],['open','待处理'],['done','已完成']])}</label><footer><small>修改后即时生效</small><button type="button" class="wsi-btn" popovertarget="siFilterMenu" popovertargetaction="hide">完成</button></footer></div></div></header><div id="siRows" class="wsi-rows">${siList()}</div></aside><div id="siDetail" class="wsi-detail">${siDetail()}</div></div>
@@ -1452,7 +1605,7 @@
   function siList() {
     return siRows().map(({t,matches})=>{
       const a=siAccount(t), m=matches.at(-1), unread=siIncoming(t).filter(m=>m.unread).length;
-      return `<button type="button" class="wsi-row ${t.id===siUI.selected?'active':''}" data-si="select" data-id="${E(t.id)}" data-target="${E(m.id)}" aria-pressed="${t.id===siUI.selected}"><span class="wsi-avatar-wrap"><img class="wsi-avatar" src="${t.avatar}" alt="">${social(a.platform)}</span><span class="wsi-row-copy"><strong>${E(t.name)}</strong><span class="wsi-row-preview">${E(m.text)}</span><small>${siTypes[m.type]} · ${E(a.name)}</small><span class="wsi-tags">${siTags([...new Set(matches.flatMap(m=>m.tags))].slice(0,2))}</span></span><span class="wsi-row-meta"><time>${E(m.time.slice(11))}</time>${unread?`<b>${unread}</b>`:t.status==='done'?I('check-check'):''}</span></button>`;
+      return `<button type="button" class="wsi-row ${t.id===siUI.selected?'active':''}" data-si="select" data-id="${E(t.id)}" data-target="${E(m.id)}" aria-pressed="${t.id===siUI.selected}"><span class="wsi-avatar-wrap"><img class="wsi-avatar" src="${t.avatar}" alt="">${social(a.platform)}</span><span class="wsi-row-copy"><strong>${E(t.name)}</strong><span class="wsi-row-preview">${E(m.text)}</span><small>${siAnalysis(t,m).status} · ${siTypes[m.type]} · ${E(a.name)}</small><span class="wsi-tags">${siTags([...new Set(matches.flatMap(m=>m.tags))].slice(0,2))}</span></span><span class="wsi-row-meta"><time>${E(m.time.slice(11))}</time>${unread?`<b>${unread}</b>`:t.status==='done'?I('check-check'):''}</span></button>`;
     }).join('') || `<div class="wsi-empty">${I('search-x')}<h3>没有匹配的会话</h3><p>试试其他关键词或放宽筛选条件。</p>${siButton('重置筛选','reset')}</div>`;
   }
   function siDetail() {
@@ -1461,7 +1614,7 @@
     const a=siAccount(t), target=siTarget(t), tags=[...new Set(siIncoming(t).flatMap(m=>m.tags))];
     return `<main class="wsi-chat" aria-label="${E(t.name)} 的会话"><header class="wsi-chat-head">${siButton(I('arrow-left'),'back','aria-label="返回会话列表" data-mobile-back')}<img class="wsi-avatar" src="${t.avatar}" alt=""><div><h2>${E(t.name)}</h2><p>${social(a.platform)} ${E(a.platform)} · ${E(t.userId)}</p></div>${siButton(I(t.status==='done'?'rotate-ccw':'check')+(t.status==='done'?' 重新打开':' 标记完成'),'status',`data-id="${E(t.id)}"`)}${siButton(I('panel-right'),'profile','aria-label="查看联系人资料"')}</header>
     <div class="wsi-context">${I('inbox')}<span>收件账号：<b>${E(a.name)}</b> · ${E(a.handle)}</span></div>
-    <div class="wsi-thread" role="log" aria-label="历史消息"><div class="wsi-date">会话历史 · ${siIncoming(t).length} 条互动</div>${t.messages.map(m=>`<article class="wsi-message ${m.from==='human'?'sent':''} ${m.id===target.id?'is-target':''}" data-si-message="${E(m.id)}"><div class="wsi-message-meta">${m.from==='human'?'你':E(t.name)} · ${E(m.time)} · ${siTypes[m.type]}</div>${m.from!=='human'?`<div class="wsi-source">${I(m.type==='dm'?'mail':'message-circle')}${E(m.source)}</div>`:''}<div class="wsi-bubble">${E(m.text)}</div><footer>${m.from==='human'?`<small>${I('check-check')}已记录 · 演示发送</small>`:`<span class="wsi-tags">${siTags(m.tags)}</span>${siButton(I('reply')+(m.id===target.id?' 回复中':' 回复'),'target',`data-id="${E(m.id)}"`)}${siButton(I('tag'),'tags',`data-id="${E(m.id)}" aria-label="管理这条互动的标签"`)}`}</footer></article>`).join('')}</div>
+    <div class="wsi-thread" role="log" aria-label="历史消息"><div class="wsi-date">会话历史 · ${siIncoming(t).length} 条互动</div>${t.messages.map(m=>`<article class="wsi-message ${m.from!=='customer'?'sent':''} ${m.id===target.id?'is-target':''}" data-si-message="${E(m.id)}"><div class="wsi-message-meta">${m.from==='ai'?'Wendy · 自动回复':m.from==='human'?'你':E(t.name)} · ${E(m.time)} · ${siTypes[m.type]}</div>${m.from==='customer'?`<div class="wsi-source">${I(m.type==='dm'?'mail':'message-circle')}${E(m.source)}</div>`:''}<div class="wsi-bubble">${E(m.text)}</div>${m.from==='customer'?siAnalysisPanel(t,m):''}<footer>${m.from!=='customer'?`<small>${I('check-check')}${m.from==='ai'?'已自动回复 · 低风险规则 · 演示':'已记录 · 演示发送'}</small>`:`<span class="wsi-tags">${siTags(m.tags)}</span>${siButton(I('reply')+(m.id===target.id?' 回复中':' 回复'),'target',`data-id="${E(m.id)}"`)}${siButton(I('tag'),'tags',`data-id="${E(m.id)}" aria-label="管理这条互动的标签"`)}`}</footer></article>`).join('')}</div>
     <form class="wsi-composer" data-si-form="send"><div class="wsi-reply-to"><span>${I(target.type==='dm'?'lock-keyhole':'globe')} ${target.type==='dm'?'私信回复':'公开回复'} · ${siTypes[target.type]}</span><small>回复 ${E(t.name)}：${E(target.text.slice(0,54))}${target.text.length>54?'…':''}</small></div><div class="wsi-compose-box"><textarea id="siDraft" aria-label="回复内容" maxlength="2000" placeholder="输入回复，或使用 AI Assistant 生成建议…">${E(t.drafts[target.id]||'')}</textarea><footer>${siButton(I('sparkles')+' AI Assistant','ai')}<span id="siDraftCount">${(t.drafts[target.id]||'').length}/2000</span><button type="submit" class="wsi-btn wsi-primary" id="siSend" ${!(t.drafts[target.id]||'').trim()?'disabled':''}>${I('send')} 发送回复</button></footer></div></form></main>
     <aside class="wsi-profile" aria-label="联系人资料"><header><h2>联系人资料</h2>${siButton(I('x'),'profile','aria-label="关闭联系人资料"')}</header><div class="wsi-profile-person"><img class="wsi-avatar" src="${t.avatar}" alt=""><h3>${E(t.name)}</h3><p>${E(t.role||'社媒联系人')}</p>${t.company?`<p>${I('building-2')} ${E(t.company)}</p>`:''}<span class="wsi-state ${t.status==='done'?'done':''}">${t.status==='done'?'已完成':'待处理'}</span></div><section><h3>${I('tag')} 互动标签</h3><div class="wsi-tags">${siTags(tags)}</div><p>标签对应具体互动，方便分类与跟进。</p>${siButton(I('plus')+' 管理当前互动标签','tags',`data-id="${E(target.id)}"`)}</section><section><h3>${I('history')} 会话概览</h3><dl><dt>平台</dt><dd>${E(a.platform)}</dd><dt>消息类型</dt><dd>${[...new Set(siIncoming(t).map(m=>siTypes[m.type]))].join('、')}</dd><dt>互动数量</dt><dd>${siIncoming(t).length} 条</dd><dt>接收账号</dt><dd>${E(a.name)}</dd></dl></section><section><h3>${I('book-open')} 品牌知识库</h3><p>生成建议时，可选择产品资料、采购指引或售后知识。</p><small>AI 建议由你确认后发送</small></section>${siButton(I('mail')+' 标记为未读','unread')}</aside>`;
   }
@@ -1546,6 +1699,7 @@
     else if(action==='accounts')siAccountDialog();
     else if(action==='connect'){const a=siData().accounts.find(a=>a.id===b.dataset.id);a.connected=!a.connected;persist();render();siAccountDialog();}
     else if(action==='tags')siTagsDialog(b.dataset.id);
+    else if(action==='use-policy'&&t){const m=t.messages.find(m=>m.id===b.dataset.id);siUI.target=m.id;t.drafts[m.id]=siAnalysis(t,m).suggestion;persist();render();root.querySelector('#siDraft')?.focus();}
     else if(action==='ai')siAIDialog();
     else if(action==='close')b.closest('dialog').close();
     else if(action==='apply-ai'){
@@ -1658,6 +1812,11 @@
        否则主区域会是一片空白，只剩静态侧栏。 */
     if (!/^#wendy(?:\/|$)/.test(location.hash)) { stopWorkstream(); document.body.classList.remove('wd-goal-locked'); return; }
     let [page = '', id = ''] = route();
+    if(ui.opsGoalEditing && page !== 'goal') {
+      state.strategy=ui.opsGoalSnapshot;ui.opsGoalSnapshot=null;ui.opsGoalEditing=false;
+      ui.operationsOpen=page==='';persist();
+    }
+    if(page!=='')ui.operationsOpen=false;
     const quickDeepLink = page === 'quick';
     if (quickDeepLink || page === 'promotion' || page === 'analytics') {
       history.replaceState(null, '', `${location.pathname}${location.search}#wendy`);
@@ -1702,6 +1861,7 @@
     layout = home ? window.mountAgentHome({ root: home, count: '#wdHomeApprovalCount', previous: previousLayout,
       responsive: window.agentHomeResponsiveRules
     }) : null;
+    if(page==='' && ui.operationsOpen)openOperations();
     if (page === 'fans' && homeComments.some(comment => comment.id === id)) {
       // Move focus out of the closed mobile comment drawer into the selected message.
       const heading = root.querySelector('h1');
@@ -2089,6 +2249,7 @@
     const id = control.dataset.id;
     const value = control.dataset.value;
     if (action === 'quick-open' || control.closest('.wqp-dialog')) return handleQuickAction(action, value, id);
+    if (action.startsWith('ops-')) return handleOperationAction(action, id);
     if (action.startsWith('cal-')) return handleCalendarAction(action, value, id);
     if (action.startsWith('studio-')) return handleStudioAction(action, value);
     if (action.startsWith('weekly-')) return handleWeeklyAction(action, id, value);
@@ -2184,6 +2345,11 @@
       else go(`goal/${step - 1}`);
     }
     else if (action === 'goal-save-draft') { persist(); toast('目标草稿已保存'); }
+    else if (action === 'goal-confirm' && ui.opsGoalEditing) {
+      state.strategy.status='active';
+      ui.opsGoalEditing=false;ui.opsGoalSnapshot=null;ui.goalReturn=null;ui.operationsOpen=true;
+      persist();go('');toast('运营目标已更新');
+    }
     else if (action === 'goal-confirm') {
       state.strategy.status = 'active';
       state.strategy.effective = '2026-09-03';
