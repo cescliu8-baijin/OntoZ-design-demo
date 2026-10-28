@@ -29,7 +29,10 @@ body.agent-home-shell #wendyPage #wendyApp .wd-content:has(.ws-studio) { padding
 #wendyApp .ws-style b { font-size:var(--oz-text-sm); line-height:var(--oz-leading-sm); font-weight:var(--oz-weight-semibold); }
 #wendyApp .ws-style-swatch,#wendyApp .ws-upload,#wendyApp .ws-style > img { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; width:100%; height:160px; border-radius:8px; background:var(--oz-secondary); border:1px solid transparent; object-fit:cover; }
 #wendyApp .ws-style.selected > :first-child { border-color:var(--oz-indigo-500); box-shadow:0 0 0 1px var(--oz-indigo-500); }
-#wendyApp .ws-style-swatch > svg { color:var(--oz-indigo-500); }
+#wendyApp .ws-style-swatch { position:relative; overflow:hidden; }
+#wendyApp .ws-style-swatch > img { display:block; width:100%; height:100%; object-fit:cover; }
+#wendyApp .ws-style-check { position:absolute; top:8px; right:8px; display:grid; place-items:center; width:24px; height:24px; border-radius:50%; background:var(--oz-indigo-500); color:var(--oz-primary-foreground); box-shadow:var(--oz-shadow-sm); }
+#wendyApp .ws-style-check > svg { width:16px; height:16px; }
 #wendyApp .ws-upload { border:1px dashed var(--oz-border); background:var(--oz-card); color:var(--oz-muted-foreground); text-align:center; padding:12px; }
 #wendyApp .ws-upload > svg { width:24px; height:24px; }
 #wendyApp .ws-style-custom { position:relative; min-width:0; }
