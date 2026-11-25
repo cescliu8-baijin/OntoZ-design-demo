@@ -854,6 +854,8 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 
 .zoe-acquisition-sidebar {
   min-width: 0;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
   padding: 16px;
   border: 1px solid var(--oz-border);
   border-radius: 12px;
@@ -865,13 +867,22 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
   justify-content: space-between;
   gap: 4px;
 }
-.zoe-sidebar-head h2 { margin: 0; font-size: var(--oz-text-base); }
+#zoeAcquisitionSidebar :is(h2, h3, summary > strong) {
+  margin: 0;
+  color: var(--oz-muted-foreground);
+  font-size: inherit;
+  font-weight: var(--oz-weight-medium);
+  line-height: inherit;
+}
+#zoeAcquisitionSidebar :is(small, [data-zoe-button]) {
+  font-size: inherit;
+  line-height: inherit;
+}
 .zoe-acquisition-sidebar section {
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px solid var(--oz-border);
 }
-.zoe-acquisition-sidebar h3 { margin: 0; }
 .zoe-acquisition-sidebar p,
 .zoe-acquisition-sidebar small { color: var(--oz-muted-foreground); }
 .zoe-acquisition-sidebar [data-zoe-round] {
