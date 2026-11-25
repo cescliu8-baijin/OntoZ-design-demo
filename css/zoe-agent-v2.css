@@ -445,7 +445,6 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 .zoe-acquisition p { margin: 8px 0; }
 .zoe-acquisition-messages { display: grid; gap: 12px; max-height: 420px; overflow: auto; margin-bottom: 16px; }
 .zoe-acquisition-message { padding: 12px; border-radius: 12px; background: var(--oz-muted); overflow-wrap: anywhere; white-space: pre-wrap; }
-.zoe-acquisition-message[data-role="user"] { margin-left: 24px; background: var(--oz-indigo-50); }
 .zoe-acquisition button:not(.av2-prompt-box button),
 .zoe-acquisition :is(select, input) {
   min-height: 32px;
@@ -586,7 +585,7 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 }
 #zoeAcquisition .zoe-acquisition-message[data-role="agent"] { padding: 2px 0; }
 
-#zoeAcquisition:not(.is-task-list) :is(.zoe-acquisition-card, .zoe-acquisition-message[data-role="user"], #zoeAcquisitionReply) {
+#zoeAcquisition:not(.is-task-list) :is(.zoe-acquisition-card, #zoeAcquisitionReply) {
   padding: 16px 20px;
   border: 1px solid var(--oz-border);
   border-radius: 12px;
@@ -665,8 +664,7 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
   .zoe-acquisition-dock { width: calc(100% - 32px); }
 }
 
-#zoeAcquisition .zoe-acquisition-card:first-child,
-#zoeAcquisition .zoe-acquisition-message[data-role="user"] { margin: 0; }
+#zoeAcquisition .zoe-acquisition-card:first-child { margin: 0; }
 #zoeAcquisition :is(.zoe-acquisition-card, .zoe-acquisition-message) h2 {
   margin-bottom: 4px;
   font-size: var(--oz-text-lg);
@@ -679,13 +677,9 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
   justify-self: end;
   padding: 10px 14px;
   border: 0;
+  border-radius: 12px;
   background: var(--oz-muted);
   box-shadow: none;
-}
-#zoeAcquisition .zoe-acquisition-message[data-role="user"] h2 {
-  font-size: var(--oz-text-xs);
-  line-height: var(--oz-leading-xs);
-  color: var(--oz-muted-foreground);
 }
 #zoeAcquisition .zoe-acquisition-message[data-role="process"] { white-space: normal; }
 

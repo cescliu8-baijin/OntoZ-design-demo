@@ -113,9 +113,6 @@ function renderMessages() {
       entry.innerHTML = `<details class="zoe-icp-history" data-snapshot="${active.id}-${index}" ${historyOpen.has(`${active.id}-${index}`) ? 'open' : ''}><summary>已确认画像 <span>${summary || '自定义条件'}</span></summary>
         <dl>${Object.entries(fields).filter(([key]) => snapshot[key]).map(([key, label]) =>
           `<dt>${label}</dt><dd>${esc(snapshot[key])}</dd>`).join('')}</dl></details>`;
-    } else if (role === 'user') {
-      entry.innerHTML = '<h2>获客需求</h2><p></p>';
-      entry.querySelector('p').textContent = text;
     } else {
       entry.textContent = text;
     }
