@@ -19,6 +19,7 @@ const announcement = document.querySelector('#zoeAcquisitionAnnouncement');
 const workspace = document.querySelector('#zoeAcquisitionWorkspace');
 const drawer = document.querySelector('#zoeAcquisitionDrawer');
 const statuses = { pending: '待执行', running: '执行中', paused: '已暂停', complete: '已完成', stopped: '已终止', partial: '部分完成', failed: '执行失败' };
+const precisionLabels = ['待标注', '精准', '不精准'];
 const ratings = ['A', 'B', 'C', 'D'];
 const tabs = ['企业概览', 'AI 背调', '匹配分析', '决策人'];
 let tasks = [];
@@ -74,7 +75,7 @@ function makeCompanies(task) {
       scores[(remaining - 1) % scores.length]++;
     }
     return {
-      id, name, type, business, customers, score, country: task.icp.market || '示例市场',
+      id, name, type, business, customers, score, precision: '待标注', country: task.icp.market || '示例市场',
       site: `company-${index + 1}.example.com`,
       breakdown: dimensions.map((label, i) => [label, scores[i], weights[i]]),
       contacts: [0, 1].map(offset => ({
@@ -355,26 +356,31 @@ function hasScores(task) {
   return task.phase === 'results' || ((task.previousPhase || task.phase) === 'qualification' && task.tick >= 2);
 }
 
+function precisionControl(company) {
+  return `<select data-company-precision="${company.id}" aria-label="${esc(company.name)} 精准度标注">${options(precisionLabels, company.precision)}</select>`;
+}
+
 function companyTable(task) {
   const complete = task.phase === 'results';
   const scored = hasScores(task);
   const companies = task.companies.slice(0, task.count);
   return `<section class="zoe-acquisition-results zoe-acquisition-card">
     <h2>${complete ? '最终客户清单' : '候选企业'}</h2>
-    <p class="zoe-acquisition-help">Demo 模拟数据</p>
+    <p class="zoe-acquisition-help">Demo 模拟数据 · ${companies.filter(company => company.precision === '精准').length} 家精准 · ${companies.filter(company => company.precision === '不精准').length} 家不精准</p>
     ${complete ? `<p>执行条件 · ${esc(taskTitle(task))}</p>
       <p>目标市场 · ${esc(task.icp.market || '未指定')}　企业 ${companies.length} 家　A级 ${companies.filter(c => grade(c.score) === 'A').length} 家　B级 ${companies.filter(c => grade(c.score) === 'B').length} 家　决策人 ${companies.reduce((sum, c) => sum + c.contacts.length, 0)} 位</p>` : ''}
     <div class="zoe-acquisition-toolbar">
       <input data-filter="query" type="search" aria-label="搜索企业名称" placeholder="搜索企业名称" value="${esc(filters.query)}">
       ${scored ? `<select data-filter="grade" aria-label="客户等级"><option value="">全部等级</option>${options(ratings, filters.grade)}</select>` : ''}
       <select data-filter="type" aria-label="企业类型"><option value="">全部类型</option>${options([...new Set(companies.map(c => c.type))], filters.type)}</select>
+      <select data-filter="precision" aria-label="精准度筛选"><option value="">全部精准度</option>${options(precisionLabels, filters.precision)}</select>
       <select data-filter="research" aria-label="背调状态"><option value="">全部背调状态</option>${options(['已背调', '待背调'], filters.research)}</select>
       ${scored ? `<select data-filter="sort" aria-label="匹配度排序">
         <option value="desc">匹配度从高到低</option><option value="asc" ${filters.sort === 'asc' ? 'selected' : ''}>匹配度从低到高</option>
       </select>` : ''}
     </div>
     <div class="zoe-acquisition-table"><table>
-      <thead><tr><th>企业名称</th><th>国家或地区</th><th>企业类型</th><th>背调状态</th>${scored ? '<th>匹配度</th>' : ''}${complete ? '<th>决策人</th>' : ''}</tr></thead>
+      <thead><tr><th>企业名称</th><th>国家或地区</th><th>企业类型</th><th>背调状态</th><th>精准度标注</th>${scored ? '<th>匹配度</th>' : ''}${complete ? '<th>决策人</th>' : ''}</tr></thead>
       <tbody></tbody>
     </table></div>
     ${task.phase === 'review' ? `<footer class="zoe-result-decision">
@@ -394,13 +400,14 @@ function renderRows(task) {
     (!filters.query || company.name.toLowerCase().includes(filters.query.trim().toLowerCase())) &&
     (!filters.type || company.type === filters.type) &&
     (!filters.grade || (scored && grade(company.score) === filters.grade)) &&
-    (!filters.research || status === filters.research));
+    (!filters.research || status === filters.research) &&
+    (!filters.precision || company.precision === filters.precision));
   if (scored) companies.sort((a, b) => filters.sort === 'asc' ? a.score - b.score : b.score - a.score);
   tbody.innerHTML = companies.map(company => `<tr data-company-id="${company.id}">
-    <td>${action('company', esc(company.name), 'ghost')}</td><td>${esc(company.country)}</td><td>${company.type}</td><td>${status}</td>
+    <td>${action('company', esc(company.name), 'ghost')}</td><td>${esc(company.country)}</td><td>${company.type}</td><td>${status}</td><td>${precisionControl(company)}</td>
     ${scored ? `<td>${action('score', `${company.score} · ${grade(company.score)}级`, 'ghost')}</td>` : ''}
     ${task.phase === 'results' ? `<td>${company.contacts.length} 位</td>` : ''}</tr>`).join('')
-    || `<tr><td colspan="${4 + Number(scored) + Number(task.phase === 'results')}">暂无符合条件的企业</td></tr>`;
+    || `<tr><td colspan="${5 + Number(scored) + Number(task.phase === 'results')}">暂无符合条件的企业</td></tr>`;
 }
 
 function render() {
@@ -444,10 +451,10 @@ function renderCompany() {
   const reasons = company.score >= 80 ? '产品线和目标客户类型匹配，具备模拟优先跟进价值。'
     : company.score >= 60 ? '产品或渠道部分匹配，建议先核实采购用途。' : '主营应用和目标客群存在差异，优先级较低。';
   const contacts = company.contacts.filter(person => !detail.role || person.role === detail.role);
+  const fieldRows = values => Object.entries(values).map(([label, value]) => `<dt>${label}</dt><dd>${esc(value)}</dd>`).join('');
   const panels = [
-    `<dl><dt>企业名称</dt><dd>${esc(company.name)}</dd><dt>市场</dt><dd>${esc(company.country)}</dd>
-      <dt>企业类型</dt><dd>${company.type}</dd><dt>模拟官网</dt><dd>${company.site}</dd>
-      <dt>搜索状态</dt><dd>已发现</dd><dt>主营业务</dt><dd>${esc(company.business)}</dd></dl>`,
+    `<h3>企业概览</h3><p>${esc(company.name)} · ${esc(company.type)} · ${esc(company.country)}</p>
+      <p>主营业务为${esc(company.business)}，主要服务${esc(company.customers)}。</p>`,
     researched ? `<p>${esc(company.name)} 的模拟业务为${esc(company.business)}，主要服务${esc(company.customers)}。</p>
       <details open><summary>主营业务与产品</summary><p>${esc(company.business)}</p></details>
       <details><summary>服务市场与客户群体</summary><p>${esc(company.country)} · ${esc(company.customers)}</p></details>
@@ -466,11 +473,39 @@ function renderCompany() {
         <dt>验证状态</dt><dd>未验证 · Demo</dd><dt>信息来源</dt><dd>预设联系人档案</dd></dl></details>`).join('') || '<p>此企业暂无符合该职位的模拟联系人。</p>'}`
       : '<p>联系人将在模拟识别完成后显示。</p>'
   ];
-  drawer.innerHTML = `<div class="zoe-acquisition-header"><span>Demo 模拟数据</span>${action('close-detail', '关闭')}</div>
-    <h2 id="zoeAcquisitionCompanyName">${esc(company.name)}</h2>
-    <div class="zoe-acquisition-actions" role="tablist" aria-label="企业详情">${tabs.map((label, i) =>
-      `<button type="button" id="zoe-detail-tab-${i}" role="tab" data-zoe-button="ghost" aria-selected="${i === tab}" tabindex="${i === tab ? 0 : -1}" aria-controls="zoe-detail-content" data-detail-tab="${i}">${label}</button>`).join('')}</div>
-    <section id="zoe-detail-content" role="tabpanel" aria-labelledby="zoe-detail-tab-${tab}">${panels[tab]}</section>`;
+  drawer.innerHTML = `<header class="zoe-acquisition-header">
+      <div><h2 id="zoeAcquisitionCompanyName">${esc(company.name)}</h2><span class="zoe-acquisition-help">Demo 模拟数据</span></div>
+      ${action('close-detail', '关闭')}
+    </header>
+    <div class="customer-detail-overview" aria-label="企业概要">
+      <div class="customer-detail-overview-row"><span>官网地址</span><span>${esc(company.site)}（模拟）</span></div>
+      <div class="customer-detail-overview-row"><span>主营产品</span><div class="customer-detail-chip-list"><span class="customer-detail-chip">${esc(company.business)}</span></div></div>
+      <div class="customer-detail-overview-row"><span>精准度标注</span><div>${precisionControl(company)}</div></div>
+    </div>
+    <div class="zoe-company-workbench">
+      <div class="customer-detail-activity">
+        <div class="zoe-acquisition-actions" role="tablist" aria-label="企业详情">${tabs.map((label, i) =>
+          `<button type="button" id="zoe-detail-tab-${i}" role="tab" data-zoe-button="ghost" aria-selected="${i === tab}" tabindex="${i === tab ? 0 : -1}" aria-controls="zoe-detail-content" data-detail-tab="${i}">${label}</button>`).join('')}</div>
+        <section id="zoe-detail-content" role="tabpanel" aria-labelledby="zoe-detail-tab-${tab}">${panels[tab]}</section>
+      </div>
+      <aside class="customer-company-detail" aria-label="公司详情">
+        <header><h3>公司详情</h3></header>
+        <details class="zoe-company-section" open><summary>基础信息</summary>
+          <dl class="customer-company-fields">${fieldRows({
+            公司名称: company.name, 国家地区: company.country, 官网地址: company.site,
+            公司类型: company.type, 主营业务: company.business, 服务客户: company.customers
+          })}</dl>
+        </details>
+        <details class="zoe-company-section" open><summary>获客信息</summary>
+          <dl class="customer-company-fields">${fieldRows({
+            搜索状态: '已发现', 背调状态: researched ? '已背调' : '待背调',
+            推荐分数: scored ? `${company.score} / 100 · ${grade(company.score)}级` : '待评分'
+          })}</dl>
+        </details>
+      </aside>
+    </div>`;
+  refreshIcons();
+
 }
 
 for (const form of [prompt, reply]) {
@@ -573,6 +608,22 @@ resetDialog.addEventListener('close', () => {
     form.querySelector('[type="submit"]').disabled = true;
   }
   goHome();
+});
+
+page.addEventListener('change', event => {
+  const control = event.target;
+  const id = control.dataset.companyPrecision;
+  if (!id || !precisionLabels.includes(control.value)) return;
+  const company = active?.companies.find(item => item.id === id);
+  if (!company) return;
+  company.precision = control.value;
+  const fromList = workspace.contains(control);
+  render();
+  if (fromList) {
+    const next = workspace.querySelector(`[data-company-precision="${id}"]`)
+      || workspace.querySelector('[data-filter="precision"]');
+    next?.focus({ preventScroll: true });
+  }
 });
 
 workspace.addEventListener('input', event => {

@@ -781,3 +781,23 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 @media (prefers-reduced-motion: reduce) {
   [data-stream-state="running"] .zoe-stream-indicator { animation: none; }
 }
+
+#zoeAcquisitionDrawer { width: min(100%, 960px); }
+#zoeAcquisitionDrawer .customer-detail-overview { margin-bottom: 16px; }
+#zoeAcquisitionDrawer .customer-detail-overview-row { align-items: center; }
+#zoeAcquisitionDrawer .customer-detail-overview-row > span:nth-child(2) {
+  color: var(--oz-foreground);
+  overflow-wrap: anywhere;
+}
+.zoe-company-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, .7fr);
+  gap: 16px;
+}
+#zoeAcquisitionDrawer .zoe-company-section { padding: 12px 16px; }
+#zoeAcquisitionDrawer .zoe-company-section summary { margin: 0 0 8px; font-weight: var(--oz-weight-medium); }
+#zoeAcquisitionDrawer .customer-company-fields { grid-template-columns: 80px minmax(0, 1fr); }
+#zoeAcquisition [data-company-precision] { min-width: 90px; }
+@media (max-width: 767px) {
+  .zoe-company-workbench { grid-template-columns: minmax(0, 1fr); }
+}
