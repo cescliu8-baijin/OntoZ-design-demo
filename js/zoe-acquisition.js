@@ -5,6 +5,14 @@ const screen = document.querySelector('#zoeAcquisition');
 const page = screen.closest('#zoePage');
 const prompt = document.querySelector('#zoeAcquisitionPrompt');
 const reply = document.querySelector('#zoeAcquisitionReply');
+const dock = reply.parentElement;
+const dockStatus = document.querySelector('#zoeAcquisitionStatus');
+const resetDialog = document.querySelector('#zoeAcquisitionReset');
+const resetMenu = resetDialog.closest('#zoeAcquisition').querySelector('.zoe-acquisition-menu');
+new ResizeObserver(() => {
+  screen.style.setProperty('--zoe-reply-height', `${dock.offsetHeight}px`);
+}).observe(dock);
+
 const conversation = screen.querySelector('.zoe-acquisition-conversation');
 const messages = document.querySelector('#zoeAcquisitionMessages');
 const announcement = document.querySelector('#zoeAcquisitionAnnouncement');
@@ -83,17 +91,28 @@ function push(task, role, text) {
 }
 
 function renderMessages() {
-  const collapsed = new Set([...messages.querySelectorAll('details:not([open])')].map(el => el.dataset.run));
-  messages.replaceChildren(...(active?.messages || []).map(({ role, text, run }, index) => {
+  const historyOpen = new Set([...messages.querySelectorAll('.zoe-icp-history[open]')].map(el => el.dataset.snapshot));
+  const expanded = new Map([...messages.querySelectorAll('details[data-run]')].map(el => [
+    el.dataset.run, { open: el.open, state: el.closest('[data-stream-state]').dataset.streamState }
+  ]));
+  messages.replaceChildren(...(active?.messages || []).map(({ role, text, run, snapshot }, index) => {
     const entry = document.createElement('div');
     entry.className = 'zoe-acquisition-message';
     entry.dataset.role = role;
     if (run) {
-      entry.innerHTML = `<details data-run="${active.id}-${index}" ${collapsed.has(`${active.id}-${index}`) ? '' : 'open'}>
-        <summary><span class="zoe-stream-indicator" aria-hidden="true"></span><span>${esc(run.title)}</span><span class="zoe-stream-status"></span><i data-lucide="chevron-down" aria-hidden="true"></i></summary>
+      const key = `${active.id}-${index}`;
+      const previous = expanded.get(key);
+      const open = previous?.state === run.state ? previous.open : run.state === 'running' || run.state === 'paused';
+      entry.innerHTML = `<details data-run="${key}" ${open ? 'open' : ''}>
+        <summary><span class="zoe-stream-indicator" aria-hidden="true"></span><span>${esc(run.summary || run.title)}</span><span class="zoe-stream-status"></span><i data-lucide="chevron-down" aria-hidden="true"></i></summary>
         <ol>${run.lines.map(line => `<li>${esc(line)}</li>`).join('')}<li class="zoe-stream-current" aria-hidden="true"></li></ol>
       </details>`;
       updateStream(entry, run);
+    } else if (snapshot) {
+      const summary = [snapshot.market, snapshot.product, snapshot.type].filter(Boolean).map(esc).join(' · ');
+      entry.innerHTML = `<details class="zoe-icp-history" data-snapshot="${active.id}-${index}" ${historyOpen.has(`${active.id}-${index}`) ? 'open' : ''}><summary>已确认画像 <span>${summary || '自定义条件'}</span></summary>
+        <dl>${Object.entries(fields).filter(([key]) => snapshot[key]).map(([key, label]) =>
+          `<dt>${label}</dt><dd>${esc(snapshot[key])}</dd>`).join('')}</dl></details>`;
     } else if (role === 'user') {
       entry.innerHTML = '<h2>获客需求</h2><p></p>';
       entry.querySelector('p').textContent = text;
@@ -103,6 +122,16 @@ function renderMessages() {
     return entry;
   }));
   reply.hidden = view !== 'chat' || !active || !['draft', 'review'].includes(active.phase);
+  const status = view === 'chat' && ['running', 'paused'].includes(active?.status) ? active.status : '';
+  dockStatus.hidden = !status;
+  if (dockStatus.dataset.status !== status) {
+    const focused = dockStatus.contains(document.activeElement);
+    dockStatus.dataset.status = status;
+    dockStatus.innerHTML = status ? `<span role="status">${status === 'paused' ? '搜索任务已暂停' : 'Zoe 正在执行获客任务…'}</span>
+      <div class="zoe-acquisition-actions">${status === 'paused' ? action('resume', '继续') : action('pause', '暂停')}${action('stop', '终止任务')}</div>` : '';
+    if (focused && status) dockStatus.querySelector('button').focus({ preventScroll: true });
+  }
+  dock.hidden = reply.hidden && dockStatus.hidden;
 }
 
 function updateStream(entry, run) {
@@ -180,6 +209,7 @@ function newTask(text = '') {
 
 function applyRequest(task, text) {
   clearTimeout(task.timer);
+  task.beforeRevision = task.original && task.messages.length ? { ...task.icp } : null;
   task.original ||= text;
   task.phase = 'understanding';
   task.status = 'pending';
@@ -201,6 +231,7 @@ function applyRequest(task, text) {
       return;
     }
     task.run.state = 'complete';
+    task.run.summary = '画像已生成';
     task.stage = 1;
     task.phase = 'draft';
     push(task, 'agent', '请确认目标客户画像。你可以直接编辑字段，也可以继续用自然语言补充需求。');
@@ -216,7 +247,11 @@ function refreshTask(task) {
 function icpCard(task) {
   if (!task.original) return '<h2>目标客户画像</h2><p class="zoe-acquisition-help">发送获客需求后，Zoe 会在这里整理搜索条件。</p>';
   if (task.phase === 'understanding') return '';
+  const changed = task.beforeRevision ? Object.entries(fields).filter(([key]) =>
+    (task.beforeRevision[key] || '') !== (task.icp[key] || '')) : [];
   return `<h2>确认目标客户画像（ICP）</h2>
+    ${task.beforeRevision ? `<p class="zoe-icp-changes">${changed.length ? changed.map(([key, label]) =>
+      `${label}：${esc(task.icp[key] || '已清除')}`).join(' · ') : '本轮沿用已有画像，请确认或编辑条件。'}</p>` : ''}
     <p class="zoe-acquisition-help">这是模拟解析结果。编辑内容会自动应用到本轮搜索。</p>
     <div class="zoe-acquisition-fields">${Object.entries(fields).map(([key, label]) =>
       `<label>${label}<input data-icp="${key}" maxlength="200" value="${esc(task.icp[key])}" placeholder="待补充"></label>`).join('')}</div>
@@ -224,6 +259,7 @@ function icpCard(task) {
 }
 
 function startSearch(task) {
+  task.messages.push({ role: 'snapshot', snapshot: { ...task.icp } });
   task.phase = 'pilot';
   task.status = 'running';
   task.stage = 2;
@@ -254,6 +290,7 @@ function schedule(task) {
         task.phase = 'review';
         task.status = 'partial';
         task.run.state = 'complete';
+        task.run.summary = '首批搜索完成 · 找到 10 家企业';
         push(task, 'agent', '已找到 10 家模拟企业并完成初步背调。这个方向符合预期吗？你可以继续搜索，或发消息修改条件。');
       }
     } else {
@@ -261,6 +298,7 @@ function schedule(task) {
       if (task.tick === qualificationLogs.length) {
         task.status = 'complete';
         task.run.state = 'complete';
+        task.run.summary = '匹配评分与决策人已生成';
         task.phase = 'results';
         push(task, 'agent', '模拟任务已完成。客户清单已包含匹配评分和决策人信息。');
       }
@@ -276,30 +314,19 @@ function continueSearch(task) {
   task.stage = 4;
   task.tick = 0;
   task.logs.push('用户确认搜索方向，已转为持续获客任务');
-  push(task, 'agent', '已按确认的方向建立任务。你可以在任务列表跟进评分和决策人识别进度。');
+  push(task, 'agent', '已启动后续获客任务。你可以留在这里查看结果，也可以到任务列表跟进进度。');
   beginStream(task, 'Zoe 正在评估匹配度并识别决策人');
-  show('tasks');
+  render();
   schedule(task);
 }
 
 function progressCard(task) {
-  const phase = task.previousPhase || task.phase;
-  const progress = phase === 'review' ? 70 : phase === 'results' ? 100
-    : phase === 'qualification' ? 70 + task.tick * 7 : 20 + task.tick * 5;
-  const controls = [
-    task.status === 'running' && action('pause', '暂停'),
-    task.status === 'paused' && action('resume', '继续'),
-    ['running', 'paused', 'partial'].includes(task.status) && action('stop', '终止任务'),
-    task.phase === 'review' && action('continue', '符合预期继续搜索', true),
-    task.phase === 'review' && action('modify', '修改搜索方向')
-  ].filter(Boolean).join('');
-  return `<h2>${esc(taskTitle(task))}</h2>
-    <p role="status">${statuses[task.status]} · ${steps[task.stage]} · 已发现 ${task.count} 家企业</p>
-    <progress class="zoe-acquisition-progress" value="${progress}" max="100" aria-label="模拟执行进度"></progress>
-    <ol class="zoe-acquisition-steps">${steps.map((step, i) =>
-      `<li ${i === task.stage && task.status !== 'complete' ? 'aria-current="step"' : ''}>${i < task.stage || task.status === 'complete' ? '已完成 · ' : ''}${step}</li>`).join('')}</ol>
-    
-    <div class="zoe-acquisition-actions">${controls}</div>`;
+  if (task.phase === 'review' || task.phase === 'results') return '';
+  return `<section class="zoe-acquisition-card">
+    <h2>${esc(taskTitle(task))}</h2>
+    <p>${statuses[task.status]} · ${steps[task.stage]} · 已发现 ${task.count} 家企业</p>
+    ${task.phase === 'qualification' ? action('tasks', '查看任务') : ''}
+  </section>`;
 }
 
 function taskTitle(task) {
@@ -338,21 +365,25 @@ function companyTable(task) {
   return `<section class="zoe-acquisition-results zoe-acquisition-card">
     <h2>${complete ? '最终客户清单' : '候选企业'}</h2>
     <p class="zoe-acquisition-help">Demo 模拟数据</p>
-    ${complete ? `<p>获客目标 · ${esc(task.original)}</p>
+    ${complete ? `<p>执行条件 · ${esc(taskTitle(task))}</p>
       <p>目标市场 · ${esc(task.icp.market || '未指定')}　企业 ${companies.length} 家　A级 ${companies.filter(c => grade(c.score) === 'A').length} 家　B级 ${companies.filter(c => grade(c.score) === 'B').length} 家　决策人 ${companies.reduce((sum, c) => sum + c.contacts.length, 0)} 位</p>` : ''}
     <div class="zoe-acquisition-toolbar">
       <input data-filter="query" type="search" aria-label="搜索企业名称" placeholder="搜索企业名称" value="${esc(filters.query)}">
-      <select data-filter="grade" aria-label="客户等级" ${scored ? '' : 'disabled'}><option value="">全部等级</option>${options(ratings, filters.grade)}</select>
+      ${scored ? `<select data-filter="grade" aria-label="客户等级"><option value="">全部等级</option>${options(ratings, filters.grade)}</select>` : ''}
       <select data-filter="type" aria-label="企业类型"><option value="">全部类型</option>${options([...new Set(companies.map(c => c.type))], filters.type)}</select>
       <select data-filter="research" aria-label="背调状态"><option value="">全部背调状态</option>${options(['已背调', '待背调'], filters.research)}</select>
-      <select data-filter="sort" aria-label="匹配度排序" ${scored ? '' : 'disabled'}>
+      ${scored ? `<select data-filter="sort" aria-label="匹配度排序">
         <option value="desc">匹配度从高到低</option><option value="asc" ${filters.sort === 'asc' ? 'selected' : ''}>匹配度从低到高</option>
-      </select>
+      </select>` : ''}
     </div>
     <div class="zoe-acquisition-table"><table>
-      <thead><tr><th>企业名称</th><th>国家或地区</th><th>企业类型</th><th>背调状态</th><th>匹配度</th><th>决策人</th></tr></thead>
+      <thead><tr><th>企业名称</th><th>国家或地区</th><th>企业类型</th><th>背调状态</th>${scored ? '<th>匹配度</th>' : ''}${complete ? '<th>决策人</th>' : ''}</tr></thead>
       <tbody></tbody>
     </table></div>
+    ${task.phase === 'review' ? `<footer class="zoe-result-decision">
+      <p>确认这批企业符合预期后，Zoe 会继续生成匹配评分并识别决策人。</p>
+      <div class="zoe-acquisition-actions">${action('continue', '继续搜索', true)}${action('modify', '调整方向')}</div>
+    </footer>` : complete ? `<footer class="zoe-result-decision">${action('tasks', '查看任务')}</footer>` : ''}
   </section>`;
 }
 
@@ -370,9 +401,9 @@ function renderRows(task) {
   if (scored) companies.sort((a, b) => filters.sort === 'asc' ? a.score - b.score : b.score - a.score);
   tbody.innerHTML = companies.map(company => `<tr data-company-id="${company.id}">
     <td>${action('company', esc(company.name))}</td><td>${esc(company.country)}</td><td>${company.type}</td><td>${status}</td>
-    <td>${scored ? action('score', `${company.score} · ${grade(company.score)}级`) : '待评分'}</td>
-    <td>${task.phase === 'results' ? company.contacts.length + ' 位' : '待识别'}</td></tr>`).join('')
-    || '<tr><td colspan="6">暂无符合条件的企业</td></tr>';
+    ${scored ? `<td>${action('score', `${company.score} · ${grade(company.score)}级`)}</td>` : ''}
+    ${task.phase === 'results' ? `<td>${company.contacts.length} 位</td>` : ''}</tr>`).join('')
+    || `<tr><td colspan="${4 + Number(scored) + Number(task.phase === 'results')}">暂无符合条件的企业</td></tr>`;
 }
 
 function render() {
@@ -387,7 +418,7 @@ function render() {
     workspace.innerHTML = active.phase === 'draft' ? `<article class="zoe-acquisition-card">${icpCard(active)}</article>` : '';
   }
   else {
-    workspace.innerHTML = `<article class="zoe-acquisition-card">${progressCard(active)}</article>${active.count ? companyTable(active) : ''}`;
+    workspace.innerHTML = `${progressCard(active)}${active.count ? companyTable(active) : ''}`;
     renderRows(active);
   }
   workspace.querySelectorAll('details[data-task-logs]').forEach(el => {
@@ -484,16 +515,10 @@ page.addEventListener('click', event => {
       input.focus();
       break;
     }
-    case 'back': goHome(); break;
+    case 'back': resetMenu.open = false; goHome(); break;
     case 'reset':
-      tasks.forEach(item => clearTimeout(item.timer));
-      tasks = [];
-      active = null;
-      for (const form of [prompt, reply]) {
-        form.reset();
-        form.querySelector('[type="submit"]').disabled = true;
-      }
-      goHome();
+      resetDialog.returnValue = '';
+      resetDialog.showModal();
       break;
     case 'new':
       if (screen.hidden) returnFocus = button;
@@ -501,6 +526,7 @@ page.addEventListener('click', event => {
       break;
     case 'tasks':
       if (screen.hidden) returnFocus = button;
+      resetMenu.open = false;
       show('tasks');
       break;
     case 'open-task': show('chat', task); break;
@@ -538,6 +564,19 @@ page.addEventListener('click', event => {
     }
     case 'close-detail': drawer.close(); break;
   }
+});
+
+resetDialog.addEventListener('close', () => {
+  if (resetDialog.returnValue !== 'reset') return;
+  resetMenu.open = false;
+  tasks.forEach(item => clearTimeout(item.timer));
+  tasks = [];
+  active = null;
+  for (const form of [prompt, reply]) {
+    form.reset();
+    form.querySelector('[type="submit"]').disabled = true;
+  }
+  goHome();
 });
 
 workspace.addEventListener('input', event => {

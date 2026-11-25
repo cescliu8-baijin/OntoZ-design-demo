@@ -594,28 +594,75 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
   box-shadow: var(--oz-shadow-xs);
 }
 
-#zoeAcquisition .zoe-acquisition-layout:has(> #zoeAcquisitionReply:not([hidden])) {
-  padding-bottom: calc(var(--zoe-composer-height) + var(--zoe-composer-bottom) + 24px);
+#zoeAcquisition .zoe-acquisition-layout:has(.zoe-acquisition-dock:not([hidden])) {
+  padding-bottom: calc(var(--zoe-reply-height, 72px) + var(--zoe-composer-bottom) + 24px);
 }
 
-#zoeAcquisitionReply.av2-prompt-box:not([hidden]) {
+.zoe-acquisition-dock {
   position: fixed;
   z-index: 60;
   inset: auto 0 var(--zoe-composer-bottom) var(--zoe-composer-nav);
   width: min(800px, calc(100% - var(--zoe-composer-nav) - 64px));
-  height: var(--zoe-composer-height);
   margin-inline: auto;
+}
+
+#zoeAcquisition #zoeAcquisitionReply:not([hidden]) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  height: auto;
+  min-height: 52px;
+  gap: 8px;
+  padding: 10px 12px;
   box-shadow: var(--oz-shadow-xl);
 }
+#zoeAcquisitionReply textarea {
+  field-sizing: content;
+  min-height: var(--oz-leading-base);
+  max-height: 120px;
+  padding-block: 4px;
+  overflow: auto;
+}
+#zoeAcquisitionReply.av2-prompt-box:focus-within { border-color: var(--oz-indigo-500); }
 
-#zoeAcquisitionReply.av2-prompt-box:focus-within {
-  border-color: var(--oz-indigo-500);
+#zoeAcquisitionStatus:not([hidden]) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--oz-card);
+  box-shadow: var(--oz-shadow-lg);
 }
 
+.zoe-acquisition-menu { position: relative; }
+.zoe-acquisition-menu summary { display: grid; place-items: center; width: 30px; height: 28px; }
+.zoe-acquisition-menu[open] button {
+  position: absolute;
+  z-index: 61;
+  top: 100%;
+  right: 0;
+  white-space: nowrap;
+  box-shadow: var(--oz-shadow-sm);
+}
+#zoeAcquisition .zoe-acquisition-menu[open] button { background: var(--oz-card); }
+.zoe-acquisition-reset {
+  max-width: min(360px, calc(100% - 32px));
+  padding: 20px;
+  border: 1px solid var(--oz-border);
+  border-radius: 12px;
+  box-shadow: var(--oz-shadow-xl);
+}
+.zoe-acquisition-reset::backdrop { background: var(--oz-black-30); }
+.zoe-acquisition-reset .zoe-acquisition-actions { justify-content: flex-end; }
+.zoe-result-decision { margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--oz-border); }
+.zoe-icp-history span,
+.zoe-icp-changes { color: var(--oz-muted-foreground); }
+
 @media (max-width: 767px) {
-  #zoeAcquisitionReply.av2-prompt-box:not([hidden]) {
-    width: calc(100% - 32px);
-  }
+  .zoe-acquisition-dock { width: calc(100% - 32px); }
 }
 
 #zoeAcquisition .zoe-acquisition-card:first-child,
@@ -626,6 +673,20 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
   line-height: var(--oz-leading-lg);
 }
 #zoeAcquisition .zoe-acquisition-message p { margin: 0; }
+#zoeAcquisition .zoe-acquisition-message[data-role="user"] {
+  width: fit-content;
+  max-width: min(100%, 640px);
+  justify-self: end;
+  padding: 10px 14px;
+  border: 0;
+  background: var(--oz-muted);
+  box-shadow: none;
+}
+#zoeAcquisition .zoe-acquisition-message[data-role="user"] h2 {
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-xs);
+  color: var(--oz-muted-foreground);
+}
 #zoeAcquisition .zoe-acquisition-message[data-role="process"] { white-space: normal; }
 
 .zoe-acquisition-message[data-role="process"] summary {

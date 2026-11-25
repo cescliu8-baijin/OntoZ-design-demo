@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="css/wendy-home.css?v=wendy-20261019" />
     <link rel="stylesheet" href="css/wendy-studio.css?v=studio-1" />
     <link rel="stylesheet" href="css/wendy-calendar.css?v=wendy-20261019" />
-    <link rel="stylesheet" href="css/zoe-agent-v2.css?v=acquisition-5" id="zoeAgentV2Styles" disabled />
+    <link rel="stylesheet" href="css/zoe-agent-v2.css?v=acquisition-6" id="zoeAgentV2Styles" disabled />
     <link rel="stylesheet" href="css/wendy-inbox.css?v=wendy-20261019" />
     <link rel="stylesheet" href="css/wendy-publisher.css?v=wendy-20261019" />
     <link rel="stylesheet" href="css/project-layout.css?v=john-demo-041" />
@@ -1402,7 +1402,10 @@
               <h1 id="zoeAcquisitionTitle" tabindex="-1">Zoe 智能获客</h1>
               <div class="zoe-acquisition-actions">
                 <button type="button" data-acquisition-action="tasks">任务列表</button>
-                <button type="button" data-acquisition-action="reset" aria-label="重新开始" title="重新开始"><i data-lucide="refresh-ccw"></i></button>
+                <details class="zoe-acquisition-menu">
+                  <summary aria-label="更多操作"><i data-lucide="ellipsis" aria-hidden="true"></i></summary>
+                  <button type="button" data-acquisition-action="reset">重置演示</button>
+                </details>
               </div>
             </header>
             <div class="zoe-acquisition-layout">
@@ -1411,11 +1414,22 @@
                 <div class="zoe-acquisition-announcement" id="zoeAcquisitionAnnouncement" role="status"></div>
               </section>
               <section class="zoe-acquisition-workspace" id="zoeAcquisitionWorkspace" aria-label="获客任务工作区"></section>
-              <form class="av2-prompt-box" id="zoeAcquisitionReply">
-                <textarea rows="2" maxlength="1000" aria-label="补充获客需求" placeholder="补充或修改获客需求…"></textarea>
-                <div><button type="submit" disabled><i data-lucide="arrow-up"></i>发送</button></div>
-              </form>
+              <div class="zoe-acquisition-dock">
+                <form class="av2-prompt-box" id="zoeAcquisitionReply">
+                  <textarea rows="2" maxlength="1000" aria-label="补充获客需求" placeholder="补充或修改获客需求…"></textarea>
+                  <div><button type="submit" disabled><i data-lucide="arrow-up"></i>发送</button></div>
+                </form>
+                <div id="zoeAcquisitionStatus" hidden></div>
+              </div>
             </div>
+            <dialog class="zoe-acquisition-reset" id="zoeAcquisitionReset" aria-labelledby="zoeAcquisitionResetTitle">
+              <h2 id="zoeAcquisitionResetTitle">重置演示？</h2>
+              <p>本次演示中的所有任务、对话和未发送的内容都会被清空。</p>
+              <form method="dialog" class="zoe-acquisition-actions">
+                <button value="cancel" autofocus>取消</button>
+                <button value="reset" data-primary>确认重置</button>
+              </form>
+            </dialog>
             <dialog class="zoe-acquisition-drawer" id="zoeAcquisitionDrawer" aria-labelledby="zoeAcquisitionCompanyName"></dialog>
           </div>
 
@@ -1697,7 +1711,7 @@ John</textarea></label>
     <script src="js/ontology-strategy.js?v=buyer-strategy-1"></script>
     <script src="js/keyword-validation.js?v=keyword-validation-history-1"></script>
     <script src="js/zoe.js?v=collaboration-1"></script>
-    <script type="module" src="js/zoe-acquisition.js?v=2"></script>
+    <script type="module" src="js/zoe-acquisition.js?v=3"></script>
     <script src="js/leo.js?v=exhibition-marketing-4"></script>
     <script src="assets/gsap.min.js"></script>
     <script src="js/agent-home-layout.js?v=foundations-2"></script>
