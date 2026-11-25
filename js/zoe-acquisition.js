@@ -38,6 +38,9 @@ function restoreTasks() {
     if (!Array.isArray(saved)) return [];
     return saved.filter(task => task?.confirmed && Array.isArray(task.messages)).map(task => {
       task.run = task.messages.findLast(message => message.run)?.run;
+      if (task.phase === 'results' && !task.poolSelection) {
+        task.poolSelection = resultCandidates(task).filter(company => company.precision === '精准').map(company => company.id);
+      }
       if (task.status === 'running' && task.run) {
         task.status = 'paused';
         task.run.state = 'paused';
@@ -77,7 +80,7 @@ const grade = score => ratings[score >= 80 ? 0 : score >= 60 ? 1 : score >= 40 ?
 
 function parseIcp(text, previous) {
   const values = { ...previous };
-  const target = text.split(/希望|想要|想找|寻找|开发|目标市场/).at(-1);
+  const target = text.split(/排除|不要/, 1)[0].split(/希望|想要|想找|寻找|开发|目标市场/).at(-1);
   const market = target.match(/德国|英国|法国|美国|加拿大|日本|中国|越南|东南亚|欧洲|北美|中东|澳大利亚|巴西|印度|墨西哥/)?.[0];
   const product = text.match(/不锈钢工业阀门|工业阀门|流体控制设备|商用照明|工业机器人|包装机械|光伏组件|医疗器械|工业连接器/)?.[0];
   const type = target.match(/经销商|进口商|制造商|零售商|批发商|工程服务商/g)?.filter(item => item !== '制造商' || !text.includes('我们是'));
@@ -97,9 +100,17 @@ function parseIcp(text, previous) {
   return values;
 }
 
+function requestedTypes(value = '') {
+  return value.match(/经销商|进口商|制造商|零售商|批发商|工程服务商/g) || [];
+}
+
 function makeCompanies(task) {
   const isValveDemo = task.icp.market === '德国' && /工业阀门/.test(task.icp.product);
   const bases = ['Aster', 'Boreal', 'Cedar', 'Delta', 'Elm', 'Flint', 'Grove', 'Harbor', 'Iris', 'Juniper'];
+  const allowed = requestedTypes(task.icp.type);
+  const blocked = requestedTypes(task.icp.exclude);
+  const excludedTerms = (task.icp.exclude || '').split(/[、,，；;\s]+/).filter(Boolean);
+  const typeQuery = (task.icp.type || '').trim();
   return companyProfiles.map(([name, type, business, customers, score], index) => {
     if (!isValveDemo) {
       name = `${bases[index]} ${['Distribution', 'Trading', 'Supply', 'Engineering'][index % 4]}`;
@@ -122,7 +133,10 @@ function makeCompanies(task) {
         email: `contact-${index * 2 + offset + 1}@example.com`
       }))
     };
-  });
+  }).filter(company => (!typeQuery || (allowed.length ? allowed.includes(company.type) : company.type.includes(typeQuery))) &&
+    !blocked.includes(company.type) &&
+    !excludedTerms.some(term => [company.name, company.business, company.customers].some(value => value.toLowerCase().includes(term.toLowerCase()))));
+
 }
 
 function push(task, role, text) {
@@ -303,6 +317,13 @@ function refreshTask(task) {
   if (!screen.hidden && (active === task || view === 'tasks')) render();
 }
 
+function icpValidation(icp) {
+  const conflicts = requestedTypes(icp.type).filter(type => requestedTypes(icp.exclude).includes(type));
+  const missing = ['product', 'market', 'type'].filter(key => !icp[key]);
+  return `${conflicts.length ? `<p>条件冲突：${esc(conflicts.join('、'))}同时出现在企业类型与排除条件中，搜索时将排除。</p>` : ''}
+    ${missing.length ? `<p>待补充：${missing.map(key => fields[key]).join('、')}。可先查看模拟候选，再补充需求。</p>` : ''}`;
+}
+
 function icpCard(task) {
   if (!task.original) return '<h2>目标客户画像</h2><p class="zoe-acquisition-help">发送获客需求后，Zoe 会在这里整理搜索条件。</p>';
   if (task.phase === 'understanding') return '';
@@ -311,9 +332,15 @@ function icpCard(task) {
   return `<h2>确认目标客户画像（ICP）</h2>
     ${task.beforeRevision ? `<p class="zoe-icp-changes">${changed.length ? changed.map(([key, label]) =>
       `${label}：${esc(task.beforeRevision[key] || '未填写')} → ${esc(task.icp[key] || '已清除')}`).join(' · ') : '本轮沿用已有画像，请确认或编辑条件。'}</p>` : ''}
-    <p class="zoe-acquisition-help">这是模拟解析结果。编辑内容会自动应用到本轮搜索。</p>
-    <div class="zoe-acquisition-fields">${Object.entries(fields).map(([key, label]) =>
-      `<label>${label}<input data-icp="${key}" maxlength="200" value="${esc(task.icp[key])}" placeholder="待补充"></label>`).join('')}</div>
+    <p class="zoe-acquisition-help">产品、市场和企业类型用于确定搜索范围。排除条件优先于企业类型。优先条件供审核参考。</p>
+    <div data-icp-validation aria-live="polite">${icpValidation(task.icp)}</div>
+    ${[
+      ['搜索范围', ['product', 'market', 'type']],
+      ['已有业务信息', ['industry', 'size', 'capability']],
+      ['优先与排除', ['priority', 'exclude']]
+    ].map(([title, keys]) => `<section><h3>${title}</h3>
+      <div class="zoe-acquisition-fields">${keys.map(key =>
+        `<label>${fields[key]}<input data-icp="${key}" maxlength="200" value="${esc(task.icp[key])}" placeholder="待补充"></label>`).join('')}</div></section>`).join('')}
     <div class="zoe-acquisition-actions">${action('start', '确认并开始搜索', 'primary')}</div>`;
 }
 
@@ -325,6 +352,7 @@ function startSearch(task) {
   task.tick = 0;
   task.count = 0;
   task.companies = makeCompanies(task);
+  task.includeUnrated = false;
   task.logs = ['已确认客户画像，开始小规模模拟搜索'];
   beginStream(task, 'Zoe 正在搜索潜在客户并开展背调');
   filters = {};
@@ -332,24 +360,28 @@ function startSearch(task) {
   schedule(task);
 }
 
-const searchLogs = ['整理搜索条件与关键词', '筛出 4 家候选企业', '已找到 8 家候选企业', '已找到 10 家候选企业，开始核对主营业务', '已核对主营业务和服务市场，首批结果待确认'];
+const searchLogs = [
+  () => '整理搜索条件与关键词',
+  task => `按企业类型和排除条件筛出 ${task.companies.length} 家候选企业`,
+  task => task.companies.length ? '已核对主营业务和服务市场，候选结果待确认' : '当前模拟样本没有符合条件的企业'
+];
 const qualificationLogs = ['已计算六个维度的匹配分数', '已生成推荐理由与待验证信息', '正在识别采购与供应链角色', '已整理模拟决策人与客户清单'];
 
 function schedule(task) {
   const pilot = task.phase === 'pilot';
-  const log = (pilot ? searchLogs : qualificationLogs)[task.tick];
+  const log = pilot ? searchLogs[task.tick](task) : qualificationLogs[task.tick];
   streamStep(task, log, () => {
     task.logs.push(log);
     task.tick++;
     if (pilot) {
-      task.stage = task.tick < 4 ? 2 : 3;
-      task.count = Math.min(10, (task.tick - 1) * 4);
+      task.stage = task.tick < 2 ? 2 : 3;
+      task.count = task.tick >= 2 ? task.companies.length : 0;
       if (task.tick === searchLogs.length) {
         task.phase = 'review';
         task.status = 'partial';
         task.run.state = 'complete';
         task.run.summary = `第 ${task.rounds.length + 1} 轮搜索完成 · 找到 ${task.count} 家企业`;
-        push(task, 'agent', '已找到 10 家模拟企业并完成初步背调。这个方向符合预期吗？你可以继续搜索，或发消息修改条件。');
+        push(task, 'agent', task.count ? `已找到 ${task.count} 家模拟企业。标注后可开始深度分析，也可以补充条件重新搜索。` : '当前没有符合条件的模拟企业。请在下方补充或放宽搜索条件。');
       }
     } else {
       task.stage = task.tick < 3 ? 4 : 5;
@@ -367,12 +399,26 @@ function schedule(task) {
   });
 }
 
+function analysisCandidates(task) {
+  return task.companies.filter(company => company.precision === '精准' || (task.includeUnrated && company.precision === '待标注'));
+}
+
+function resultCandidates(task) {
+  return task.companies.slice(0, task.count).filter(company => !task.analysisIds || task.analysisIds.includes(company.id));
+}
+
 function continueSearch(task) {
+  const companies = analysisCandidates(task);
+  if (!companies.length) return;
+  task.analysisIds = companies.map(company => company.id);
+  task.poolSelection = companies.filter(company => company.precision === '精准').map(company => company.id);
+  filters = {};
+
   task.phase = 'qualification';
   task.status = 'running';
   task.stage = 4;
   task.tick = 0;
-  task.logs.push('用户确认搜索方向，已转为持续获客任务');
+  task.logs.push(`用户确认深度分析范围：${companies.length} 家企业`);
   task.confirmed = true;
   const guide = {
     role: 'task-guide',
@@ -457,12 +503,12 @@ function taskList() {
     <div class="zoe-acquisition-actions">${action('new', '创建获客任务', 'primary')} <a href="#customers">前往客户池</a></div>
     ${tasks.length ? tasks.map(task => `<article class="zoe-acquisition-card">
       <h3>${esc(taskTitle(task))}</h3>
-      <p>${statuses[task.status]} · ${steps[task.stage]} · 已发现 ${task.count} 家企业</p>
+      <p>${task.phase === 'review' ? '待确认' : statuses[task.status]} · ${steps[task.stage]} · ${task.status === 'complete' ? `已分析 ${resultCandidates(task).length} 家企业` : task.phase === 'review' ? `${task.companies.filter(company => company.precision === '待标注').length} 家待标注` : `已发现 ${task.count} 家企业`}</p>
       <details data-task-logs="${task.id}"><summary>模拟执行日志</summary>${task.logs.length ? `<ul>${task.logs.map(log => `<li>${esc(log)}</li>`).join('')}</ul>` : '<p>暂无执行日志</p>'}</details>
       <div class="zoe-acquisition-actions" data-task-id="${task.id}">
-        ${action('open-task', task.status === 'complete' ? '查看客户清单' : '查看任务')}
+        ${action('open-task', task.status === 'complete' ? '查看结果' : task.phase === 'review' ? '继续审核' : '查看任务')}
         ${task.status === 'running' ? action('pause', '暂停') : ''}
-        ${task.status === 'paused' ? action('resume', '继续') : ''}
+        ${task.status === 'paused' ? action('resume', '继续执行') : ''}
         ${['running', 'paused', 'partial'].includes(task.status) ? action('stop', '终止任务', 'destructive') : ''}
       </div>
     </article>`).join('') : '<p>暂无任务。创建获客任务后可在这里查看进度。</p>'}`;
@@ -489,7 +535,7 @@ function precisionControl(company, placement = 'list') {
 function companyTable(task) {
   const complete = task.phase === 'results';
   const scored = hasScores(task);
-  const companies = task.companies.slice(0, task.count);
+  const companies = resultCandidates(task);
   return `<section class="zoe-acquisition-results zoe-acquisition-card">
     <h2 tabindex="-1">${complete ? '最终客户清单' : '候选企业'}</h2>
     <p class="zoe-acquisition-help">Demo 模拟数据 · ${companies.filter(company => company.precision === '精准').length} 家精准 · ${companies.filter(company => company.precision === '不精准').length} 家不精准</p>
@@ -506,13 +552,18 @@ function companyTable(task) {
       </select>` : ''}
     </div>
     <div class="zoe-acquisition-table"><table>
-      <thead><tr><th>企业名称</th><th>国家或地区</th><th>企业类型</th><th>背调状态</th><th>你的标注</th>${scored ? '<th>Zoe 匹配评分</th>' : ''}${complete ? '<th>决策人</th>' : ''}</tr></thead>
+      <thead><tr>${complete ? '<th>加入客户池</th>' : ''}<th>企业名称</th><th>国家或地区</th><th>企业类型</th><th>背调状态</th><th>你的标注</th>${scored ? '<th>Zoe 匹配评分</th>' : ''}${complete ? '<th>决策人</th>' : ''}</tr></thead>
       <tbody></tbody>
     </table></div>
     ${task.phase === 'review' ? `<footer class="zoe-result-decision">
-      <p>确认这批企业符合预期后，Zoe 会继续生成匹配评分并识别决策人。如需调整搜索方向，请在下方输入框补充需求。</p>
-      <div class="zoe-acquisition-actions">${action('continue', '继续搜索', 'primary')}</div>
-    </footer>` : complete ? `<footer class="zoe-result-decision">${action('tasks', '查看任务')}</footer>` : ''}
+      <p>将分析 ${analysisCandidates(task).length} 家企业，生成匹配评分和决策人信息。跳过 ${companies.filter(company => company.precision === '不精准').length} 家不精准企业。</p>
+      <label><input type="checkbox" data-include-unrated ${task.includeUnrated ? 'checked' : ''}>同时分析待标注企业</label>
+      <div class="zoe-acquisition-actions"><button type="button" data-zoe-button="primary" data-acquisition-action="continue" ${analysisCandidates(task).length ? '' : 'disabled'}>开始深度分析</button></div>
+    </footer>` : complete ? `<footer class="zoe-result-decision">
+      <p>已选 <span data-pool-count>${(task.poolSelection || []).length}</span> 家 · 默认勾选精准企业。</p>
+      <div class="zoe-acquisition-actions"><button type="button" data-zoe-button="primary" data-acquisition-action="add-pool" ${task.poolSelection?.length ? '' : 'disabled'}>加入客户池</button>${action('tasks', '查看任务')} <a href="#customers">前往客户池</a></div>
+      <p role="status" data-pool-result>${esc(task.poolResult || '')}</p>
+    </footer>` : ''}
   </section>`;
 }
 
@@ -522,7 +573,7 @@ function renderRows(task) {
   const researched = hasResearch(task);
   const scored = hasScores(task);
   const status = researched ? '已背调' : '待背调';
-  const companies = task.companies.slice(0, task.count).filter(company =>
+  const companies = resultCandidates(task).filter(company =>
     (!filters.query || company.name.toLowerCase().includes(filters.query.trim().toLowerCase())) &&
     (!filters.type || company.type === filters.type) &&
     (!filters.grade || (scored && grade(company.score) === filters.grade)) &&
@@ -530,10 +581,11 @@ function renderRows(task) {
     (!filters.precision || company.precision === filters.precision));
   if (scored) companies.sort((a, b) => filters.sort === 'asc' ? a.score - b.score : b.score - a.score);
   tbody.innerHTML = companies.map(company => `<tr data-company-id="${company.id}">
+    ${task.phase === 'results' ? `<td><input type="checkbox" data-pool-select="${company.id}" aria-label="选中 ${esc(company.name)} 加入客户池" ${task.poolSelection?.includes(company.id) ? 'checked' : ''}></td>` : ''}
     <td>${action('company', esc(company.name), 'ghost')}</td><td>${esc(company.country)}</td><td>${company.type}</td><td>${status}</td><td>${precisionControl(company)}</td>
     ${scored ? `<td>${action('score', `${company.score} · ${grade(company.score)}级`, 'ghost')}</td>` : ''}
     ${task.phase === 'results' ? `<td>${company.contacts.length} 位</td>` : ''}</tr>`).join('')
-    || `<tr><td colspan="${5 + Number(scored) + Number(task.phase === 'results')}">暂无符合条件的企业</td></tr>`;
+    || `<tr><td colspan="${5 + Number(scored) + 2 * Number(task.phase === 'results')}">暂无符合条件的企业</td></tr>`;
 }
 
 function render() {
@@ -549,7 +601,7 @@ function render() {
     workspace.innerHTML = active.phase === 'draft' ? `<article class="zoe-acquisition-card">${icpCard(active)}</article>` : '';
   }
   else {
-    workspace.innerHTML = `${active.count ? companyTable(active) : ''}
+    workspace.innerHTML = `${active.count ? companyTable(active) : active.phase === 'review' ? '<p>暂无符合条件的候选企业。请在下方补充或放宽搜索条件。</p>' : ''}
       ${active.status === 'stopped' ? '<p role="status">任务已终止</p>' : ''}
       ${active.phase === 'qualification' ? action('tasks', '查看任务') : ''}`;
     renderRows(active);
@@ -576,7 +628,8 @@ function showCompany(company, index, trigger, task) {
 function renderCompany() {
   const { company, task, tab } = detail;
   const researched = hasResearch(task);
-  const scored = hasScores(task);
+  const eligible = !task.analysisIds || task.analysisIds.includes(company.id);
+  const scored = eligible && hasScores(task);
   const reasons = company.score >= 80 ? '产品线和目标客户类型匹配，具备模拟优先跟进价值。'
     : company.score >= 60 ? '产品或渠道部分匹配，建议先核实采购用途。' : '主营应用和目标客群存在差异，优先级较低。';
   const contacts = company.contacts.filter(person => !detail.role || person.role === detail.role);
@@ -596,7 +649,7 @@ function renderCompany() {
       <h3>匹配理由</h3><p>${reasons} 企业主营${esc(company.business)}，服务${esc(company.customers)}。</p>
       <h3>限制与待验证</h3><p>${company.score < 80 ? '渠道覆盖或应用范围与目标存在差异。' : '现有样本无法确认近期采购意向。'}采购需求、进口记录与供应商准入条件待核实。</p>`
       : '<p>匹配分析将在模拟评分完成后显示。</p>',
-    task.phase === 'results' ? `<label>筛选职位 <select data-contact-role><option value="">全部职位</option>${options(roles, detail.role)}</select></label>
+    eligible && task.phase === 'results' ? `<label>筛选职位 <select data-contact-role><option value="">全部职位</option>${options(roles, detail.role)}</select></label>
       ${contacts.map(person => `<details><summary>${person.name} · ${person.role}</summary>
         <dl><dt>所属企业</dt><dd>${esc(company.name)}</dd><dt>部门</dt><dd>${/Sales|CEO/.test(person.role) ? '业务管理' : '采购与供应链'}</dd>
         <dt>示例邮箱</dt><dd>${person.email}</dd><dt>电话</dt><dd>未提供</dd><dt>LinkedIn</dt><dd>未提供</dd>
@@ -683,8 +736,8 @@ page.addEventListener('click', event => {
       resetDialog.showModal();
       break;
     case 'new':
-      if (screen.hidden) returnFocus = button;
-      newTask();
+      if (home.contains(button)) prompt.querySelector('textarea').focus();
+      else newTask();
       break;
     case 'tasks':
       if (screen.hidden) returnFocus = button;
@@ -720,6 +773,17 @@ page.addEventListener('click', event => {
       if (task.confirmed) saveTasks();
       render();
       break;
+    case 'add-pool': {
+      if (task.phase !== 'results') break;
+      const selected = resultCandidates(task).filter(company => task.poolSelection.includes(company.id));
+      const result = addZoeCustomerLeads(selected, {
+        id: task.id, title: taskTitle(task), round: task.rounds.length + 1, industry: task.icp.industry
+      });
+      task.poolResult = result ? `新增 ${result.added} 家，重复 ${result.duplicates} 家。` : '保存失败，请重试。';
+      saveTasks();
+      workspace.querySelector('[data-pool-result]').textContent = task.poolResult;
+      break;
+    }
     case 'latest-result': {
       const destination = workspace.querySelector('h2') || messages.lastElementChild;
       if (destination) {
@@ -757,6 +821,22 @@ resetDialog.addEventListener('close', () => {
 
 page.addEventListener('change', event => {
   const control = event.target;
+  if (control.matches('[data-include-unrated]')) {
+    active.includeUnrated = control.checked;
+    render();
+    workspace.querySelector('[data-include-unrated]')?.focus({ preventScroll: true });
+    return;
+  }
+  if (control.dataset.poolSelect && active?.phase === 'results') {
+    const selection = new Set(active.poolSelection || []);
+    if (control.checked) selection.add(control.dataset.poolSelect);
+    else selection.delete(control.dataset.poolSelect);
+    active.poolSelection = [...selection];
+    workspace.querySelector('[data-pool-count]').textContent = selection.size;
+    workspace.querySelector('[data-acquisition-action="add-pool"]').disabled = !selection.size;
+    saveTasks();
+    return;
+  }
   const id = control.dataset.companyPrecision;
   if (!id || !precisionLabels.includes(control.value)) return;
   const company = active?.companies.find(item => item.id === id);
@@ -776,6 +856,7 @@ workspace.addEventListener('input', event => {
   const { filter, icp } = event.target.dataset;
   if (icp) {
     active.icp[icp] = event.target.value.trim();
+    workspace.querySelector('[data-icp-validation]').innerHTML = icpValidation(active.icp);
     renderSidebar();
   }
   if (filter) {

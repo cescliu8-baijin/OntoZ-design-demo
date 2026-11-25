@@ -428,16 +428,61 @@ function renderAgentStrategies() {
   agentStrategies.innerHTML = generatedStrategies.map(renderAgentStrategyCard).join('');
 }
 
+const zoeLeadStorageKey = 'ontoz-customer-pool-zoe-v1';
+function customerPoolLeads() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(zoeLeadStorageKey) || '[]');
+    return Array.isArray(saved) ? [...saved, ...leads] : leads;
+  } catch {
+    return leads;
+  }
+}
+
+function addZoeCustomerLeads(companies, source) {
+  const pool = customerPoolLeads();
+  const keys = new Set(pool.map(lead => `${lead.company.trim().toLowerCase()}|${lead.country.trim().toLowerCase()}`));
+  const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  const added = [];
+  for (const company of companies) {
+    const key = `${company.name.trim().toLowerCase()}|${company.country.trim().toLowerCase()}`;
+    if (keys.has(key)) continue;
+    keys.add(key);
+    added.push({
+      id: `zoe-${company.id}`, company: company.name, country: company.country, type: company.type,
+      contacts: `${company.contacts.length} 人`, owner: '待分配', site: `https://${company.site}`,
+      score: (company.score / 10).toFixed(1), recommendedScore: company.score, stage: 0, createdAt,
+      products: [company.business], custom: ['Zoe 获客', company.precision], industry: source.industry || '未提供',
+      facebook: '', address: '未提供', identity: company.type, businessArea: company.business,
+      companyType: company.type, hardwareAdvantages: '未提供', softwareAdvantages: '未提供',
+      description: `${company.business}，面向${company.customers}（Demo 模拟数据）`,
+      advantages: [], sellingPoints: '待核实', timeline: '从 Zoe 获客任务加入客户池',
+      contactList: company.contacts.map(contact => ({ ...contact, phone: '未提供' })),
+      materials: [], notes: [`来源：${source.title} · 第 ${source.round} 轮 · ${company.precision}（模拟数据）`],
+      zoeSource: { ...source, precision: company.precision }
+    });
+  }
+  try {
+    localStorage.setItem(zoeLeadStorageKey, JSON.stringify([...added, ...pool.filter(lead => lead.zoeSource)]));
+  } catch {
+    return null;
+  }
+  const list = document.querySelector('#leadList');
+  if (list) delete list.dataset.rendered;
+  renderLeads();
+  refreshIcons();
+  return { added: added.length, duplicates: companies.length - added.length };
+}
+
 function renderLeads() {
   const list = document.querySelector('#leadList');
   if (!list || list.dataset.rendered) return;
-  list.innerHTML = leads.map(lead => `
+  list.innerHTML = customerPoolLeads().map(lead => `
     <article class="lead-card" data-customer-id="${escapeHTML(lead.id)}">
       <div class="lead-info">
         <div class="lead-title-row">
           <span class="fake-check" aria-hidden="true"></span>
           <button class="lead-open-detail" type="button" aria-label="查看 ${escapeHTML(lead.company)} 客户详情">${escapeHTML(lead.company)}</button>
-          <span class="tag sky">新能源设备制造商</span>
+          <span class="tag sky">${escapeHTML(lead.zoeSource ? lead.type : '新能源设备制造商')}</span>
           <span class="tag purple"><i data-lucide="gem"></i>${escapeHTML(lead.score)}</span>
         </div>
         <div class="lead-meta">
@@ -695,7 +740,7 @@ document.querySelector('#leadList')?.addEventListener('click', event => {
   }
   const card = event.target.closest('.lead-card');
   if (!card || event.target.closest('.fake-check')) return;
-  const customer = leads.find(lead => lead.id === card.dataset.customerId);
+  const customer = customerPoolLeads().find(lead => lead.id === card.dataset.customerId);
   if (customer) openCustomerDetail(customer, event.target.closest('button') || card.querySelector('.lead-open-detail'));
 });
 
