@@ -592,8 +592,7 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
   inset: var(--zoe-header-top) 0 auto var(--zoe-composer-nav);
   z-index: 40;
   min-height: var(--zoe-header-height);
-  border-bottom: 1px solid var(--oz-border);
-  background: var(--oz-white);
+  background: inherit;
 }
 body[data-agent-nav="mobile"] #zoeAcquisition:not(.is-task-list) { --zoe-header-top: 56px; }
 
