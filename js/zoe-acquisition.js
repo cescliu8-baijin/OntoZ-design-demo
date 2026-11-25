@@ -41,7 +41,7 @@ function restoreTasks() {
       if (task.phase === 'results' && !task.poolSelection) {
         task.poolSelection = resultCandidates(task).filter(company => company.precision === '精准').map(company => company.id);
       }
-      if (task.status === 'running' && task.run) {
+      if (task.status === 'running' && !task.continuous && task.run) {
         task.status = 'paused';
         task.run.state = 'paused';
         task.logs.push('页面重新打开，任务已暂停，可在任务列表继续');
@@ -352,7 +352,6 @@ function startSearch(task) {
   task.tick = 0;
   task.count = 0;
   task.companies = makeCompanies(task);
-  task.includeUnrated = false;
   task.logs = ['已确认客户画像，开始小规模模拟搜索'];
   beginStream(task, 'Zoe 正在搜索潜在客户并开展背调');
   filters = {};
@@ -368,6 +367,7 @@ const searchLogs = [
 const qualificationLogs = ['已计算六个维度的匹配分数', '已生成推荐理由与待验证信息', '正在识别采购与供应链角色', '已整理模拟决策人与客户清单'];
 
 function schedule(task) {
+  if (task.continuous) { scheduleContinuousSearch(task); return; }
   const pilot = task.phase === 'pilot';
   const log = pilot ? searchLogs[task.tick](task) : qualificationLogs[task.tick];
   streamStep(task, log, () => {
@@ -381,7 +381,7 @@ function schedule(task) {
         task.status = 'partial';
         task.run.state = 'complete';
         task.run.summary = `第 ${task.rounds.length + 1} 轮搜索完成 · 找到 ${task.count} 家企业`;
-        push(task, 'agent', task.count ? `已找到 ${task.count} 家模拟企业。标注后可开始深度分析，也可以补充条件重新搜索。` : '当前没有符合条件的模拟企业。请在下方补充或放宽搜索条件。');
+        push(task, 'agent', task.count ? `已找到 ${task.count} 家模拟企业。可以标注候选来校准画像，再启动持续获客；也可以补充条件重新搜索。` : '当前没有符合条件的模拟企业。请在下方补充或放宽搜索条件。');
       }
     } else {
       task.stage = task.tick < 3 ? 4 : 5;
@@ -399,36 +399,68 @@ function schedule(task) {
   });
 }
 
-function analysisCandidates(task) {
-  return task.companies.filter(company => company.precision === '精准' || (task.includeUnrated && company.precision === '待标注'));
-}
+const continuousInterval = 30_000;
 
 function resultCandidates(task) {
   return task.companies.slice(0, task.count).filter(company => !task.analysisIds || task.analysisIds.includes(company.id));
 }
 
 function continueSearch(task) {
-  const companies = analysisCandidates(task);
-  if (!companies.length) return;
-  task.analysisIds = companies.map(company => company.id);
-  task.poolSelection = companies.filter(company => company.precision === '精准').map(company => company.id);
-  filters = {};
-
-  task.phase = 'qualification';
+  if (task.phase !== 'review' || !task.count) return;
+  const samples = task.companies.slice(0, task.count);
+  task.rounds.push({ icp: { ...task.icp }, companies: samples, count: samples.length, phase: 'review' });
+  task.continuous = { referenceRound: task.rounds.length, batches: 0, nextAt: Date.now() + 1600 };
+  task.companies = [];
+  task.count = 0;
+  task.poolSelection = [];
+  task.phase = 'results';
   task.status = 'running';
-  task.stage = 4;
-  task.tick = 0;
-  task.logs.push(`用户确认深度分析范围：${companies.length} 家企业`);
+  task.stage = 2;
   task.confirmed = true;
+  task.logs.push('已保存目标画像与候选标注，启动持续获客');
+  filters = {};
   const guide = {
     role: 'task-guide',
-    text: '获客任务已保存到当前浏览器。你可以在任务列表查看进度、暂停、继续或终止任务。'
+    text: '持续获客任务已启动并保存在当前浏览器。Zoe 会以本轮画像和标注为参考，定期模拟搜索新企业并在后台完成背调。你可以前往任务列表查看结果、暂停、继续或终止任务。'
   };
   task.messages.push(guide);
-  beginStream(task, 'Zoe 正在评估匹配度并识别决策人');
-  if (!saveTasks()) guide.text = '获客任务已启动。当前浏览器无法保存任务，本次会话中仍可在任务列表查看和管理。';
+  if (!saveTasks()) guide.text = '持续获客任务已启动。当前浏览器无法保存任务，本次会话中仍可在任务列表查看和管理。';
   render();
   schedule(task);
+}
+
+function scheduleContinuousSearch(task) {
+  clearTimeout(task.timer);
+  task.timer = setTimeout(() => {
+    if (task.status !== 'running') return;
+    const { referenceRound } = task.continuous;
+    const reference = task.rounds[referenceRound - 1];
+    const labels = new Map(reference.companies.map(company => [company.name, company.precision]));
+    const batch = ++task.continuous.batches;
+    const candidates = makeCompanies({ ...task, icp: reference.icp })
+      .filter(company => labels.get(company.name) !== '不精准')
+      .sort((a, b) => Number(labels.get(b.name) === '精准') - Number(labels.get(a.name) === '精准') || b.score - a.score);
+    const offset = (batch - 1) % Math.max(1, candidates.length);
+    const discovered = [...candidates.slice(offset), ...candidates.slice(0, offset)].slice(0, 3).map((company, index) => ({
+      ...company,
+      id: `${task.id}-batch-${batch}-${index + 1}`,
+      name: `${company.name} · 模拟线索 ${batch}-${index + 1}`,
+      site: `batch-${batch}-company-${index + 1}.example.com`,
+      contacts: company.contacts.map((contact, contactIndex) => ({
+        ...contact, email: `contact-${batch}-${index + 1}-${contactIndex + 1}@example.com`
+      }))
+    }));
+    task.companies.push(...discovered);
+    task.count = task.companies.length;
+    task.stage = 3;
+    task.continuous.nextAt = Date.now() + continuousInterval;
+    task.logs.push(discovered.length
+      ? `第 ${batch} 批：新增 ${discovered.length} 家模拟企业，背调已完成`
+      : `第 ${batch} 批：当前模拟样本没有符合参考条件的新企业`);
+    saveTasks();
+    refreshTask(task);
+    scheduleContinuousSearch(task);
+  }, Math.max(0, task.continuous.nextAt - Date.now()));
 }
 
 function roundCounts(companies) {
@@ -460,7 +492,7 @@ function renderSidebar() {
   const openIcp = new Set([...roundSidebar.querySelectorAll('.zoe-round-icp[open]')].map(el => el.closest('[data-zoe-round]').dataset.zoeRound));
   const sameTask = roundSidebar.dataset.task === active.id;
   roundSidebar.dataset.task = active.id;
-  const hasCurrentRound = Boolean(active.companies?.length);
+  const hasCurrentRound = Boolean(active.companies?.length) && !active.continuous;
   const analyzing = active.phase === 'understanding';
   const fieldsMarkup = Object.entries(fields).map(([key, label]) => `<dt>${label}</dt><dd>${
     analyzing ? '<div class="skeleton-line" aria-hidden="true"></div>'
@@ -469,7 +501,7 @@ function renderSidebar() {
   const markup = `<div class="zoe-sidebar-head"><h2>搜索上下文</h2>${action('latest-result', '查看最新结果', 'ghost')}</div>
     <section class="zoe-sidebar-profile">
       <h3>目标客户画像</h3>
-      <p role="status">${analyzing ? '正在分析获客需求…' : hasCurrentRound ? '本轮已确认' : '待确认 · 可在对话中编辑'}</p>
+      <p role="status">${analyzing ? '正在分析获客需求…' : (hasCurrentRound || active.continuous) ? active.continuous ? '持续搜索使用的画像' : '本轮已确认' : '待确认 · 可在对话中编辑'}</p>
       <dl aria-busy="${analyzing}">${fieldsMarkup}</dl>
     </section>
     <section><h3>每轮候选与标注</h3><p>你的标注用于复核与筛选。匹配评分由 Zoe 单独生成。</p>
@@ -499,14 +531,15 @@ function taskTitle(task) {
 
 function taskList() {
   return `<h2 tabindex="-1">获客任务列表</h2>
-    <p class="zoe-acquisition-help">Demo 模拟数据 · 已启动的获客任务保存在当前浏览器</p>
+    <p class="zoe-acquisition-help">Demo 模拟数据 · 任务保存在当前浏览器，模拟持续搜索在页面打开时运行。</p>
     <div class="zoe-acquisition-actions">${action('new', '创建获客任务', 'primary')} <a href="#customers">前往客户池</a></div>
     ${tasks.length ? tasks.map(task => `<article class="zoe-acquisition-card">
       <h3>${esc(taskTitle(task))}</h3>
+      ${task.continuous ? `<p>持续获客 · 基于第 ${task.continuous.referenceRound} 轮画像与标注 · 已搜索 ${task.continuous.batches} 批${task.status === 'running' ? ' · 约每 30 秒搜索一批' : ''}</p>` : ''}
       <p>${task.phase === 'review' ? '待确认' : statuses[task.status]} · ${steps[task.stage]} · ${task.status === 'complete' ? `已分析 ${resultCandidates(task).length} 家企业` : task.phase === 'review' ? `${task.companies.filter(company => company.precision === '待标注').length} 家待标注` : `已发现 ${task.count} 家企业`}</p>
       <details data-task-logs="${task.id}"><summary>模拟执行日志</summary>${task.logs.length ? `<ul>${task.logs.map(log => `<li>${esc(log)}</li>`).join('')}</ul>` : '<p>暂无执行日志</p>'}</details>
       <div class="zoe-acquisition-actions" data-task-id="${task.id}">
-        ${action('open-task', task.status === 'complete' ? '查看结果' : task.phase === 'review' ? '继续审核' : '查看任务')}
+        ${action('open-task', (task.continuous || task.status === 'complete') ? '查看结果' : task.phase === 'review' ? '继续审核' : '查看任务')}
         ${task.status === 'running' ? action('pause', '暂停') : ''}
         ${task.status === 'paused' ? action('resume', '继续执行') : ''}
         ${['running', 'paused', 'partial'].includes(task.status) ? action('stop', '终止任务', 'destructive') : ''}
@@ -537,8 +570,9 @@ function companyTable(task) {
   const scored = hasScores(task);
   const companies = resultCandidates(task);
   return `<section class="zoe-acquisition-results zoe-acquisition-card">
-    <h2 tabindex="-1">${complete ? '最终客户清单' : '候选企业'}</h2>
+    <h2 tabindex="-1">${task.continuous ? '持续获客结果' : complete ? '最终客户清单' : '候选企业'}</h2>
     <p class="zoe-acquisition-help">Demo 模拟数据 · ${companies.filter(company => company.precision === '精准').length} 家精准 · ${companies.filter(company => company.precision === '不精准').length} 家不精准</p>
+    ${task.continuous ? '<p>新企业会随持续搜索陆续加入，背调由 Zoe 自动执行。</p>' : ''}
     ${complete ? `<p>执行条件 · ${esc(taskTitle(task))}</p>
       <p>目标市场 · ${esc(task.icp.market || '未指定')}　企业 ${companies.length} 家　A级 ${companies.filter(c => grade(c.score) === 'A').length} 家　B级 ${companies.filter(c => grade(c.score) === 'B').length} 家　决策人 ${companies.reduce((sum, c) => sum + c.contacts.length, 0)} 位</p>` : ''}
     <div class="zoe-acquisition-toolbar">
@@ -556,11 +590,10 @@ function companyTable(task) {
       <tbody></tbody>
     </table></div>
     ${task.phase === 'review' ? `<footer class="zoe-result-decision">
-      <p>将分析 ${analysisCandidates(task).length} 家企业，生成匹配评分和决策人信息。跳过 ${companies.filter(company => company.precision === '不精准').length} 家不精准企业。</p>
-      <label><input type="checkbox" data-include-unrated ${task.includeUnrated ? 'checked' : ''}>同时分析待标注企业</label>
-      <div class="zoe-acquisition-actions"><button type="button" data-zoe-button="primary" data-acquisition-action="continue" ${analysisCandidates(task).length ? '' : 'disabled'}>开始深度分析</button></div>
+      <p>启动后，Zoe 会保存当前画像和标注作为参考，持续搜索新企业并自动背调。可前往任务列表管理。</p>
+      <div class="zoe-acquisition-actions">${action('continue', '启动持续获客', 'primary')}</div>
     </footer>` : complete ? `<footer class="zoe-result-decision">
-      <p>已选 <span data-pool-count>${(task.poolSelection || []).length}</span> 家 · 默认勾选精准企业。</p>
+      <p>已选 <span data-pool-count>${(task.poolSelection || []).length}</span> 家${task.continuous ? '待加入客户池。' : ' · 默认勾选精准企业。'}</p>
       <div class="zoe-acquisition-actions"><button type="button" data-zoe-button="primary" data-acquisition-action="add-pool" ${task.poolSelection?.length ? '' : 'disabled'}>加入客户池</button>${action('tasks', '查看任务')} <a href="#customers">前往客户池</a></div>
       <p role="status" data-pool-result>${esc(task.poolResult || '')}</p>
     </footer>` : ''}
@@ -601,7 +634,7 @@ function render() {
     workspace.innerHTML = active.phase === 'draft' ? `<article class="zoe-acquisition-card">${icpCard(active)}</article>` : '';
   }
   else {
-    workspace.innerHTML = `${active.count ? companyTable(active) : active.phase === 'review' ? '<p>暂无符合条件的候选企业。请在下方补充或放宽搜索条件。</p>' : ''}
+    workspace.innerHTML = `${active.count ? companyTable(active) : active.continuous ? `<p>${active.status === 'stopped' || active.continuous.batches ? '暂无持续获客结果。' : '正在等待首批持续获客结果，可在任务列表跟进。'}</p>` : active.phase === 'review' ? '<p>暂无符合条件的候选企业。请在下方补充或放宽搜索条件。</p>' : ''}
       ${active.status === 'stopped' ? '<p role="status">任务已终止</p>' : ''}
       ${active.phase === 'qualification' ? action('tasks', '查看任务') : ''}`;
     renderRows(active);
@@ -749,7 +782,7 @@ page.addEventListener('click', event => {
     case 'continue': continueSearch(task); break;
     case 'pause':
       task.status = 'paused';
-      task.run.state = 'paused';
+      if (!task.continuous) task.run.state = 'paused';
       clearTimeout(task.timer);
       task.logs.push('用户暂停任务');
       if (task.confirmed) saveTasks();
@@ -757,7 +790,7 @@ page.addEventListener('click', event => {
       break;
     case 'resume':
       task.status = 'running';
-      task.run.state = 'running';
+      if (!task.continuous) task.run.state = 'running';
       task.logs.push('用户继续任务');
       if (task.confirmed) saveTasks();
       render();
@@ -766,9 +799,11 @@ page.addEventListener('click', event => {
     case 'stop':
       clearTimeout(task.timer);
       task.status = 'stopped';
-      if (task.run.state !== 'complete') task.run.state = 'stopped';
-      task.previousPhase = task.phase;
-      task.phase = 'stopped';
+      if (!task.continuous) {
+        if (task.run.state !== 'complete') task.run.state = 'stopped';
+        task.previousPhase = task.phase;
+        task.phase = 'stopped';
+      }
       task.logs.push('用户终止任务');
       if (task.confirmed) saveTasks();
       render();
@@ -777,7 +812,7 @@ page.addEventListener('click', event => {
       if (task.phase !== 'results') break;
       const selected = resultCandidates(task).filter(company => task.poolSelection.includes(company.id));
       const result = addZoeCustomerLeads(selected, {
-        id: task.id, title: taskTitle(task), round: task.rounds.length + 1, industry: task.icp.industry
+        id: task.id, title: taskTitle(task), round: task.continuous?.referenceRound || task.rounds.length + 1, industry: task.icp.industry
       });
       task.poolResult = result ? `新增 ${result.added} 家，重复 ${result.duplicates} 家。` : '保存失败，请重试。';
       saveTasks();
@@ -821,12 +856,6 @@ resetDialog.addEventListener('close', () => {
 
 page.addEventListener('change', event => {
   const control = event.target;
-  if (control.matches('[data-include-unrated]')) {
-    active.includeUnrated = control.checked;
-    render();
-    workspace.querySelector('[data-include-unrated]')?.focus({ preventScroll: true });
-    return;
-  }
   if (control.dataset.poolSelect && active?.phase === 'results') {
     const selection = new Set(active.poolSelection || []);
     if (control.checked) selection.add(control.dataset.poolSelect);
@@ -905,3 +934,7 @@ drawer.addEventListener('close', () => {
 window.addEventListener('hashchange', () => {
   if (location.hash !== '#zoe' && drawer.open) drawer.close();
 });
+
+for (const task of tasks) {
+  if (task.continuous && task.status === 'running') scheduleContinuousSearch(task);
+}
