@@ -569,9 +569,13 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 #zoeHome .zoe-acquisition-example { margin-right: auto; background: transparent; }
 
 /* Agent conversation layout, adapted from Figma 17:2324. */
+#zoePage:has(> #zoeAcquisition:not([hidden], .is-task-list)) { padding: 0; }
+
 #zoeAcquisition:not(.is-task-list) {
+  --zoe-header-top: 0px;
+  --zoe-header-height: 44px;
   background: #f8f7ff;
-  min-height: calc(100dvh - 64px);
+  min-height: 100dvh;
 }
 
 #zoeAcquisition > .zoe-acquisition-header {
@@ -582,6 +586,16 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
   margin: 0;
   padding: 0 12px;
 }
+
+#zoeAcquisition:not(.is-task-list) > .zoe-acquisition-header {
+  position: fixed;
+  inset: var(--zoe-header-top) 0 auto var(--zoe-composer-nav);
+  z-index: 40;
+  min-height: var(--zoe-header-height);
+  border-bottom: 1px solid var(--oz-border);
+  background: var(--oz-white);
+}
+body[data-agent-nav="mobile"] #zoeAcquisition:not(.is-task-list) { --zoe-header-top: 56px; }
 
 #zoeAcquisitionTitle {
   margin: 0;
@@ -598,7 +612,7 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
   gap: 10px;
   max-width: 864px;
   margin: 0 auto;
-  padding: 24px 32px 32px;
+  padding: calc(var(--zoe-header-height) + 12px) 16px 24px;
 }
 
 #zoeAcquisition:not(.is-task-list) :is(.zoe-acquisition-conversation, .zoe-acquisition-workspace) {
@@ -795,8 +809,8 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
   clip-path: inset(50%);
 }
 @media (max-width: 767px) {
-  #zoeAcquisition:not(.is-task-list) .zoe-acquisition-layout { padding: 16px 0 24px; }
-  #zoeAcquisition > .zoe-acquisition-header { padding: 0; }
+  #zoeAcquisition:not(.is-task-list) .zoe-acquisition-layout { padding-inline: 12px; }
+  #zoeAcquisition > .zoe-acquisition-header { padding-inline: 8px; }
   #zoeAcquisitionTitle { font-size: var(--oz-text-sm); }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -903,23 +917,25 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 }
 .zoe-acquisition-sidebar li span { flex: none; font-size: var(--oz-text-xs); color: var(--oz-muted-foreground); }
 #zoeAcquisitionStatus:not([hidden]) { justify-content: flex-end; }
-#zoeAcquisitionWorkspace h2 { scroll-margin-top: 24px; }
+#zoeAcquisition:not(.is-task-list) :is(#zoeAcquisitionWorkspace h2, .zoe-acquisition-message) {
+  scroll-margin-top: calc(var(--zoe-header-top) + var(--zoe-header-height) + 12px);
+}
 
 @media (min-width: 1024px) {
   #zoeAcquisition:not(.is-task-list) .zoe-acquisition-layout {
     display: grid;
-    grid-template-columns: minmax(0, 800px) 300px;
-    column-gap: 24px;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    column-gap: 16px;
     justify-content: center;
     align-items: start;
-    max-width: 1188px;
+    max-width: 1440px;
   }
   #zoeAcquisition :is(.zoe-acquisition-conversation, .zoe-acquisition-workspace) { grid-column: 1; }
   .zoe-acquisition-sidebar {
     grid-area: 1 / 2 / span 2;
     position: sticky;
-    top: 16px;
-    max-height: calc(100dvh - 32px);
+    top: calc(var(--zoe-header-height) + 12px);
+    max-height: calc(100dvh - var(--zoe-header-height) - 24px);
     overflow: auto;
   }
   .zoe-acquisition-dock {

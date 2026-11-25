@@ -29,7 +29,37 @@ const statuses = { pending: '待执行', running: '执行中', paused: '已暂�
 const precisionLabels = ['待标注', '精准', '不精准'];
 const ratings = ['A', 'B', 'C', 'D'];
 const tabs = ['企业概览', 'AI 背调', '匹配分析', '决策人'];
-let tasks = [];
+const taskStorageKey = 'ontoz-zoe-confirmed-tasks-v1';
+let tasks = restoreTasks();
+
+function restoreTasks() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(taskStorageKey) || '[]');
+    if (!Array.isArray(saved)) return [];
+    return saved.filter(task => task?.confirmed && Array.isArray(task.messages)).map(task => {
+      task.run = task.messages.findLast(message => message.run)?.run;
+      if (task.status === 'running' && task.run) {
+        task.status = 'paused';
+        task.run.state = 'paused';
+        task.logs.push('页面重新打开，任务已暂停，可在任务列表继续');
+      }
+      return task;
+    });
+  } catch {
+    return [];
+  }
+}
+
+function saveTasks() {
+  try {
+    const saved = tasks.filter(task => task.confirmed).map(({ timer, run, ...task }) => task);
+    if (saved.length) localStorage.setItem(taskStorageKey, JSON.stringify(saved));
+    else localStorage.removeItem(taskStorageKey);
+    return true;
+  } catch {
+    return false;
+  }
+}
 let active = null;
 let view = 'chat';
 let returnFocus;
@@ -129,6 +159,9 @@ function renderMessages() {
         </ol>
       </details>`;
       updateStream(entry, run);
+    } else if (role === 'task-guide') {
+      entry.innerHTML = `<p></p>${action('tasks', '查看任务列表', 'outline')}`;
+      entry.querySelector('p').textContent = text;
     } else if (snapshot) {
       const summary = [snapshot.market, snapshot.product, snapshot.type].filter(Boolean).map(esc).join(' · ');
       entry.innerHTML = `<details class="zoe-icp-history" data-snapshot="${active.id}-${index}" ${historyOpen.has(`${active.id}-${index}`) ? 'open' : ''}><summary>已确认画像 <span>${summary || '自定义条件'}</span></summary>
@@ -328,6 +361,7 @@ function schedule(task) {
         push(task, 'agent', '模拟任务已完成。客户清单已包含匹配评分和决策人信息。');
       }
     }
+    if (task.confirmed) saveTasks();
     refreshTask(task);
     if (task.status === 'running') schedule(task);
   });
@@ -339,8 +373,14 @@ function continueSearch(task) {
   task.stage = 4;
   task.tick = 0;
   task.logs.push('用户确认搜索方向，已转为持续获客任务');
-  push(task, 'agent', '已启动后续获客任务。你可以留在这里查看结果，也可以到任务列表跟进进度。');
+  task.confirmed = true;
+  const guide = {
+    role: 'task-guide',
+    text: '获客任务已保存到当前浏览器。你可以在任务列表查看进度、暂停、继续或终止任务。'
+  };
+  task.messages.push(guide);
   beginStream(task, 'Zoe 正在评估匹配度并识别决策人');
+  if (!saveTasks()) guide.text = '获客任务已启动。当前浏览器无法保存任务，本次会话中仍可在任务列表查看和管理。';
   render();
   schedule(task);
 }
@@ -413,12 +453,12 @@ function taskTitle(task) {
 
 function taskList() {
   return `<h2 tabindex="-1">获客任务列表</h2>
-    <p class="zoe-acquisition-help">Demo 模拟数据 · 任务在本次演示中运行</p>
+    <p class="zoe-acquisition-help">Demo 模拟数据 · 已启动的获客任务保存在当前浏览器</p>
     <div class="zoe-acquisition-actions">${action('new', '创建获客任务', 'primary')} <a href="#customers">前往客户池</a></div>
     ${tasks.length ? tasks.map(task => `<article class="zoe-acquisition-card">
       <h3>${esc(taskTitle(task))}</h3>
       <p>${statuses[task.status]} · ${steps[task.stage]} · 已发现 ${task.count} 家企业</p>
-      <details data-task-logs="${task.id}"><summary>模拟执行日志</summary>${task.logs.length ? `<ul>${task.logs.map(log => `<li>${log}</li>`).join('')}</ul>` : '<p>暂无执行日志</p>'}</details>
+      <details data-task-logs="${task.id}"><summary>模拟执行日志</summary>${task.logs.length ? `<ul>${task.logs.map(log => `<li>${esc(log)}</li>`).join('')}</ul>` : '<p>暂无执行日志</p>'}</details>
       <div class="zoe-acquisition-actions" data-task-id="${task.id}">
         ${action('open-task', task.status === 'complete' ? '查看客户清单' : '查看任务')}
         ${task.status === 'running' ? action('pause', '暂停') : ''}
@@ -659,12 +699,14 @@ page.addEventListener('click', event => {
       task.run.state = 'paused';
       clearTimeout(task.timer);
       task.logs.push('用户暂停任务');
+      if (task.confirmed) saveTasks();
       render();
       break;
     case 'resume':
       task.status = 'running';
       task.run.state = 'running';
       task.logs.push('用户继续任务');
+      if (task.confirmed) saveTasks();
       render();
       schedule(task);
       break;
@@ -675,6 +717,7 @@ page.addEventListener('click', event => {
       task.previousPhase = task.phase;
       task.phase = 'stopped';
       task.logs.push('用户终止任务');
+      if (task.confirmed) saveTasks();
       render();
       break;
     case 'latest-result': {
@@ -703,6 +746,7 @@ resetDialog.addEventListener('close', () => {
   resetMenu.open = false;
   tasks.forEach(item => clearTimeout(item.timer));
   tasks = [];
+  saveTasks();
   active = null;
   for (const form of [prompt, reply]) {
     form.reset();
@@ -718,6 +762,7 @@ page.addEventListener('change', event => {
   const company = active?.companies.find(item => item.id === id);
   if (!company) return;
   company.precision = control.value;
+  if (active.confirmed) saveTasks();
   const fromList = workspace.contains(control);
   render();
   if (fromList) {
