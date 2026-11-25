@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="css/wendy-home.css?v=wendy-20261019" />
     <link rel="stylesheet" href="css/wendy-studio.css?v=studio-1" />
     <link rel="stylesheet" href="css/wendy-calendar.css?v=wendy-20261019" />
-    <link rel="stylesheet" href="css/zoe-agent-v2.css?v=foundations-2" id="zoeAgentV2Styles" disabled />
+    <link rel="stylesheet" href="css/zoe-agent-v2.css?v=acquisition-1" id="zoeAgentV2Styles" disabled />
     <link rel="stylesheet" href="css/wendy-inbox.css?v=wendy-20261019" />
     <link rel="stylesheet" href="css/wendy-publisher.css?v=wendy-20261019" />
     <link rel="stylesheet" href="css/project-layout.css?v=john-demo-041" />
@@ -1213,8 +1213,8 @@
                 <h1 class="zoe-home-title" id="zoe-title">让高质量客户持续进入客户池</h1>
                 <p class="zoe-home-subtitle">基于企业信息、产品关键词和目标市场，生成买家画像并扩展潜在客户名单。</p>
                 <div class="zoe-hero-actions av2-page-actions">
-                  <button class="zoe-primary-action" type="button" data-zoe-new-task><i data-lucide="wand-sparkles"></i>创建获客任务</button>
-                  <button class="zoe-secondary-action" type="button" data-zoe-task-detail><i data-lucide="send"></i>查看智能体日志</button>
+                  <button class="zoe-primary-action" type="button" data-acquisition-action="new"><i data-lucide="wand-sparkles"></i>创建获客任务</button>
+                  <button class="zoe-secondary-action" type="button" data-acquisition-action="tasks"><i data-lucide="clipboard-list"></i>查看任务列表</button>
                 </div>
               </div>
               <aside class="zoe-autopilot-status" aria-label="Zoe 运行状态">
@@ -1222,6 +1222,15 @@
                 <span><strong>Zoe 正在自主工作</strong><small>3个任务正在自主执行</small></span>
               </aside>
             </header>
+
+            <form class="av2-prompt-box zoe-acquisition-prompt" id="zoeAcquisitionPrompt">
+              <label for="zoeAcquisitionInput">告诉 Zoe 你想找什么客户</label>
+              <textarea id="zoeAcquisitionInput" rows="2" maxlength="1000" placeholder="例如：帮我寻找德国有工业阀门采购需求的经销商"></textarea>
+              <footer>
+                <button type="button" class="zoe-acquisition-example" data-acquisition-action="example">填入示例</button>
+                <button type="submit" disabled><i data-lucide="arrow-up"></i>开始获客</button>
+              </footer>
+            </form>
 
             <div class="zoe-workbench av2-columns">
               <div class="zoe-primary-column av2-main">
@@ -1388,6 +1397,29 @@
               </aside>
               <button class="zoe-chat-mobile-trigger" type="button" data-zoe-chat-mobile-toggle aria-controls="zoeAgentChat" aria-expanded="false"><i data-lucide="message-square-more"></i><span>与 Zoe 协作</span><b id="zoeChatMobileBadge">1</b></button>
             </div>
+          </div>
+
+          <div class="agent-v2 zoe-acquisition" id="zoeAcquisition" hidden>
+            <header class="zoe-acquisition-header">
+              <button type="button" data-acquisition-action="back"><i data-lucide="arrow-left"></i>返回获客总览</button>
+              <span>搜索开发 Zoe · 模拟演示</span>
+              <div class="zoe-acquisition-actions">
+                <button type="button" data-acquisition-action="tasks">任务列表</button>
+                <button type="button" data-acquisition-action="reset">重新开始</button>
+              </div>
+            </header>
+            <div class="zoe-acquisition-layout">
+              <section class="zoe-acquisition-conversation" aria-labelledby="zoeAcquisitionTitle">
+                <h1 id="zoeAcquisitionTitle" tabindex="-1">智能获客</h1>
+                <div id="zoeAcquisitionMessages" class="zoe-acquisition-messages" role="log" aria-live="polite"></div>
+                <form class="av2-prompt-box" id="zoeAcquisitionReply">
+                  <textarea rows="2" maxlength="1000" aria-label="补充获客需求" placeholder="补充或修改获客需求…"></textarea>
+                  <div><button type="submit" disabled><i data-lucide="arrow-up"></i>发送</button></div>
+                </form>
+              </section>
+              <section class="zoe-acquisition-workspace" id="zoeAcquisitionWorkspace" aria-label="获客任务工作区"></section>
+            </div>
+            <dialog class="zoe-acquisition-drawer" id="zoeAcquisitionDrawer" aria-labelledby="zoeAcquisitionCompanyName"></dialog>
           </div>
 
           <div class="zoe-create" data-zoe-screen="create" hidden>
@@ -1668,6 +1700,7 @@ John</textarea></label>
     <script src="js/ontology-strategy.js?v=buyer-strategy-1"></script>
     <script src="js/keyword-validation.js?v=keyword-validation-history-1"></script>
     <script src="js/zoe.js?v=agent-responsive-v83"></script>
+    <script type="module" src="js/zoe-acquisition.js?v=1"></script>
     <script src="js/leo.js?v=exhibition-marketing-4"></script>
     <script src="assets/gsap.min.js"></script>
     <script src="js/agent-home-layout.js?v=foundations-2"></script>

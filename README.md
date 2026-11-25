@@ -112,3 +112,16 @@ Vercel 导入 `cescliu8-baijin/OntoZ-design-demo`，生产分支选择 `main`，
 - Output Directory：`public/site`
 
 只发布由根目录源码生成的静态网页，无需运行 Cloudflare/vinext 构建，也不需要环境变量或 Python 服务。每次向 `main` 推送新提交后，Vercel 会自动重新部署。浏览器内的演示数据仍按网站域名分别保存，不会从本机预览自动迁移到线上域名。
+
+## Zoe 智能获客演示
+
+在项目根目录运行 `python3 -m http.server 8766 --bind 127.0.0.1`，
+打开 `http://127.0.0.1:8766/#zoe`。点击「填入示例」，再点击「开始获客」。
+
+- 首页输入与「创建获客任务」均进入 Zoe 对话。确认可编辑的目标客户画像后，Zoe 模拟搜索并背调 10 家候选企业。
+- 在首批结果后可以补充需求并重跑，或点击「符合预期继续搜索」。任务列表显示执行阶段、日志和企业数量，支持暂停、继续和终止。
+- 任务完成后可查看和筛选客户清单。企业详情包含概览、背调、六维匹配分析和模拟决策人，可从任务列表前往平台客户池。
+- 需求解析使用关键词和可编辑模板。企业、评分、联系方式以及执行日志均为前端模拟数据。任务保留在当前打开的页面中，刷新或点击「重新开始」会重置演示。
+- Demo 的企业搜索、采购信息验证、联系方式验证、真实模型、后端服务和外联均未接入。模拟清单保留在 Zoe 任务中。
+
+组件参考 OntoZ Figma 组件库的 [Primary](https://www.figma.com/design/oPNMfPosKibiZoqjOLh92h?node-id=3352-343)、[Outline](https://www.figma.com/design/oPNMfPosKibiZoqjOLh92h?node-id=1463-5739)、[Input](https://www.figma.com/design/oPNMfPosKibiZoqjOLh92h?node-id=3671-30) 和 [Select](https://www.figma.com/design/oPNMfPosKibiZoqjOLh92h?node-id=3871-42)。
