@@ -240,9 +240,6 @@
     workbench: page.querySelector('.zoe-workbench'),
     chat: page.querySelector('#zoeAgentChat'),
     chatStream: page.querySelector('#zoeChatStream'),
-    chatComposer: page.querySelector('#zoeChatComposer'),
-    chatInput: page.querySelector('#zoeChatInput'),
-    chatSubmit: page.querySelector('#zoeChatComposer button[type="submit"]'),
     chatRailBadge: page.querySelector('#zoeChatRailBadge'),
     chatMobileBadge: page.querySelector('#zoeChatMobileBadge'),
     chatMobileTrigger: page.querySelector('[data-zoe-chat-mobile-toggle]'),
@@ -392,14 +389,6 @@
     noteIncomingMessage();
     scrollChatToLatest();
     return message;
-  }
-
-  function appendUserMessage(text) {
-    const message = document.createElement('article');
-    message.className = 'zoe-chat-message zoe-chat-message-user';
-    message.innerHTML = `<div><p>${escapeHTML(text)}</p><time>刚刚</time></div>`;
-    elements.chatStream.append(message);
-    scrollChatToLatest();
   }
 
   function createCardMessage(type, intro) {
@@ -670,7 +659,7 @@
     try { window.localStorage.setItem('zoe-chat-collapsed', String(state.chatCollapsed)); } catch (_) {}
     if (!state.chatCollapsed) {
       markChatRead();
-      window.setTimeout(() => elements.chatInput.focus(), 0);
+      window.setTimeout(() => elements.chat.querySelector('[data-zoe-chat-collapse]').focus({ preventScroll: true }), 0);
     }
   }
 
@@ -681,7 +670,7 @@
     document.body.classList.toggle('zoe-mobile-chat-open', state.mobileChatOpen);
     if (state.mobileChatOpen) {
       markChatRead();
-      window.setTimeout(() => elements.chatInput.focus(), 0);
+      window.setTimeout(() => elements.chat.querySelector('[data-zoe-chat-collapse]').focus({ preventScroll: true }), 0);
     }
   }
 
@@ -880,34 +869,6 @@
     }
   });
 
-  function syncChatSubmitState() {
-    const disabled = !elements.chatInput.value.trim();
-    elements.chatSubmit.disabled = disabled;
-    elements.chatSubmit.setAttribute('aria-disabled', String(disabled));
-  }
-
-  elements.chatInput.addEventListener('input', syncChatSubmitState);
-
-  elements.chatComposer.addEventListener('submit', event => {
-    event.preventDefault();
-    const message = elements.chatInput.value.trim();
-    if (!message) return;
-    appendUserMessage(message);
-    elements.chatInput.value = '';
-    syncChatSubmitState();
-    window.setTimeout(() => {
-      if (/欧洲|经销/.test(message)) state.taskIndex = 1;
-      else if (/东南亚|工程/.test(message)) state.taskIndex = 2;
-      else if (/北美|酒店/.test(message)) state.taskIndex = 0;
-
-      if (/任务|进度|运行/.test(message)) pushChatCard('task');
-      else if (/画像|判断|精准|校准/.test(message)) pushChatCard('review');
-      else if (/策略|优化|风险/.test(message)) pushChatCard('strategy');
-      else if (/线索|客户|发现/.test(message)) pushChatCard('leads');
-      else appendAgentText('收到。我可以继续查看任务进度、判断客户画像、确认策略优化，或整理最新线索。');
-    }, 180);
-  });
-
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && state.mobileChatOpen) {
       setMobileChatOpen(false);
@@ -992,13 +953,11 @@
 
   renderStage(0);
   renderCreateStep();
-  syncChatSubmitState();
   elements.reviewCount.textContent = String(state.reviewCount);
   elements.strategyCount.textContent = String(strategyData.risky.filter(item => item.status === 'pending').length);
   try {
     state.chatCollapsed = window.localStorage.getItem('zoe-chat-collapsed') === 'true';
   } catch (_) {}
-  // Initial layout must not scroll the homepage to the composer.
   elements.workbench.classList.toggle('is-chat-collapsed', state.chatCollapsed);
   elements.chat.setAttribute('aria-expanded', String(!state.chatCollapsed));
   elements.overview.addEventListener('agent:collaboration-open', markChatRead);
