@@ -339,9 +339,34 @@
 body.av2-dialog-open { overflow: hidden; }
 
 /* Zoe natural-language acquisition workspace */
-#zoeHome > .zoe-acquisition-prompt {
-  max-width: 720px;
-  margin: 0 0 var(--oz-module-gap);
+#zoeHome {
+  --zoe-composer-nav: 240px;
+  --zoe-composer-bottom: max(16px, env(safe-area-inset-bottom));
+  --zoe-composer-height: 112px;
+  padding-bottom: calc(var(--zoe-composer-height) + var(--zoe-composer-bottom) + 24px);
+}
+
+body[data-agent-nav="rail"] #zoeHome,
+body[data-agent-nav="desktop"] .sidebar.collapsed + .app-workspace #zoeHome {
+  --zoe-composer-nav: 64px;
+}
+
+body[data-agent-nav="mobile"] #zoeHome { --zoe-composer-nav: 0px; }
+
+#zoeHome > .zoe-acquisition-prompt.av2-prompt-box {
+  position: fixed;
+  z-index: 60;
+  inset: auto 0 var(--zoe-composer-bottom) var(--zoe-composer-nav);
+  width: min(800px, calc(100% - var(--zoe-composer-nav) - 2 * var(--av2-padding)));
+  height: var(--zoe-composer-height);
+  margin: 0 auto;
+  box-shadow: var(--oz-shadow-xl);
+}
+
+#zoeHome > .zoe-acquisition-prompt > textarea {
+  flex: 1 1 auto;
+  height: auto;
+  max-height: none;
 }
 
 .zoe-acquisition {
