@@ -375,10 +375,17 @@ function renderSidebar() {
   const sameTask = roundSidebar.dataset.task === active.id;
   roundSidebar.dataset.task = active.id;
   const hasCurrentRound = Boolean(active.companies?.length);
-  const fieldsMarkup = Object.entries(fields).map(([key, label]) =>
-    `<dt>${label}</dt><dd data-zoe-context-field="${key}">${esc(active.icp[key] || '未填写')}</dd>`).join('');
+  const analyzing = active.phase === 'understanding';
+  const fieldsMarkup = Object.entries(fields).map(([key, label]) => `<dt>${label}</dt><dd>${
+    analyzing ? '<div class="skeleton-line" aria-hidden="true"></div>'
+      : `<span data-zoe-context-field="${key}">${esc(active.icp[key] || '未填写')}</span>`
+  }</dd>`).join('');
   const markup = `<div class="zoe-sidebar-head"><h2>搜索上下文</h2>${action('latest-result', '查看最新结果', 'ghost')}</div>
-    <section><h3>目标客户画像</h3><p>${hasCurrentRound ? '本轮已确认' : '待确认 · 可在对话中编辑'}</p><dl>${fieldsMarkup}</dl></section>
+    <section class="zoe-sidebar-profile">
+      <h3>目标客户画像</h3>
+      <p role="status">${analyzing ? '正在分析获客需求…' : hasCurrentRound ? '本轮已确认' : '待确认 · 可在对话中编辑'}</p>
+      <dl aria-busy="${analyzing}">${fieldsMarkup}</dl>
+    </section>
     <section><h3>每轮候选与标注</h3><p>你的标注用于复核与筛选。匹配评分由 Zoe 单独生成。</p>
       ${active.rounds.map((round, i) => roundSummary(round, i, false)).join('')}
       ${hasCurrentRound ? roundSummary(active, active.rounds.length, true) : ''}
@@ -429,8 +436,14 @@ function hasScores(task) {
   return task.phase === 'results' || ((task.previousPhase || task.phase) === 'qualification' && task.tick >= 2);
 }
 
-function precisionControl(company) {
-  return `<select data-company-precision="${company.id}" aria-label="${esc(company.name)} 精准度标注">${options(precisionLabels, company.precision)}</select>`;
+function precisionControl(company, placement = 'list') {
+  return `<div class="zoe-precision-toggle" role="radiogroup" aria-label="${esc(company.name)} 精准度标注">
+    ${precisionLabels.map(label => `<label>
+      <input type="radio" name="zoe-precision-${placement}-${company.id}" value="${label}"
+        data-company-precision="${company.id}" ${label === company.precision ? 'checked' : ''}>
+      <span>${label}</span>
+    </label>`).join('')}
+  </div>`;
 }
 
 function companyTable(task) {
@@ -557,7 +570,7 @@ function renderCompany() {
     <div class="customer-detail-overview" aria-label="企业概要">
       <div class="customer-detail-overview-row"><span>官网地址</span><span>${esc(company.site)}（模拟）</span></div>
       <div class="customer-detail-overview-row"><span>主营产品</span><div class="customer-detail-chip-list"><span class="customer-detail-chip">${esc(company.business)}</span></div></div>
-      <div class="customer-detail-overview-row"><span>你的标注</span><div>${currentRound ? precisionControl(company) : company.precision}</div></div>
+      <div class="customer-detail-overview-row"><span>你的标注</span><div>${currentRound ? precisionControl(company, 'detail') : company.precision}</div></div>
     </div>
     <div class="zoe-company-workbench">
       <div class="customer-detail-activity">
@@ -708,7 +721,7 @@ page.addEventListener('change', event => {
   const fromList = workspace.contains(control);
   render();
   if (fromList) {
-    const next = workspace.querySelector(`[data-company-precision="${id}"]`)
+    const next = workspace.querySelector(`[data-company-precision="${id}"]:checked`)
       || workspace.querySelector('[data-filter="precision"]');
     next?.focus({ preventScroll: true });
   }
