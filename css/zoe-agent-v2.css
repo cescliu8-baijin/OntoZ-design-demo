@@ -801,3 +801,69 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 @media (max-width: 767px) {
   .zoe-company-workbench { grid-template-columns: minmax(0, 1fr); }
 }
+
+.zoe-acquisition-sidebar {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--oz-border);
+  border-radius: 12px;
+  background: var(--oz-card);
+}
+.zoe-sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+.zoe-sidebar-head h2 { margin: 0; font-size: var(--oz-text-base); }
+.zoe-acquisition-sidebar section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--oz-border);
+}
+.zoe-acquisition-sidebar h3 { margin: 0; }
+.zoe-acquisition-sidebar p,
+.zoe-acquisition-sidebar small { color: var(--oz-muted-foreground); }
+.zoe-acquisition-sidebar [data-zoe-round] {
+  padding: 8px 10px;
+  margin-top: 8px;
+  border-radius: 8px;
+  background: var(--oz-neutral-50);
+}
+.zoe-acquisition-sidebar [data-zoe-round] > summary small { display: block; margin-left: 14px; }
+.zoe-acquisition-sidebar ul { list-style: none; margin: 8px 0 0; padding: 0; }
+.zoe-acquisition-sidebar li { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+.zoe-acquisition-sidebar li button[data-zoe-button] {
+  justify-content: flex-start;
+  text-align: left;
+  flex: 1;
+  height: auto;
+  overflow-wrap: anywhere;
+}
+.zoe-acquisition-sidebar li span { flex: none; font-size: var(--oz-text-xs); color: var(--oz-muted-foreground); }
+#zoeAcquisitionStatus:not([hidden]) { justify-content: flex-end; }
+#zoeAcquisitionWorkspace h2 { scroll-margin-top: 24px; }
+
+@media (min-width: 1024px) {
+  #zoeAcquisition:not(.is-task-list) .zoe-acquisition-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 800px) 300px;
+    column-gap: 24px;
+    justify-content: center;
+    align-items: start;
+    max-width: 1188px;
+  }
+  #zoeAcquisition :is(.zoe-acquisition-conversation, .zoe-acquisition-workspace) { grid-column: 1; }
+  .zoe-acquisition-sidebar {
+    grid-area: 1 / 2 / span 2;
+    position: sticky;
+    top: 16px;
+    max-height: calc(100dvh - 32px);
+    overflow: auto;
+  }
+  .zoe-acquisition-dock {
+    left: var(--zoe-conversation-left, var(--zoe-composer-nav));
+    right: auto;
+    width: var(--zoe-conversation-width, 0px);
+  }
+}
