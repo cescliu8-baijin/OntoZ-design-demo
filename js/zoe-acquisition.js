@@ -378,8 +378,8 @@ function companyTable(task) {
       <tbody></tbody>
     </table></div>
     ${task.phase === 'review' ? `<footer class="zoe-result-decision">
-      <p>确认这批企业符合预期后，Zoe 会继续生成匹配评分并识别决策人。</p>
-      <div class="zoe-acquisition-actions">${action('continue', '继续搜索', 'primary')}${action('modify', '调整方向')}</div>
+      <p>确认这批企业符合预期后，Zoe 会继续生成匹配评分并识别决策人。如需调整搜索方向，请在下方输入框补充需求。</p>
+      <div class="zoe-acquisition-actions">${action('continue', '继续搜索', 'primary')}</div>
     </footer>` : complete ? `<footer class="zoe-result-decision">${action('tasks', '查看任务')}</footer>` : ''}
   </section>`;
 }
@@ -527,7 +527,6 @@ page.addEventListener('click', event => {
       show('tasks');
       break;
     case 'open-task': show('chat', task); break;
-    case 'modify': reply.querySelector('textarea').focus(); break;
     case 'start': startSearch(task); break;
     case 'continue': continueSearch(task); break;
     case 'pause':
