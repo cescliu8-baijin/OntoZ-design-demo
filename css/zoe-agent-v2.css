@@ -465,3 +465,147 @@ body.av2-dialog-open { overflow: hidden; }
 .zoe-acquisition-toolbar > * { max-width: 100%; }
 .zoe-acquisition-workspace { overflow-wrap: anywhere; }
 #zoeHome .zoe-acquisition-example { margin-right: auto; background: transparent; }
+
+/* Agent conversation layout, adapted from Figma 17:2324. */
+#zoeAcquisition:not(.is-task-list) {
+  background: #f8f7ff;
+  min-height: calc(100dvh - 64px);
+}
+
+#zoeAcquisition > .zoe-acquisition-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 6px;
+  min-height: 40px;
+  margin: 0;
+  padding: 0 12px;
+}
+
+#zoeAcquisitionTitle {
+  margin: 0;
+  font-size: var(--oz-text-base);
+  font-weight: var(--oz-weight-normal);
+  line-height: var(--oz-leading-base);
+}
+
+#zoeAcquisition > .zoe-acquisition-header .zoe-acquisition-actions { justify-content: flex-end; }
+#zoeAcquisition > .zoe-acquisition-header button {
+  min-height: 28px;
+  padding: 4px 6px;
+  border: 0;
+  background: transparent;
+  font-size: var(--oz-text-xs);
+}
+#zoeAcquisition > .zoe-acquisition-header button:hover { background: var(--oz-muted); }
+#zoeAcquisition > .zoe-acquisition-header svg { margin: 0 3px 0 0; }
+
+#zoeAcquisition:not(.is-task-list) .zoe-acquisition-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  max-width: 864px;
+  margin: 0 auto;
+  padding: 24px 32px 32px;
+}
+
+#zoeAcquisition:not(.is-task-list) :is(.zoe-acquisition-conversation, .zoe-acquisition-workspace) {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+#zoeAcquisition .zoe-acquisition-messages {
+  gap: 10px;
+  max-height: none;
+  overflow: visible;
+  margin: 0;
+}
+
+#zoeAcquisition .zoe-acquisition-message {
+  padding: 0;
+  background: transparent;
+  color: var(--oz-foreground);
+}
+#zoeAcquisition .zoe-acquisition-message[data-role="agent"] { padding: 2px 0; }
+
+#zoeAcquisition:not(.is-task-list) :is(.zoe-acquisition-card, .zoe-acquisition-message[data-role="user"], #zoeAcquisitionReply) {
+  padding: 16px 20px;
+  border: 1px solid var(--oz-border);
+  border-radius: 12px;
+  background: var(--oz-card);
+  box-shadow: var(--oz-shadow-xs);
+}
+
+#zoeAcquisition .zoe-acquisition-card:first-child,
+#zoeAcquisition .zoe-acquisition-message[data-role="user"] { margin: 0; }
+#zoeAcquisition :is(.zoe-acquisition-card, .zoe-acquisition-message) h2 {
+  margin-bottom: 4px;
+  font-size: var(--oz-text-lg);
+  line-height: var(--oz-leading-lg);
+}
+#zoeAcquisition .zoe-acquisition-message p { margin: 0; }
+#zoeAcquisition .zoe-acquisition-message[data-role="process"] { white-space: normal; }
+
+.zoe-acquisition-message[data-role="process"] summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  cursor: pointer;
+}
+.zoe-acquisition-message[data-role="process"] summary svg { width: 14px; height: 14px; }
+.zoe-acquisition-message[data-role="process"] details:not([open]) summary svg { transform: rotate(-90deg); }
+
+.zoe-stream-indicator {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 13px;
+  border: 1px solid var(--oz-indigo-500);
+  border-radius: 50%;
+}
+[data-stream-state="running"] .zoe-stream-indicator {
+  border-right-color: transparent;
+  animation: zoe-stream-spin .9s linear infinite;
+}
+[data-stream-state="complete"] .zoe-stream-indicator { background: var(--oz-indigo-500); }
+@keyframes zoe-stream-spin { to { transform: rotate(360deg); } }
+
+.zoe-stream-status {
+  color: var(--oz-muted-foreground);
+  font-size: var(--oz-text-xs);
+}
+.zoe-acquisition-message[data-role="process"] ol {
+  display: grid;
+  gap: 10px;
+  margin: 8px 0 2px 6px;
+  padding: 0 0 0 16px;
+  border-left: 1px solid var(--oz-border);
+  list-style: none;
+  font-size: var(--oz-text-xs);
+  line-height: var(--oz-leading-4);
+}
+.zoe-stream-current { min-height: 16px; }
+[data-stream-state="running"] .zoe-stream-current::after {
+  content: '';
+  display: inline-block;
+  width: 1px;
+  height: .9em;
+  margin-left: 2px;
+  background: var(--oz-indigo-500);
+}
+.zoe-acquisition-announcement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+@media (max-width: 767px) {
+  #zoeAcquisition:not(.is-task-list) .zoe-acquisition-layout { padding: 16px 0 24px; }
+  #zoeAcquisition > .zoe-acquisition-header { padding: 0; }
+  #zoeAcquisitionTitle { font-size: var(--oz-text-sm); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-stream-state="running"] .zoe-stream-indicator { animation: none; }
+}
