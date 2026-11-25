@@ -719,52 +719,73 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 }
 #zoeAcquisition .zoe-acquisition-message[data-role="process"] { white-space: normal; }
 
+/* Collapsible execution timeline inspired by AI Elements Chain of Thought. */
 .zoe-acquisition-message[data-role="process"] summary {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 28px;
+  color: var(--oz-muted-foreground);
   cursor: pointer;
 }
-.zoe-acquisition-message[data-role="process"] summary svg { width: 14px; height: 14px; }
-.zoe-acquisition-message[data-role="process"] details:not([open]) summary svg { transform: rotate(-90deg); }
+.zoe-acquisition-message[data-role="process"] summary::-webkit-details-marker { display: none; }
+.zoe-acquisition-message[data-role="process"] summary:hover { color: var(--oz-foreground); }
+.zoe-acquisition-message[data-role="process"] summary svg { flex: none; width: 16px; height: 16px; }
+.zoe-stream-chevron { transition: transform 150ms ease; }
+.zoe-acquisition-message details[open] .zoe-stream-chevron { transform: rotate(180deg); }
+.zoe-stream-status { font-size: var(--oz-text-xs); }
 
+.zoe-stream-steps {
+  display: grid;
+  gap: 12px;
+  margin: 8px 0 4px;
+  padding: 0;
+  list-style: none;
+  font-size: var(--oz-text-sm);
+  line-height: var(--oz-leading-sm);
+}
+.zoe-stream-steps > li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  color: var(--oz-muted-foreground);
+}
+.zoe-stream-steps > li[hidden] { display: none; }
+.zoe-stream-steps > li:has(+ li:not([hidden]))::after {
+  content: '';
+  position: absolute;
+  left: 7.5px;
+  top: 19px;
+  bottom: -11px;
+  width: 1px;
+  background: var(--oz-border);
+}
+.zoe-stream-steps > li svg { width: 16px; height: 16px; margin-top: 2px; }
+.zoe-stream-steps > li[data-step-state="active"] { color: var(--oz-foreground); }
 .zoe-stream-indicator {
-  width: 13px;
-  height: 13px;
-  flex: 0 0 13px;
-  border: 1px solid var(--oz-indigo-500);
+  width: 12px;
+  height: 12px;
+  margin: 4px 2px;
+  border: 1px solid currentColor;
   border-radius: 50%;
 }
 [data-stream-state="running"] .zoe-stream-indicator {
   border-right-color: transparent;
   animation: zoe-stream-spin .9s linear infinite;
 }
-[data-stream-state="complete"] .zoe-stream-indicator { background: var(--oz-indigo-500); }
 @keyframes zoe-stream-spin { to { transform: rotate(360deg); } }
-
-.zoe-stream-status {
-  color: var(--oz-muted-foreground);
-  font-size: var(--oz-text-xs);
-}
-.zoe-acquisition-message[data-role="process"] ol {
-  display: grid;
-  gap: 10px;
-  margin: 8px 0 2px 6px;
-  padding: 0 0 0 16px;
-  border-left: 1px solid var(--oz-border);
-  list-style: none;
-  font-size: var(--oz-text-xs);
-  line-height: var(--oz-leading-4);
-}
-.zoe-stream-current { min-height: 16px; }
-[data-stream-state="running"] .zoe-stream-current::after {
+[data-stream-state="running"] .zoe-stream-preview::after {
   content: '';
   display: inline-block;
   width: 1px;
   height: .9em;
   margin-left: 2px;
-  background: var(--oz-indigo-500);
+  background: currentColor;
 }
 .zoe-acquisition-announcement {
   position: absolute;
@@ -780,6 +801,7 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 }
 @media (prefers-reduced-motion: reduce) {
   [data-stream-state="running"] .zoe-stream-indicator { animation: none; }
+  .zoe-stream-chevron { transition: none; }
 }
 
 #zoeAcquisitionDrawer { width: min(100%, 960px); }

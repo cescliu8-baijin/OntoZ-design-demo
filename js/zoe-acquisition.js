@@ -100,6 +100,8 @@ function push(task, role, text) {
 }
 
 function renderMessages() {
+  const focusedRun = document.activeElement?.matches('details[data-run] > summary')
+    ? document.activeElement.parentElement.dataset.run : null;
   const historyOpen = new Set([...messages.querySelectorAll('.zoe-icp-history[open]')].map(el => el.dataset.snapshot));
   const expanded = new Map([...messages.querySelectorAll('details[data-run]')].map(el => [
     el.dataset.run, { open: el.open, state: el.closest('[data-stream-state]').dataset.streamState }
@@ -113,8 +115,18 @@ function renderMessages() {
       const previous = expanded.get(key);
       const open = previous?.state === run.state ? previous.open : run.state === 'running' || run.state === 'paused';
       entry.innerHTML = `<details data-run="${key}" ${open ? 'open' : ''}>
-        <summary><span class="zoe-stream-indicator" aria-hidden="true"></span><span>${esc(run.summary || run.title)}</span><span class="zoe-stream-status"></span><i data-lucide="chevron-down" aria-hidden="true"></i></summary>
-        <ol>${run.lines.map(line => `<li>${esc(line)}</li>`).join('')}<li class="zoe-stream-current" aria-hidden="true"></li></ol>
+        <summary>
+          <i class="zoe-stream-header-icon" data-lucide="brain" aria-hidden="true"></i>
+          <span>${esc(run.summary || run.title)}</span>
+          <span class="zoe-stream-status"></span>
+          <i class="zoe-stream-chevron" data-lucide="chevron-down" aria-hidden="true"></i>
+        </summary>
+        <ol class="zoe-stream-steps" aria-label="模拟执行步骤">
+          ${run.lines.map(line => `<li data-step-state="complete"><i data-lucide="check" aria-hidden="true"></i><span>${esc(line)}</span></li>`).join('')}
+          <li data-step-state="active" class="zoe-stream-current" aria-hidden="true">
+            <span class="zoe-stream-indicator"></span><span class="zoe-stream-preview"></span>
+          </li>
+        </ol>
       </details>`;
       updateStream(entry, run);
     } else if (snapshot) {
@@ -127,6 +139,7 @@ function renderMessages() {
     }
     return entry;
   }));
+  if (focusedRun) messages.querySelector(`[data-run="${focusedRun}"] > summary`)?.focus({ preventScroll: true });
   reply.hidden = view !== 'chat' || !active || !['draft', 'review'].includes(active.phase);
   const status = view === 'chat' && ['running', 'paused'].includes(active?.status) ? active.status : '';
   dockStatus.hidden = !status;
@@ -146,7 +159,7 @@ function updateStream(entry, run) {
     running: '模拟输出中', paused: '模拟执行已暂停', complete: '模拟执行已完成', stopped: '模拟执行已终止'
   }[run.state];
   const current = entry.querySelector('.zoe-stream-current');
-  current.textContent = run.preview;
+  current.querySelector('.zoe-stream-preview').textContent = run.preview;
   current.hidden = !run.preview && run.state !== 'running';
 }
 
