@@ -30,8 +30,8 @@ let detail;
 let detailTrigger;
 
 const esc = value => escapeHTML(String(value ?? ''));
-const action = (name, label, primary = false) =>
-  `<button type="button" data-acquisition-action="${name}" ${primary ? 'data-primary' : ''}>${label}</button>`;
+const action = (name, label, variant = 'outline') =>
+  `<button type="button" data-acquisition-action="${name}" data-zoe-button="${variant}">${label}</button>`;
 const options = (values, current) => values.map(value =>
   `<option value="${esc(value)}"${current === value ? ' selected' : ''}>${esc(value)}</option>`).join('');
 const grade = score => ratings[score >= 80 ? 0 : score >= 60 ? 1 : score >= 40 ? 2 : 3];
@@ -125,7 +125,7 @@ function renderMessages() {
     const focused = dockStatus.contains(document.activeElement);
     dockStatus.dataset.status = status;
     dockStatus.innerHTML = status ? `<span role="status">${status === 'paused' ? '搜索任务已暂停' : 'Zoe 正在执行获客任务…'}</span>
-      <div class="zoe-acquisition-actions">${status === 'paused' ? action('resume', '继续') : action('pause', '暂停')}${action('stop', '终止任务')}</div>` : '';
+      <div class="zoe-acquisition-actions">${status === 'paused' ? action('resume', '继续') : action('pause', '暂停')}${action('stop', '终止任务', 'destructive')}</div>` : '';
     if (focused && status) dockStatus.querySelector('button').focus({ preventScroll: true });
   }
   dock.hidden = reply.hidden && dockStatus.hidden;
@@ -252,7 +252,7 @@ function icpCard(task) {
     <p class="zoe-acquisition-help">这是模拟解析结果。编辑内容会自动应用到本轮搜索。</p>
     <div class="zoe-acquisition-fields">${Object.entries(fields).map(([key, label]) =>
       `<label>${label}<input data-icp="${key}" maxlength="200" value="${esc(task.icp[key])}" placeholder="待补充"></label>`).join('')}</div>
-    <div class="zoe-acquisition-actions">${action('modify', '修改需求')}${action('start', '确认并开始搜索', true)}</div>`;
+    <div class="zoe-acquisition-actions">${action('start', '确认并开始搜索', 'primary')}</div>`;
 }
 
 function startSearch(task) {
@@ -333,7 +333,7 @@ function taskTitle(task) {
 function taskList() {
   return `<h2 tabindex="-1">获客任务列表</h2>
     <p class="zoe-acquisition-help">Demo 模拟数据 · 任务在本次演示中运行</p>
-    <div class="zoe-acquisition-actions">${action('new', '创建获客任务', true)} <a href="#customers">前往客户池</a></div>
+    <div class="zoe-acquisition-actions">${action('new', '创建获客任务', 'primary')} <a href="#customers">前往客户池</a></div>
     ${tasks.length ? tasks.map(task => `<article class="zoe-acquisition-card">
       <h3>${esc(taskTitle(task))}</h3>
       <p>${statuses[task.status]} · ${steps[task.stage]} · 已发现 ${task.count} 家企业</p>
@@ -342,7 +342,7 @@ function taskList() {
         ${action('open-task', task.status === 'complete' ? '查看客户清单' : '查看任务')}
         ${task.status === 'running' ? action('pause', '暂停') : ''}
         ${task.status === 'paused' ? action('resume', '继续') : ''}
-        ${['running', 'paused', 'partial'].includes(task.status) ? action('stop', '终止任务') : ''}
+        ${['running', 'paused', 'partial'].includes(task.status) ? action('stop', '终止任务', 'destructive') : ''}
       </div>
     </article>`).join('') : '<p>暂无任务。创建获客任务后可在这里查看进度。</p>'}`;
 }
@@ -379,7 +379,7 @@ function companyTable(task) {
     </table></div>
     ${task.phase === 'review' ? `<footer class="zoe-result-decision">
       <p>确认这批企业符合预期后，Zoe 会继续生成匹配评分并识别决策人。</p>
-      <div class="zoe-acquisition-actions">${action('continue', '继续搜索', true)}${action('modify', '调整方向')}</div>
+      <div class="zoe-acquisition-actions">${action('continue', '继续搜索', 'primary')}${action('modify', '调整方向')}</div>
     </footer>` : complete ? `<footer class="zoe-result-decision">${action('tasks', '查看任务')}</footer>` : ''}
   </section>`;
 }
@@ -397,8 +397,8 @@ function renderRows(task) {
     (!filters.research || status === filters.research));
   if (scored) companies.sort((a, b) => filters.sort === 'asc' ? a.score - b.score : b.score - a.score);
   tbody.innerHTML = companies.map(company => `<tr data-company-id="${company.id}">
-    <td>${action('company', esc(company.name))}</td><td>${esc(company.country)}</td><td>${company.type}</td><td>${status}</td>
-    ${scored ? `<td>${action('score', `${company.score} · ${grade(company.score)}级`)}</td>` : ''}
+    <td>${action('company', esc(company.name), 'ghost')}</td><td>${esc(company.country)}</td><td>${company.type}</td><td>${status}</td>
+    ${scored ? `<td>${action('score', `${company.score} · ${grade(company.score)}级`, 'ghost')}</td>` : ''}
     ${task.phase === 'results' ? `<td>${company.contacts.length} 位</td>` : ''}</tr>`).join('')
     || `<tr><td colspan="${4 + Number(scored) + Number(task.phase === 'results')}">暂无符合条件的企业</td></tr>`;
 }
@@ -469,7 +469,7 @@ function renderCompany() {
   drawer.innerHTML = `<div class="zoe-acquisition-header"><span>Demo 模拟数据</span>${action('close-detail', '关闭')}</div>
     <h2 id="zoeAcquisitionCompanyName">${esc(company.name)}</h2>
     <div class="zoe-acquisition-actions" role="tablist" aria-label="企业详情">${tabs.map((label, i) =>
-      `<button type="button" id="zoe-detail-tab-${i}" role="tab" aria-selected="${i === tab}" tabindex="${i === tab ? 0 : -1}" aria-controls="zoe-detail-content" data-detail-tab="${i}">${label}</button>`).join('')}</div>
+      `<button type="button" id="zoe-detail-tab-${i}" role="tab" data-zoe-button="ghost" aria-selected="${i === tab}" tabindex="${i === tab ? 0 : -1}" aria-controls="zoe-detail-content" data-detail-tab="${i}">${label}</button>`).join('')}</div>
     <section id="zoe-detail-content" role="tabpanel" aria-labelledby="zoe-detail-tab-${tab}">${panels[tab]}</section>`;
 }
 

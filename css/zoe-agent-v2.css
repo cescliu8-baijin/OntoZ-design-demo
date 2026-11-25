@@ -47,7 +47,7 @@
   padding: 0; gap: 8px; width: fit-content; max-width: 100%; height: auto; min-height: 36px;
   flex: none; order: 2;
 }
-:is(#zoeHome, #lilyOverview, #wendyHome) .av2-header .av2-page-actions > button {
+:is(#zoeHome, #lilyOverview, #wendyHome) .av2-header .av2-page-actions > button:where(:not([data-zoe-button])) {
   box-sizing: border-box; display: inline-flex; flex-direction: row; align-items: center; justify-content: center;
   flex: none; gap: 4px; width: auto; max-width: 100%; min-width: 0; height: auto; min-height: 36px;
   padding: 7px 10px; border: 1px solid var(--oz-border); border-radius: 9999px;
@@ -60,9 +60,9 @@
   background: radial-gradient(50% 100% at 50% 0%, var(--oz-indigo-500) 0%, var(--oz-purple-500) 100%);
   box-shadow: var(--oz-shadow-xs);
 }
-:is(#zoeHome, #lilyOverview, #wendyHome) .av2-header .av2-page-actions > button:hover { box-shadow: var(--oz-shadow-xs); }
-:is(#zoeHome, #lilyOverview, #wendyHome) .av2-header .av2-page-actions > button:active { box-shadow: var(--oz-shadow-none); }
-:is(#zoeHome, #lilyOverview, #wendyHome) .av2-header .av2-page-actions > button svg { width: 16px; height: 16px; flex: none; stroke-width: 1px; }
+:is(#zoeHome, #lilyOverview, #wendyHome) .av2-header .av2-page-actions > button:where(:not([data-zoe-button])):hover { box-shadow: var(--oz-shadow-xs); }
+:is(#zoeHome, #lilyOverview, #wendyHome) .av2-header .av2-page-actions > button:where(:not([data-zoe-button])):active { box-shadow: var(--oz-shadow-none); }
+:is(#zoeHome, #lilyOverview, #wendyHome) .av2-header .av2-page-actions > button:where(:not([data-zoe-button])) svg { width: 16px; height: 16px; flex: none; stroke-width: 1px; }
 :is(#zoeHome, #lilyOverview, #wendyHome) :is(.zoe-autopilot-status, .lily-console-card, .wh-manager) {
   position: static; display: grid; width: 100%; min-width: 0; min-height: 76px;
   margin: 0; padding: 16px 24px; gap: 12px; border: 0; border-radius: 12px;
@@ -182,10 +182,10 @@
 :is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box > :is(footer, .composer-actions) > span { flex: 1; min-width: 0; color: var(--av2-muted); font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
 #zoeHome .zoe-chat-quick-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; }
 #zoeHome .zoe-chat-quick-actions button { width: auto; min-height: 36px; border-radius: 10px; padding: 8px 10px; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); color: var(--av2-ink); background: var(--oz-muted); }
-:is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box button { box-sizing: border-box; display: inline-flex; flex: none; align-items: center; justify-content: center; gap: 4px; width: auto; min-width: 68px; height: 32px; min-height: 32px; padding: 8px 10px; border: 0; border-radius: 10px; color: var(--oz-indigo-500); background: var(--oz-indigo-50); box-shadow: var(--oz-shadow-none); font-size: var(--oz-text-sm); line-height: var(--oz-leading-sm); font-weight: var(--oz-weight-medium); }
-:is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box button:hover { color: var(--oz-indigo-600); background: var(--oz-indigo-100); }
-:is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box button:disabled { color: var(--oz-neutral-400); background: var(--oz-neutral-100); cursor: not-allowed; }
-:is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box button svg { width: 16px; height: 16px; flex: none; stroke-width: 1px; }
+:is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box button:where(:not([data-zoe-button])) { box-sizing: border-box; display: inline-flex; flex: none; align-items: center; justify-content: center; gap: 4px; width: auto; min-width: 68px; height: 32px; min-height: 32px; padding: 8px 10px; border: 0; border-radius: 10px; color: var(--oz-indigo-500); background: var(--oz-indigo-50); box-shadow: var(--oz-shadow-none); font-size: var(--oz-text-sm); line-height: var(--oz-leading-sm); font-weight: var(--oz-weight-medium); }
+:is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box button:where(:not([data-zoe-button])):hover { color: var(--oz-indigo-600); background: var(--oz-indigo-100); }
+:is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box button:where(:not([data-zoe-button])):disabled { color: var(--oz-neutral-400); background: var(--oz-neutral-100); cursor: not-allowed; }
+:is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box button:where(:not([data-zoe-button])) svg { width: 16px; height: 16px; flex: none; stroke-width: 1px; }
 /* Zoe's existing business cards retain all controls. */
 #zoeHome .zoe-chat-stream > * { flex: none; }
 #zoeHome .zoe-chat-stream :is(p, h4, strong, span, small, b, em, time, button) { font-size: var(--oz-text-sm); line-height: var(--oz-leading-sm); }
@@ -318,10 +318,10 @@
 #lilyOverview[data-av2-small="true"] .lily-reach-totals p:last-child { padding: 12px 0 0; border-left: 0; border-top: 1px solid var(--av2-border); }
 #wendyHome[data-av2-small="true"] .wh-metric:nth-child(2) { border: 0; }
 #wendyHome[data-av2-small="true"] .wh-operation-footer { margin: 0 -16px; }
-:is(#zoeHome, #lilyOverview, #wendyHome)[data-av2-small="true"] .av2-header .av2-page-actions > button { min-height: 44px; flex: none; }
-:is(#zoeHome, #lilyOverview, #wendyHome)[data-av2-small="true"] :is(button, .use-strategy) { min-height: 44px; }
+:is(#zoeHome, #lilyOverview, #wendyHome)[data-av2-small="true"] .av2-header .av2-page-actions > button:where(:not([data-zoe-button])) { min-height: 44px; flex: none; }
+:is(#zoeHome, #lilyOverview, #wendyHome)[data-av2-small="true"] :is(button, .use-strategy):where(:not([data-zoe-button])) { min-height: 44px; }
 :is(#zoeHome, #lilyOverview, #wendyHome)[data-av2-small="true"] :is(textarea, input) { font-size: var(--oz-text-base); line-height: var(--oz-leading-base); }
-:is(#zoeHome, #lilyOverview, #wendyHome)[data-av2-small="true"] .av2-prompt-box button { height: 32px; min-height: 32px; }
+:is(#zoeHome, #lilyOverview, #wendyHome)[data-av2-small="true"] .av2-prompt-box button:where(:not([data-zoe-button])) { height: 32px; min-height: 32px; }
 :is(#zoeHome, #lilyOverview, #wendyHome)[data-av2-small="true"] .av2-dialog { width: 100vw; border-radius: 0; }
 :is(#zoeHome, #lilyOverview, #wendyHome)[data-av2-small="true"] :is(.wh-composer, .lily-composer-shell, .zoe-chat-composer) { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
 :is(#zoeHome, #lilyOverview, #wendyHome)[data-av2-small="true"] .av2-flow-toggle { display: block; width: calc(100% - 32px); margin: 16px; text-align: center; }
@@ -445,7 +445,6 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 .zoe-acquisition p { margin: 8px 0; }
 .zoe-acquisition-messages { display: grid; gap: 12px; max-height: 420px; overflow: auto; margin-bottom: 16px; }
 .zoe-acquisition-message { padding: 12px; border-radius: 12px; background: var(--oz-muted); overflow-wrap: anywhere; white-space: pre-wrap; }
-.zoe-acquisition button:not(.av2-prompt-box button),
 .zoe-acquisition :is(select, input) {
   min-height: 32px;
   padding: 4px 10px;
@@ -455,27 +454,49 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
   color: inherit;
   font: inherit;
 }
-.zoe-acquisition button {
-  cursor: pointer;
-  font-weight: var(--oz-weight-medium);
-}
-.zoe-acquisition button:not(.av2-prompt-box button) { border-radius: 10px; }
-.zoe-acquisition button:not(:disabled):hover { background: var(--oz-muted); }
 .zoe-acquisition select { min-height: 36px; padding-inline: 12px; box-shadow: var(--oz-shadow-xs); }
 .zoe-acquisition :is(input, select):focus-visible { border-color: var(--oz-indigo-500); }
-.zoe-acquisition button:disabled { opacity: .5; cursor: not-allowed; }
-#zoeHome .zoe-acquisition-prompt button[type="submit"]:enabled,
-.zoe-acquisition button[data-primary],
-.zoe-acquisition .av2-prompt-box button:enabled {
-  border-color: transparent;
-  background: var(--oz-indigo-500);
+
+:is(#zoeHome, #zoeAcquisition) [data-zoe-button] {
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: auto;
+  min-width: 0;
+  height: 32px;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--oz-foreground);
+  font: var(--oz-weight-medium) var(--oz-text-sm)/var(--oz-leading-sm) var(--oz-font-family-sans);
+  cursor: pointer;
+}
+
+:is(#zoeHome, #zoeAcquisition) [data-zoe-button] svg { width: 16px; height: 16px; flex: none; }
+:is(#zoeHome, #zoeAcquisition) [data-zoe-button]:focus-visible { outline: 2px solid var(--oz-ring); outline-offset: 2px; }
+:is(#zoeHome, #zoeAcquisition) [data-zoe-button="primary"] {
   color: var(--oz-primary-foreground);
+  background: var(--oz-indigo-500);
   box-shadow: var(--oz-shadow-xs);
 }
-#zoeHome .zoe-acquisition-prompt button[type="submit"]:enabled:hover,
-.zoe-acquisition button[data-primary]:hover,
-.zoe-acquisition .av2-prompt-box button:enabled:hover { background: var(--oz-indigo-600); }
-.zoe-acquisition button svg { width: 16px; height: 16px; vertical-align: middle; margin-right: 4px; }
+:is(#zoeHome, #zoeAcquisition) [data-zoe-button="primary"]:enabled:hover { background: var(--oz-indigo-600); }
+:is(#zoeHome, #zoeAcquisition) :is([data-zoe-button="outline"], [data-zoe-button="icon"]) {
+  background: var(--oz-white);
+  border-color: var(--oz-border);
+}
+:is(#zoeHome, #zoeAcquisition) :is([data-zoe-button="outline"], [data-zoe-button="icon"], [data-zoe-button="ghost"]):not(:disabled):hover {
+  background: var(--oz-muted);
+}
+#zoeAcquisition [data-zoe-button="icon"] { width: 32px; padding: 0; }
+#zoeAcquisition [data-zoe-button="destructive"] { color: var(--oz-destructive); background: var(--oz-red-100); }
+#zoeAcquisition [data-zoe-button="destructive"]:enabled:hover { opacity: .9; }
+:is(#zoeHome, #zoeAcquisition) [data-zoe-button]:disabled { opacity: .5; cursor: not-allowed; }
+
 .zoe-acquisition :focus-visible { outline: 2px solid var(--oz-indigo-500); outline-offset: 2px; }
 .zoe-acquisition-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 12px; margin: 16px 0; }
 .zoe-acquisition-fields label { display: grid; min-width: 0; gap: 4px; }
@@ -515,12 +536,29 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 }
 .zoe-acquisition.is-task-list .zoe-acquisition-layout { grid-template-columns: minmax(0, 1fr); }
 .zoe-acquisition-card, .zoe-acquisition-results { margin-top: 16px; }
-.zoe-acquisition [role="tab"][aria-selected="true"] { background: var(--oz-indigo-50); color: var(--oz-indigo-600); }
+#zoeAcquisition [role="tablist"] {
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--oz-muted);
+}
+#zoeAcquisition [role="tab"] {
+  flex: 1 1 auto;
+  border-radius: 8px;
+  padding-inline: 8px;
+  color: var(--oz-muted-foreground);
+}
+#zoeAcquisition [role="tab"][aria-selected="true"] {
+  color: var(--oz-foreground);
+  background: var(--oz-white);
+  border-color: var(--oz-border);
+  box-shadow: var(--oz-shadow-xs);
+}
 .zoe-acquisition-drawer :is(details, summary) { margin: 8px 0; }
 .zoe-acquisition :is(summary, a) { cursor: pointer; }
 .zoe-acquisition-toolbar > * { max-width: 100%; }
 .zoe-acquisition-workspace { overflow-wrap: anywhere; }
-#zoeHome .zoe-acquisition-example { margin-right: auto; background: transparent; }
+#zoeHome [data-acquisition-action="example"] { margin-right: auto; }
 
 /* Agent conversation layout, adapted from Figma 17:2324. */
 #zoeAcquisition:not(.is-task-list) {
@@ -545,16 +583,6 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 }
 
 #zoeAcquisition > .zoe-acquisition-header .zoe-acquisition-actions { justify-content: flex-end; }
-#zoeAcquisition > .zoe-acquisition-header button {
-  min-height: 28px;
-  padding: 4px 6px;
-  border: 0;
-  background: transparent;
-  font-size: var(--oz-text-xs);
-}
-#zoeAcquisition > .zoe-acquisition-header button:hover { background: var(--oz-muted); }
-#zoeAcquisition > .zoe-acquisition-header svg { margin: 0 3px 0 0; }
-
 #zoeAcquisition:not(.is-task-list) .zoe-acquisition-layout {
   display: flex;
   flex-direction: column;
@@ -637,7 +665,7 @@ body[data-agent-nav="mobile"] :is(#zoeHome, #zoeAcquisition) { --zoe-composer-na
 }
 
 .zoe-acquisition-menu { position: relative; }
-.zoe-acquisition-menu summary { display: grid; place-items: center; width: 30px; height: 28px; }
+.zoe-acquisition-menu summary::-webkit-details-marker { display: none; }
 .zoe-acquisition-menu[open] button {
   position: absolute;
   z-index: 61;
