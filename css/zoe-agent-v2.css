@@ -181,7 +181,7 @@
 :is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box > :is(footer, .composer-actions) { display: flex; flex: none; flex-direction: row; justify-content: flex-end; align-items: center; gap: 12px; width: 100%; height: 32px; margin: 0; padding: 0; }
 :is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box > :is(footer, .composer-actions) > span { flex: 1; min-width: 0; color: var(--av2-muted); font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
 #zoeHome .zoe-chat-quick-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; }
-#zoeHome .zoe-chat-quick-actions button { width: auto; min-height: 36px; border-radius: 10px; padding: 8px 10px; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); color: var(--oz-indigo-600); background: var(--oz-indigo-50); }
+#zoeHome .zoe-chat-quick-actions button { width: auto; min-height: 36px; border-radius: 10px; padding: 8px 10px; font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); color: var(--av2-ink); background: var(--oz-muted); }
 :is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box button { box-sizing: border-box; display: inline-flex; flex: none; align-items: center; justify-content: center; gap: 4px; width: auto; min-width: 68px; height: 32px; min-height: 32px; padding: 8px 10px; border: 0; border-radius: 10px; color: var(--oz-indigo-500); background: var(--oz-indigo-50); box-shadow: var(--oz-shadow-none); font-size: var(--oz-text-sm); line-height: var(--oz-leading-sm); font-weight: var(--oz-weight-medium); }
 :is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box button:hover { color: var(--oz-indigo-600); background: var(--oz-indigo-100); }
 :is(#zoeHome, #lilyOverview, #wendyHome) .av2-prompt-box button:disabled { color: var(--oz-neutral-400); background: var(--oz-neutral-100); cursor: not-allowed; }
@@ -192,12 +192,42 @@
 #zoeHome .zoe-chat-stream p { font-size: var(--oz-text-sm); line-height: var(--oz-leading-sm); color: var(--av2-muted); }
 #zoeHome .zoe-chat-stream h3 { font-size: var(--oz-text-base); line-height: var(--oz-leading-base); color: var(--av2-ink); }
 #zoeHome .zoe-chat-stream button { min-height: 40px; border-radius: 10px; }
-#zoeHome .zoe-copilot-optimization { border-color: var(--av2-border); border-radius: 12px; }
-#zoeHome .zoe-copilot-optimization-group > article { background: var(--oz-green-50); border-color: var(--oz-green-200); }
-#zoeHome .zoe-copilot-optimization-group.is-risk > article { background: var(--oz-amber-50); border-color: var(--oz-amber-200); }
-#zoeHome .zoe-copilot-optimization-group.is-risk h4 { color: var(--oz-amber-700); }
-#zoeHome .zoe-copilot-optimization-group.is-complete h4 { color: var(--oz-green-700); }
-#zoeHome .zoe-chat-stream button[data-zoe-chat-strategy="approve"] { background: var(--oz-primary); border-color: var(--oz-primary); color: var(--oz-primary-foreground); }
+#zoeHome .zoe-chat-quick-actions button:hover { background: var(--oz-neutral-200); }
+
+#zoeHome .zoe-chat-stream :is(.zoe-chat-card, .zoe-copilot-optimization, .zoe-copilot-feedback-card) {
+  border: 0;
+  border-radius: 12px;
+  background: var(--oz-neutral-50);
+  box-shadow: none;
+}
+#zoeHome .zoe-chat-stream :is(.zoe-copilot-optimization-group, .zoe-chat-strategy-group) > article {
+  border: 0;
+  border-radius: 0;
+  padding-inline: 0;
+  background: transparent;
+}
+#zoeHome .zoe-chat-stream :is(.zoe-copilot-optimization-group, .zoe-chat-strategy-group) > article + article {
+  border-top: 1px solid var(--av2-border);
+}
+#zoeHome .zoe-chat-stream :is(.zoe-copilot-optimization-group h4, .zoe-chat-strategy-group h4) {
+  color: var(--av2-ink);
+}
+#zoeHome .zoe-chat-stream :is(
+  .zoe-copilot-optimization-header > b, .zoe-copilot-review-meta strong,
+  .zoe-copilot-products span, .zoe-copilot-task-kpis p, .zoe-chat-inline-success
+) {
+  color: var(--av2-muted);
+  background: var(--oz-muted);
+  border-color: transparent;
+}
+#zoeHome .zoe-copilot-task-header > span i { background: var(--av2-brand); }
+#zoeHome .zoe-copilot-task-ring { background: conic-gradient(var(--av2-brand) var(--progress), var(--oz-neutral-200) 0); }
+#zoeHome .zoe-copilot-stack { display: none; }
+#zoeHome .zoe-chat-stream button:is([data-zoe-chat-strategy="approve"], [data-zoe-chat-review="target"]) {
+  border-color: transparent;
+  background: var(--oz-primary);
+  color: var(--oz-primary-foreground);
+}
 #zoeHome .zoe-copilot-task-kpis, #zoeHome .zoe-copilot-review-actions { min-width: 0; }
 /* Runtime diagrams start directly with business content; no visible title bar or motion toggle. */
 :is(#zoeHome, #lilyOverview, #wendyHome) .av2-flow-toggle { min-height: 36px; padding: 8px 12px; border: 1px solid var(--av2-border); border-radius: 10px; color: var(--av2-muted); background: var(--av2-surface); font-size: var(--oz-text-xs); line-height: var(--oz-leading-xs); }
@@ -334,7 +364,6 @@
   :is(#zoeHome, #lilyOverview, #wendyHome) *, :is(#zoeHome, #lilyOverview, #wendyHome) *::before { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 #lilyOverview[data-av2-paused="true"] .lily-live-status strong { animation: none; opacity: 1; transform: none; }
-#zoeHome .zoe-copilot-optimization-header > b { color: var(--oz-amber-700); background: var(--oz-amber-50); }
 #zoeHome .zoe-chat-stream button[data-zoe-chat-strategy="ignore"] { color: var(--av2-ink); border-color: var(--av2-border); background: var(--av2-surface); }
 body.av2-dialog-open { overflow: hidden; }
 
